@@ -1,0 +1,27 @@
+/* Variable fonts */
+@font-face {
+  font-family: 'Syne';
+  src: url('/assets/fonts/Syne/Syne-VariableFont_wght.ttf')
+    format('truetype');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overpass';
+  src: url('/assets/fonts/Overpass/Overpass-VariableFont_wght.ttf')
+    format('truetype');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Overpass';
+  src: url('/assets/fonts/Overpass/Overpass-Italic-VariableFont_wght.ttf')
+    format('truetype');
+  font-weight: 100 900;
+  font-style: italic;
+  font-display: swap;
+}
