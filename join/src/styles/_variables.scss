@@ -8,3 +8,15 @@
 //     --gray-900: oklch(19.37% 0.006 300.98);
 //     --gray-700: oklch(36.98% 0.014 302.71);
 //     --gray-400: oklch(70.9% 0.015 304.04);
+
+$bg-color: #fffcf3;
+
+$g-pad-x: clamp(1.2rem, 6vw, 7.5rem);
+$g-max-width: 1440px;
+$g-frame-gap: clamp(0.8rem, 1.5vw, 1.5rem);
+
+$header-text: #111;
+$header-height: 7rem;
+$footer-height: 22rem;
+
+$menu-overlay-title-size: clamp(2em, 6vmin, 6em);
