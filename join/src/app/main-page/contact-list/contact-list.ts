@@ -10,4 +10,5 @@ import { FirebaseService } from '../../shared/services/firebase-service';
 })
 export class ContactList {
   firebaseService = inject(FirebaseService);
+  
 }
