@@ -53,7 +53,12 @@ export class FirebaseService {
       email: obj.email || "",
       phone: obj.phone || "",
       isAvailable: obj.isAvailable || false,
+      // color: this.setUserColor(),
     }
+  }
+
+  setUserColor(){
+    // return random()
   }
 
   async deleteDocument(colId: string, docId: string){

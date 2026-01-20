@@ -1,7 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { SingleContact } from './single-contact/single-contact';
 import { FirebaseService } from '../../shared/services/firebase-service';
-import { Firestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-contact-list',
