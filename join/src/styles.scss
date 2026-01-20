@@ -34,3 +34,60 @@ html {
     
   }
 }
+
+button{
+  padding: 8px;
+  border: none;
+  border-radius: 8px;
+  @include styles.setFont();
+  cursor: pointer;
+}
+
+.button--primary{
+  background-color: styles.$gray-dark;
+  color: white;
+
+  &:hover{
+    background-color: styles.$blue-sky;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+
+  &:active{
+    background-color: styles.$navy-dark;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+}
+
+.button--secondary{
+  background-color: styles.$white-light;
+  color: styles.$gray-dark;
+  border: 1px solid styles.$gray-dark;
+
+  &:hover{
+    color: styles.$blue-sky;
+    border-color: styles.$blue-sky;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+
+  &:active{
+    color: styles.$gray-dark;
+    border-color: styles.$gray-dark;
+    box-shadow: 0px 4px 4px 0px #00000040;
+  }
+}
+
+.button--disabled{
+  color: styles.$gray-dark;
+  border: 1px solid styles.$gray-dark;
+  filter: opacity(0.5);
+  cursor: not-allowed;
+}
+
+.button--icon{
+  @include styles.setFlex($gap: 4px);
+
+  .button__icon{
+    width: 20px;
+    height: 20px;
+  }
+}
