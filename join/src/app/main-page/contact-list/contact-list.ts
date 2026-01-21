@@ -11,6 +11,7 @@ import { Contact } from '../../shared/interfaces/contact';
 })
 export class ContactList {
   firebaseService = inject(FirebaseService);
+  activeContactID: string | number | null = null;
 
   getFirstLetter(contact: Contact): string {
     const name = contact?.name?.trim();
@@ -25,4 +26,14 @@ export class ContactList {
     const contacts = this.firebaseService.contacts;
     return this.getFirstLetter(contacts[index]) !== this.getFirstLetter(contacts[index - 1]);
   }
+
+  getContactId(contact: Contact, index: number): string | number {
+    return contact.id ?? `${contact.name}-${index}`;
+  }
+
+  setActiveContact(contact: Contact, index: number): void {
+    this.activeContactID = this.getContactId(contact, index);
+  }
+
+  openContactDialog() {}
 }

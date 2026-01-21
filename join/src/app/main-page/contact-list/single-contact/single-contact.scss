@@ -3,10 +3,17 @@
 .single-contact {
   @include styles.setFlex($jc: flex-start, $gap: 1.5rem);
   padding: 1rem 0.5rem;
-  border-radius: 2rem;
+  border-radius: 1rem;
   background-color: styles.$white;
+  background-color: whitesmoke;
+  cursor: pointer;
+  width: 100%;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
 
   &__avatar {
+    border: 1px solid red;
     @include styles.setFlex();
     width: 5rem;
     height: 5rem;
@@ -16,41 +23,45 @@
   }
 
   &__initials {
-    @include styles.setFont($size: 1em, $weight: 500, $color: #ffffff);
+    @include styles.setFont($size: 1em, $weight: 700, $color: #ffffff);
   }
 
   &__text {
     @include styles.setFlex($d: column, $ai: flex-start, $gap: 0.4rem);
+    // flex: 1 1 auto;
+    min-width: 0;
   }
 
   &__name {
-    @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$black);
+    @include styles.setFont($size: clamp(1em, 2vw, 1.3em), $weight: 400, $color: styles.$black);
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   &__email {
-    @include styles.setFont($size: 1.6rem, $weight: 400, $color: styles.$blue-link);
+    @include styles.setFont($size: 1em, $weight: 400, $color: styles.$blue-link);
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  &:hover {
-    cursor: pointer;
+  &:not(&--active):hover {
     background-color: styles.$white-bright;
-
-    .single-contact__avatar {
-    }
-
-    .single-contact__name {
-      // @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$white-soft);
-    }
   }
-  &:focus {
-    cursor: pointer;
-    background-color: styles.$gray-dark;
 
-    .single-contact__avatar {
-    }
+  &--active {
+    background-color: styles.$gray-dark;
+    transform: scale(1.02);
 
     .single-contact__name {
-      @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$white-soft);
+      @include styles.setFont(
+        $size: clamp(1em, 1.25em, 1.5em),
+        $weight: 400,
+        $color: styles.$white-soft
+      );
     }
   }
 }

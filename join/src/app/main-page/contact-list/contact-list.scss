@@ -3,8 +3,9 @@
 .contact-list {
   border: 1px solid red;
   @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1.4rem);
-  max-width: 36rem;
-  width: 100%;
+  min-width: 32rem;
+  max-width: 40rem;
+  // width: 100%;
   height: calc(100dvh - styles.$header-height);
   min-height: 0;
   padding: 1.6rem 1.6rem 0;
@@ -27,6 +28,7 @@
 
     &:hover {
       background-color: styles.$blue-sky;
+      transform: scale(1.02);
     }
 
     &:active {
@@ -59,7 +61,7 @@
   &__empty {
     @include styles.setFlex();
     min-height: 10rem;
-    @include styles.setFont($size: 1.5rem, $color: styles.$gray-light);
+    @include styles.setFont($size: 1em, $color: styles.$gray-light);
   }
 
   &__alphab-section {
@@ -74,7 +76,7 @@
   &__letter {
     // border: 1px solid red;
     padding-left: 0.5rem;
-    @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$gray-dark);
+    @include styles.setFont($size: 1.25em, $weight: 400, $color: styles.$gray-dark);
   }
 
   &__divider {

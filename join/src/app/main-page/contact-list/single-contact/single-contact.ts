@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
 import { getTwoInitials } from '../../../shared/utilities/utils';
 
@@ -10,6 +10,12 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
 })
 export class SingleContact {
   @Input() contact?: Contact;
+  @Input() isActive = false;
+  @Output() selected = new EventEmitter<Contact>();
 
   readonly getTwoInitials = getTwoInitials;
+
+  setContactAsSelected() {
+    this.selected.emit(this.contact);
+  }
 }
