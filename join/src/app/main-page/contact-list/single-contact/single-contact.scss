@@ -1,0 +1,56 @@
+@use '../../../../styles/index' as styles;
+
+.single-contact {
+  @include styles.setFlex($jc: flex-start, $gap: 1.5rem);
+  padding: 1rem 0.5rem;
+  border-radius: 2rem;
+  background-color: styles.$white;
+
+  &__avatar {
+    @include styles.setFlex();
+    width: 5rem;
+    height: 5rem;
+    border: 0.3rem solid styles.$white-soft;
+    border-radius: 50%;
+    background-color: styles.$purple-accent;
+  }
+
+  &__initials {
+    @include styles.setFont($size: 1em, $weight: 500, $color: #ffffff);
+  }
+
+  &__text {
+    @include styles.setFlex($d: column, $ai: flex-start, $gap: 0.4rem);
+  }
+
+  &__name {
+    @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$black);
+  }
+
+  &__email {
+    @include styles.setFont($size: 1.6rem, $weight: 400, $color: styles.$blue-link);
+  }
+
+  &:hover {
+    cursor: pointer;
+    background-color: styles.$white-bright;
+
+    .single-contact__avatar {
+    }
+
+    .single-contact__name {
+      // @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$white-soft);
+    }
+  }
+  &:focus {
+    cursor: pointer;
+    background-color: styles.$gray-dark;
+
+    .single-contact__avatar {
+    }
+
+    .single-contact__name {
+      @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$white-soft);
+    }
+  }
+}

@@ -4,5 +4,5 @@ export interface Contact {
   email: string;
   phone: number | string;
   isAvailable: boolean;
-  userColor?: string;
+  userColor?: string | null;
 }

@@ -1,0 +1,90 @@
+@use '../../../styles/index' as styles;
+
+.contact-list {
+  border: 1px solid red;
+  @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1.4rem);
+  max-width: 36rem;
+  width: 100%;
+  height: calc(100dvh - styles.$header-height);
+  min-height: 0;
+  padding: 1.6rem 1.6rem 0;
+  background-color: #ffffff;
+  overflow: hidden;
+
+  &__btn-box {
+    border: 1px solid red;
+    @include styles.setFlex($gap: 2rem);
+    width: 100%;
+    padding: 1rem 1.5rem;
+    border-radius: 1rem;
+    background-color: styles.$gray-dark;
+    @include styles.setFont($size: 1em, $weight: 700, $color: #ffffff);
+    box-shadow: 0 3px 10px #00000026;
+    transition:
+      background-color 0.2s ease,
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+
+    &:hover {
+      background-color: styles.$blue-sky;
+    }
+
+    &:active {
+      background-color: styles.$navy-dark;
+      transform: translateY(1px);
+    }
+  }
+
+  &__btn-text {
+    border: 1px solid red;
+    pointer-events: none;
+  }
+
+  &__btn-icon {
+    border: 1px solid red;
+    @include styles.setFlex();
+    width: 3rem;
+  }
+
+  &__scroll {
+    border: 1px solid red;
+    @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1.5rem);
+    flex: 1 1 auto;
+    height: 100%;
+    padding: 0.5rem 1.5rem;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
+  }
+
+  &__empty {
+    @include styles.setFlex();
+    min-height: 10rem;
+    @include styles.setFont($size: 1.5rem, $color: styles.$gray-light);
+  }
+
+  &__alphab-section {
+    // border: 1px solid red;
+    @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1rem);
+  }
+
+  &__alphab-section + &__alphab-section {
+    margin-top: 0.5rem;
+  }
+
+  &__letter {
+    // border: 1px solid red;
+    padding-left: 0.5rem;
+    @include styles.setFont($size: 2rem, $weight: 400, $color: styles.$gray-dark);
+  }
+
+  &__divider {
+    // border: 1px solid red;
+    width: 100%;
+    height: 1px;
+    background-color: styles.$gray-light;
+  }
+
+  &__single-contact {
+    // border: 1px solid red;
+  }
+}
