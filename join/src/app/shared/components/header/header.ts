@@ -8,5 +8,5 @@ import { RouterLink } from "@angular/router";
   styleUrl: './header.scss',
 })
 export class Header {
-
+  loggedIn: boolean = true;
 }
