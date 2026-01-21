@@ -1,1 +1,10 @@
-<p>single-contact works!</p>
+<li class="single-contact" [class.single-contact--active]="isActive" (click)="setContactAsSelected()">
+    <div class="single-contact__avatar" [style.backgroundColor]="contact?.userColor || null">
+        <!-- <div class="single-contact__avatar" [style.backgroundColor]="'#e60026'"> -->
+        <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
+    </div>
+    <div class="single-contact__text">
+        <div class="single-contact__name">{{ contact?.name }}</div>
+        <div class="single-contact__email">{{ contact?.email }}</div>
+    </div>
+</li>
