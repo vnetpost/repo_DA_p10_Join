@@ -1,0 +1,39 @@
+@use "../../src/styles/index.scss" as styles;
+
+.viewport-centered{
+    min-height: 100dvh;
+    
+    @include styles.desktop{
+        @include styles.setFlex();
+    }
+
+    .app-layout{
+        width: 100%;
+        max-width: 1440px;
+        height: 100dvh;
+        max-height: 1024px;
+        background-color: #f6f7f8;
+
+        @include styles.desktop{
+            @include styles.grid($rows: auto 1fr, $columns: 232px 1fr);
+        }
+    }
+}
+
+app-cockpit{
+    grid-area: 1/1/3/2;
+}
+
+app-header{
+    grid-area: 1/2/2/3;
+}
+
+.content-area{
+    grid-area: 2/2/3/3;
+    overflow-y: auto;
+    scrollbar-width: none; 
+}
+
+app-header, app-cockpit{
+    z-index: 2;
+}
