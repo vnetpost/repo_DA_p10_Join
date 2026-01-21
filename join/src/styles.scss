@@ -94,6 +94,53 @@ button{
 }
 // #endregion
 
+// #region Legal pages
+.legal-content-wrapper{
+    @include styles.setFlex();
+
+    .legal-page-article{
+        width: 90%;
+        padding: 7rem 0 12rem;
+        
+        h1 {
+            font-size: 3rem; 
+            padding: 0 0 16px;
+            font-weight: normal;
+        }
+
+        h2 {
+            font-size: 2rem; 
+            margin: 24px 0 0;
+            font-weight: normal;
+        }
+
+        h3{
+            font-size: 1.8rem; 
+            margin-top: 16px;
+            font-weight: normal;
+        }
+
+        h4, h5, h6{
+            font-size: 1.6rem; 
+            margin-top: 16px;
+            font-weight: normal;
+        }
+
+        ul {
+            padding-left: 24px;
+        }
+
+        p {
+            margin-top: 8px;
+        }
+
+        li{
+            list-style: square;
+        }
+    }
+}
+// #endregion
+
 // #region Visibility classes
 .mobile-only{
     @include styles.desktop{

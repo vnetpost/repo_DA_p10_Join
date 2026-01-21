@@ -9,8 +9,7 @@ section{
 
     @include styles.desktop{
         position: relative;
-        width: 232px;
-        height: 100dvh;
+        height: 100%;
     }
 
     .content-wrapper{
@@ -19,13 +18,15 @@ section{
         width: 90%;
 
         @include styles.desktop{
-            @include styles.setFlex($d: column, $jc: space-between, $gap: 100px);
+            @include styles.setFlex($d: column, $jc: space-around, $gap: 100px);
             height: 100%;
-            max-height: 1024px;
-            padding: 70px 0;
             width: 100%;
         }
     }
+}
+
+.logo{
+    margin-top: 70px;
 }
 
 nav{
@@ -92,6 +93,7 @@ nav{
 .legal-nav{
     @include styles.desktop{
         margin-top: 200px;
+        margin-bottom: 70px;
         width: 100%;
     }
 
