@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
-import { ContactDialog } from './contact-dialog/contact-dialog';
-import { ContactInfo } from './contact-info/contact-info';
+import { ContactDialog } from './contacts/contact-dialog/contact-dialog';
+import { ContactInfo } from './contacts/contact-info/contact-info';
 import { FirebaseService } from '../shared/services/firebase-service';
 
 @Component({
