@@ -18,16 +18,12 @@ a {
 
 html {
   @include styles.setFont($size: 10px);
-  scroll-padding-top: styles.$header-mobile;
+  // scroll-padding-top: styles.$header-mobile;
 
   > body {
     @include styles.setFont($size: 16px, $weight: 400);
-
-    min-height: 100dvh;
-
-    width: 100%;
-    // max-width: styles.$g-max-width;
-    // margin: 0 auto;
+    // min-height: 100dvh;
+    // width: 100%;
   }
 }
 
