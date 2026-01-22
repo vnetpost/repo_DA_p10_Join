@@ -16,6 +16,11 @@
             max-width: 1440px;
             height: 100dvh;
             max-height: 1024px;
+
+            >*{
+                min-width: 0;
+                min-height: 0;
+            }
         }
     }
 }

@@ -18,7 +18,7 @@ section{
         width: 90%;
 
         @include styles.desktop{
-            @include styles.setFlex($d: column, $jc: space-around, $gap: 100px);
+            @include styles.setFlex($d: column, $jc: space-around);
             height: 100%;
             width: 100%;
         }
