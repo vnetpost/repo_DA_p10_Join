@@ -1,6 +1,5 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { SingleContact } from './single-contact/single-contact';
-import { FirebaseService } from '../../../shared/services/firebase-service';
 import { Contact } from '../../../shared/interfaces/contact';
 
 @Component({
@@ -10,8 +9,10 @@ import { Contact } from '../../../shared/interfaces/contact';
   styleUrl: './contact-list.scss',
 })
 export class ContactList {
-  firebaseService = inject(FirebaseService);
-  activeContactID: string | number | null = null;
+  @Input() contacts: Contact[] = [];
+  @Input() activeContactID: string | number | null = null;
+  @Output() selected = new EventEmitter<{ contact: Contact; id: string | number }>();
+  @Output() addContact = new EventEmitter<void>();
 
   getFirstLetter(contact: Contact): string {
     const name = contact?.name?.trim();
@@ -23,7 +24,7 @@ export class ContactList {
 
   isNewLetter(index: number): boolean {
     if (index === 0) return true;
-    const contacts = this.firebaseService.contacts;
+    const contacts = this.contacts;
     return this.getFirstLetter(contacts[index]) !== this.getFirstLetter(contacts[index - 1]);
   }
 
@@ -32,8 +33,11 @@ export class ContactList {
   }
 
   setActiveContact(contact: Contact, index: number): void {
-    this.activeContactID = this.getContactId(contact, index);
+    const id = this.getContactId(contact, index);
+    this.selected.emit({ contact, id });
   }
 
-  openContactDialog() {}
+  openContactDialog() {
+    this.addContact.emit();
+  }
 }

@@ -9,11 +9,11 @@
     </button>
 
     <ul class="contact-list__scroll">
-        @if (!firebaseService.contacts.length) {
+        @if (!contacts.length) {
         <li class="contact-list__empty">No contacts yet</li>
         }
 
-        @for (contact of firebaseService.contacts; track getContactId(contact, $index); let idx = $index) {
+        @for (contact of contacts; track getContactId(contact, $index); let idx = $index) {
         <div class="contact-list__alphab-section">
             @if (isNewLetter(idx)) {
             <div class="contact-list__letter">{{ getFirstLetter(contact) }}</div>

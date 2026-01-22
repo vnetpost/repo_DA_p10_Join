@@ -168,7 +168,7 @@ button {
     ol > li {
       counter-increment: number-counter;
       list-style-position: outside;
-      @include styles.grid($columns: 20px 1fr);
+      @include styles.setGrid($columns: 20px 1fr);
 
       &::before {
         content: counter(number-counter) '. ';
