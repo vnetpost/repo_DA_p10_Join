@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink } from "@angular/router";
 
 @Component({
@@ -17,6 +17,11 @@ export class Header {
 
   closeMenu(): void{
     this.menuOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape() {
+    this.closeMenu();
   }
 
   logout(): void{
