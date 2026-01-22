@@ -2,7 +2,7 @@
 
 .contacts-desktop{
     @include styles.desktop{
-        @include styles.grid($columns: 40% 60%);
+        @include styles.setGrid($columns: 40% 60%);
         height: 100%;
     }
 }

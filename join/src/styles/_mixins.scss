@@ -7,7 +7,7 @@
   gap: $gap;
 }
 
-@mixin grid(
+@mixin setGrid(
   $rows: null,
   $columns: null,
   $gap: null,

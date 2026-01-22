@@ -5,7 +5,7 @@ import { Cockpit } from './shared/components/cockpit/cockpit';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, Cockpit],
+  imports: [Header, Cockpit, RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.scss',
 })
