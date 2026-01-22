@@ -18,25 +18,14 @@ a {
 
 html {
   @include styles.setFont($size: 10px);
-  scroll-padding-top: styles.$header-mobile;
 
   > body {
     @include styles.setFont($size: 16px, $weight: 400);
-
-    min-height: 100dvh;
-
-    
-
-    width: 100%;
-    // max-width: styles.$g-max-width;
-    // margin: 0 auto;
-
-    
   }
 }
 
 // #region Button styles
-button{
+button {
   padding: 8px;
   border: none;
   border-radius: 8px;
@@ -44,50 +33,50 @@ button{
   cursor: pointer;
 }
 
-.button--primary{
+.button--primary {
   background-color: styles.$gray-dark;
   color: white;
 
-  &:hover{
+  &:hover {
     background-color: styles.$blue-sky;
     box-shadow: 0px 4px 4px 0px #00000040;
   }
 
-  &:active{
+  &:active {
     background-color: styles.$navy-dark;
     box-shadow: 0px 4px 4px 0px #00000040;
   }
 }
 
-.button--secondary{
+.button--secondary {
   background-color: styles.$white-light;
   color: styles.$gray-dark;
   border: 1px solid styles.$gray-dark;
 
-  &:hover{
+  &:hover {
     color: styles.$blue-sky;
     border-color: styles.$blue-sky;
     box-shadow: 0px 4px 4px 0px #00000040;
   }
 
-  &:active{
+  &:active {
     color: styles.$gray-dark;
     border-color: styles.$gray-dark;
     box-shadow: 0px 4px 4px 0px #00000040;
   }
 }
 
-.button--disabled{
+.button--disabled {
   color: styles.$gray-dark;
   border: 1px solid styles.$gray-dark;
   filter: opacity(0.5);
   cursor: not-allowed;
 }
 
-.button--icon{
+.button--icon {
   @include styles.setFlex($gap: 4px);
 
-  .button__icon{
+  .button__icon {
     width: 20px;
     height: 20px;
   }
@@ -95,121 +84,125 @@ button{
 // #endregion
 
 // #region Legal pages
-.legal-content-wrapper{
-    @include styles.setFlex();
+.legal-content-wrapper {
+  @include styles.setFlex($ai: flex-start);
+  height: 100%;
+  overflow-y: auto;
+  scrollbar-width: none; 
 
-    .legal-page-article{
-        width: 90%;
-        padding: 7rem 0 12rem;
+  .legal-page-article {
+    width: 90%;
+    padding: 7rem 0 12rem;
 
-        .heading{
-          @include styles.setFlex($jc: space-between);
+    .heading {
+      @include styles.setFlex($jc: space-between);
 
-          >button{
-            background-color: transparent;
-          }
-        }
-        
-        h1 {
-            padding: 0 0 16px;
-            font-size: 42px; 
-
-            @include styles.desktop{
-              font-size: 60px; 
-            }
-        }
-
-        h2 {
-            margin: 24px 0 16px;
-            font-size: 24px; 
-
-            @include styles.desktop{
-              font-size: 30px; 
-            }
-        }
-
-        h3{
-            margin-top: 16px;
-            font-size: 20px; 
-
-            @include styles.desktop{
-              font-size: 24px; 
-            }
-        }
-
-        h4{
-            margin-top: 16px;
-            font-size: 18px; 
-
-            @include styles.desktop{
-              font-size: 20px; 
-            }
-        }
-
-        h5, h6{
-            margin-top: 16px;
-            font-size: 16px; 
-
-            @include styles.desktop{
-              font-size: 18px; 
-            }
-        }
-
-        ul {
-            padding-left: 24px;
-        }
-
-        li{
-          margin: 16px 0;
-        }
-
-        ol{
-          list-style: none;
-          counter-reset: number-counter;
-        }
-
-        ol>li{
-          counter-increment: number-counter;
-          list-style-position: outside;
-          @include styles.grid($columns: 20px 1fr);
-
-          &::before{
-            content: counter(number-counter) ". ";
-            font-weight: bold;
-            font-size: 20px;
-          }
-        }
-
-        .li-content{
-          margin-left: 15px;
-
-          >span{
-            font-weight: bold;
-            font-size: 18px;
-          }
-        }
-        
-        a{
-          color: styles.$blue-sky;
-        }
-
-        p {
-            margin-top: 8px;
-        }
+      > button {
+        background-color: transparent;
+      }
     }
+
+    h1 {
+      padding: 0 0 16px;
+      font-size: 42px;
+
+      @include styles.desktop {
+        font-size: 60px;
+      }
+    }
+
+    h2 {
+      margin: 24px 0 16px;
+      font-size: 24px;
+
+      @include styles.desktop {
+        font-size: 30px;
+      }
+    }
+
+    h3 {
+      margin-top: 16px;
+      font-size: 20px;
+
+      @include styles.desktop {
+        font-size: 24px;
+      }
+    }
+
+    h4 {
+      margin-top: 16px;
+      font-size: 18px;
+
+      @include styles.desktop {
+        font-size: 20px;
+      }
+    }
+
+    h5,
+    h6 {
+      margin-top: 16px;
+      font-size: 16px;
+
+      @include styles.desktop {
+        font-size: 18px;
+      }
+    }
+
+    ul {
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 16px 0;
+    }
+
+    ol {
+      list-style: none;
+      counter-reset: number-counter;
+    }
+
+    ol > li {
+      counter-increment: number-counter;
+      list-style-position: outside;
+      @include styles.setGrid($columns: 20px 1fr);
+
+      &::before {
+        content: counter(number-counter) '. ';
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+
+    .li-content {
+      margin-left: 15px;
+
+      > span {
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+
+    a {
+      color: styles.$blue-sky;
+    }
+
+    p {
+      margin-top: 8px;
+    }
+  }
 }
 // #endregion
 
 // #region Visibility classes
-.mobile-only{
-    @include styles.desktop{
-        display: none;
-    }
+.mobile-only {
+  @include styles.desktop {
+    display: none;
+  }
 }
 
-.desktop-only{
-    @include styles.notebook{
-        display: none;
-    }
+.desktop-only {
+  @include styles.notebook {
+    display: none;
+  }
 }
 // #endregion
