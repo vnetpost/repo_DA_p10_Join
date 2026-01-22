@@ -2,16 +2,16 @@
 
 .contacts-desktop{
     @include styles.desktop{
-        @include styles.setGrid($columns: 40% 60%);
+        @include styles.setFlex($ai: stretch);
         height: 100%;
+        width: 100%;
     }
 }
 
 app-contact-list{
-    grid-area: 1/1/2/2;
     background-color: white;
 } 
 
 app-contact-info{
-    grid-area: 1/2/2/3;
+    flex: 1;
 }
