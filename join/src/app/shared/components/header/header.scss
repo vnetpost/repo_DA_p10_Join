@@ -78,4 +78,25 @@ header{
             }
         }
     }
+
+    .user-menu{
+        position: absolute;
+        top: styles.$header-mobile;
+        right: 0;
+        @include styles.setFlex($d: column, $ai: flex-start, $gap: 24px);
+        width: 150px;
+        padding: 24px 16px 24px 24px;
+        border-radius: 16px 0 16px 16px;
+        background-color: styles.$gray-dark;
+
+        a{
+            color: #CDCDCD;
+        }
+
+        button{
+            color: #CDCDCD;
+            background-color: transparent;
+            padding: 0;
+        }
+    }
 }

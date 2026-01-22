@@ -9,4 +9,18 @@ import { RouterLink } from "@angular/router";
 })
 export class Header {
   loggedIn: boolean = true;
+  menuOpen: boolean = false;
+
+  toggleMenu(){
+    this.menuOpen = !this.menuOpen;
+  }
+
+  closeMenu(): void{
+    this.menuOpen = false;
+  }
+
+  logout(): void{
+    this.menuOpen = false;
+    // hier später Logik für Log-out rein
+  }
 }
