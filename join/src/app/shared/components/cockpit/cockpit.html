@@ -6,41 +6,41 @@
 
         <nav class="main-nav" aria-label="Primary navigation">
             @if (loggedIn) {
-                <ul>
-                    <li>
-                        <a routerLink="/summary">
-                            <img src="assets/img/icons/cockpit/summary.svg" alt="" aria-hidden="true">
-                            <span>Summary</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/add-task">
-                            <img src="assets/img/icons/cockpit/add-task.svg" alt="" aria-hidden="true">
-                            <span>Add Task</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/board">
-                            <img src="assets/img/icons/cockpit/board.svg" alt="" aria-hidden="true">
-                            <span>Board</span>
-                        </a>
-                    </li>
-                    <li>
-                        <a routerLink="/contacts">
-                            <img src="assets/img/icons/cockpit/contacts.svg" alt="" aria-hidden="true">
-                            <span>Contacts</span>
-                        </a>
-                    </li>
-                </ul>
+            <ul>
+                <li>
+                    <a routerLink="/summary">
+                        <img src="assets/img/icons/cockpit/summary.svg" alt="" aria-hidden="true">
+                        <span>Summary</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/add-task">
+                        <img src="assets/img/icons/cockpit/add-task.svg" alt="" aria-hidden="true">
+                        <span>Add Task</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/board">
+                        <img src="assets/img/icons/cockpit/board.svg" alt="" aria-hidden="true">
+                        <span>Board</span>
+                    </a>
+                </li>
+                <li>
+                    <a routerLink="/contacts">
+                        <img src="assets/img/icons/cockpit/contacts.svg" alt="" aria-hidden="true">
+                        <span>Contacts</span>
+                    </a>
+                </li>
+            </ul>
             } @else {
-                <ul>
-                    <li>
-                        <a routerLink="/log-in">
-                            <img src="assets/img/icons/cockpit/log-in.svg" alt="" aria-hidden="true">
-                            <span>Log In</span>
-                        </a>
-                    </li>
-                </ul>
+            <ul>
+                <li>
+                    <a routerLink="/log-in">
+                        <img src="assets/img/icons/cockpit/log-in.svg" alt="" aria-hidden="true">
+                        <span>Log In</span>
+                    </a>
+                </li>
+            </ul>
             }
         </nav>
 
@@ -56,15 +56,15 @@
         </nav>
         @if (!loggedIn) {
         <nav class="legal-nav mobile-only" aria-label="Legal navigation">
-                <ul>
-                    <li>
-                        <a routerLink="/privacy">Privacy Policy</a>
-                    </li>
-                    <li>
-                        <a routerLink="/imprint">Legal Notice</a>
-                    </li>
-                </ul>
-            </nav>
+            <ul>
+                <li>
+                    <a routerLink="/privacy">Privacy Policy</a>
+                </li>
+                <li>
+                    <a routerLink="/imprint">Legal Notice</a>
+                </li>
+            </ul>
+        </nav>
         }
     </div>
 </section>
