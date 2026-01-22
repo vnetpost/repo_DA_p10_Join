@@ -69,7 +69,19 @@ nav{
             a{
                 @include styles.setFlex($d: column, $gap: 4px);
                 color: #CDCDCD;
-    
+
+                
+                @include styles.notebook{
+                    width: 80px;
+                    height: 65px;
+                    border-radius: 8px;
+                }
+
+                @media(max-width: 350px){
+                    width: 70px;
+                    height: 65px;
+                }
+
                 @include styles.desktop{
                     @include styles.setFlex($d: row, $jc: flex-start, $gap: 8px);
                     width: 100%;
@@ -79,11 +91,35 @@ nav{
                 &:hover{
                     background-color: styles.$navy-dark;
                 }
+
+                .icon--active{
+                    display: none;
+                }
+
+                &.is-active{
+                    background-color: styles.$navy-dark;
+                    color: white;
+
+                    .icon--default{
+                        display: none;
+                    }
+
+                    .icon--active{
+                        display: block;
+                    }
+                }
                 
                 span{
                     @media(max-width: 350px){
                         display: none;
                     }
+                }
+            }
+
+            .log-in-link:focus{
+                @include styles.notebook{
+                    background-color: transparent;
+
                 }
             }
         }
@@ -98,7 +134,7 @@ nav{
     }
 
     ul{
-        @include styles.setFlex($gap: 16px);
+        @include styles.setFlex();
 
         @include styles.desktop{
             width: 100%;
@@ -113,6 +149,14 @@ nav{
             a{
                 color: #CDCDCD;
                 white-space: nowrap;
+
+                @include styles.notebook{
+                    @include styles.setFlex();
+                    width: 115px;
+                    height: 65px;
+                    border-radius: 8px;
+                    font-weight: normal;
+                }
     
                 @include styles.desktop{
                     @include styles.setFlex($d: column, $ai: flex-start, $gap: 16px);
@@ -123,6 +167,15 @@ nav{
                 &:hover{
                     color: styles.$blue-sky;
                     font-weight: 700;
+                }
+
+                &.is-active{
+                    background-color: styles.$navy-dark;
+
+                    @include styles.notebook{
+                        color: white;
+                        font-weight: normal;
+                    }
                 }
             }
         }
