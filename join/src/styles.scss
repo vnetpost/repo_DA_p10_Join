@@ -17,12 +17,14 @@ a {
 }
 
 html {
-  font-size: 10px;
+  @include styles.setFont($size: 10px);
   scroll-padding-top: styles.$header-mobile;
 
   > body {
-    font-size: 16px;
+    @include styles.setFont($size: 16px, $weight: 400);
+
     min-height: 100dvh;
+
     width: 100%;
     // max-width: styles.$g-max-width;
     // margin: 0 auto;
@@ -166,7 +168,7 @@ button {
     ol > li {
       counter-increment: number-counter;
       list-style-position: outside;
-      @include styles.setGrid($columns: 20px 1fr);
+      @include styles.grid($columns: 20px 1fr);
 
       &::before {
         content: counter(number-counter) '. ';
