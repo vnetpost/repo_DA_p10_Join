@@ -1,0 +1,25 @@
+@use "../../../../styles/index.scss" as styles;
+
+dialog {
+    margin: auto;
+    // position: revert;
+    position: fixed;
+    top: calc(styles.$header-mobile + 4px);
+
+    box-shadow: 0px 0px 4px 0px #0000001A;
+    border: none;
+
+    .dialog-content{
+        width: 326px;
+        height: 80dvh;
+
+        header{
+            background-color: styles.$gray-dark;
+        }
+
+        .form-section{
+
+        }
+        
+    }
+}
