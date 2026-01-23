@@ -1,14 +1,51 @@
-<dialog #contactDialog>
+<dialog #contactDialog open>
   <div class="dialog-content">
+
     <header>
       <button class="mobile-only">
         <img src="assets/img/icons/buttons/close-white.svg" alt="" />
       </button>
-      <h1>Add contact</h1>
-      <p>Tasks are better with a team</p>
-      <div class="line"></div>
+
+      <div class="title">
+        <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="">
+        <h1>Add contact</h1>
+        <p>Tasks are better with a team!</p>
+        <div class="line"></div>
+      </div>
     </header>
 
-    <section class="form-section"></section>
+    <section class="form-section">
+      <div class="avatar">
+        <img src="assets/img/icons/forms/contact-white.svg" alt="">
+      </div>
+
+      <form class="form">
+        <div class="form__input-box">
+          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required>
+          <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="">
+        </div>
+        <div class="form__input-box">
+          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required>
+          <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
+        </div>
+        <div class="form__input-box">
+          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required>
+          <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
+        </div>
+        
+        <div class="form__actions">
+          <button type="button" class="button button--secondary button--icon desktop-only">
+            Cancel
+            <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
+            <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
+          </button>
+          <button type="submit" class="button button--primary button--icon">
+            Create contact 
+            <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="">
+          </button>
+        </div>
+      </form>
+
+    </section>
   </div>
 </dialog>
