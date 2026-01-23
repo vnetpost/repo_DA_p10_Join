@@ -6,8 +6,7 @@ import { AfterViewInit, Component, ElementRef, ViewChild } from '@angular/core';
   templateUrl: './contact-dialog.html',
   styleUrl: './contact-dialog.scss',
 })
-export class ContactDialog{
-
+export class ContactDialog {
   // showDialog(dialog: HTMLDialogElement): void{
   //   dialog.showModal();
   // }

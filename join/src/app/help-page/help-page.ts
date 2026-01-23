@@ -7,7 +7,7 @@ import { Component, inject } from '@angular/core';
   templateUrl: './help-page.html',
   styleUrl: './help-page.scss',
 })
-export class HelpPage{
+export class HelpPage {
   location = inject(Location);
 
   back(): void {

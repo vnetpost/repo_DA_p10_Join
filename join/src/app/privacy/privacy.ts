@@ -7,7 +7,7 @@ import { Component, inject } from '@angular/core';
   templateUrl: './privacy.html',
   styleUrl: './privacy.scss',
 })
-export class Privacy{
+export class Privacy {
   location = inject(Location);
 
   back(): void {

@@ -1,5 +1,5 @@
 import { Component, HostListener } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +11,11 @@ export class Header {
   loggedIn: boolean = true;
   menuOpen: boolean = false;
 
-  toggleMenu(){
+  toggleMenu() {
     this.menuOpen = !this.menuOpen;
   }
 
-  closeMenu(): void{
+  closeMenu(): void {
     this.menuOpen = false;
   }
 
@@ -24,7 +24,7 @@ export class Header {
     this.closeMenu();
   }
 
-  logout(): void{
+  logout(): void {
     this.menuOpen = false;
     // hier später Logik für Log-out rein
   }

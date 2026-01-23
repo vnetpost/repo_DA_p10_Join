@@ -1,29 +1,40 @@
 <header>
-    <div class="content-wrapper">
-        <div class="content-left">
-            <a routerLink="" class="mobile-logo-link mobile-only" aria-label="Open start page">
-                <img src="assets/img/icons/logo-dark.svg" alt="Join">
-            </a>
-            <p class="desktop-title desktop-only">Kanban Project Management Tool</p>
-        </div>
-        <div class="content-right">
-            @if(loggedIn){
-                <a routerLink="/help" class="desktop-help-link desktop-only" title="Help" aria-label="Open help page">
-                    <img src="assets/img/icons/buttons/help.svg" alt="" aria-hidden="true">
-                </a>
-                <button class="user-menu-button" [class.is-open]="menuOpen" (click)="toggleMenu()" aria-label="Open user menu" aria-controls="user-menu">
-                    <span aria-hidden="true">G</span>
-                </button>
-                @if (menuOpen) {
-                    <div class="menu-overlay" (click)="closeMenu()"></div>
-                    <div id="user-menu" class="user-menu" role="menu">
-                        <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
-                        <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
-                        <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
-                        <a routerLink="" (click)="logout()" role="menuitem">Log out</a>
-                    </div>
-                }
-            }
-        </div>
+  <div class="content-wrapper">
+    <div class="content-left">
+      <a routerLink="" class="mobile-logo-link mobile-only" aria-label="Open start page">
+        <img src="assets/img/icons/logo-dark.svg" alt="Join" />
+      </a>
+      <p class="desktop-title desktop-only">Kanban Project Management Tool</p>
     </div>
+    <div class="content-right">
+      @if (loggedIn) {
+        <a
+          routerLink="/help"
+          class="desktop-help-link desktop-only"
+          title="Help"
+          aria-label="Open help page"
+        >
+          <img src="assets/img/icons/buttons/help.svg" alt="" aria-hidden="true" />
+        </a>
+        <button
+          class="user-menu-button"
+          [class.is-open]="menuOpen"
+          (click)="toggleMenu()"
+          aria-label="Open user menu"
+          aria-controls="user-menu"
+        >
+          <span aria-hidden="true">G</span>
+        </button>
+        @if (menuOpen) {
+          <div class="menu-overlay" (click)="closeMenu()"></div>
+          <div id="user-menu" class="user-menu" role="menu">
+            <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
+            <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
+            <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
+            <a routerLink="" (click)="logout()" role="menuitem">Log out</a>
+          </div>
+        }
+      }
+    </div>
+  </div>
 </header>
