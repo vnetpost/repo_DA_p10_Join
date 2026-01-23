@@ -3,14 +3,14 @@
 .viewport-centered {
   min-height: 100dvh;
 
-  @include styles.desktopSmall {
+  @include styles.up-lg {
     @include styles.setFlex();
   }
 
   .app-layout {
     background-color: #f6f7f8;
 
-    @include styles.desktopSmall {
+    @include styles.up-lg {
       @include styles.setGrid($rows: auto minmax(0, 1fr), $columns: 232px 1fr);
       width: 100%;
       max-width: 1440px;
