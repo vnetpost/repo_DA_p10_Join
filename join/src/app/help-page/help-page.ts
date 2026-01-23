@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-help-page',
@@ -7,15 +7,8 @@ import { Component, inject, OnInit } from '@angular/core';
   templateUrl: './help-page.html',
   styleUrl: './help-page.scss',
 })
-export class HelpPage implements OnInit{
+export class HelpPage{
   location = inject(Location);
-
-  ngOnInit(): void {
-    const el = document.querySelector('.content-area');
-    if (el) {
-      el.scrollTop = 0;
-    }
-  }
 
   back(): void {
     this.location.back();

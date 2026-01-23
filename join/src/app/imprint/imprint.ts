@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'app-imprint',
@@ -7,15 +7,8 @@ import { Component, inject, OnInit } from '@angular/core';
   templateUrl: './imprint.html',
   styleUrl: './imprint.scss',
 })
-export class Imprint implements OnInit{
+export class Imprint{
   location = inject(Location);
-
-  ngOnInit(): void {
-    const el = document.querySelector('.content-area');
-    if (el) {
-      el.scrollTop = 0;
-    }
-  }
 
   back(): void {
     this.location.back();
