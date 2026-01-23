@@ -1,82 +1,114 @@
 <section>
-    <div class="content-wrapper">
-        <a routerLink="" class="logo desktop-only" aria-label="To start page">
-            <img src="assets/img/icons/logo-light.svg" alt="Join">
-        </a>
+  <div class="content-wrapper">
+    <a routerLink="" class="logo desktop-only" aria-label="To start page">
+      <img src="assets/img/icons/logo-light.svg" alt="Join" />
+    </a>
 
-        <nav class="main-nav" aria-label="Primary navigation">
-            @if (loggedIn) {
-            <ul>
-                <li>
-                    <a routerLink="/summary" routerLinkActive="is-active">
-                        <img class="icon icon--default" src="assets/img/icons/cockpit/summary.svg" alt="" aria-hidden="true">
-                        <img class="icon icon--active" src="assets/img/icons/cockpit/summary-active.svg" alt="" aria-hidden="true">
-                        <span>Summary</span>
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/add-task" routerLinkActive="is-active">
-                        <img class="icon icon--default" src="assets/img/icons/cockpit/add-task.svg" alt="" aria-hidden="true">
-                        <img class="icon icon--active" src="assets/img/icons/cockpit/add-task-active.svg" alt="" aria-hidden="true">
-                        <span>Add Task</span>
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/board" routerLinkActive="is-active">
-                        <img class="icon icon--default" src="assets/img/icons/cockpit/board.svg" alt="" aria-hidden="true">
-                        <img class="icon icon--active" src="assets/img/icons/cockpit/board-active.svg" alt="" aria-hidden="true">
-                        <span>Board</span>
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/contacts" routerLinkActive="is-active">
-                        <img class="icon icon--default" src="assets/img/icons/cockpit/contacts.svg" alt="" aria-hidden="true">
-                        <img class="icon icon--active" src="assets/img/icons/cockpit/contacts-active.svg" alt="" aria-hidden="true">
-                        <span>Contacts</span>
-                    </a>
-                </li>
-            </ul>
-            } @else {
-            <ul>
-                <li>
-                    <a routerLink="/log-in" routerLinkActive="is-active" class="log-in-link">
-                        <img src="assets/img/icons/cockpit/log-in.svg" alt="" aria-hidden="true">
-                        <span>Log In</span>
-                    </a>
-                </li>
-            </ul>
-            }
-        </nav>
+    <nav class="main-nav" aria-label="Primary navigation">
+      @if (loggedIn) {
+        <ul>
+          <li>
+            <a routerLink="/summary" routerLinkActive="is-active">
+              <img
+                class="icon icon--default"
+                src="assets/img/icons/cockpit/summary.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <img
+                class="icon icon--active"
+                src="assets/img/icons/cockpit/summary-active.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Summary</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/add-task" routerLinkActive="is-active">
+              <img
+                class="icon icon--default"
+                src="assets/img/icons/cockpit/add-task.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <img
+                class="icon icon--active"
+                src="assets/img/icons/cockpit/add-task-active.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Add Task</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/board" routerLinkActive="is-active">
+              <img
+                class="icon icon--default"
+                src="assets/img/icons/cockpit/board.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <img
+                class="icon icon--active"
+                src="assets/img/icons/cockpit/board-active.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Board</span>
+            </a>
+          </li>
+          <li>
+            <a routerLink="/contacts" routerLinkActive="is-active">
+              <img
+                class="icon icon--default"
+                src="assets/img/icons/cockpit/contacts.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <img
+                class="icon icon--active"
+                src="assets/img/icons/cockpit/contacts-active.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Contacts</span>
+            </a>
+          </li>
+        </ul>
+      } @else {
+        <ul>
+          <li>
+            <a routerLink="/log-in" routerLinkActive="is-active" class="log-in-link">
+              <img src="assets/img/icons/cockpit/log-in.svg" alt="" aria-hidden="true" />
+              <span>Log In</span>
+            </a>
+          </li>
+        </ul>
+      }
+    </nav>
 
-        <nav class="legal-nav desktop-only" aria-label="Legal navigation">
-            <ul>
-                <li>
-                    <a routerLink="/privacy" routerLinkActive="is-active">
-                        Privacy Policy
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/imprint" routerLinkActive="is-active">
-                        Legal Notice
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        @if (!loggedIn) {
-        <nav class="legal-nav mobile-only" aria-label="Legal navigation">
-            <ul>
-                <li>
-                    <a routerLink="/privacy" routerLinkActive="is-active">
-                        Privacy Policy
-                    </a>
-                </li>
-                <li>
-                    <a routerLink="/imprint" routerLinkActive="is-active">
-                        Legal Notice
-                    </a>
-                </li>
-            </ul>
-        </nav>
-        }
-    </div>
+    <nav class="legal-nav desktop-only" aria-label="Legal navigation">
+      <ul>
+        <li>
+          <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
+        </li>
+        <li>
+          <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
+        </li>
+      </ul>
+    </nav>
+    @if (!loggedIn) {
+      <nav class="legal-nav mobile-only" aria-label="Legal navigation">
+        <ul>
+          <li>
+            <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
+          </li>
+          <li>
+            <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
+          </li>
+        </ul>
+      </nav>
+    }
+  </div>
 </section>
