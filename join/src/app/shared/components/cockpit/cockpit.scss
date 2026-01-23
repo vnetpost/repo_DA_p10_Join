@@ -7,7 +7,7 @@ section{
     width: 100%;
     background-color: styles.$gray-dark;
 
-    @include styles.desktop{
+    @include styles.desktopSmall{
         position: relative;
         height: 100%;
     }
@@ -17,7 +17,7 @@ section{
         height: 70px;
         width: 90%;
 
-        @include styles.desktop{
+        @include styles.desktopSmall{
             @include styles.setFlex($d: column, $jc: space-around);
             height: 100%;
             width: 100%;
@@ -51,7 +51,7 @@ nav{
     ul{
         @include styles.setFlex($jc: space-between);
 
-        @include styles.desktop{
+        @include styles.desktopSmall{
             @include styles.setFlex($d: column, $gap: 16px);
             width: 100%;
         }
@@ -61,7 +61,7 @@ nav{
         }
 
         li{
-            @include styles.desktop{
+            @include styles.desktopSmall{
                 width: 100%;
                 
             }
@@ -71,7 +71,7 @@ nav{
                 color: #CDCDCD;
 
                 
-                @include styles.notebook{
+                @include styles.tablet{
                     width: 80px;
                     height: 65px;
                     border-radius: 8px;
@@ -82,7 +82,7 @@ nav{
                     height: 65px;
                 }
 
-                @include styles.desktop{
+                @include styles.desktopSmall{
                     @include styles.setFlex($d: row, $jc: flex-start, $gap: 8px);
                     width: 100%;
                     padding: 8px 0 8px 50px;
@@ -117,7 +117,7 @@ nav{
             }
 
             .log-in-link:focus{
-                @include styles.notebook{
+                @include styles.tablet{
                     background-color: transparent;
 
                 }
@@ -127,7 +127,7 @@ nav{
 }
 
 .legal-nav{
-    @include styles.desktop{
+    @include styles.desktopSmall{
         margin-top: 200px;
         margin-bottom: 70px;
         width: 100%;
@@ -136,13 +136,13 @@ nav{
     ul{
         @include styles.setFlex();
 
-        @include styles.desktop{
+        @include styles.desktopSmall{
             width: 100%;
             display: block;
         }
 
         li{
-            @include styles.desktop{
+            @include styles.desktopSmall{
                 width: 100%;
             }
 
@@ -150,7 +150,7 @@ nav{
                 color: #CDCDCD;
                 white-space: nowrap;
 
-                @include styles.notebook{
+                @include styles.tablet{
                     @include styles.setFlex();
                     width: 115px;
                     height: 65px;
@@ -158,7 +158,7 @@ nav{
                     font-weight: normal;
                 }
     
-                @include styles.desktop{
+                @include styles.desktopSmall{
                     @include styles.setFlex($d: column, $ai: flex-start, $gap: 16px);
                     padding: 8px 0 8px 50px;
                     color: #A8A8A8;
@@ -172,7 +172,7 @@ nav{
                 &.is-active{
                     background-color: styles.$navy-dark;
 
-                    @include styles.notebook{
+                    @include styles.tablet{
                         color: white;
                         font-weight: normal;
                     }
