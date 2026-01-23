@@ -1,4 +1,4 @@
-import { Contact } from "../interfaces/contact";
+import { Contact } from '../interfaces/contact';
 
 export function capitalizeFullname(fullName?: string): string {
   if (!fullName) return '';
@@ -41,6 +41,6 @@ export function getTwoInitials(fullName?: string): string {
     .join('');
 }
 
-// export function 
+// export function
 // export function
 // export function

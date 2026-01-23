@@ -1,18 +1,18 @@
-@use "../../../styles/index.scss" as styles;
+@use '../../../styles/index.scss' as styles;
 
-.contacts-desktop{
-    @include styles.desktopSmall{
-        @include styles.setFlex($ai: stretch);
-        height: 100%;
-        width: 100%;
-    }
+.contacts-desktop {
+  @include styles.desktop {
+    @include styles.setFlex($ai: stretch);
+    height: 100%;
+    width: 100%;
+  }
 }
 
-app-contact-list{
-    background-color: white;
-} 
+app-contact-list {
+  background-color: white;
+}
 
-app-contact-info{
-    flex: 1;
-    min-width: 0;
+app-contact-info {
+  flex: 1;
+  min-width: 0;
 }

@@ -7,7 +7,8 @@ section {
   width: 100%;
   background-color: styles.$gray-dark;
 
-  @include styles.desktopSmall {
+<<<<<<< HEAD
+  @include styles.desktop {
     position: relative;
     height: 100%;
   }
@@ -17,10 +18,27 @@ section {
     height: 70px;
     width: 90%;
 
-    @include styles.desktopSmall {
+    @include styles.desktop {
       @include styles.setFlex($d: column, $jc: space-around);
       height: 100%;
       width: 100%;
+=======
+    @include styles.desktopSmall{
+        position: relative;
+        height: 100%;
+    }
+
+  .content-wrapper {
+    @include styles.setFlex($jc: space-between);
+    height: 70px;
+    width: 90%;
+
+        @include styles.desktopSmall{
+            @include styles.setFlex($d: column, $jc: space-around);
+            height: 100%;
+            width: 100%;
+        }
+>>>>>>> 4657778067b10cfa37efcaf510baef0db017dc64
     }
   }
 }
@@ -51,14 +69,19 @@ nav {
   ul {
     @include styles.setFlex($jc: space-between);
 
-    @include styles.desktopSmall {
+<<<<<<< HEAD
+    @include styles.desktop {
       @include styles.setFlex($d: column, $gap: 16px);
       width: 100%;
-    }
-
-    @media (max-width: 350px) {
-      justify-content: space-around;
-    }
+=======
+        @include styles.desktopSmall{
+            @include styles.setFlex($d: column, $gap: 16px);
+            width: 100%;
+        }
+        
+        @media(max-width: 350px){
+            justify-content: space-around;
+        }
 
     li {
       @include styles.desktopSmall {
@@ -114,34 +137,89 @@ nav {
         }
       }
 
-      .log-in-link:focus {
-        @include styles.tablet {
-          background-color: transparent;
+            .log-in-link:focus{
+                @include styles.tablet{
+                    background-color: transparent;
+
+                }
+            }
         }
-      }
+>>>>>>> 4657778067b10cfa37efcaf510baef0db017dc64
     }
-  }
-}
 
-.legal-nav {
-  @include styles.desktopSmall {
-    margin-top: 200px;
-    margin-bottom: 70px;
-    width: 100%;
-  }
-
-  ul {
-    @include styles.setFlex();
-
-    @include styles.desktopSmall {
-      width: 100%;
-      display: block;
+<<<<<<< HEAD
+    @media (max-width: 350px) {
+      justify-content: space-around;
     }
 
     li {
-      @include styles.desktopSmall {
+      @include styles.desktop {
+=======
+.legal-nav{
+    @include styles.desktopSmall{
+        margin-top: 200px;
+        margin-bottom: 70px;
+>>>>>>> 4657778067b10cfa37efcaf510baef0db017dc64
         width: 100%;
       }
+
+      a {
+        @include styles.setFlex($d: column, $gap: 4px);
+        color: #cdcdcd;
+
+<<<<<<< HEAD
+        @include styles.notebook {
+          width: 80px;
+          height: 65px;
+          border-radius: 8px;
+        }
+
+        @media (max-width: 350px) {
+          width: 70px;
+          height: 65px;
+        }
+
+        @include styles.desktop {
+          @include styles.setFlex($d: row, $jc: flex-start, $gap: 8px);
+          width: 100%;
+          padding: 8px 0 8px 50px;
+        }
+
+        &:hover {
+          background-color: styles.$navy-dark;
+        }
+
+        .icon--active {
+          display: none;
+        }
+
+        &.is-active {
+          background-color: styles.$navy-dark;
+          color: white;
+
+          .icon--default {
+            display: none;
+          }
+
+          .icon--active {
+=======
+        @include styles.desktopSmall{
+            width: 100%;
+>>>>>>> 4657778067b10cfa37efcaf510baef0db017dc64
+            display: block;
+          }
+        }
+
+<<<<<<< HEAD
+        span {
+          @media (max-width: 350px) {
+            display: none;
+          }
+=======
+        li{
+            @include styles.desktopSmall{
+                width: 100%;
+            }
 
       a {
         color: #cdcdcd;
@@ -169,7 +247,72 @@ nav {
         &.is-active {
           background-color: styles.$navy-dark;
 
-          @include styles.tablet {
+                    @include styles.tablet{
+                        color: white;
+                        font-weight: normal;
+                    }
+                }
+            }
+>>>>>>> 4657778067b10cfa37efcaf510baef0db017dc64
+        }
+      }
+
+      .log-in-link:focus {
+        @include styles.notebook {
+          background-color: transparent;
+        }
+      }
+    }
+  }
+}
+
+.legal-nav {
+  @include styles.desktop {
+    margin-top: 200px;
+    margin-bottom: 70px;
+    width: 100%;
+  }
+
+  ul {
+    @include styles.setFlex();
+
+    @include styles.desktop {
+      width: 100%;
+      display: block;
+    }
+
+    li {
+      @include styles.desktop {
+        width: 100%;
+      }
+
+      a {
+        color: #cdcdcd;
+        white-space: nowrap;
+
+        @include styles.notebook {
+          @include styles.setFlex();
+          width: 115px;
+          height: 65px;
+          border-radius: 8px;
+          font-weight: normal;
+        }
+
+        @include styles.desktop {
+          @include styles.setFlex($d: column, $ai: flex-start, $gap: 16px);
+          padding: 8px 0 8px 50px;
+          color: #a8a8a8;
+        }
+
+        &:hover {
+          color: styles.$blue-sky;
+          font-weight: 700;
+        }
+
+        &.is-active {
+          background-color: styles.$navy-dark;
+
+          @include styles.notebook {
             color: white;
             font-weight: normal;
           }
