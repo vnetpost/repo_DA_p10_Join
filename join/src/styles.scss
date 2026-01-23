@@ -103,7 +103,7 @@ button {
       padding: 0 0 16px;
       font-size: 42px;
 
-      @include styles.desktop {
+      @include styles.desktopSmall {
         font-size: 60px;
       }
     }
@@ -112,7 +112,7 @@ button {
       margin: 24px 0 16px;
       font-size: 24px;
 
-      @include styles.desktop {
+      @include styles.desktopSmall {
         font-size: 30px;
       }
     }
@@ -121,7 +121,7 @@ button {
       margin-top: 16px;
       font-size: 20px;
 
-      @include styles.desktop {
+      @include styles.desktopSmall {
         font-size: 24px;
       }
     }
@@ -130,7 +130,7 @@ button {
       margin-top: 16px;
       font-size: 18px;
 
-      @include styles.desktop {
+      @include styles.desktopSmall {
         font-size: 20px;
       }
     }
@@ -140,7 +140,7 @@ button {
       margin-top: 16px;
       font-size: 16px;
 
-      @include styles.desktop {
+      @include styles.desktopSmall {
         font-size: 18px;
       }
     }
@@ -192,13 +192,13 @@ button {
 
 // #region Visibility classes
 .mobile-only {
-  @include styles.desktop {
+  @include styles.desktopSmall {
     display: none;
   }
 }
 
 .desktop-only {
-  @include styles.notebook {
+  @include styles.tablet {
     display: none;
   }
 }

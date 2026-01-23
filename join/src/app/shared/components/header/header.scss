@@ -12,7 +12,7 @@ header{
         width: 93%;
         height: styles.$header-mobile;
 
-        @include styles.desktop{
+        @include styles.desktopSmall{
             width: 90%;
             height: styles.$header-desktop;
         }
@@ -40,7 +40,7 @@ header{
     .desktop-help-link{
         @include styles.setFlex();
 
-        @include styles.notebook{
+        @include styles.tablet{
             display: none;
         }
 
@@ -65,7 +65,7 @@ header{
             background-color: #E2E6EC;
         }
 
-        @include styles.desktop{
+        @include styles.desktopSmall{
             width: 50px;
             height: 50px;
         }
@@ -73,7 +73,7 @@ header{
         >span{
             @include styles.setFont($color: styles.$blue-sky, $weight: 900);
 
-            @include styles.desktop{
+            @include styles.desktopSmall{
                 font-size: 18px;
             }
         }
