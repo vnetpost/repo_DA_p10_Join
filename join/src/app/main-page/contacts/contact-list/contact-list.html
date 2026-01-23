@@ -2,28 +2,35 @@
 <!-- <app-single-contact /> -->
 
 <section class="contact-list">
-    <button class="contact-list__btn-box" type="button" (click)="openContactDialog()">
-        <span class="contact-list__btn-text">Add new contact</span>
-        <img class="contact-list__btn-icon" src="/assets/img/icons/buttons/add-contact.svg" alt="Add contact Icon"
-            aria-hidden="true">
-    </button>
+  <button class="contact-list__btn-box" type="button" (click)="openContactDialog()">
+    <span class="contact-list__btn-text">Add new contact</span>
+    <img
+      class="contact-list__btn-icon"
+      src="/assets/img/icons/buttons/add-contact.svg"
+      alt="Add contact Icon"
+      aria-hidden="true"
+    />
+  </button>
 
-    <ul class="contact-list__scroll">
-        @if (!contacts.length) {
-        <li class="contact-list__empty">No contacts yet</li>
+  <ul class="contact-list__scroll">
+    @if (!contacts.length) {
+      <li class="contact-list__empty">No contacts yet</li>
+    }
+
+    @for (contact of contacts; track getContactId(contact, $index); let idx = $index) {
+      <div class="contact-list__alphab-section">
+        @if (isNewLetter(idx)) {
+          <div class="contact-list__letter">{{ getFirstLetter(contact) }}</div>
+          <div class="contact-list__divider"></div>
         }
 
-        @for (contact of contacts; track getContactId(contact, $index); let idx = $index) {
-        <div class="contact-list__alphab-section">
-            @if (isNewLetter(idx)) {
-            <div class="contact-list__letter">{{ getFirstLetter(contact) }}</div>
-            <div class="contact-list__divider"></div>
-            }
-
-            <app-single-contact class="contact-list__single-contact" [contact]="contact"
-                [isActive]="activeContactID === getContactId(contact, idx)"
-                (selected)="setActiveContact(contact, idx)" />
-        </div>
-        }
-    </ul>
+        <app-single-contact
+          class="contact-list__single-contact"
+          [contact]="contact"
+          [isActive]="activeContactID === getContactId(contact, idx)"
+          (selected)="setActiveContact(contact, idx)"
+        />
+      </div>
+    }
+  </ul>
 </section>
