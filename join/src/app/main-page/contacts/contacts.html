@@ -1,18 +1,18 @@
 <div class="contacts-mobile mobile-only" id="contacts-mobile">
-    <app-contact-list
-        [contacts]="firebaseService.contacts"
-        [activeContactID]="activeContactID"
-        (selected)="setActiveContact($event)"
-        (addContact)="openContactDialog()"
-    />
+  <app-contact-list
+    [contacts]="firebaseService.contacts"
+    [activeContactID]="activeContactID"
+    (selected)="setActiveContact($event)"
+    (addContact)="openContactDialog()"
+  />
 </div>
 <div class="contacts-desktop desktop-only" id="contacts-desktop">
-    <app-contact-list
-        [contacts]="firebaseService.contacts"
-        [activeContactID]="activeContactID"
-        (selected)="setActiveContact($event)"
-        (addContact)="openContactDialog()"
-    />
-    <app-contact-info [contact]="activeContact" />
+  <app-contact-list
+    [contacts]="firebaseService.contacts"
+    [activeContactID]="activeContactID"
+    (selected)="setActiveContact($event)"
+    (addContact)="openContactDialog()"
+  />
+  <app-contact-info [contact]="activeContact" />
 </div>
 <!-- <app-contact-dialog /> -->
