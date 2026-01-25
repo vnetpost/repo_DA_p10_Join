@@ -2,8 +2,7 @@ $g-pad-x: clamp(1.2rem, 6vw, 7.5rem);
 $g-max-width: 1440px;
 $g-frame-gap: clamp(0.8rem, 1.5vw, 1.5rem);
 
-$header-mobile: 70px;
-$header-desktop: 96px;
+$header-height: clamp(70px, 6dvw, 96px);
 
 $menu-overlay-title-size: clamp(2em, 6vmin, 6em);
 

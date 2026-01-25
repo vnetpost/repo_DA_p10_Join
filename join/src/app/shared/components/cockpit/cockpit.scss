@@ -6,6 +6,7 @@ section {
   @include styles.setFlex();
   width: 100%;
   background-color: styles.$gray-dark;
+  z-index: 2;
 
   @include styles.up-xxl {
     position: relative;
@@ -69,7 +70,7 @@ nav {
     a {
       font-weight: 300;
 
-      img {
+      .icon {
         width: 25px;
         height: 25px;
         object-fit: contain;
@@ -126,6 +127,10 @@ nav {
           height: 65px;
         }
 
+        @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+          height: 50px;
+        }
+
         @include styles.up-xxl {
           @include styles.setFlex($d: row, $jc: flex-start, $gap: 8px);
           width: 100%;
@@ -150,6 +155,10 @@ nav {
 
           .icon--active {
             display: block;
+
+            @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+              display: none;
+            }
           }
         }
 

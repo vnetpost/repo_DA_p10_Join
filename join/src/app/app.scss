@@ -25,19 +25,16 @@
   }
 }
 
-app-cockpit {
-  grid-area: 1/1/3/2;
-}
-
-app-header {
-  grid-area: 1/2/2/3;
-}
-
-.content-area {
-  grid-area: 2/2/3/3;
-}
-
-app-header,
-app-cockpit {
-  z-index: 2;
+@include styles.up-xxl {
+  app-cockpit {
+    grid-area: 1/1/3/2;
+  }
+  
+  app-header {
+    grid-area: 1/2/2/3;
+  }
+  
+  .content-area {
+    grid-area: 2/2/3/3;
+  }
 }
