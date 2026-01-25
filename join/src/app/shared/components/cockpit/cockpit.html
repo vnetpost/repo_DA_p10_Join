@@ -88,18 +88,8 @@
       }
     </nav>
 
-    <nav class="legal-nav desktop-only" aria-label="Legal navigation">
-      <ul>
-        <li>
-          <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
-        </li>
-        <li>
-          <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
-        </li>
-      </ul>
-    </nav>
-    @if (!loggedIn) {
-      <nav class="legal-nav mobile-only" aria-label="Legal navigation">
+    @if (isDesktop || !loggedIn) {
+      <nav class="legal-nav" aria-label="Legal navigation">
         <ul>
           <li>
             <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
