@@ -2,75 +2,118 @@
 
 .contact-info {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
-  height: calc(100dvh - styles.$header-desktop);
-  padding: clamp(3rem, 5vw, 6rem) clamp(3rem, 6vw, 7rem);
+  height: 100%;
+  padding: clamp(3rem, 6vw, 6rem) clamp(3rem, 3vw, 7rem);
 
   &__header {
+    border: 1px solid red;
     @include styles.setFlex($jc: flex-start, $gap: 3rem);
-    flex-wrap: wrap;
+    // flex-wrap: wrap;
+
+    @include styles.down-xl {
+      @include styles.setFlex($d: column, $ai: flex-start, $gap: 2rem);
+
+      .contact-info__title {
+        order: 1;
+      }
+      .contact-info__header-divider {
+        order: 3;
+        height: 0.4rem;
+        // width: clamp(3rem, 5vw, 6rem);
+        width: 50%;
+      }
+      .contact-info__subtitle {
+        order: 2;
+      }
+    }
+  }
+
+  &__back-arrow {
+    display: none;
+    display: block;
+    border: 1px solid red;
+    position: absolute;
+    top: clamp(3rem, 6vw, 6rem);
+    right: 5%;
+
+    img {
+      width: 5rem;
+    }
+
+    @include styles.down-sm {
+      display: block;
+    }
   }
 
   &__title {
-    @include styles.setFont($size: clamp(2.8rem, 5vw, 6rem), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(2.8em, 5vw, 6em), $weight: 700, $color: styles.$black);
   }
 
   &__header-divider {
-    width: 0.3rem;
-    height: clamp(3rem, 5vw, 6rem);
-    border-radius: 100%;
+    width: 0.4rem;
+    height: 100%;
+    border-radius: 100rem;
     background-color: styles.$blue-sky;
   }
 
   &__subtitle {
     @include styles.setFont(
-      $size: clamp(1.4rem, 2.2vw, 2.4rem),
+      $size: clamp(1.4em, 2.2vw, 2.4em),
       $weight: 400,
       $color: styles.$gray-dark
     );
   }
 
   &__profile {
-    border: 1px solid red;
     width: 100%;
     @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 3rem);
   }
 
   &__main {
-    width: 100%;
     border: 1px solid red;
-    @include styles.setFlex($gap: 3.2rem);
+    width: 100%;
+
+    @include styles.setFlex($jc: flex-start, $gap: 2rem);
     // flex-wrap: wrap;
+
+    @include styles.down-xl {
+      @include styles.setFlex($d: column, $ai: flex-start, $gap: 2rem);
+
+      .contact-info__identity {
+        width: 100%;
+      }
+    }
   }
 
   &__avatar {
     @include styles.setFlex();
     flex-shrink: 0;
-    width: clamp(8rem, 12vw, 12rem);
-    height: clamp(8rem, 12vw, 12rem);
+    width: clamp(8rem, 7vw, 10rem);
+    height: clamp(8rem, 7vw, 10rem);
     border: 0.3rem solid styles.$white;
     border-radius: 50%;
-    background-color: styles.$orange-accent;
     box-shadow: 0 4px 12px #0000001a;
   }
 
   &__initials {
-    @include styles.setFont($size: clamp(2.4rem, 4vw, 4rem), $weight: 700, $color: styles.$white);
+    // padding: clamp(1rem, 2vw, 3rem);
+    @include styles.setFont($size: clamp(1.5em, 2.5vw, 2.5em), $weight: 700, $color: styles.$white);
   }
 
   &__identity {
-    width: 70%;
     border: 1px solid red;
+    flex: 1;
+    width: 70%;
     @include styles.setFlex($d: column, $ai: flex-start, $gap: 1.2rem);
   }
 
   &__name {
-    border: 1px solid red;
     width: 100%;
     // max-width: 25rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    @include styles.setFont($size: clamp(2.4rem, 4vw, 4rem), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(1.5em, 2.5vw, 2.5em), $weight: 700, $color: styles.$black);
   }
 
   &__actions {
@@ -78,21 +121,32 @@
   }
 
   &__action {
-    @include styles.setFlex($gap: 0.8rem);
+    @include styles.setFlex($jc: flex-start, $gap: 0.8rem);
+    width: 9rem;
     padding: 0;
     border: none;
+
     border-radius: 0;
     background: transparent;
     @include styles.setFont($size: 1em, $weight: 400, $color: styles.$gray-dark);
 
     &:hover {
       color: styles.$blue-link;
+      font-weight: 700;
+
+      .contact-info__action-icon {
+        filter: brightness(0) saturate(100%) invert(33%) sepia(93%) saturate(2671%)
+          hue-rotate(190deg) brightness(99%) contrast(101%);
+        transform: scale(1.2);
+      }
     }
   }
 
   &__action-icon {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 2.5rem;
+    transition:
+      filter 0.2s ease,
+      transform 0.2s ease;
   }
 
   &__details {
@@ -100,7 +154,7 @@
   }
 
   &__section-title {
-    @include styles.setFont($size: 2rem, $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(1.5em, 2.5vw, 2.5em), $weight: 400, $color: styles.$black);
   }
 
   &__detail {
@@ -108,10 +162,10 @@
   }
 
   &__label {
-    @include styles.setFont($size: 1.6rem, $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: 1.6em, $weight: 700, $color: styles.$black);
   }
 
   &__value {
-    @include styles.setFont($size: 1.6rem, $weight: 400, $color: styles.$blue-link);
+    @include styles.setFont($size: 1.6em, $weight: 400, $color: styles.$blue-link);
   }
 }

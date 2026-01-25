@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
@@ -9,4 +9,11 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Cockpit {
   loggedIn: boolean = true;
+
+  isDesktop: boolean = window.innerWidth >= 1025;
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.isDesktop = window.innerWidth >= 1025;
+  }
 }

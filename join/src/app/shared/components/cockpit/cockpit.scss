@@ -6,8 +6,9 @@ section {
   @include styles.setFlex();
   width: 100%;
   background-color: styles.$gray-dark;
+  z-index: 2;
 
-  @include styles.desktopSmall {
+  @include styles.up-xxl {
     position: relative;
     height: 100%;
   }
@@ -17,16 +18,49 @@ section {
     height: 70px;
     width: 90%;
 
-    @include styles.desktopSmall {
-      @include styles.setFlex($d: column, $jc: space-around);
+    @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+      height: 50px;
+    }
+
+    @media(min-width: 650px) and (max-width: 1024px){
+      width: 80%;
+    }
+
+    @include styles.up-xxl {
+      @include styles.setGrid($rows: 25% 30% 25% 20%, $columns: 1fr);
       height: 100%;
       width: 100%;
+
+      @media(max-height: 800px){
+        @include styles.setGrid($rows: 1fr 1fr 1fr, $columns: 1fr);
+      }
     }
   }
 }
 
 .logo {
-  margin-top: 70px;
+  @include styles.up-xxl{
+    grid-area: 1/1/2/2;
+    @include styles.setFlex();
+    height: 100%;
+
+    @media(max-height: 800px){
+        grid-area: 1/1/2/2;
+        height: 85%;
+    }
+
+    @media(max-height: 380px){
+      display: none;
+    }
+  }
+
+  >img{
+    @include styles.up-xxl{
+      width: auto;
+      height: auto;
+      max-height: 45%;
+    }
+  }
 }
 
 nav {
@@ -36,10 +70,14 @@ nav {
     a {
       font-weight: 300;
 
-      img {
+      .icon {
         width: 25px;
         height: 25px;
         object-fit: contain;
+
+        @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+          display: none;
+        }
       }
     }
   }
@@ -47,12 +85,21 @@ nav {
 
 .main-nav {
   width: 100%;
+  
+  @include styles.up-xxl{
+    grid-area: 2/1/3/2;
+
+    @media(max-height: 800px){
+      grid-area: 2/1/3/2;
+    }
+
+  }
 
   ul {
     @include styles.setFlex($jc: space-between);
 
-    @include styles.desktopSmall {
-      @include styles.setFlex($d: column, $gap: 16px);
+    @include styles.up-xxl {
+      @include styles.setFlex($d: column, $gap: 20px);
       width: 100%;
     }
 
@@ -61,7 +108,7 @@ nav {
     }
 
     li {
-      @include styles.desktopSmall {
+      @include styles.up-xxl {
         width: 100%;
       }
 
@@ -69,7 +116,7 @@ nav {
         @include styles.setFlex($d: column, $gap: 4px);
         color: #cdcdcd;
 
-        @include styles.notebook {
+        @include styles.down-xxl {
           width: 80px;
           height: 65px;
           border-radius: 8px;
@@ -80,10 +127,14 @@ nav {
           height: 65px;
         }
 
-        @include styles.desktopSmall {
+        @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+          height: 50px;
+        }
+
+        @include styles.up-xxl {
           @include styles.setFlex($d: row, $jc: flex-start, $gap: 8px);
           width: 100%;
-          padding: 8px 0 8px 50px;
+          padding: 8px 0 8px 55px;
         }
 
         &:hover {
@@ -104,6 +155,10 @@ nav {
 
           .icon--active {
             display: block;
+
+            @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+              display: none;
+            }
           }
         }
 
@@ -111,11 +166,14 @@ nav {
           @media (max-width: 350px) {
             display: none;
           }
+          @include styles.up-xxl{
+            text-align: left;
+          }
         }
       }
 
       .log-in-link:focus {
-        @include styles.notebook {
+        @include styles.down-xxl {
           background-color: transparent;
         }
       }
@@ -124,22 +182,29 @@ nav {
 }
 
 .legal-nav {
-  @include styles.desktopSmall {
-    margin-top: 200px;
-    margin-bottom: 70px;
+  @include styles.up-xxl {
+    grid-area: 4/1/5/2;
     width: 100%;
+
+    @media(max-height: 800px){
+      grid-area: 3/1/4/2;
+    }
+
+    @media(max-height: 450px){
+      display: none;
+    }
   }
 
   ul {
     @include styles.setFlex();
 
-    @include styles.desktopSmall {
+    @include styles.up-xxl {
+      @include styles.setFlex($d: column);
       width: 100%;
-      display: block;
     }
 
     li {
-      @include styles.desktopSmall {
+      @include styles.up-xxl {
         width: 100%;
       }
 
@@ -147,7 +212,7 @@ nav {
         color: #cdcdcd;
         white-space: nowrap;
 
-        @include styles.notebook {
+        @include styles.down-xxl {
           @include styles.setFlex();
           width: 115px;
           height: 65px;
@@ -155,9 +220,9 @@ nav {
           font-weight: normal;
         }
 
-        @include styles.desktopSmall {
+        @include styles.up-xxl {
           @include styles.setFlex($d: column, $ai: flex-start, $gap: 16px);
-          padding: 8px 0 8px 50px;
+          padding: 8px 0 8px 55px;
           color: #a8a8a8;
         }
 
@@ -169,7 +234,7 @@ nav {
         &.is-active {
           background-color: styles.$navy-dark;
 
-          @include styles.notebook {
+          @include styles.down-xxl {
             color: white;
             font-weight: normal;
           }

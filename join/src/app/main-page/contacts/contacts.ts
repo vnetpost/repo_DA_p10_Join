@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
 import { ContactInfo } from './contact-info/contact-info';
 import { ContactDialog } from './contact-dialog/contact-dialog';
@@ -7,20 +7,40 @@ import { Contact } from '../../shared/interfaces/contact';
 
 @Component({
   selector: 'app-contacts',
-  imports: [ContactList, ContactInfo, ContactDialog],
+  imports: [ContactList, ContactInfo],
   templateUrl: './contacts.html',
   styleUrl: './contacts.scss',
 })
 export class Contacts {
   firebaseService = inject(FirebaseService);
-  activeContactID: string | number | null = null;
+  private readonly mobileMaxWidth = 768;
+
+  isMobile = false;
+  activeContactID: string | null = null;
   activeContact: Contact | null = null;
 
-  setActiveContact(selection: {  id: string | number; contact: Contact }): void {
+  constructor() {
+    this.updateIsMobile();
+  }
+
+  @HostListener('window:resize')
+  onResize(): void {
+    this.updateIsMobile();
+  }
+
+  private updateIsMobile(): void {
+    this.isMobile = window.innerWidth <= this.mobileMaxWidth;
+  }
+
+  setActiveContact(selection: { id: string; contact: Contact }): void {
     this.activeContactID = selection.id;
     this.activeContact = selection.contact;
   }
 
   openContactDialog(): void {}
 
+  @HostListener('contextmenu', ['$event'])
+  onContextMenu(event: Event): void {
+    event.preventDefault();
+  }
 }

@@ -10,8 +10,8 @@ import { Contact } from '../../../shared/interfaces/contact';
 })
 export class ContactList {
   @Input() contacts: Contact[] = [];
-  @Input() activeContactID: string | number | null = null;
-  @Output() selected = new EventEmitter<{ contact: Contact; id: string | number }>();
+  @Input() activeContactID: string | null = null;
+  @Output() selected = new EventEmitter<{ contact: Contact; id: string }>();
   @Output() addContact = new EventEmitter<void>();
 
   getFirstLetter(contact: Contact): string {
@@ -28,7 +28,7 @@ export class ContactList {
     return this.getFirstLetter(contacts[index]) !== this.getFirstLetter(contacts[index - 1]);
   }
 
-  getContactId(contact: Contact, index: number): string | number {
+  getContactId(contact: Contact, index: number): string {
     return contact.id ?? `${contact.name}-${index}`;
   }
 

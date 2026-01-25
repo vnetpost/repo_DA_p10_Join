@@ -1,11 +1,17 @@
 @use '../../../styles/index.scss' as styles;
 
+.contacts {
+  border: 1px solid red;
+  height: 100%;
+  width: 100%;
+}
+
 .contacts-desktop {
-  @include styles.desktopSmall {
-    @include styles.setFlex($ai: stretch);
-    height: 100%;
-    width: 100%;
-  }
+  @include styles.setFlex($ai: stretch);
+}
+
+.contacts-mobile {
+  @include styles.setFlex($ai: stretch);
 }
 
 app-contact-list {

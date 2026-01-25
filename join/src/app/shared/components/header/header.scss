@@ -4,17 +4,23 @@ header {
   position: sticky;
   top: 0;
   @include styles.setFlex();
+  height: styles.$header-height;
   background-color: white;
   box-shadow: 0px 4px 4px 0px #0000001a;
+  z-index: 2;
+  overflow-x: clip;
+
+  @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+    height: 60px;
+  }
 
   .content-wrapper {
     @include styles.setFlex($jc: space-between);
     width: 93%;
-    height: styles.$header-mobile;
 
-    @include styles.desktopSmall {
-      width: 90%;
-      height: styles.$header-desktop;
+    @include styles.up-xxl {
+      width: 93%;
+      padding-left: 75px;
     }
   }
 }
@@ -39,7 +45,7 @@ header {
   .desktop-help-link {
     @include styles.setFlex();
 
-    @include styles.tablet {
+    @include styles.down-xxl {
       display: none;
     }
 
@@ -59,6 +65,7 @@ header {
     border: 2px solid styles.$gray-dark;
     border-radius: 50%;
     background-color: white;
+    z-index: 100;
 
     &:hover {
       background-color: #e2e6ec;
@@ -73,7 +80,7 @@ header {
       outline-offset: 3px;
     }
 
-    @include styles.desktopSmall {
+    @include styles.up-xxl {
       width: 50px;
       height: 50px;
     }
@@ -81,7 +88,7 @@ header {
     > span {
       @include styles.setFont($color: styles.$blue-sky, $weight: 900);
 
-      @include styles.desktopSmall {
+      @include styles.up-xxl {
         font-size: 18px;
       }
     }
@@ -104,10 +111,33 @@ header {
     border-radius: 16px 0 16px 16px;
     background-color: styles.$gray-dark;
     z-index: 11;
+    
+    @include styles.down-xxl {
+      opacity: 0;
+      transform: translateX(100%);
+      transition: transform 160ms ease, opacity 120ms ease;
+      pointer-events: none;
+    }
 
-    @include styles.desktopSmall {
-      top: 150%;
-      right: -32px;
+    @include styles.up-xxl {
+      top: 130%;
+      right: -8px;
+      display: none;
+    }
+
+    &.is-open{
+      opacity: 1;
+      pointer-events: auto;
+
+      @include styles.down-xxl{
+        transform: translateX(0);
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      @include styles.up-xxl {
+        @include styles.setFlex($d: column, $ai: flex-start);
+      }
     }
 
     a {

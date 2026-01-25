@@ -27,13 +27,13 @@
         </button>
         @if (menuOpen) {
           <div class="menu-overlay" (click)="closeMenu()"></div>
-          <div id="user-menu" class="user-menu" role="menu">
-            <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
-            <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
-            <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
-            <a routerLink="" (click)="logout()" role="menuitem">Log out</a>
-          </div>
         }
+        <div id="user-menu" class="user-menu" [class.is-open]="menuOpen" role="menu">
+          <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
+          <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
+          <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
+          <a routerLink="" (click)="logout()" role="menuitem">Log out</a>
+        </div>
       }
     </div>
   </div>
