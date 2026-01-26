@@ -1,4 +1,4 @@
-<dialog #contactDialog open>
+<dialog #contactDialog open (cancel)="onEsc($event)" (click)="onBackdropClick($event)">
   <div class="dialog-content">
 
     <header>
@@ -13,6 +13,11 @@
         <div class="line"></div>
       </div>
     </header>
+
+    <button class="close-btn-desktop">
+      <img src="assets/img/icons/buttons/close.svg" alt="">
+      <img src="assets/img/icons/buttons/close-hover.svg" alt="">
+    </button>
 
     <section class="form-section">
       <div class="avatar">
@@ -79,3 +84,6 @@
     </section>
   </div>
 </dialog>
+
+
+<button (click)="openDialog()">Add contact</button>

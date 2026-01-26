@@ -4,21 +4,37 @@ dialog {
   margin: auto;
   // position: revert;
   position: fixed;
-  top: calc(styles.$header-height + 4px);
+  
+  @include styles.down-xxl{
+    top: calc(styles.$header-height + 4px);
+  }
+
   @include styles.up-xxl{
-    top: 200px;
+    top: 300px;
   }
 
   box-shadow: 0px 0px 4px 0px #0000001a;
-  border: 1px solid transparent;
+  border: none;
   border-radius: 16px;
   z-index: 100;
+
+  &.opened {
+    background: transparent;
+    border-radius: 16px;
+    border: none;
+
+    &::backdrop {
+      opacity: 0.7;
+      background: #b3b3b3;
+    }
+  }
 
   .dialog-content {
     @include styles.setGrid($rows: 20% 25% 1fr);
     width: 90dvw;
     max-width: 350px;
     height: 590px;
+    background-color: white;
 
     @include styles.up-xxl{
       @include styles.setGrid($rows: 1fr, $columns: 40% 60%);
@@ -73,6 +89,19 @@ header {
       height: 3px;
       background-color: lightblue;
     }
+  }
+}
+
+.close-btn-desktop{
+  @include styles.up-xxl{
+    grid-area: 1/2/2/3;
+    justify-self: end;
+    align-self: start;
+    margin: 8px;
+    background-color: transparent;
+
+    // img{
+    // }
   }
 }
 
