@@ -1,7 +1,6 @@
 @use '../../../styles/index.scss' as styles;
 
 .contacts {
-  border: 1px solid red;
   height: 100%;
   width: 100%;
 }
@@ -21,4 +20,32 @@ app-contact-list {
 app-contact-info {
   flex: 1;
   min-width: 0;
+}
+
+@include styles.down-lg {
+  app-contact-list {
+    width: 100%;
+  }
+
+  app-contact-info {
+    display: none;
+  }
+
+  .contacts-detail-open {
+    app-contact-info {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100dvh;
+      background-color: #ffffff;
+      overflow-y: auto;
+    }
+
+    app-contact-list {
+      display: none;
+    }
+  }
 }

@@ -3,35 +3,19 @@
 .contact-info {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
   height: 100%;
-  padding: clamp(3rem, 6vw, 6rem) clamp(3rem, 3vw, 7rem);
+  width: 100%;
+  position: relative;
+  padding: clamp(2rem, 6vw, 5rem) clamp(2rem, 3vw, 5rem);
 
   &__header {
-    border: 1px solid red;
-    @include styles.setFlex($jc: flex-start, $gap: 3rem);
+    //
+    @include styles.setFlex($jc: flex-start, $gap: clamp(1rem, 1vw, 3rem));
     // flex-wrap: wrap;
-
-    @include styles.down-xl {
-      @include styles.setFlex($d: column, $ai: flex-start, $gap: 2rem);
-
-      .contact-info__title {
-        order: 1;
-      }
-      .contact-info__header-divider {
-        order: 3;
-        height: 0.4rem;
-        // width: clamp(3rem, 5vw, 6rem);
-        width: 50%;
-      }
-      .contact-info__subtitle {
-        order: 2;
-      }
-    }
   }
 
   &__back-arrow {
+    //
     display: none;
-    display: block;
-    border: 1px solid red;
     position: absolute;
     top: clamp(3rem, 6vw, 6rem);
     right: 5%;
@@ -46,7 +30,7 @@
   }
 
   &__title {
-    @include styles.setFont($size: clamp(2.8em, 5vw, 6em), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(1.5em, 3vw, 3em), $weight: 700, $color: styles.$black);
   }
 
   &__header-divider {
@@ -57,23 +41,24 @@
   }
 
   &__subtitle {
+    //
     @include styles.setFont(
-      $size: clamp(1.4em, 2.2vw, 2.4em),
+      $size: clamp(1em, 2.2vw, 1.4em),
       $weight: 400,
       $color: styles.$gray-dark
     );
   }
 
   &__profile {
+    border: 1px solid red;
     width: 100%;
     @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 3rem);
   }
 
   &__main {
-    border: 1px solid red;
     width: 100%;
 
-    @include styles.setFlex($jc: flex-start, $gap: 2rem);
+    @include styles.setFlex($jc: flex-start, $gap: 1rem);
     // flex-wrap: wrap;
 
     @include styles.down-xl {
@@ -82,6 +67,11 @@
       .contact-info__identity {
         width: 100%;
       }
+    }
+
+    @include styles.down-lg {
+      //
+      @include styles.setFlex($jc: flex-start, $gap: 2rem);
     }
   }
 
@@ -101,7 +91,6 @@
   }
 
   &__identity {
-    border: 1px solid red;
     flex: 1;
     width: 70%;
     @include styles.setFlex($d: column, $ai: flex-start, $gap: 1.2rem);
@@ -113,7 +102,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    @include styles.setFont($size: clamp(1.5em, 2.5vw, 2.5em), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(1.2em, 2.5vw, 2em), $weight: 700, $color: styles.$black);
   }
 
   &__actions {
@@ -162,10 +151,92 @@
   }
 
   &__label {
-    @include styles.setFont($size: 1.6em, $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(1em, 1.6vw, 2em), $weight: 700, $color: styles.$black);
   }
 
   &__value {
-    @include styles.setFont($size: 1.6em, $weight: 400, $color: styles.$blue-link);
+    @include styles.setFont(
+      $size: clamp(1em, 1.5vw, 1.5em),
+      $weight: 400,
+      $color: styles.$blue-link
+    );
+  }
+
+  &__fab {
+    display: none;
+    @include styles.setFlex();
+    position: fixed;
+    right: clamp(1.6rem, 4vw, 2.4rem);
+    bottom: clamp(9rem, 4vw, 10rem);
+    width: clamp(5rem, 12vw, 6rem);
+    height: clamp(5rem, 12vw, 6rem);
+    border: none;
+    border-radius: 50%;
+    padding: 0;
+    background-color: styles.$gray-dark;
+    box-shadow: 0 6px 16px #00000033;
+    cursor: pointer;
+    z-index: 2;
+
+    img {
+      width: clamp(2.2rem, 5vw, 2.8rem);
+      height: clamp(2.2rem, 5vw, 2.8rem);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+@include styles.down-lg {
+  .contact-info__title {
+    @include styles.setFont($size: clamp(2em, 9vw, 3em), $weight: 700, $color: styles.$black);
+  }
+
+  .contact-info__subtitle {
+    @include styles.setFont(
+      $size: clamp(1em, 2.2vw, 1.4em),
+      $weight: 400,
+      $color: styles.$gray-dark
+    );
+  }
+  .contact-info__back-arrow {
+    display: block;
+  }
+
+  .contact-info__actions {
+    display: none;
+  }
+
+  .contact-info__name {
+    overflow: hidden;
+    text-overflow: unset;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .contact-info__fab {
+    display: flex;
+  }
+}
+
+@include styles.down-xs {
+  .contact-info__header {
+    @include styles.setFlex($d: column, $ai: flex-start, $gap: 2rem);
+
+    .contact-info__title {
+      order: 1;
+    }
+    .contact-info__header-divider {
+      order: 3;
+      height: 0.4rem;
+      // width: clamp(3rem, 5vw, 6rem);
+      width: 50%;
+    }
+    .contact-info__subtitle {
+      order: 2;
+    }
   }
 }
