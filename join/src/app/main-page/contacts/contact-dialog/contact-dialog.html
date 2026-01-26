@@ -2,21 +2,29 @@
   <div class="dialog-content">
 
     <header>
-      <button class="mobile-only">
+      <button class="close-btn-mobile mobile-only" (click)="closeDialog()">
         <img src="assets/img/icons/buttons/close-white.svg" alt="" />
       </button>
 
       <div class="title">
         <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="">
-        <h1>Add contact</h1>
-        <p>Tasks are better with a team!</p>
+        <h1>
+          @if (dialogMode === "add") {
+            Add contact
+          } @else {
+            Edit contact
+          }
+        </h1>
+        @if (dialogMode === "add") {
+          <p>Tasks are better with a team!</p>
+        }
         <div class="line"></div>
       </div>
     </header>
 
-    <button class="close-btn-desktop">
-      <img src="assets/img/icons/buttons/close.svg" alt="">
-      <img src="assets/img/icons/buttons/close-hover.svg" alt="">
+    <button class="close-btn-desktop desktop-only" (click)="closeDialog()">
+      <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="">
+      <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="">
     </button>
 
     <section class="form-section">
@@ -69,13 +77,22 @@
         </div>
         
         <div class="form__actions">
-          <button type="button" class="button button--secondary button--icon desktop-only">
-            Cancel
-            <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
-            <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
+          <button type="button" class="button button--secondary button--icon desktop-only" (click)="closeDialog()">
+            @if(dialogMode === "add"){
+              Cancel
+              <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
+              <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
+            } @else {
+              Delete
+            }
           </button>
+
           <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid">
-            Create contact 
+            @if(dialogMode === "add"){
+              Create contact
+            } @else {
+              Save
+            }
             <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="">
           </button>
         </div>
@@ -87,3 +104,5 @@
 
 
 <button (click)="openDialog()">Add contact</button>
+<!-- <button (click)="openAddDialog()">Add contact</button> -->
+<!-- <button (click)="openEditDialog(existingContact)">Edit</button> -->

@@ -57,11 +57,12 @@ header {
     border-radius: 16px 0 0 16px;
   }
 
-  button{
+  .close-btn-mobile{
     grid-area: 1/1/2/2;
     background-color: transparent;
     justify-self: end;
     padding: 8px;
+    z-index: 101;
   }
 
   .title{
@@ -99,9 +100,21 @@ header {
     align-self: start;
     margin: 8px;
     background-color: transparent;
+    z-index: 101;
 
-    // img{
-    // }
+    .icon--hover{
+      display: none;
+    }
+
+    &:hover{
+      .icon--default{
+        display: none;
+      }
+  
+      .icon--hover{
+        display: block;
+      }
+    }
   }
 }
 
@@ -157,6 +170,16 @@ header {
       &::placeholder{
         color: styles.$gray-light;
       }
+
+      &:focus {
+        outline: none;
+        border-color: styles.$gray-dark;
+      }
+
+      &.ng-invalid.ng-touched,
+      &.ng-invalid.ng-dirty {
+          border-color: styles.$red-error;
+        }
     }
 
     .form__icon{
@@ -188,6 +211,12 @@ header {
             .button__icon--hover{
               display: block;
             }
+          }
+
+          &:disabled{
+              border: 1px solid styles.$gray-dark;
+              filter: opacity(0.5);
+              pointer-events: none;
           }
         }
 
