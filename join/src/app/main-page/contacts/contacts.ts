@@ -7,7 +7,7 @@ import { Contact } from '../../shared/interfaces/contact';
 
 @Component({
   selector: 'app-contacts',
-  imports: [ContactList, ContactInfo],
+  imports: [ContactList, ContactInfo, ContactDialog],
   templateUrl: './contacts.html',
   styleUrl: './contacts.scss',
 })

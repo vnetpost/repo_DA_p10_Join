@@ -4,8 +4,8 @@ dialog {
   margin: auto;
   // position: revert;
   position: fixed;
-  top: calc(styles.$header-mobile + 4px);
-  @include styles.desktopSmall{
+  top: calc(styles.$header-height + 4px);
+  @include styles.up-xxl{
     top: 200px;
   }
 
@@ -20,7 +20,7 @@ dialog {
     max-width: 350px;
     height: 590px;
 
-    @include styles.desktopSmall{
+    @include styles.up-xxl{
       @include styles.setGrid($rows: 1fr, $columns: 40% 60%);
       width: 80dvw;
       max-width: 1000px;
@@ -36,7 +36,7 @@ header {
   border-radius: 16px 16px 0 0;
   @include styles.setGrid($rows: auto 1fr);
 
-  @include styles.desktopSmall{
+  @include styles.up-xxl{
     grid-area: 1/1/2/2;
     border-radius: 16px 0 0 16px;
   }
@@ -63,7 +63,7 @@ header {
     h1{
       font-size: 39px;
       
-      @include styles.desktopSmall{
+      @include styles.up-xxl{
         font-size: 60px;
       }
     }
@@ -80,7 +80,7 @@ header {
   grid-area: 2/1/4/2;
   @include styles.setFlex($d: column, $gap: 24px);
 
-  @include styles.desktopSmall{
+  @include styles.up-xxl{
     grid-area: 1/2/2/3;
     @include styles.setFlex($d: row, $gap: 24px);
   }
@@ -104,7 +104,7 @@ header {
     @include styles.setFlex($d: column, $ai: center, $gap: 16px);
     width: 100%;
     
-    @include styles.desktopSmall{
+    @include styles.up-xxl{
       @include styles.setFlex($d: column, $ai: flex-start, $gap: 16px);
       width: 70%;
     }
@@ -112,7 +112,7 @@ header {
     .form__input-box{
       width: 90%;
 
-      @include styles.desktopSmall{
+      @include styles.up-xxl{
         width: 100%;
       }
     }
@@ -122,16 +122,17 @@ header {
       height: 30px;
       border: 1px solid styles.$gray-light;
       border-radius: 8px;
+      @include styles.setFont();
+      padding-left: 16px;
 
       &::placeholder{
         color: styles.$gray-light;
-        padding-left: 16px;
       }
     }
 
     .form__icon{
       position: absolute;
-      right: 12px;
+      right: 4px;
       top: 5px;
       transform: translate(-50%);
       pointer-events: none;
@@ -140,7 +141,7 @@ header {
     }
 
       .form__actions{
-        @include styles.desktopSmall{
+        @include styles.up-xxl{
           @include styles.setFlex($gap: 16px);
         }
 
@@ -164,6 +165,12 @@ header {
         .button--secondary{
           background-color: white;
         }
+      }
+
+      .form__error{
+          display: block;
+          margin-top: 2px;
+          color: styles.$red-error;
       }
     }
   

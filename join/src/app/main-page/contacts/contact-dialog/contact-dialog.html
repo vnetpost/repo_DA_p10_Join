@@ -19,18 +19,48 @@
         <img src="assets/img/icons/forms/contact-white.svg" alt="">
       </div>
 
-      <form class="form">
+      <form class="form" #contactForm ="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+        
         <div class="form__input-box">
-          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required>
+          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required minlength="2" [(ngModel)]="contactData.name" #name="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="">
+          @if (name.invalid && (name.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (name.errors?.['required']) {
+                Name is required.
+              } @else if (name.errors?.['minlength']) {
+                Name must be at least 2 characters.
+              }
+            </span>
+          }
         </div>
+
         <div class="form__input-box">
-          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required>
+          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
+          @if (email.invalid && (email.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (email.errors?.['required']) {
+                Email is required.
+              } @else if (email.errors?.['pattern']) {
+                Please enter a valid email address.
+              }
+            </span>
+          }
         </div>
+
         <div class="form__input-box">
-          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required>
+          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required pattern="^[0-9]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
+          @if (phone.invalid && (phone.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (phone.errors?.['required']) {
+                Phone number is required.
+              } @else if (phone.errors?.['pattern']) {
+                Only numbers are allowed.
+              }
+            </span>
+          }
         </div>
         
         <div class="form__actions">
@@ -39,7 +69,7 @@
             <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
             <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
           </button>
-          <button type="submit" class="button button--primary button--icon">
+          <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid">
             Create contact 
             <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="">
           </button>
