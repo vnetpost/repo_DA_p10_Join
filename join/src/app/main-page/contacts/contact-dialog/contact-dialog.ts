@@ -1,6 +1,7 @@
 import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Contact } from '../../../shared/interfaces/contact';
+import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -13,17 +14,14 @@ export class ContactDialog {
   dialog!: ElementRef<HTMLDialogElement>;
 
   dialogMode: 'add' | 'edit' = 'add';
-  // dialogMode: 'add' | 'edit' = 'edit';
+  @Output() saveContact = new EventEmitter<ContactFormData>();
+  @Output() deleteContact = new EventEmitter<string>();
 
-  contactData = {
+  contactData: ContactFormData = {
     name: '',
     email: '',
     phone: '',
   };
-
-  @Output() save = new EventEmitter<Contact>();
-  @Output() delete = new EventEmitter<string>();
-
 
   // #region Methods
   // #region Opening dialog
@@ -62,28 +60,28 @@ export class ContactDialog {
       return;
     }
 
-    if (this.dialogMode === 'add') {
-      this.createContact();
-    } else {
-      this.updateContact();
-
-    }
+    this.saveContact.emit({
+      name: this.contactData.name,
+      email: this.contactData.email,
+      phone: this.contactData.phone,
+    });
 
     this.closeDialog();
-    form.resetForm({
-      name: '',
-      email: '',
-      phone: '',
-    });
+
+    if (this.dialogMode === 'add') {
+      form.resetForm({
+        name: '',
+        email: '',
+        phone: '',
+      });
+    }
   }
 
-  createContact(): void {
-    console.log('Created:', this.contactData);
+  onDeleteClick(): void {
+    this.deleteContact.emit();
+    this.closeDialog();
   }
 
-  updateContact(): void {
-    console.log('Updated:', this.contactData);
-  }
 
   // #region Closing dialog
   closeDialog(): void {

@@ -1,4 +1,4 @@
-<dialog #contactDialog open (cancel)="onEsc($event)" (click)="onBackdropClick($event)">
+<dialog #contactDialog (cancel)="onEsc($event)" (click)="onBackdropClick($event)">
   <div class="dialog-content">
 
     <header>
@@ -77,16 +77,17 @@
         </div>
         
         <div class="form__actions">
+        @if(dialogMode === "add"){
           <button type="button" class="button button--secondary button--icon desktop-only" (click)="closeDialog()">
-            @if(dialogMode === "add"){
               Cancel
               <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
               <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
-            } @else {
-              Delete
-            }
           </button>
-
+        } @else {
+            <button type="button" class="button button--secondary desktop-only" (click)="onDeleteClick()">
+              Delete
+          </button>
+        }
           <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid">
             @if(dialogMode === "add"){
               Create contact
@@ -101,8 +102,3 @@
     </section>
   </div>
 </dialog>
-
-
-<button (click)="openDialog()">Add contact</button>
-<!-- <button (click)="openAddDialog()">Add contact</button> -->
-<!-- <button (click)="openEditDialog(existingContact)">Edit</button> -->

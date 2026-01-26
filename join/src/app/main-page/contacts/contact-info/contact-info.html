@@ -22,7 +22,7 @@
         <div class="contact-info__identity">
           <h2 class="contact-info__name">{{ contact.name }}</h2>
           <div class="contact-info__actions">
-            <button class="contact-info__action" type="button">
+            <button class="contact-info__action" type="button" (click)="editContact.emit()">
               <img
                 class="contact-info__action-icon"
                 src="/assets/img/icons/buttons/edit.svg"
@@ -31,7 +31,7 @@
               />
               <span>Edit</span>
             </button>
-            <button class="contact-info__action" type="button">
+            <button class="contact-info__action" type="button" (click)="deleteContact.emit()">
               <img
                 class="contact-info__action-icon"
                 src="/assets/img/icons/buttons/delete.svg"

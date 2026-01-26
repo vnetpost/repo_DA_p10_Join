@@ -36,8 +36,4 @@ export class ContactList {
     const id = this.getContactId(contact, index);
     this.selected.emit({ contact, id });
   }
-
-  openContactDialog() {
-    this.addContact.emit();
-  }
 }

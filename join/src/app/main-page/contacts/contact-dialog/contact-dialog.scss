@@ -2,16 +2,16 @@
 
 dialog {
   margin: auto;
-  // position: revert;
-  position: fixed;
+  position: revert;
+  // position: fixed;
   
-  @include styles.down-xxl{
-    top: calc(styles.$header-height + 4px);
-  }
+  // @include styles.down-xxl{
+  //   top: calc(styles.$header-height + 4px);
+  // }
 
-  @include styles.up-xxl{
-    top: 300px;
-  }
+  // @include styles.up-xxl{
+  //   top: 300px;
+  // }
 
   box-shadow: 0px 0px 4px 0px #0000001a;
   border: none;
