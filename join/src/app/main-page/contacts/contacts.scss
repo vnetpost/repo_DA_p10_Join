@@ -70,3 +70,47 @@ app-contact-info {
     }
   }
 }
+
+.toast-wrapper{
+  position: fixed;
+  inset: 0;
+  @include styles.setFlex();
+  z-index: 1000;
+  pointer-events: none;
+
+  @include styles.up-xxl {
+    transform: translate(7dvw, 25dvh);
+  }
+}
+
+.toast {
+  padding: 16px 24px;
+  border-radius: 8px;
+  background-color: styles.$gray-dark;
+  color: white;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+
+  @include styles.down-xxl{
+    transform: translateY(100%);
+  }
+
+  @include styles.up-xxl{
+    transform: translateX(100%);
+  }
+
+  &--visible {
+    opacity: 1;
+
+    @include styles.down-xxl{
+      transform: translateY(0);
+    }
+
+    @include styles.up-xxl{
+      transform: translateX(0);
+    }
+  }
+}

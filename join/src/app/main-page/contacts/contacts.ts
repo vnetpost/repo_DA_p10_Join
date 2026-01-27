@@ -21,6 +21,7 @@ export class Contacts {
   isDetailOpen = false;
   activeContactID: string | null = null;
   activeContact: Contact | null = null;
+  toastVisible = false;
 
   @ViewChild(ContactDialog)
   dialog!: ContactDialog;
@@ -76,10 +77,11 @@ export class Contacts {
       email: data.email,
       phone: data.phone,
       isAvailable: true,
-      userColor: null, // oder setUserColor()
+      userColor: null,
     };
 
     this.firebaseService.addDocument(contact);
+    this.showToast();
   }
 
   updateContactFromForm(data: ContactFormData): void {
@@ -103,4 +105,13 @@ export class Contacts {
     this.activeContact = null;
     this.activeContactID = null;
   }
+
+  showToast(): void {
+    this.toastVisible = true;
+
+    setTimeout(() => {
+      this.toastVisible = false;
+    }, 1200);
+  }
+
 }

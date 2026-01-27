@@ -24,6 +24,10 @@ html {
   }
 }
 
+body:has(dialog[open]){
+    overflow: hidden;
+}
+
 // #region Button styles
 button {
   padding: 8px;
@@ -31,11 +35,16 @@ button {
   border-radius: 8px;
   @include styles.setFont();
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .button--primary {
   background-color: styles.$gray-dark;
   color: white;
+
+  @include styles.up-xxl{
+    padding: 14px;
+  }
 
   &:hover {
     background-color: styles.$blue-sky;
@@ -52,6 +61,10 @@ button {
   background-color: styles.$white-light;
   color: styles.$gray-dark;
   border: 1px solid styles.$gray-dark;
+
+  @include styles.up-xxl{
+    padding: 14px;
+  }
 
   &:hover {
     color: styles.$blue-sky;
