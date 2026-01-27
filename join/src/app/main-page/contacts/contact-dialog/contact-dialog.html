@@ -40,18 +40,20 @@
         </div>
       }
 
-      <form class="form" #contactForm ="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+      <form class="form" #contactForm ="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate autocomplete="off">
         
         <div class="form__input-box">
-          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required minlength="2" [(ngModel)]="contactData.name" #name="ngModel">
+          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required minlength="2" pattern="^[A-Za-zÄÖÜäöüß\s]+$" [(ngModel)]="contactData.name" #name="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="">
-          @if (name.invalid && (name.touched || contactForm.submitted)) {
+          @if (name.invalid && name.touched) {
             <span class="form__error">
               @if (name.errors?.['required']) {
                 Name is required.
               } @else if (name.errors?.['minlength']) {
                 Name must be at least 2 characters.
-              }
+              } @else if (name.errors?.['pattern']) {
+                  Only letters are allowed.
+                }
             </span>
           }
         </div>
@@ -59,12 +61,12 @@
         <div class="form__input-box">
           <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required minlength="5" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
-          @if (email.invalid && (email.touched || contactForm.submitted)) {
+          @if (email.invalid && email.touched) {
             <span class="form__error">
               @if (email.errors?.['required']) {
                 Email is required.
               } @else if (email.errors?.['minlength']) {
-                  Email must be at least 5 characters long.
+                  Email must be at least 5 characters.
                 } @else if (email.errors?.['pattern']) {
                     Please enter a valid email address.
                 }
@@ -75,12 +77,12 @@
         <div class="form__input-box">
           <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required minlength="5" pattern="^\+?[0-9 ]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
-          @if (phone.invalid && (phone.touched || contactForm.submitted)) {
+          @if (phone.invalid && phone.touched) {
             <span class="form__error">
               @if (phone.errors?.['required']) {
                 Phone number is required.
               } @else if (phone.errors?.['minlength']) {
-                Number must be at least 5 characters long.
+                Number must be at least 5 characters.
               }@else if (phone.errors?.['pattern']) {
                 Only numbers, spaces and + are allowed.
               }
@@ -96,9 +98,9 @@
               <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="" aria-hidden="true">
           </button>
         } @else {
-            <button type="button" class="button button--secondary desktop-only" (click)="onDeleteClick()" aria-label="Delete contact">
-              Delete
-          </button>
+            <button type="button" class="button button--secondary" (click)="onDeleteClick()" aria-label="Delete contact">
+                Delete
+            </button>
         }
           <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid" aria-label="Save changes">
             @if(dialogMode === "add"){
