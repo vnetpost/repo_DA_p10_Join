@@ -8,8 +8,13 @@
     [contacts]="firebaseService.contacts"
     [activeContactID]="activeContactID"
     (selected)="setActiveContact($event)"
-    (addContact)="openContactDialog()"
+    (addContact)="openAddDialog()"
   />
-  <app-contact-info [activeContact]="activeContact" (back)="closeContactInfo()" />
+  <app-contact-info
+    [activeContact]="activeContact"
+    (back)="closeContactInfo()"
+    (editContact)="openEditDialog(activeContact!)"
+    (deleteContact)="onDelete(activeContact!)"
+  />
 </div>
-<!-- <app-contact-dialog /> -->
+<app-contact-dialog (saveContact)="onSave($event)" (deleteContact)="onDelete(activeContact!)" />

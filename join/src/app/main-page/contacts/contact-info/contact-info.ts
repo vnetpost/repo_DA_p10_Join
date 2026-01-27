@@ -11,6 +11,8 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
 export class ContactInfo {
   @Input() activeContact: Contact | null = null;
   @Output() back = new EventEmitter<void>();
+  @Output() editContact = new EventEmitter<void>();
+  @Output() deleteContact = new EventEmitter<void>();
 
   readonly getTwoInitials = getTwoInitials;
 

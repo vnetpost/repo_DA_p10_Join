@@ -1,14 +1,104 @@
-<dialog #contactDialog>
+<dialog #contactDialog (cancel)="onEsc($event)" (click)="onBackdropClick($event)">
   <div class="dialog-content">
+
     <header>
-      <button class="mobile-only">
+      <button class="close-btn-mobile mobile-only" (click)="closeDialog()">
         <img src="assets/img/icons/buttons/close-white.svg" alt="" />
       </button>
-      <h1>Add contact</h1>
-      <p>Tasks are better with a team</p>
-      <div class="line"></div>
+
+      <div class="title">
+        <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="">
+        <h1>
+          @if (dialogMode === "add") {
+            Add contact
+          } @else {
+            Edit contact
+          }
+        </h1>
+        @if (dialogMode === "add") {
+          <p>Tasks are better with a team!</p>
+        }
+        <div class="line"></div>
+      </div>
     </header>
 
-    <section class="form-section"></section>
+    <button class="close-btn-desktop desktop-only" (click)="closeDialog()">
+      <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="">
+      <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="">
+    </button>
+
+    <section class="form-section">
+      <div class="avatar">
+        <img src="assets/img/icons/forms/contact-white.svg" alt="">
+      </div>
+
+      <form class="form" #contactForm ="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
+        
+        <div class="form__input-box">
+          <input class="form__input" type="text" placeholder="Name" name="name" aria-label="Name" required minlength="2" [(ngModel)]="contactData.name" #name="ngModel">
+          <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="">
+          @if (name.invalid && (name.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (name.errors?.['required']) {
+                Name is required.
+              } @else if (name.errors?.['minlength']) {
+                Name must be at least 2 characters.
+              }
+            </span>
+          }
+        </div>
+
+        <div class="form__input-box">
+          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
+          <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
+          @if (email.invalid && (email.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (email.errors?.['required']) {
+                Email is required.
+              } @else if (email.errors?.['pattern']) {
+                Please enter a valid email address.
+              }
+            </span>
+          }
+        </div>
+
+        <div class="form__input-box">
+          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required pattern="^[0-9]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
+          <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
+          @if (phone.invalid && (phone.touched || contactForm.submitted)) {
+            <span class="form__error">
+              @if (phone.errors?.['required']) {
+                Phone number is required.
+              } @else if (phone.errors?.['pattern']) {
+                Only numbers are allowed.
+              }
+            </span>
+          }
+        </div>
+        
+        <div class="form__actions">
+        @if(dialogMode === "add"){
+          <button type="button" class="button button--secondary button--icon desktop-only" (click)="closeDialog()">
+              Cancel
+              <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
+              <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
+          </button>
+        } @else {
+            <button type="button" class="button button--secondary desktop-only" (click)="onDeleteClick()">
+              Delete
+          </button>
+        }
+          <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid">
+            @if(dialogMode === "add"){
+              Create contact
+            } @else {
+              Save
+            }
+            <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="">
+          </button>
+        </div>
+      </form>
+
+    </section>
   </div>
 </dialog>
