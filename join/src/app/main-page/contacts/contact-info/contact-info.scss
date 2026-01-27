@@ -1,6 +1,7 @@
 @use '../../../../styles/index.scss' as styles;
 
 .contact-info {
+  
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
   height: 100%;
   width: 100%;
@@ -81,8 +82,10 @@
   &__name {
     width: 100%;
     overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    text-overflow: unset;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    word-break: break-word;
     @include styles.setFont($size: clamp(1.2em, 2.5vw, 2em), $weight: 700, $color: styles.$black);
   }
 
@@ -141,6 +144,15 @@
       $weight: 400,
       $color: styles.$blue-link
     );
+    overflow: hidden;
+    text-overflow: unset;
+    white-space: pre-line;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  &__value--phone {
+    color: styles.$black;
   }
 
   &__fab {
@@ -184,7 +196,6 @@
 
   &__fab-menu {
     display: none;
-    // border: 1px solid red;
     position: fixed;
     right: clamp(1.6rem, 4vw, 2.4rem);
     bottom: clamp(15rem, 8vw, 18rem);
@@ -270,11 +281,6 @@
   }
 
   .contact-info__name {
-    overflow: hidden;
-    text-overflow: unset;
-    white-space: pre-line;
-    overflow-wrap: anywhere;
-    word-break: break-word;
     font-size: clamp(1.2em, 6vw, 2.5em);
   }
 
@@ -292,6 +298,12 @@
 
   .contact-info__main {
     @include styles.setFlex($jc: flex-start, $gap: 2rem);
+  }
+}
+
+@include styles.down-xxl {
+  .contact-info {
+    height: calc(100dvh - 2 * styles.$header-height);
   }
 }
 
