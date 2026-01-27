@@ -19,6 +19,8 @@
 </div>
 <app-contact-dialog (saveContact)="onSave($event)" (deleteContact)="onDelete(activeContact!)" />
 
-<div class="toast" [class.toast--visible]="toastVisible" role="status" aria-live="polite">
-  Contact successfully created
+<div class="toast-wrapper">
+  <p class="toast" [class.toast--visible]="toastVisible" role="status" aria-live="polite">
+    Contact successfully created
+  </p>
 </div>

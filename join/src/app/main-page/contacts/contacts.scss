@@ -50,13 +50,21 @@ app-contact-info {
   }
 }
 
-.toast {
+.toast-wrapper{
   position: fixed;
-  top: 50%;
-  left: 50%;
+  inset: 0;
+  @include styles.setFlex();
   z-index: 1000;
-  padding: 1.2rem 1.6rem;
-  border-radius: 1.2rem;
+  pointer-events: none;
+
+  @include styles.up-xxl {
+    transform: translate(7dvw, 25dvh);
+  }
+}
+
+.toast {
+  padding: 16px 24px;
+  border-radius: 8px;
   background-color: styles.$gray-dark;
   color: white;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
