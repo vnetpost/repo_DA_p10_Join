@@ -1,4 +1,4 @@
-<section class="contact-info" >
+<section class="contact-info">
   <header class="contact-info__header">
     <h1 class="contact-info__title">Contacts</h1>
     <span class="contact-info__header-divider" aria-hidden="true"></span>
@@ -10,7 +10,10 @@
   </a>
 
   @if (activeContact) {
-    <div class="contact-info__profile">
+    <div
+      class="contact-info__profile"
+      [class.animIt]="profileAnimating"
+      >
       <div class="contact-info__main">
         <div
           class="contact-info__avatar"
@@ -59,8 +62,53 @@
         </div>
       </div>
     </div>
-    <button class="contact-info__fab" type="button" aria-label="Contact options">
+    <button
+      class="contact-info__fab"
+      type="button"
+      aria-label="Contact options"
+      aria-controls="contact-info-fab-menu"
+      [attr.aria-expanded]="fabMenuOpen"
+      (click)="toggleFabMenu()"
+    >
       <img src="/assets/img/icons/buttons/contact-options.svg" alt="" aria-hidden="true" />
     </button>
+    @if (fabMenuOpen) {
+      <div class="contact-info__fab-overlay" (click)="closeFabMenu()"></div>
+      <div
+        id="contact-info-fab-menu"
+        class="contact-info__fab-menu"
+        role="menu"
+        (keydown.escape)="closeFabMenu()"
+      >
+        <button
+          class="contact-info__fab-action"
+          type="button"
+          role="menuitem"
+          (click)="handleFabEdit()"
+        >
+          <img
+            class="contact-info__fab-action-icon"
+            src="/assets/img/icons/buttons/edit.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <span>Edit</span>
+        </button>
+        <button
+          class="contact-info__fab-action"
+          type="button"
+          role="menuitem"
+          (click)="handleFabDelete()"
+        >
+          <img
+            class="contact-info__fab-action-icon"
+            src="/assets/img/icons/buttons/delete.svg"
+            alt=""
+            aria-hidden="true"
+          />
+          <span>Delete</span>
+        </button>
+      </div>
+    }
   }
 </section>
