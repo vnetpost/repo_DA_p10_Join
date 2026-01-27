@@ -2,13 +2,18 @@
 
 .contact-list {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1.4rem);
-  width: 100%;
   max-width: clamp(32rem, 40vw, 40rem);
   height: 100%;
   min-height: 0;
   padding: clamp(1.2rem, 2vw, 1.8rem) clamp(1.2rem, 2vw, 1.8rem) 0;
   background-color: #ffffff;
   overflow: hidden;
+  
+  @include styles.down-lg {
+    width: 100%;
+    max-width: 100%;
+    min-height: 0;
+  }
 
   &__button {
     @include styles.setFlex($gap: clamp(1.2rem, 2vw, 2rem));
@@ -26,11 +31,13 @@
     &:hover {
       background-color: styles.$blue-sky;
       transform: scale(1.02);
+      box-shadow: 0px 4px 4px 0px #00000040;
     }
-
+    
     &:active {
       background-color: styles.$navy-dark;
       transform: translateY(1px);
+      box-shadow: 0px 4px 4px 0px #00000040;
     }
 
     @include styles.down-sm {

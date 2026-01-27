@@ -18,6 +18,7 @@ export class Contacts {
   private readonly mobileMaxWidth = 768;
 
   isMobile = false;
+  isDetailOpen = false;
   activeContactID: string | null = null;
   activeContact: Contact | null = null;
   toastVisible = false;
@@ -41,6 +42,11 @@ export class Contacts {
   setActiveContact(selection: { id: string; contact: Contact }): void {
     this.activeContactID = selection.id;
     this.activeContact = selection.contact;
+    this.isDetailOpen = true;
+  }
+
+  closeContactInfo(): void {
+    this.isDetailOpen = false;
   }
 
   @HostListener('contextmenu', ['$event'])

@@ -1,20 +1,24 @@
-<div class="contacts" [class]="{ 'contacts-mobile': isMobile, 'contacts-desktop': !isMobile }">
+<div
+  class="contacts"
+  [class.contacts-mobile]="isMobile"
+  [class.contacts-desktop]="!isMobile"
+  [class.contacts-detail-open]="isMobile && isDetailOpen"
+>
   <app-contact-list
     [contacts]="firebaseService.contacts"
     [activeContactID]="activeContactID"
     (selected)="setActiveContact($event)"
     (addContact)="openAddDialog()"
   />
-  <app-contact-info 
-    [contact]="activeContact" 
+  <app-contact-info
+    [activeContact]="activeContact"
+    (back)="closeContactInfo()"
     (editContact)="openEditDialog(activeContact!)"
     (deleteContact)="onDelete(activeContact!)"
   />
 </div>
-<app-contact-dialog 
-  (saveContact)="onSave($event)"
-  (deleteContact)="onDelete(activeContact!)"
-/>
+<app-contact-dialog (saveContact)="onSave($event)" (deleteContact)="onDelete(activeContact!)" />
+
 <div
   class="toast"
   [class.toast--visible]="toastVisible"
@@ -23,4 +27,3 @@
 >
   Contact successfully created
 </div>
-

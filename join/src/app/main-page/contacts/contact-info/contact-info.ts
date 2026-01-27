@@ -9,10 +9,15 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
   styleUrl: './contact-info.scss',
 })
 export class ContactInfo {
-  @Input() contact: Contact | null = null;
+  @Input() activeContact: Contact | null = null;
+  @Output() back = new EventEmitter<void>();
   @Output() editContact = new EventEmitter<void>();
   @Output() deleteContact = new EventEmitter<void>();
 
   readonly getTwoInitials = getTwoInitials;
 
+  handleBack(event: Event): void {
+    event.preventDefault();
+    this.back.emit();
+  }
 }
