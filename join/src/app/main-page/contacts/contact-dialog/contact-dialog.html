@@ -1,14 +1,14 @@
-<dialog #contactDialog (cancel)="onEsc($event)" (click)="onBackdropClick($event)">
+<dialog #contactDialog (cancel)="onEsc($event)" (click)="onBackdropClick($event)" role="dialog" aria-labelledby="contact-dialog-title">
   <div class="dialog-content">
 
     <header>
-      <button class="close-btn-mobile mobile-only" (click)="closeDialog()">
-        <img src="assets/img/icons/buttons/close-white.svg" alt="" />
+      <button class="close-btn-mobile mobile-only" type="button" aria-label="Close contact dialog" (click)="closeDialog()">
+        <img src="assets/img/icons/buttons/close-white.svg" alt="" aria-hidden="true"/>
       </button>
 
       <div class="title">
         <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="">
-        <h1>
+        <h1 id="contact-dialog-title">
           @if (dialogMode === "add") {
             Add contact
           } @else {
@@ -22,15 +22,23 @@
       </div>
     </header>
 
-    <button class="close-btn-desktop desktop-only" (click)="closeDialog()">
-      <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="">
-      <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="">
+    <button class="close-btn-desktop desktop-only" type="button" aria-label="Close contact dialog" (click)="closeDialog()">
+      <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="" aria-hidden="true">
+      <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="" aria-hidden="true">
     </button>
 
     <section class="form-section">
-      <div class="avatar">
-        <img src="assets/img/icons/forms/contact-white.svg" alt="">
-      </div>
+      @if (dialogMode === "add") {
+        <div class="avatar" aria-hidden="true">
+          <img src="assets/img/icons/forms/contact-white.svg" alt="">
+        </div>
+      }@else {
+        <div class="avatar" [style.backgroundColor]="userColor" aria-hidden="true">
+          <span class="initials">
+            {{ getTwoInitials(contactData.name) }}
+          </span>
+        </div>
+      }
 
       <form class="form" #contactForm ="ngForm" (ngSubmit)="onSubmit(contactForm)" novalidate>
         
@@ -49,7 +57,7 @@
         </div>
 
         <div class="form__input-box">
-          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
+          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email address" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
           @if (email.invalid && (email.touched || contactForm.submitted)) {
             <span class="form__error">
@@ -63,7 +71,7 @@
         </div>
 
         <div class="form__input-box">
-          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required pattern="^[0-9]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
+          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone number" required pattern="^[0-9]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
           @if (phone.invalid && (phone.touched || contactForm.submitted)) {
             <span class="form__error">
@@ -78,23 +86,23 @@
         
         <div class="form__actions">
         @if(dialogMode === "add"){
-          <button type="button" class="button button--secondary button--icon desktop-only" (click)="closeDialog()">
+          <button type="button" class="button button--secondary button--icon desktop-only" (click)="closeDialog()" aria-label="Cancel and close dialog">
               Cancel
-              <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="">
-              <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="">
+              <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="" aria-hidden="true">
+              <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="" aria-hidden="true">
           </button>
         } @else {
-            <button type="button" class="button button--secondary desktop-only" (click)="onDeleteClick()">
+            <button type="button" class="button button--secondary desktop-only" (click)="onDeleteClick()" aria-label="Delete contact">
               Delete
           </button>
         }
-          <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid">
+          <button type="submit" class="button button--primary button--icon" [disabled]="contactForm.invalid" aria-label="Save changes">
             @if(dialogMode === "add"){
               Create contact
             } @else {
               Save
             }
-            <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="">
+            <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="" aria-hidden="true">
           </button>
         </div>
       </form>
