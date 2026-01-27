@@ -57,28 +57,32 @@
         </div>
 
         <div class="form__input-box">
-          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email address" required pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
+          <input class="form__input" type="email" placeholder="Email" name="email" aria-label="Email" required minlength="5" pattern="[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}" [(ngModel)]="contactData.email" #email="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="">
           @if (email.invalid && (email.touched || contactForm.submitted)) {
             <span class="form__error">
               @if (email.errors?.['required']) {
                 Email is required.
-              } @else if (email.errors?.['pattern']) {
-                Please enter a valid email address.
-              }
+              } @else if (email.errors?.['minlength']) {
+                  Email must be at least 5 characters long.
+                } @else if (email.errors?.['pattern']) {
+                    Please enter a valid email address.
+                }
             </span>
           }
         </div>
 
         <div class="form__input-box">
-          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone number" required pattern="^[0-9]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
+          <input class="form__input" type="tel" placeholder="Phone" name="phone" aria-label="Phone" required minlength="5" pattern="^\+?[0-9 ]+$" [(ngModel)]="contactData.phone" #phone="ngModel">
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="">
           @if (phone.invalid && (phone.touched || contactForm.submitted)) {
             <span class="form__error">
               @if (phone.errors?.['required']) {
                 Phone number is required.
-              } @else if (phone.errors?.['pattern']) {
-                Only numbers are allowed.
+              } @else if (phone.errors?.['minlength']) {
+                Number must be at least 5 characters long.
+              }@else if (phone.errors?.['pattern']) {
+                Only numbers, spaces and + are allowed.
               }
             </span>
           }
