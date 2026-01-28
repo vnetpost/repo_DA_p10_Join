@@ -14,13 +14,19 @@ header {
     height: 60px;
   }
 
+  @include styles.up-xxl {
+    @include styles.setFlex($jc: flex-start);
+  }
+
   .content-wrapper {
     @include styles.setFlex($jc: space-between);
     width: 93%;
 
     @include styles.up-xxl {
-      width: 93%;
-      padding-left: 75px;
+      width: 100%;
+      max-width: 1208px;
+      padding-left: 120px;
+      padding-right: 32px;
     }
   }
 }
