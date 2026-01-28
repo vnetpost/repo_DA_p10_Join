@@ -104,6 +104,7 @@ export class Contacts {
     this.firebaseService.deleteDocument('contacts', contact.id);
     this.activeContact = null;
     this.activeContactID = null;
+    this.isDetailOpen = false;
   }
 
   showToast(): void {

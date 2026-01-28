@@ -22,6 +22,27 @@ app-contact-info {
   min-width: 0;
 }
 
+// @include styles.down-xxl {
+//   @include styles.up-lg {
+//     .contacts {
+//       height: calc(100dvh - styles.$header-height);
+//       padding-bottom: 70px;
+//       overflow: hidden;
+//     }
+
+//     .contacts-desktop {
+//       height: 100%;
+//       min-height: 0;
+//     }
+
+//     app-contact-list,
+//     app-contact-info {
+//       height: 100%;
+//       min-height: 0;
+//     }
+//   }
+// }
+
 @include styles.down-lg {
   app-contact-list {
     width: 100%;
@@ -41,7 +62,7 @@ app-contact-info {
       width: 100%;
       height: 100dvh;
       background-color: #ffffff;
-      overflow-y: auto;
+      // overflow-y: auto;
     }
 
     app-contact-list {
