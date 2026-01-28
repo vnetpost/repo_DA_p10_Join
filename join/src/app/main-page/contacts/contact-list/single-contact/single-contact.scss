@@ -5,7 +5,6 @@
   padding: 1rem 0.5rem;
   border-radius: 1rem;
   background-color: styles.$white;
-  // background-color: whitesmoke;
   cursor: pointer;
   width: 100%;
   transition:
@@ -35,7 +34,6 @@
   &__name {
     @include styles.setFont($size: clamp(1em, 2vw, 1.3em), $weight: 400, $color: styles.$black);
     width: 100%;
-    // max-width: 25rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

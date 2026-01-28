@@ -63,15 +63,15 @@ export class Contacts {
     this.dialog.openEditDialog(contact);
   }
 
-  onSave(formData: ContactFormData): void {
+  async onSave(formData: ContactFormData) {
     if (this.dialog.dialogMode === 'add') {
-      this.createContactFromForm(formData);
+      await this.createContactFromForm(formData);
     } else {
       this.updateContactFromForm(formData);
     }
   }
 
-  createContactFromForm(data: ContactFormData): void {
+  async createContactFromForm(data: ContactFormData) {
     const contact: Contact = {
       name: capitalizeFullname(data.name),
       email: data.email,
@@ -80,8 +80,25 @@ export class Contacts {
       userColor: setUserColor(),
     };
 
-    this.firebaseService.addDocument(contact);
+    const newContactId = await this.firebaseService.addDocument(contact);
     this.showToast();
+
+    if (!newContactId) return;
+
+    const createdContact: Contact = {
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      isAvailable: contact.isAvailable,
+      userColor: contact.userColor,
+      id: newContactId,
+    };
+
+    this.activeContactID = newContactId;
+    this.activeContact = createdContact;
+    if (this.isMobile) {
+      this.isDetailOpen = true;
+    }
   }
 
   updateContactFromForm(data: ContactFormData): void {
@@ -114,5 +131,4 @@ export class Contacts {
       this.toastVisible = false;
     }, 1200);
   }
-
 }

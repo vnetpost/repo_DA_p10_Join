@@ -1,11 +1,11 @@
 @use '../../../../styles/index.scss' as styles;
 
 .contact-info {
-  
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
   height: 100%;
   width: 100%;
-  padding: clamp(2rem, 6vw, 5rem) clamp(2rem, 3vw, 5rem);
+  padding: clamp(2rem, 13vmin, 5rem) clamp(2rem, 3vw, 5rem);
+  overflow: hidden;
 
   &__header {
     @include styles.setFlex($jc: flex-start, $gap: clamp(1rem, 1vw, 3rem));
@@ -14,7 +14,7 @@
   &__back-arrow {
     display: none;
     position: absolute;
-    top: clamp(3rem, 6vw, 6rem);
+    top: calc(0.7 * styles.$header-height);
     right: 5%;
 
     img {
@@ -27,7 +27,12 @@
   }
 
   &__title {
-    @include styles.setFont($size: clamp(1.5em, 3vw, 3em), $weight: 700, $color: styles.$black);
+    @include styles.setFont(
+      $size: clamp(2.3em, 3vw, 3em),
+      $weight: 800,
+      $line-height: 0.6,
+      $color: styles.$black
+    );
   }
 
   &__header-divider {
@@ -49,7 +54,7 @@
     width: 100%;
     @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 3rem);
 
-    &.animIt {
+    &--animating {
       animation: contact-info-profile-in 0.3s ease-out;
     }
   }
@@ -261,7 +266,7 @@
 
 @include styles.down-lg {
   .contact-info__title {
-    @include styles.setFont($size: clamp(2em, 9vw, 3em), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(2.2em, 9vw, 3em), $weight: 700, $color: styles.$black);
   }
 
   .contact-info__subtitle {
@@ -327,38 +332,6 @@
   }
 
   .contact-info__name {
-    font-size: clamp(1.2em, 9vw, 2em);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .contact-info__profile.animIt {
-    animation: none;
-  }
-
-  .contact-info__fab-menu {
-    animation: none;
-  }
-}
-
-@keyframes contact-info-fab-menu-in {
-  from {
-    opacity: 0;
-    transform: translateX(3rem) scale(0.98);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-@keyframes contact-info-profile-in {
-  from {
-    opacity: 0;
-    transform: translateX(100rem);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
+    font-size: clamp(1.2em, 7vw, 2em);
   }
 }

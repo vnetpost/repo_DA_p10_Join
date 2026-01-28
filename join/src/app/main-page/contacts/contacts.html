@@ -1,10 +1,9 @@
 <div
   class="contacts"
-  [class.contacts-mobile]="isMobile"
-  [class.contacts-desktop]="!isMobile"
-  [class.contacts-detail-open]="isMobile && isDetailOpen"
+  [class.contacts--detail-open]="isMobile && isDetailOpen"
 >
   <app-contact-list
+    class="contacts__list"
     [contacts]="firebaseService.contacts"
     [loading]="firebaseService.loading"
     [activeContactID]="activeContactID"
@@ -12,6 +11,7 @@
     (addContact)="openAddDialog()"
   />
   <app-contact-info
+    class="contacts__info"
     [activeContact]="activeContact"
     (back)="closeContactInfo()"
     (editContact)="openEditDialog(activeContact!)"
@@ -20,8 +20,13 @@
 </div>
 <app-contact-dialog (saveContact)="onSave($event)" (deleteContact)="onDelete(activeContact!)" />
 
-<div class="toast-wrapper">
-  <p class="toast" [class.toast--visible]="toastVisible" role="status" aria-live="polite">
+<div class="contacts-toast">
+  <p
+    class="contacts-toast__message"
+    [class.contacts-toast__message--visible]="toastVisible"
+    role="status"
+    aria-live="polite"
+  >
     Contact successfully created
   </p>
 </div>
