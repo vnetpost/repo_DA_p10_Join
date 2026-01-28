@@ -98,7 +98,7 @@ export class FirebaseService {
   }
 
   // später: Prüffunktion, ob Kontakt schon vorhanden ist
-  async addDocument(item: Contact){
+  async addDocument(item: Contact) {
     try {
       const docRef = await addDoc(this.getContactsRef(), item);
       console.log('Document written with ID: ', docRef.id);

@@ -8,6 +8,9 @@ import { getTwoInitials } from '../../../../shared/utilities/utils';
   templateUrl: './single-contact.html',
   styleUrl: './single-contact.scss',
 })
+/**
+ * Displays a single contact row and emits selection when clicked.
+ */
 export class SingleContact {
   @Input() contact?: Contact;
   @Input() isActive = false;
@@ -15,6 +18,9 @@ export class SingleContact {
 
   readonly getTwoInitials = getTwoInitials;
 
+  /**
+   * Emits the current contact as the selected item.
+   */
   setContactAsSelected() {
     this.selected.emit(this.contact);
   }
