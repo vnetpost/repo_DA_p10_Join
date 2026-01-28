@@ -6,7 +6,7 @@ dialog {
   box-shadow: 0px 0px 4px 0px #0000001a;
   border: none;
   border-radius: 16px;
-  z-index: 100;
+  z-index: 6;
 
   &.opened {
     background: transparent;
@@ -58,7 +58,7 @@ header {
     background-color: transparent;
     justify-self: end;
     padding: 16px 12px;
-    z-index: 101;
+    z-index: 7;
 
     >img{
       width: 24px;
@@ -121,7 +121,7 @@ header {
     align-self: start;
     margin: 28px; 
     background-color: transparent;
-    z-index: 101;
+    z-index: 7;
 
     .icon--hover{
       display: none;
@@ -220,7 +220,7 @@ header {
       border: 1px solid styles.$gray-light;
       border-radius: 8px;
       @include styles.setFont();
-      padding: 0 32px 0 16px;
+      padding: 0 50px 0 16px;
 
       @include styles.up-xxl{
         height: 45px;
@@ -302,4 +302,3 @@ header {
     }
   
 }
-

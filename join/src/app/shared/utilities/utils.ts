@@ -40,7 +40,3 @@ export function getTwoInitials(fullName?: string): string {
     .map((word) => word[0].toUpperCase())
     .join('');
 }
-
-// export function
-// export function
-// export function
