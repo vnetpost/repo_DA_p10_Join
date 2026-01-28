@@ -22,7 +22,6 @@ export class ContactDialog {
   dialog!: ElementRef<HTMLDialogElement>;
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
-  userColor: string | null = null;
 
   @Output() saveContact = new EventEmitter<ContactFormData>();
   @Output() deleteContact = new EventEmitter<string>();
@@ -71,7 +70,6 @@ export class ContactDialog {
     this.contactData.name = contact.name;
     this.contactData.email = contact.email;
     this.contactData.phone = String(contact.phone);
-    this.userColor = contact.userColor ?? null;
 
     this.openDialog();
   }
