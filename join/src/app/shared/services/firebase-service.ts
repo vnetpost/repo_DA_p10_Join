@@ -64,10 +64,6 @@ export class FirebaseService {
     };
   }
 
-  /////////////////////////////
-
-  /////////////////////////////
-
   async deleteDocument(colId: string, docId: string) {
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch((err) => {
       console.log(err);

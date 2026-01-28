@@ -4,7 +4,6 @@
   (click)="setContactAsSelected()"
 >
   <div class="single-contact__avatar" [style.backgroundColor]="contact?.userColor || null">
-    <!-- <div class="single-contact__avatar" [style.backgroundColor]="'#e60026'"> -->
     <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
   </div>
   <div class="single-contact__text">
