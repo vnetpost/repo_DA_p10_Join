@@ -6,6 +6,7 @@
 >
   <app-contact-list
     [contacts]="firebaseService.contacts"
+    [loading]="firebaseService.loading"
     [activeContactID]="activeContactID"
     (selected)="setActiveContact($event)"
     (addContact)="openAddDialog()"

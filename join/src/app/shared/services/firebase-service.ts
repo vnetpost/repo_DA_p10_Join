@@ -21,21 +21,21 @@ import { capitalizeFullname, setUserColor, userColors } from '../utilities/utils
 })
 export class FirebaseService {
   firestore: Firestore = inject(Firestore);
-
   contacts: Array<Contact> = [];
-
   unsubCollection!: Unsubscribe;
+  loading = true;
 
   constructor() {
     this.unsubCollection = this.subCollection();
   }
 
   subCollection() {
+    this.loading = true;
+
     const contactsQuery = query(
       this.getContactsRef(),
       where('isAvailable', '==', true),
       orderBy('name', 'asc'),
-      limit(15),
     );
 
     return onSnapshot(contactsQuery, (snapshot) => {
@@ -43,19 +43,7 @@ export class FirebaseService {
       snapshot.forEach((contact) => {
         this.contacts.push(this.mapContactObj(contact.data(), contact.id));
       });
-      console.log(this.contacts);
-
-      // list.docChanges().forEach((change) => {
-      //   if (change.type === "added") {
-      //       console.log("New contact: ", change.doc.data());
-      //   }
-      //   if (change.type === "modified") {
-      //       console.log("Modified contact: ", change.doc.data());
-      //   }
-      //   if (change.type === "removed") {
-      //       console.log("Removed contact: ", change.doc.data());
-      //   }
-      // });
+      this.loading = false;
     });
   }
 

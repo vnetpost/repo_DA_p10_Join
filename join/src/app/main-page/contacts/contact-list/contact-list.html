@@ -13,7 +13,9 @@
   </button>
 
   <ul class="contact-list__scroll">
-    @if (!contacts.length) {
+    @if (loading && !contacts.length){
+      <li class="contact-list__empty">Loading contacts...</li>
+    } @else if (!loading && !contacts.length) {
       <li class="contact-list__empty">No contacts yet</li>
     }
 

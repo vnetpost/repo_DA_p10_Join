@@ -11,6 +11,7 @@ import { Contact } from '../../../shared/interfaces/contact';
 export class ContactList {
   @Input() contacts: Contact[] = [];
   @Input() activeContactID: string | null = null;
+  @Input() loading = false;
   @Output() selected = new EventEmitter<{ contact: Contact; id: string }>();
   @Output() addContact = new EventEmitter<void>();
 
