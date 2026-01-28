@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, DoCheck, HostListener, inject, ViewChild } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
 import { ContactInfo } from './contact-info/contact-info';
 import { ContactDialog } from './contact-dialog/contact-dialog';
@@ -16,9 +16,10 @@ import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
 /**
  * Container for the contacts page that coordinates list, detail, and dialog flows.
  */
-export class Contacts {
+export class Contacts implements DoCheck {
   firebaseService = inject(FirebaseService);
   private readonly mobileMaxWidth = 768;
+  private lastContactsVersion = 0;
 
   isMobile = false;
   isDetailOpen = false;
@@ -31,6 +32,17 @@ export class Contacts {
 
   constructor() {
     this.updateIsMobile();
+  }
+
+  ngDoCheck(): void {
+    if (this.lastContactsVersion === this.firebaseService.contactsVersion) return;
+    this.lastContactsVersion = this.firebaseService.contactsVersion;
+    if (!this.activeContactID) return;
+    const updatedContact = this.firebaseService.contacts.find(
+      (contact) => contact.id === this.activeContactID,
+    );
+    if (!updatedContact) return;
+    this.activeContact = updatedContact;
   }
 
   @HostListener('window:resize')
@@ -147,6 +159,8 @@ export class Contacts {
     };
 
     this.firebaseService.updateDocument(contact, 'contacts');
+    this.activeContact = contact;
+    this.activeContactID = contact.id ?? null;
   }
 
   /**

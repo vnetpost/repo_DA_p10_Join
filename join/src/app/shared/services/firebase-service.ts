@@ -22,6 +22,7 @@ import { capitalizeFullname, setUserColor, userColors } from '../utilities/utils
 export class FirebaseService {
   firestore: Firestore = inject(Firestore);
   contacts: Array<Contact> = [];
+  contactsVersion = 0;
   unsubCollection!: Unsubscribe;
   loading = true;
 
@@ -44,6 +45,7 @@ export class FirebaseService {
         this.contacts.push(this.mapContactObj(contact.data(), contact.id));
       });
       this.loading = false;
+      this.contactsVersion += 1;
     });
   }
 
