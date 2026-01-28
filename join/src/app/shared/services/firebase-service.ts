@@ -25,11 +25,9 @@ export class FirebaseService {
   contacts: Array<Contact> = [];
 
   unsubCollection!: Unsubscribe;
-  unsubSingleDoc!: Unsubscribe;
 
   constructor() {
     this.unsubCollection = this.subCollection();
-    // this.unsubSingleDoc = this.subSingleDoc();
   }
 
   subCollection() {
@@ -74,7 +72,7 @@ export class FirebaseService {
       email: obj.email || '',
       phone: obj.phone || '',
       isAvailable: obj.isAvailable || false,
-      userColor: setUserColor(),
+      userColor: obj.userColor || null,
     };
   }
 
@@ -124,7 +122,6 @@ export class FirebaseService {
 
   ngOnDestroy() {
     this.unsubCollection();
-    this.unsubSingleDoc();
   }
 
   getContactsRef() {

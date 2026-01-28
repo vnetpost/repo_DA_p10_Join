@@ -5,7 +5,7 @@ import { ContactDialog } from './contact-dialog/contact-dialog';
 import { FirebaseService } from '../../shared/services/firebase-service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
-import { capitalizeFullname } from '../../shared/utilities/utils';
+import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
 
 @Component({
   selector: 'app-contacts',
@@ -77,7 +77,7 @@ export class Contacts {
       email: data.email,
       phone: data.phone,
       isAvailable: true,
-      userColor: null,
+      userColor: setUserColor(),
     };
 
     this.firebaseService.addDocument(contact);
@@ -93,7 +93,7 @@ export class Contacts {
       email: data.email,
       phone: data.phone,
       isAvailable: this.activeContact.isAvailable,
-      userColor: this.activeContact.userColor ?? null,
+      userColor: this.activeContact.userColor,
     };
 
     this.firebaseService.updateDocument(contact, 'contacts');
