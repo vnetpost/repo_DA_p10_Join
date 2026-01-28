@@ -18,8 +18,8 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
  * such as saving or deleting a contact.
  */
 export class ContactDialog {
-  @ViewChild('contactDialog')
-  dialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild('contactDialog') dialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild('contactForm') contactForm!: NgForm;
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
   userColor: string | null = null;
@@ -149,6 +149,14 @@ export class ContactDialog {
     const el = this.dialog.nativeElement;
     el.classList.remove('opened');
     el.close();
+
+    queueMicrotask(() => {
+      this.contactForm.resetForm({
+        name: '',
+        email: '',
+        phone: '',
+      });
+    });
   }
 
   /**
