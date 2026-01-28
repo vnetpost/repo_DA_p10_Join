@@ -74,7 +74,7 @@ export class FirebaseService {
       email: obj.email || '',
       phone: obj.phone || '',
       isAvailable: obj.isAvailable || false,
-      userColor: setUserColor(),
+      userColor: obj.userColor ?? setUserColor(),
     };
   }
 
@@ -112,14 +112,15 @@ export class FirebaseService {
   }
 
   // später: Prüffunktion, ob Kontakt schon vorhanden ist
-  async addDocument(item: Contact) {
-    await addDoc(this.getContactsRef(), item)
-      .catch((err) => {
-        console.error(err);
-      })
-      .then((docRef) => {
-        console.log('Document written with ID: ', docRef?.id);
-      });
+  async addDocument(item: Contact){
+    try {
+      const docRef = await addDoc(this.getContactsRef(), item);
+      console.log('Document written with ID: ', docRef.id);
+      return docRef.id;
+    } catch (err) {
+      console.error(err);
+      return null;
+    }
   }
 
   ngOnDestroy() {
