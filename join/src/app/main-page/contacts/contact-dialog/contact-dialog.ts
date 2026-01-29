@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Contact } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
@@ -188,5 +188,13 @@ export class ContactDialog {
     this.closeDialog();
   }
   // #endregion
+
+  @HostListener('contextmenu', ['$event'])
+  /**
+   * Prevents the default context menu on the contacts page.
+   */
+  onContextMenu(event: Event): void {
+    event.preventDefault();
+  }
   // #endregion
 }
