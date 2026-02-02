@@ -9,6 +9,10 @@ import { Unsubscribe } from '@angular/fire/auth';
 export class TaskService {
   firestore: Firestore = inject(Firestore);
   tasks: Array<Task> = [];
+  taskCategories: Array<{ value: Task['category']; label: string }> = [
+    { value: 'technical-task', label: 'Technical Task' },
+    { value: 'user-story', label: 'User Story' },
+  ];
   // tasksVersion = 0;
   unsubCollection!: Unsubscribe;
   loading = true;
