@@ -11,9 +11,19 @@ export class TaskService {
   unsubCollection!: Unsubscribe;
   tasks: Task[] = [];
   loading = true;
+  searchTerm: string = '';
 
   constructor() {
     this.unsubCollection = this.subCollection();
+  } 
+
+  getFilteredTasks() {
+    if (!this.searchTerm) return this.tasks;
+
+    return this.tasks.filter((task) => {
+      return task.title.toLowerCase().includes(this.searchTerm) ||
+      task.description.toLowerCase().includes(this.searchTerm)
+    });
   }
 
   subCollection() {

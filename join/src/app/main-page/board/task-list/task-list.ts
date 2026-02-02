@@ -17,8 +17,8 @@ export class TaskList {
   @Input() listTitle: string = "";
 
   get tasksByStatus() {
-    return this.taskService.tasks.filter(task => {
-      return task.status === this.status;
+    return this.taskService.getFilteredTasks().filter((task) => {
+      return task.status === this.status
     });
   }
 }

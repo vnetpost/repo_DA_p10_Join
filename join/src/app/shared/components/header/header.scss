@@ -9,7 +9,7 @@ header {
   box-shadow: 0px 4px 4px 0px #0000001a;
   z-index: 5;
 
-  @media (hover: none) and (orientation: landscape) and (max-height: 400px){
+  @media (hover: none) and (orientation: landscape) and (max-height: 400px) {
     height: 60px;
   }
 
@@ -116,11 +116,13 @@ header {
     border-radius: 16px 0 16px 16px;
     background-color: styles.$gray-dark;
     z-index: 5;
-    
+
     @include styles.down-xxl {
       opacity: 0;
       transform: translateX(8px);
-      transition: transform 160ms ease, opacity 120ms ease;
+      transition:
+        transform 160ms ease,
+        opacity 120ms ease;
       pointer-events: none;
     }
 
@@ -130,11 +132,11 @@ header {
       display: none;
     }
 
-    &.is-open{
+    &.is-open {
       opacity: 1;
       pointer-events: auto;
 
-      @include styles.down-xxl{
+      @include styles.down-xxl {
         transform: translateX(0);
         opacity: 1;
         pointer-events: auto;
