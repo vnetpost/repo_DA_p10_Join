@@ -1,0 +1,27 @@
+<label class="form-field" [class.form-field--textarea]="textarea">
+  <span class="form-field__label">
+    {{ label }}
+    @if (required) {
+      <span class="required">*</span>
+    }
+  </span>
+  <div class="form-field__control">
+    @if (!textarea) {
+      <input
+        class="form-field__input"
+        [class.form-field__input--dark-placeholder]="darkPlaceholder"
+        [type]="type"
+        [placeholder]="placeholder"
+      />
+    } @else {
+      <textarea
+        class="form-field__input form-field__input--textarea"
+        [class.form-field__input--dark-placeholder]="darkPlaceholder"
+        [placeholder]="placeholder"
+      ></textarea>
+    }
+    @if (iconSrc) {
+      <img class="form-field__icon" [src]="iconSrc" alt="" />
+    }
+  </div>
+</label>

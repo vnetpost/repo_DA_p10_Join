@@ -1,0 +1,53 @@
+<label class="form-field form-field--dropdown">
+  <span class="form-field__label">Assigned to</span>
+  <div
+    class="form-field__control form-field__control--dropdown"
+    [class.is-open]="assignedDropdownOpen"
+    (click)="toggleAssignedDropdown()"
+  >
+    <input
+      class="form-field__input form-field__input--dark-placeholder"
+      type="text"
+      placeholder="Select contacts to assign"
+      [value]="assignedDropdownOpen ? assignedQuery : assignedToLabel"
+      [readonly]="!assignedDropdownOpen"
+      (focus)="assignedDropdownOpen = true"
+      (input)="assignedQuery = $any($event.target).value"
+    />
+    <img
+      class="form-field__icon"
+      [class.is-open]="assignedDropdownOpen"
+      src="assets/img/icons/add-task/dropdown-arrow-down.svg"
+      alt=""
+    />
+  </div>
+
+  @if (assignedDropdownOpen) {
+    <div class="dropdown">
+      @if (firebaseService.loading && !filteredContacts.length) {
+        <div class="dropdown__empty">Loading contacts...</div>
+      } @else if (!firebaseService.loading && !filteredContacts.length) {
+        <div class="dropdown__empty">No contacts yet</div>
+      } @else {
+        @for (contact of filteredContacts; track getContactId(contact, $index)) {
+          <button
+            type="button"
+            class="dropdown__item"
+            [class.is-selected]="isSelected(contact)"
+            (click)="toggleContact(contact, $event)"
+          >
+            <span
+              class="dropdown__avatar"
+              [style.backgroundColor]="contact.userColor ?? '#cccccc'"
+              aria-hidden="true"
+            >
+              {{ getTwoInitials(contact.name) }}
+            </span>
+            <span class="dropdown__name">{{ contact.name }}</span>
+            <span class="dropdown__checkbox" aria-hidden="true"></span>
+          </button>
+        }
+      }
+    </div>
+  }
+</label>

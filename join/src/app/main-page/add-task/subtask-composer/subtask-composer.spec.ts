@@ -1,19 +1,17 @@
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContactInfo } from './contact-info';
+import { SubtaskComposer } from './subtask-composer';
 
-describe('ContactInfo', () => {
-  let component: ContactInfo;
-  let fixture: ComponentFixture<ContactInfo>;
+describe('SubtaskComposer', () => {
+  let component: SubtaskComposer;
+  let fixture: ComponentFixture<SubtaskComposer>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContactInfo]
-    })
-    .compileComponents();
+      imports: [SubtaskComposer],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(ContactInfo);
+    fixture = TestBed.createComponent(SubtaskComposer);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

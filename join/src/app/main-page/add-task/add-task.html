@@ -6,165 +6,31 @@
   <form class="add-task__form" autocomplete="off">
     <div class="add-task__content">
       <div class="add-task__column">
-        <label class="form-field">
-          <span class="form-field__label">Title<span class="required">*</span></span>
-          <div class="form-field__control">
-            <input class="form-field__input" type="text" placeholder="Enter a title" />
-          </div>
-        </label>
+        <app-task-form-field
+          label="Title"
+          [required]="true"
+          placeholder="Enter a title"
+        ></app-task-form-field>
 
-        <label class="form-field form-field--textarea">
-          <span class="form-field__label">Description</span>
-          <div class="form-field__control">
-            <textarea
-              class="form-field__input form-field__input--textarea"
-              placeholder="Enter a Description"
-            ></textarea>
-          </div>
-        </label>
+        <app-task-form-field
+          label="Description"
+          [textarea]="true"
+          placeholder="Enter a Description"
+        ></app-task-form-field>
 
-        <label class="form-field">
-          <span class="form-field__label">Due date<span class="required">*</span></span>
-          <div class="form-field__control">
-            <input class="form-field__input" type="text" placeholder="dd/mm/yyyy" />
-            <img class="form-field__icon" src="assets/img/icons/board/date.svg" alt="" />
-          </div>
-        </label>
+        <app-task-form-field
+          label="Due date"
+          [required]="true"
+          placeholder="dd/mm/yyyy"
+          iconSrc="assets/img/icons/board/date.svg"
+        ></app-task-form-field>
       </div>
 
-      <!-- <div class="add-task__divider" aria-hidden="true"></div> -->
-
       <div class="add-task__column add-task__column--divider">
-        <div class="form-field">
-          <span class="form-field__label">Priority</span>
-          <div class="priority">
-            <button type="button" class="priority__button priority__button--urgent is-active">
-              Urgent
-              <img
-                class="priority__icon"
-                src="assets/img/icons/priority/priority-high.svg"
-                alt="priority-high icon"
-              />
-            </button>
-            <button type="button" class="priority__button priority__button--medium is-active">
-              Medium
-              <img
-                class="priority__icon"
-                src="assets/img/icons/priority/priority-medium.svg"
-                alt="priority-medium icon"
-              />
-            </button>
-            <button type="button" class="priority__button priority__button--low is-active">
-              Low
-              <img
-                class="priority__icon"
-                src="assets/img/icons/priority/priority-low.svg"
-                alt="priority-low icon"
-              />
-            </button>
-          </div>
-        </div>
-
-        <label class="form-field form-field--dropdown">
-          <span class="form-field__label">Assigned to</span>
-          <div
-            class="form-field__control form-field__control--dropdown"
-            [class.is-open]="assignedDropdownOpen"
-            (click)="toggleAssignedDropdown()"
-          >
-            <input
-              class="form-field__input form-field__input--dark-placeholder"
-              type="text"
-              placeholder="Select contacts to assign"
-              [value]="assignedDropdownOpen ? assignedQuery : assignedToLabel"
-              [readonly]="!assignedDropdownOpen"
-              (focus)="assignedDropdownOpen = true"
-              (input)="assignedQuery = $any($event.target).value"
-            />
-            <img
-              class="form-field__icon"
-              [class.is-open]="assignedDropdownOpen"
-              src="assets/img/icons/add-task/dropdown-arrow-down.svg"
-              alt=""
-            />
-          </div>
-
-          @if (assignedDropdownOpen) {
-            <div class="dropdown">
-              @if (firebaseService.loading && !filteredContacts.length) {
-                <div class="dropdown__empty">Loading contacts...</div>
-              } @else if (!firebaseService.loading && !filteredContacts.length) {
-                <div class="dropdown__empty">No contacts yet</div>
-              } @else {
-                @for (contact of filteredContacts; track getContactId(contact, $index)) {
-                  <button
-                    type="button"
-                    class="dropdown__item"
-                    [class.is-selected]="isSelected(contact)"
-                    (click)="toggleContact(contact, $event)"
-                  >
-                    <span
-                      class="dropdown__avatar"
-                      [style.backgroundColor]="contact.userColor ?? '#cccccc'"
-                      aria-hidden="true"
-                    >
-                      {{ getTwoInitials(contact.name) }}
-                    </span>
-                    <span class="dropdown__name">{{ contact.name }}</span>
-                    <span class="dropdown__checkbox" aria-hidden="true"></span>
-                  </button>
-                }
-              }
-            </div>
-          }
-        </label>
-
-        <label class="form-field form-field--dropdown">
-          <span class="form-field__label">Category<span class="required">*</span></span>
-          <div
-            class="form-field__control form-field__control--dropdown"
-            [class.is-open]="categoryDropdownOpen"
-            (click)="toggleCategoryDropdown()"
-          >
-            <input
-              class="form-field__input form-field__input--dark-placeholder"
-              type="text"
-              placeholder="Select task category"
-              [value]="selectedCategoryLabel"
-              readonly
-            />
-            <img
-              class="form-field__icon"
-              [class.is-open]="categoryDropdownOpen"
-              src="assets/img/icons/add-task/dropdown-arrow-down.svg"
-              alt=""
-            />
-          </div>
-
-          @if (categoryDropdownOpen) {
-            <div class="dropdown dropdown--category">
-              @for (category of taskService.taskCategories; track category.value) {
-                <button
-                  type="button"
-                  class="dropdown__item dropdown__item--category"
-                  (click)="selectCategory(category, $event)"
-                >
-                  <span class="dropdown__name">{{ category.label }}</span>
-                </button>
-              }
-            </div>
-          }
-        </label>
-
-        <label class="form-field">
-          <span class="form-field__label">Subtasks</span>
-          <div class="form-field__control">
-            <input class="form-field__input" type="text" placeholder="Add new subtask" />
-            <button type="button" class="icon-button" aria-label="Add subtask">
-              <img src="assets/img/icons/add-task/add.svg" alt="" />
-            </button>
-          </div>
-        </label>
+        <app-priority-selector [(value)]="priority"></app-priority-selector>
+        <app-dropdown-assignee [(selectedContacts)]="selectedContacts"></app-dropdown-assignee>
+        <app-dropdown-category [(selectedCategory)]="selectedCategory"></app-dropdown-category>
+        <app-subtask-composer [(subtasks)]="subtasks"></app-subtask-composer>
       </div>
     </div>
 
