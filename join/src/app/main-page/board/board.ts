@@ -2,16 +2,22 @@ import { Component, inject} from '@angular/core';
 import { TaskList } from './task-list/task-list';
 import { TaskService } from '../../shared/services/task-service';
 import { Timestamp } from '@angular/fire/firestore';
+import { FormsModule } from '@angular/forms';
 
 
 @Component({
   selector: 'app-board',
-  imports: [TaskList],
+  imports: [TaskList, FormsModule],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
 export class Board {
   taskService = inject(TaskService);
+  searchTerm: string = '';
+
+  search() {
+    this.taskService.searchTerm = this.searchTerm.trim().toLowerCase();
+  }
 
   addTestTask() {
     this.taskService.addDocument({
