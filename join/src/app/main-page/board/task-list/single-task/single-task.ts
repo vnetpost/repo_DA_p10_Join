@@ -3,6 +3,7 @@ import { Task } from '../../../../shared/interfaces/task';
 import { FirebaseService } from '../../../../shared/services/firebase-service';
 import { getTwoInitials } from '../../../../shared/utilities/utils';
 import { NgClass } from '@angular/common';
+import { TaskService } from '../../../../shared/services/task-service';
 
 
 @Component({
@@ -13,6 +14,7 @@ import { NgClass } from '@angular/common';
 })
 export class SingleTask {
   @Input() task!: Task;
+  taskService = inject(TaskService);
   contactService = inject(FirebaseService);
   userColor: string | null = null;
   moveMenuOpen: boolean = false;
@@ -23,6 +25,12 @@ export class SingleTask {
 
   closeMenu(): void {
     this.moveMenuOpen = false;
+  }
+
+  moveTo(status: "to-do" | "in-progress" | "await-feedback" | "done"): void {
+    this.task.status = status;
+    this.taskService.updateDocument(this.task, 'tasks');
+    this.closeMenu();
   }
 
   get doneCount(): number {
