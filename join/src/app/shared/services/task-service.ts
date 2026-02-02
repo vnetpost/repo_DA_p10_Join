@@ -9,7 +9,7 @@ import { Unsubscribe } from '@angular/fire/auth';
 export class TaskService {
   firestore: Firestore = inject(Firestore);
   unsubCollection!: Unsubscribe;
-  tasks: Task[] = [];
+  tasks: Array<Task> = [];
   loading = true;
   searchTerm: string = '';
 

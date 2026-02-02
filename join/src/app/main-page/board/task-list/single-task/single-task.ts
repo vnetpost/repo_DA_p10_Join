@@ -27,7 +27,7 @@ export class SingleTask {
     this.moveMenuOpen = false;
   }
 
-  moveTo(status: "to-do" | "in-progress" | "await-feedback" | "done"): void {
+  moveTo(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): void {
     this.task.status = status;
     this.taskService.updateDocument(this.task, 'tasks');
     this.closeMenu();
