@@ -143,12 +143,13 @@ article{
     }
 
     .more-contacts-sign{
-      background-color: transparent;
       border: 1px solid transparent;
-      margin-left: -13px;
+      background-color: transparent;
       
-      img{
-        filter: opacity(75%);
+      span{
+        margin-left: 4px;
+        color: black;
+        white-space: nowrap;
       }
     }
   }
