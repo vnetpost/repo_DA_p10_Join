@@ -145,7 +145,7 @@ section{
     @include styles.setFlex($jc: flex-start, $ai: flex-start, $gap: 4px);
   }
 
-  @media(min-width: 1120px){
+  @media(min-width: 1250px){
     gap: 20px;
   }
 }
