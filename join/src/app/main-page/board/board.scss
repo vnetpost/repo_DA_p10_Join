@@ -65,6 +65,11 @@ section{
         font-size: 20px;
         padding: 0 20% 0 12px;
       }
+
+      &:focus {
+        outline: none;
+        border-color: styles.$gray-dark;
+      }
     }
 
     .search-bar__divider{
