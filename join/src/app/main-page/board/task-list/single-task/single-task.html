@@ -1,1 +1,44 @@
-<p>single-task works!</p>
+<article>
+  <div class="header">
+    <p class="category" [ngClass]="task.category">
+      {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
+    </p>
+    <button aria-label="Move task to other list">
+      <img src="assets/img/icons/board/move.svg" alt="" aria-hidden="true">
+    </button>
+  </div>
+
+  <div class="topic">
+    <h4 class="title">{{ task.title }}</h4>
+    <p class="description">
+      {{ task.description }}
+    </p>
+  </div>
+
+  @if(totalCount > 0){
+    <div class="subtasks" title="{{ doneCount }} of {{ totalCount }} subtasks completed">
+      <progress id="subtasks-done" [value]="doneCount" [max]="totalCount" aria-valuetext="{{ doneCount }} of {{ totalCount }} subtasks completed"></progress>
+      <label for="subtasks-done">
+        {{ doneCount }}/{{ totalCount }} Subtasks
+      </label>
+    </div>
+  }
+
+  <div class="assigned-info">
+    <div class="assignees" aria-label="Assignees" role="group">
+      @for (assignee of task.assignees; track $index) {
+        <div [style.backgroundColor]="getUserColor(assignee)" aria-label="Assigned to {{ getAssigneeInitials(assignee) }}">
+          {{ getAssigneeInitials(assignee) }}
+        </div>
+      }
+    </div>
+
+    @if (task.priority === "low") {
+      <img class="priority-icon" src="assets/img/icons/priority/priority-low.svg" alt="Low priority">
+    } @else if (task.priority === "medium") {
+      <img class="priority-icon" src="assets/img/icons/priority/priority-medium.svg" alt="Medium priority">
+    } @else if (task.priority === "high") {
+      <img class="priority-icon" src="assets/img/icons/priority/priority-high.svg" alt="High priority">
+    }
+  </div>
+</article>

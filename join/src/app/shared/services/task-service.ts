@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
-import { Subtask, Task } from '../interfaces/task';
+import { Task } from '../interfaces/task';
 import { Unsubscribe } from '@angular/fire/auth';
 
 @Injectable({
@@ -8,9 +8,8 @@ import { Unsubscribe } from '@angular/fire/auth';
 })
 export class TaskService {
   firestore: Firestore = inject(Firestore);
-  tasks: Array<Task> = [];
-  // tasksVersion = 0;
   unsubCollection!: Unsubscribe;
+  tasks: Task[] = [];
   loading = true;
 
   constructor() {
@@ -27,12 +26,23 @@ export class TaskService {
     );
 
     return onSnapshot(tasksQuery, (snapshot) => {
-      this.tasks.length = 0;
+      this.tasks = [];
       snapshot.forEach((task) => {
         this.tasks.push(this.mapTaskObj(task.data(), task.id));
       });
+      snapshot.docChanges().forEach((change) => {
+        if (change.type === "added") {
+            console.log("New note: ", change.doc.data());
+        }
+        if (change.type === "modified") {
+            console.log("Modified note: ", change.doc.data());
+        }
+        if (change.type === "removed") {
+            console.log("Removed note: ", change.doc.data());
+        }
+      });
+
       this.loading = false;
-      // this.tasksVersion += 1;
     });
   }
 
@@ -44,9 +54,9 @@ export class TaskService {
       description: obj.description || '',
       dueDate: obj.dueDate || null,
       priority: obj.priority || '',
-      assignees: obj.assignees || Array<string>,
+      assignees: obj.assignees || [],
       category: obj.category || '',
-      subtasks: obj.subtasks || Array<Subtask>,
+      subtasks: obj.subtasks || [],
     }
   }
 
@@ -55,8 +65,7 @@ export class TaskService {
       console.log(err);
     });
   }
-
-  // später item: Task | Task
+  
   async updateDocument(item: Task, colId: string) {
     if (item.id) {
       let docRef = this.getSingleDocRef(colId, item.id);
@@ -68,7 +77,6 @@ export class TaskService {
     }
   }
 
-  // später entweder type contact oder type task
   getCleanJson(task: Task): {} {
     return {
       status: task.status,

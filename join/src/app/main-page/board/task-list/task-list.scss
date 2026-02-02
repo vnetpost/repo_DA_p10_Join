@@ -1,0 +1,94 @@
+@use "../../../../styles/index.scss" as styles;
+
+article{
+  .list-head{
+    @include styles.setFlex($jc: space-between);
+    margin-bottom: 14px;
+    height: 30px;
+
+    h2{
+      color: #42526e;
+
+      @include styles.up-xxl{
+        font-size: clamp(16px, 1.5dvw, 20px);
+        padding: 0 4px;
+      }
+    }
+
+    .add-to-list-btn{
+      @include styles.setFlex();
+      background-color: transparent;
+      width: 30px;
+      height: 30px;
+
+      .add-icon--hover{
+        display: none;
+      }
+
+      &:hover{
+        .add-icon--default{
+          display: none;
+        }
+
+        .add-icon--hover{
+          display: block;
+        }
+      }
+    }
+  }
+
+  .list{
+    @include styles.setFlex($jc: flex-start, $gap: 16px);
+    margin-bottom: 24px;
+    padding: 4px;
+    
+    @include styles.down-xxl{
+      @include styles.setFlex($jc: flex-start, $ai: flex-start, $gap: 16px);
+      overflow-x: auto;
+
+      &::-webkit-scrollbar {
+          display: none;
+      }
+    }
+
+    @include styles.up-xxl{
+      @include styles.setFlex($d: column, $jc: flex-start, $gap: 16px);
+    }
+  }
+}
+
+.loading-tasks-box{
+  @include styles.setFlex();
+  min-width: 211px;
+  width: 235px;
+  height: 200px;
+  border: 1px dashed #A8A8A8;
+  border-radius: 20px;
+  background-color: #e7e7e7;
+  box-shadow: 0px 0px 4px 2px #00000014;
+  padding: 16px 14px;
+
+  @include styles.up-xxl{
+    min-width: 0;
+    width: 100%;
+    box-shadow: 0px 0px 10px 3px #00000014;
+  }
+
+  p{
+    color: #A8A8A8;
+  }
+}
+
+.no-tasks-yet-box{
+  @include styles.setFlex();
+  width: 100%;
+  border: 1px dashed #A8A8A8;
+  border-radius: 10px;
+  background-color: #e7e7e7;
+  box-shadow: 0px 0px 4px 0px #00000029;
+  padding: 16px 14px;
+
+  p{
+    color: #A8A8A8;
+  }
+}
