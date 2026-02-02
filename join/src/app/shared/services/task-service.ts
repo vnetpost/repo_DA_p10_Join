@@ -3,13 +3,20 @@ import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, orderBy, que
 import { Task } from '../interfaces/task';
 import { Unsubscribe } from '@angular/fire/auth';
 
+export type TaskCategoryOption = { value: Task['category']; label: string };
+
 @Injectable({
   providedIn: 'root',
 })
 export class TaskService {
   firestore: Firestore = inject(Firestore);
+  tasks: Array<Task> = [];
+  taskCategories: TaskCategoryOption[] = [
+    { value: 'technical-task', label: 'Technical Task' },
+    { value: 'user-story', label: 'User Story' },
+  ];
+  // tasksVersion = 0;
   unsubCollection!: Unsubscribe;
-  tasks: Task[] = [];
   loading = true;
 
   constructor() {

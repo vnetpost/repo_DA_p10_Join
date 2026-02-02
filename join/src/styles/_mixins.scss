@@ -1,5 +1,5 @@
 @mixin setFlex($display: flex, $d: row, $jc: center, $ai: center, $wrap: nowrap, $gap: 0) {
-  display: $display;
+  display: flex;
   flex-direction: $d;
   justify-content: $jc;
   align-items: $ai;
@@ -24,10 +24,10 @@
   gap: $gap;
   row-gap: $row-gap;
   column-gap: $column-gap;
-  justify-items: $ji;
-  align-items: $ai;
   justify-content: $jc;
+  justify-items: $ji;
   align-content: $ac;
+  align-items: $ai;
 }
 
 @mixin setFont(

@@ -1,0 +1,15 @@
+<label class="form-field">
+  <span class="form-field__label">Subtasks</span>
+  <div class="form-field__control">
+    <input
+      class="form-field__input form-field__input--dark-placeholder"
+      type="text"
+      placeholder="Add new subtask"
+      [value]="subtaskTitle"
+      (input)="subtaskTitle = $any($event.target).value"
+    />
+    <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
+      <img src="assets/img/icons/add-task/add.svg" alt="" />
+    </button>
+  </div>
+</label>

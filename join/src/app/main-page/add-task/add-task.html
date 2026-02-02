@@ -1,1 +1,53 @@
-<p>add-task works!</p>
+<section class="add-task">
+  <header class="add-task__header">
+    <h1>Add Task</h1>
+  </header>
+
+  <form class="add-task__form" autocomplete="off">
+    <div class="add-task__content">
+      <div class="add-task__column">
+        <app-task-form-field
+          label="Title"
+          [required]="true"
+          placeholder="Enter a title"
+        ></app-task-form-field>
+
+        <app-task-form-field
+          label="Description"
+          [textarea]="true"
+          placeholder="Enter a Description"
+        ></app-task-form-field>
+
+        <app-task-form-field
+          label="Due date"
+          [required]="true"
+          placeholder="dd/mm/yyyy"
+          iconSrc="assets/img/icons/board/date.svg"
+        ></app-task-form-field>
+      </div>
+
+      <div class="add-task__column add-task__column--divider">
+        <app-priority-selector [(value)]="priority"></app-priority-selector>
+        <app-dropdown-assignee [(selectedContacts)]="selectedContacts"></app-dropdown-assignee>
+        <app-dropdown-category [(selectedCategory)]="selectedCategory"></app-dropdown-category>
+        <app-subtask-composer [(subtasks)]="subtasks"></app-subtask-composer>
+      </div>
+    </div>
+
+    <div class="add-task__footer">
+      <span class="add-task__required-note"
+        ><span class="required">*</span> This field is required</span
+      >
+      <div class="add-task__actions">
+        <button type="button" class="button button--secondary button--icon">
+          Clear
+          <img class="button__icon" src="assets/img/icons/add-task/close.svg" alt="" />
+        </button>
+        <button type="submit" class="button button--primary button--icon">
+          Create Task
+          <img class="button__icon" src="assets/img/icons/add-task/check.svg" alt="" />
+        </button>
+      </div>
+    </div>
+  </form>
+</section>
