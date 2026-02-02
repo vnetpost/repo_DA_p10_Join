@@ -26,9 +26,14 @@
 
   <div class="assigned-info">
     <div class="assignees" aria-label="Assignees" role="group">
-      @for (assignee of task.assignees; track $index) {
+      @for (assignee of task.assignees.slice(0, 4); track $index) {
         <div [style.backgroundColor]="getUserColor(assignee)" aria-label="Assigned to {{ getAssigneeInitials(assignee) }}">
           {{ getAssigneeInitials(assignee) }}
+        </div>
+      }
+      @if(task.assignees.length > 4){
+        <div class="more-contacts-sign" aria-label="And assigned to further contacts">
+          <img src="assets/img/icons/add-task/add.svg" alt="" aria-hidden="true">
         </div>
       }
     </div>
