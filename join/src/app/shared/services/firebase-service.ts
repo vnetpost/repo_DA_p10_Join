@@ -66,7 +66,6 @@ export class FirebaseService {
     });
   }
 
-  // später item: Contact | Task
   async updateDocument(item: Contact, colId: string) {
     if (item.id) {
       let docRef = this.getSingleDocRef(colId, item.id);
@@ -78,7 +77,6 @@ export class FirebaseService {
     }
   }
 
-  // später entweder type contact oder type task
   getCleanJson(contact: Contact): {} {
     return {
       name: contact.name,

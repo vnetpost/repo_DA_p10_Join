@@ -1,0 +1,24 @@
+@use "../../../styles/index.scss" as styles;
+
+section{
+  @include styles.setFlex($ai: flex-start);
+  min-height: calc(100dvh - styles.$header-height);
+
+  .content-wrapper{
+    width: 93%;
+    padding: 4rem 0 12rem;
+
+    @include styles.up-xxl{
+      width: 90%;
+      padding: 8rem 0 12rem;
+    }
+  }
+}
+
+h1{
+  font-size: 40px;
+
+  @include styles.up-xxl{
+    font-size: 60px;
+  }
+}
