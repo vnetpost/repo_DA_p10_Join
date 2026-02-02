@@ -1,0 +1,33 @@
+@use '../../../../styles/index.scss' as styles;
+
+.add-task-a {
+  @include styles.setFlex($display: flex, $d: column, $jc: flex-start, $ai: stretch, $wrap: nowrap, $gap: 1.125rem);
+  // height: 100%;
+}
+
+.add-task-a__field {
+  @include styles.setFlex($display: flex, $d: column, $jc: flex-start, $ai: stretch, $wrap: nowrap, $gap: 0.5rem);
+}
+
+.add-task-a__label {
+  @include styles.setFont($size: 1em, $color: styles.$gray-dark);
+}
+
+.add-task-a__required {
+  color: styles.$red-error;
+  margin-left: 0.25rem;
+}
+
+.add-task-a__input,
+.add-task-a__textarea {
+  border: 0.0625rem solid styles.$gray-light;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: styles.$white;
+  font: inherit;
+}
+
+.add-task-a__textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}

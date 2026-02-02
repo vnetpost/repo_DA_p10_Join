@@ -1,0 +1,72 @@
+@use '../../../../styles/index.scss' as styles;
+
+.add-task-b {
+  // border: 1px solid red;
+  @include styles.setFlex(
+    $display: flex,
+    $d: column,
+    $jc: flex-start,
+    $ai: stretch,
+    $wrap: nowrap,
+    $gap: 1.125rem
+  );
+  // height: 100%;
+}
+
+.add-task-b__field {
+  @include styles.setFlex(
+    $display: flex,
+    $d: column,
+    $jc: flex-start,
+    $ai: stretch,
+    $wrap: nowrap,
+    $gap: 0.5rem
+  );
+}
+
+.add-task-b__label {
+  @include styles.setFont($size: 1em, $color: styles.$gray-dark);
+}
+
+.add-task-b__required {
+  color: styles.$red-error;
+  margin-left: 0.25rem;
+}
+
+.add-task-b__priority {
+  @include styles.setFlex(
+    $display: flex,
+    $d: row,
+    $jc: flex-start,
+    $ai: stretch,
+    $wrap: nowrap,
+    $gap: 0.75rem
+  );
+}
+
+.add-task-b__priority-button {
+  flex: 1;
+  @include styles.setFlex();
+  border: 0.0625rem solid styles.$gray-light;
+  border: 1px solid red;
+  border-radius: 0.5rem;
+  padding: 0.625rem 0.75rem;
+  @include styles.setFont($size: 1em, $color: styles.$gray-dark, $weight: 500);
+  background: styles.$white;
+  cursor: pointer;
+}
+
+.add-task-b__priority-button--active {
+  background: styles.$orange-warning;
+  border-color: styles.$orange-warning;
+  color: styles.$white;
+}
+
+.add-task-b__select,
+.add-task-b__input {
+  border: 0.0625rem solid styles.$gray-light;
+  border-radius: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: styles.$white;
+  font: inherit;
+}
