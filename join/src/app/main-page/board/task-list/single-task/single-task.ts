@@ -15,22 +15,31 @@ export class SingleTask {
   @Input() task!: Task;
   contactService = inject(FirebaseService);
   userColor: string | null = null;
+  moveMenuOpen: boolean = false;
 
-  get doneCount() {
+  openMenu(): void {
+    this.moveMenuOpen = true;
+  }
+
+  closeMenu(): void {
+    this.moveMenuOpen = false;
+  }
+
+  get doneCount(): number {
     if (!this.task.subtasks) {
       return 0;
     }
     return this.task.subtasks.filter((s) => s.done).length;
   }
 
-  get totalCount() {
+  get totalCount(): number {
     if (!this.task.subtasks) {
       return 0;
     }
     return this.task.subtasks.length;
   }
 
-  getAssigneeInitials(id: string) {
+  getAssigneeInitials(id: string): string {
     const contact = this.contactService.contacts.find((c) => {
       return c.id === id;
     });
@@ -38,7 +47,7 @@ export class SingleTask {
     return getTwoInitials(contact?.name || "Unknown");
   }
 
-  getUserColor(id: string) {
+  getUserColor(id: string): string {
     const contact = this.contactService.contacts.find((c) => {
       return c.id === id;
     });

@@ -3,9 +3,52 @@
     <p class="category" [ngClass]="task.category">
       {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
     </p>
-    <button aria-label="Move task to other list">
+    <button class="mobile-move-btn" (click)="openMenu()" aria-label="Move task to other list" aria-controls="move-menu">
       <img src="assets/img/icons/board/move.svg" alt="" aria-hidden="true">
     </button>
+  </div>
+
+  @if (moveMenuOpen) {
+    <div class="menu-overlay mobile-only" (click)="closeMenu()" aria-hidden="true"></div>
+  }
+  <div id="move-menu" class="move-menu mobile-only" [class.is-open]="moveMenuOpen" aria-label="Move task menu" role="menu">
+    <p>Move to</p>
+
+    @if(task.status === "to-do"){
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to in progress">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        Doing
+      </button>
+    }
+    
+    @if(task.status === "in-progress"){
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to to do">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        To-do
+      </button>
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to await feedback">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        Review
+      </button>
+    }
+
+    @if(task.status === "await-feedback"){
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to in progress">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        Doing
+      </button>
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to done">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        Done
+      </button>
+    }
+
+    @if(task.status === "done"){
+      <button (click)="closeMenu()" role="menuitem" aria-label="Move to await feedback">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        Review
+      </button>
+    }
   </div>
 
   <div class="topic">
