@@ -1,6 +1,11 @@
 @use "../../../../styles/index.scss" as styles;
 
-article{
+section{
+  @include styles.up-xxl{
+    @include styles.setFlex($d: column, $ai: space-between);
+    height: 100%;
+  }
+
   .list-head{
     @include styles.setFlex($jc: space-between);
     margin-bottom: 14px;
@@ -53,6 +58,8 @@ article{
 
     @include styles.up-xxl{
       @include styles.setFlex($d: column, $jc: flex-start, $gap: 16px);
+      height: 100%;
+      flex: 1;
     }
   }
 }

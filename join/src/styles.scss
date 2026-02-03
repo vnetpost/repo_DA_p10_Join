@@ -219,3 +219,26 @@ button {
   }
 }
 // #endregion
+
+// #region Dragging tasks on board
+.cdk-drag-preview {
+  overflow: hidden;
+}
+
+.cdk-drag-preview .task-card {
+  backface-visibility: hidden;
+  box-shadow: none;
+  transform: rotate(2deg);
+}
+
+.cdk-drag-placeholder {
+  margin-bottom: 16px;
+  border: 2px dashed #e7e7e7;
+  border-radius: 20px;
+  background-color: #f6f7f8;
+}
+
+.cdk-drag-placeholder * {
+  visibility: hidden;
+}
+// #endregion

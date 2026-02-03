@@ -34,13 +34,4 @@ export class Board {
       ],
     });
   }
-
-  moveRandomToDone() {
-    this.taskService.tasks.forEach((task) => {
-      if (task.status === 'to-do') {
-        task.status = 'done';
-        this.taskService.updateDocument(task, 'tasks');
-      }
-    });
-  }
 }

@@ -1,4 +1,4 @@
-<article>
+<section>
   <div class="list-head">
     <h2>{{listTitle}}</h2>
     @if (status !== "done") {
@@ -9,7 +9,7 @@
     }
   </div>
 
-  <div class="list">
+  <div class="list" cdkDropList (cdkDropListDropped)="onDrop($event)" [id]="status" [cdkDropListConnectedTo]="connectedLists" [cdkDropListData]="tasksByStatus">
     @if(taskService.loading || contactService.loading){
       <div class="loading-tasks-box" role="status" aria-live="polite">
         <p>Loading...</p>
@@ -28,4 +28,4 @@
         </div>
       }
   </div>
-</article>
+</section>
