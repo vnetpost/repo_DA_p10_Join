@@ -38,12 +38,12 @@ export class TaskService {
 
     const tasksQuery = query(
       this.getTasksRef(),
-      // where('isAvailable', '==', true),
-      // orderBy('name', 'asc'),
+      orderBy('status'),
+      orderBy('order')
     );
 
     return onSnapshot(tasksQuery, (snapshot) => {
-      this.tasks = [];
+      this.tasks.length = 0;
       snapshot.forEach((task) => {
         this.tasks.push(this.mapTaskObj(task.data(), task.id));
       });
@@ -60,6 +60,7 @@ export class TaskService {
       });
 
       this.loading = false;
+      window.dispatchEvent(new Event('tasks-updated'));
     });
   }
 
@@ -67,6 +68,7 @@ export class TaskService {
     return {
       id: id,
       status: obj.status || '',
+      order: obj.order || 0,
       title: obj.title || '',
       description: obj.description || '',
       dueDate: obj.dueDate || null,
@@ -97,6 +99,7 @@ export class TaskService {
   getCleanJson(task: Task): {} {
     return {
       status: task.status,
+      order: task.order,
       title: task.title,
       description: task.description,
       dueDate: task.dueDate,

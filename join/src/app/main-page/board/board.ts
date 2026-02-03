@@ -15,13 +15,17 @@ export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
 
-  search() {
+  search(): void {
     this.taskService.searchTerm = this.searchTerm.trim().toLowerCase();
   }
 
-  addTestTask() {
+  addTestTask(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): void {
+    const toDoTasks = this.taskService.tasks.filter(t => t.status === status);
+    const newOrder = toDoTasks.length;
+
     this.taskService.addDocument({
-      status: 'to-do',
+      status: status,
+      order: newOrder,
       title: 'Test Task',
       description: 'Test Description Test Description Test Description',
       dueDate: Timestamp.fromDate(new Date(2026, 7, 20)),
@@ -32,15 +36,6 @@ export class Board {
         { title: 'Sub 1', done: false },
         { title: 'Sub 2', done: true },
       ],
-    });
-  }
-
-  moveRandomToDone() {
-    this.taskService.tasks.forEach((task) => {
-      if (task.status === 'to-do') {
-        task.status = 'done';
-        this.taskService.updateDocument(task, 'tasks');
-      }
     });
   }
 }
