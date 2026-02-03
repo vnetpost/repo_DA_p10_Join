@@ -1,12 +1,9 @@
 @use '../../../../styles/index.scss' as styles;
 
 .form-field {
+  position: static;
   @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 0.5rem);
   width: 100%;
-}
-
-.form-field--dropdown {
-  position: static;
 }
 
 .form-field__label {
@@ -22,9 +19,10 @@
   border-radius: 1rem;
   background-color: styles.$white;
   box-shadow: 0 0.0625rem 0.125rem 0 #0000001a;
+  cursor: pointer;
 
   &:focus-within {
-    border-color: styles.$gray-dark;
+    border-color: styles.$blue-sky;
   }
 }
 
@@ -38,22 +36,11 @@
   padding: clamp(0.5rem, 1.2vw, 0.625rem) clamp(0rem, 0vw, 0rem);
 
   &::placeholder {
-    color: styles.$gray-light;
-  }
-}
-
-.form-field__input--dark-placeholder {
-  &::placeholder {
     color: styles.$black;
-    opacity: 1;
   }
 }
 
-.form-field__control--dropdown {
-  cursor: pointer;
-}
-
-.form-field__control--dropdown.is-open {
+.form-field__control.is-open {
   border-color: styles.$blue-link;
   box-shadow: 0 0 0 0.0625rem rgba(styles.$blue-link, 0.35);
   border-bottom-left-radius: 0;
@@ -65,8 +52,7 @@
 }
 
 .form-field__icon {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 3rem;
 }
 
 .form-field__icon.is-open {

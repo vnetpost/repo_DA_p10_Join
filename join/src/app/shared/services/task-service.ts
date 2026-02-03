@@ -49,10 +49,10 @@ export class TaskService {
       });
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-            console.log("New note: ", change.doc.data());
+            // console.log("New note: ", change.doc.data());
         }
         if (change.type === "modified") {
-            console.log("Modified note: ", change.doc.data());
+            // console.log("Modified note: ", change.doc.data());
         }
         if (change.type === "removed") {
             console.log("Removed note: ", change.doc.data());

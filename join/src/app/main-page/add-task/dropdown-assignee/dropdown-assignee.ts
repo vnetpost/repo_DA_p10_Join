@@ -16,26 +16,21 @@ export class DropdownAssignee {
   @Input() selectedContacts: Contact[] = [];
   @Output() selectedContactsChange = new EventEmitter<Contact[]>();
 
-  assignedDropdownOpen = false;
-  assignedQuery = '';
-
-  get assignedToLabel(): string {
-    if (!this.selectedContacts.length) return '';
-    return this.selectedContacts.map((contact) => contact.name).join(', ');
-  }
+  isDropdownOpen = false;
+  assigneeQuery = '';
 
   get filteredContacts(): Contact[] {
-    const query = this.assignedQuery.trim().toLowerCase();
+    const query = this.assigneeQuery.trim().toLowerCase();
     if (!query) return this.firebaseService.contacts;
     return this.firebaseService.contacts.filter((contact) =>
       contact.name.toLowerCase().includes(query),
     );
   }
 
-  toggleAssignedDropdown(): void {
-    this.assignedDropdownOpen = !this.assignedDropdownOpen;
-    if (!this.assignedDropdownOpen) {
-      this.assignedQuery = '';
+  toggleDropdownOpen(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
+    if (!this.isDropdownOpen) {
+      this.assigneeQuery = '';
     }
   }
 
@@ -43,7 +38,7 @@ export class DropdownAssignee {
     event?.stopPropagation();
     const index = this.selectedContacts.findIndex((item) => item.id === contact.id);
     if (index === -1) {
-      this.selectedContacts = [...this.selectedContacts, contact];
+      this.selectedContacts.push(contact);
       this.selectedContactsChange.emit(this.selectedContacts);
       return;
     }

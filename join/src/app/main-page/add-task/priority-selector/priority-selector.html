@@ -5,11 +5,11 @@
       <button
         type="button"
         class="priority__button {{ option.modifierClass }}"
-        [class.is-active]="value === option.value"
+        [class.is-active]="option.value === selectedPriority"
         (click)="selectPriority(option.value)"
       >
         {{ option.label }}
-        <img class="priority__icon" [src]="option.icon" [alt]="option.label" />
+        <img class="priority__icon" [src]="option.iconPath" [alt]="option.label" />
       </button>
     }
   </div>

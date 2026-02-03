@@ -7,30 +7,31 @@
     <div class="add-task__content">
       <div class="add-task__column">
         <app-task-form-field
-          label="Title"
-          [required]="true"
-          placeholder="Enter a title"
+          [label]="'Title'"
+          [isRequired]="true"
+          [placeholder]="'Enter a title'"
         ></app-task-form-field>
 
         <app-task-form-field
-          label="Description"
-          [textarea]="true"
-          placeholder="Enter a Description"
+          [label]="'Description'"
+          [isTextarea]="true"
+          [isRequired]="false"
+          [placeholder]="'Enter a Description'"
         ></app-task-form-field>
 
         <app-task-form-field
-          label="Due date"
-          [required]="true"
-          placeholder="dd/mm/yyyy"
-          iconSrc="assets/img/icons/board/date.svg"
+          [label]="'Due date'"
+          [isRequired]="true"
+          [placeholder]="'dd/mm/yyyy'"
+          [iconSrc]="'assets/img/icons/board/date.svg'"
         ></app-task-form-field>
       </div>
 
       <div class="add-task__column add-task__column--divider">
-        <app-priority-selector [(value)]="priority"></app-priority-selector>
-        <app-dropdown-assignee [(selectedContacts)]="selectedContacts"></app-dropdown-assignee>
-        <app-dropdown-category [(selectedCategory)]="selectedCategory"></app-dropdown-category>
-        <app-subtask-composer [(subtasks)]="subtasks"></app-subtask-composer>
+        <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
+        <app-dropdown-assignee [(selectedContacts)]="activeAssignees"></app-dropdown-assignee>
+        <app-dropdown-category [(selectedCategory)]="activeCategory"></app-dropdown-category>
+        <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
       </div>
     </div>
 

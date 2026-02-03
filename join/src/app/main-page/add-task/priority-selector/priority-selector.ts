@@ -4,7 +4,7 @@ import { Task } from '../../../shared/interfaces/task';
 type PriorityOption = {
   value: Task['priority'];
   label: string;
-  icon: string;
+  iconPath: string;
   modifierClass: string;
 };
 
@@ -15,32 +15,32 @@ type PriorityOption = {
   styleUrl: './priority-selector.scss',
 })
 export class PrioritySelector {
-  @Input() value: Task['priority'] = 'medium';
-  @Output() valueChange = new EventEmitter<Task['priority']>();
+  @Input() selectedPriority: Task['priority'] = 'medium';
+  @Output() selectedPriorityChange = new EventEmitter<Task['priority']>();
 
   options: PriorityOption[] = [
     {
       value: 'high',
       label: 'Urgent',
-      icon: 'assets/img/icons/priority/priority-high.svg',
+      iconPath: 'assets/img/icons/priority/priority-high.svg',
       modifierClass: 'priority__button--urgent',
     },
     {
       value: 'medium',
       label: 'Medium',
-      icon: 'assets/img/icons/priority/priority-medium.svg',
+      iconPath: 'assets/img/icons/priority/priority-medium.svg',
       modifierClass: 'priority__button--medium',
     },
     {
       value: 'low',
       label: 'Low',
-      icon: 'assets/img/icons/priority/priority-low.svg',
+      iconPath: 'assets/img/icons/priority/priority-low.svg',
       modifierClass: 'priority__button--low',
     },
   ];
 
-  selectPriority(value: Task['priority']): void {
-    this.value = value;
-    this.valueChange.emit(value);
+  selectPriority(newPrio: Task['priority']): void {
+    this.selectedPriority = newPrio;
+    this.selectedPriorityChange.emit(newPrio);
   }
 }

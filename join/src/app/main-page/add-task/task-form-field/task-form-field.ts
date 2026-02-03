@@ -8,10 +8,10 @@ import { Component, Input } from '@angular/core';
 })
 export class TaskFormField {
   @Input() label = '';
-  @Input() required = false;
+  @Input() isRequired = false;
   @Input() placeholder = '';
   @Input() type = 'text';
-  @Input() textarea = false;
+  @Input() isTextarea = false;
   @Input() iconSrc: string | null = null;
-  @Input() darkPlaceholder = false;
+  @Input() isDarkPlaceholder = false;
 }

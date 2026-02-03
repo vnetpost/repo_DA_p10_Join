@@ -13,20 +13,20 @@ export class DropdownCategory {
   @Input() selectedCategory: TaskCategoryOption | null = null;
   @Output() selectedCategoryChange = new EventEmitter<TaskCategoryOption | null>();
 
-  categoryDropdownOpen = false;
+  isDropdownOpen = false;
 
   get selectedCategoryLabel(): string {
     return this.selectedCategory?.label ?? '';
   }
 
-  toggleCategoryDropdown(): void {
-    this.categoryDropdownOpen = !this.categoryDropdownOpen;
+  toggleDropdownOpen(): void {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
-  selectCategory(category: TaskCategoryOption, event?: Event): void {
+  selectCategory(newCat: TaskCategoryOption, event?: Event): void {
     event?.stopPropagation();
-    this.selectedCategory = category;
-    this.selectedCategoryChange.emit(category);
-    this.categoryDropdownOpen = false;
+    this.selectedCategory = newCat;
+    this.selectedCategoryChange.emit(newCat);
+    this.isDropdownOpen = false;
   }
 }

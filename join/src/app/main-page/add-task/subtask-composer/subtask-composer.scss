@@ -10,7 +10,7 @@
 }
 
 .form-field__control {
-  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.625rem);
+  @include styles.setFlex($jc: space-between, $gap: 0.625rem);
   width: 100%;
   min-height: 3rem;
   padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.6vw, 0.875rem);
@@ -20,7 +20,7 @@
   box-shadow: 0 0.0625rem 0.125rem 0 #0000001a;
 
   &:focus-within {
-    border-color: styles.$gray-dark;
+    border-color: styles.$blue-sky;
   }
 }
 
@@ -53,7 +53,66 @@
   cursor: pointer;
 
   img {
-    width: 1rem;
-    height: 1rem;
+    width: 2.5rem;
   }
+}
+
+.icon-button--small {
+  padding: 0.2rem;
+
+  img {
+    width: 1.6rem;
+  }
+}
+
+.subtask-actions {
+  @include styles.setFlex($gap: 0.5rem);
+  flex: 0 0 auto;
+}
+
+.subtask-actions__divider {
+  width: 0.0625rem;
+  height: 1.5rem;
+  background-color: styles.$gray-light;
+}
+
+.subtask-list {
+  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.5rem);
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.subtask-list__item {
+  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.5rem);
+  width: 100%;
+  // background-color: styles.$white-light;
+  border-radius: 0.75rem;
+  padding: clamp(0.45rem, 1vw, 0.65rem) clamp(0.75rem, 1.6vw, 1rem);
+}
+
+.subtask-list__bullet {
+  @include styles.setFont($size: 1.1em, $weight: 700, $color: styles.$black);
+  flex: 0 0 auto;
+}
+
+.subtask-list__title {
+  @include styles.setFont($size: 1em, $weight: 300, $color: styles.$black);
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.subtask-list__actions {
+  @include styles.setFlex($d: row, $ai: center, $jc: center, $gap: 0.4rem);
+  flex: 0 0 auto;
+}
+
+.subtask-list__divider {
+  width: 0.0625rem;
+  height: 1.5rem;
+  background-color: styles.$gray-light;
 }

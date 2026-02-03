@@ -42,12 +42,7 @@
 }
 
 .add-task__content {
-  @include styles.setFlex(
-    $d: row,
-    $ai: flex-start,
-    $jc: flex-start,
-    $gap: clamp(0rem, 0vw, 0rem)
-  );
+  @include styles.setFlex($d: row, $ai: flex-start, $jc: flex-start, $gap: clamp(0rem, 0vw, 0rem));
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -119,12 +114,12 @@
   }
 
   .add-task__content {
-    @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0rem);
+    @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 1rem);
   }
 
   .add-task__column {
     flex: 0;
-    gap: 0rem;
+    gap: 1.5rem;
   }
 
   .add-task__column:first-child {

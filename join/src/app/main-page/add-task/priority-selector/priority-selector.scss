@@ -21,8 +21,9 @@
 
 .priority__button {
   @include styles.setFlex($gap: 0.5rem);
+  @include styles.setFlex($gap: 0);
   flex: 1;
-  padding: clamp(0.625rem, 0.5vw, 0.75rem) clamp(0.625rem, 0.5vw, 0.75rem);
+  padding: clamp(0.5rem, 0.5vw, 0.75rem) clamp(0.5rem, 0.5vw, 0.75rem);
   border-radius: 1rem;
   border: 0.0625rem solid styles.$gray-light;
   background-color: styles.$white;

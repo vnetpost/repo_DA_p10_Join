@@ -1,12 +1,9 @@
 @use '../../../../styles/index.scss' as styles;
 
 .form-field {
+  // position: static;
   @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 0.5rem);
   width: 100%;
-}
-
-.form-field--dropdown {
-  position: static;
 }
 
 .form-field__label {
@@ -14,7 +11,7 @@
 }
 
 .form-field__control {
-  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.625rem);
+  @include styles.setFlex($jc: space-between, $gap: 0.625rem);
   width: 100%;
   min-height: 3rem;
   padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.6vw, 0.875rem);
@@ -24,7 +21,7 @@
   box-shadow: 0 0.0625rem 0.125rem 0 #0000001a;
 
   &:focus-within {
-    border-color: styles.$gray-dark;
+    border-color: styles.$blue-sky;
   }
 }
 
@@ -38,24 +35,14 @@
   padding: clamp(0.5rem, 1.2vw, 0.625rem) clamp(0rem, 0vw, 0rem);
 
   &::placeholder {
-    color: styles.$gray-light;
-  }
-}
-
-.form-field__input--dark-placeholder {
-  &::placeholder {
     color: styles.$black;
     opacity: 1;
   }
 }
 
-.form-field__control--dropdown {
-  cursor: pointer;
-}
-
-.form-field__control--dropdown.is-open {
+.form-field__control.is-open {
   border-color: styles.$blue-link;
-  box-shadow: 0 0 0 0.0625rem rgba(styles.$blue-link, 0.35);
+  box-shadow: 0 0 0 0.0625rem rgba(styles.$blue-link, 0.5);
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
 }
@@ -65,12 +52,26 @@
 }
 
 .form-field__icon {
-  width: 1.125rem;
-  height: 1.125rem;
+  width: 3rem;
 }
 
 .form-field__icon.is-open {
   transform: rotate(180deg);
+}
+
+.assignees-preview {
+  @include styles.setFlex($d: row, $ai: center, $jc: flex-start, $gap: 0.625rem);
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.assignees-preview__avatar {
+  @include styles.setFlex();
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  @include styles.setFont($size: 1em, $weight: 500, $color: styles.$white);
+  flex: 0 0 auto;
 }
 
 .dropdown {
@@ -90,6 +91,7 @@
   @include styles.setFlex($d: row, $ai: center, $jc: flex-start, $gap: 0.75rem);
   width: 100%;
   border: none;
+
   background-color: transparent;
   text-align: left;
   padding: clamp(0.5rem, 1.2vw, 0.75rem) clamp(0.75rem, 1.6vw, 1rem);
@@ -107,9 +109,9 @@
 }
 
 .dropdown__avatar {
-  @include styles.setFlex($d: row, $ai: center, $jc: center);
-  width: 2.25rem;
-  height: 2.25rem;
+  @include styles.setFlex();
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
   @include styles.setFont($size: 1em, $weight: 500, $color: styles.$white);
   flex: 0 0 auto;
@@ -117,6 +119,10 @@
 
 .dropdown__name {
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .dropdown__checkbox {
