@@ -2,6 +2,7 @@ import { Timestamp } from "@angular/fire/firestore";
 
 export interface Task {
   status: 'to-do' | 'in-progress' | 'await-feedback' | 'done';
+  order: number;
   id?: string; 
   title: string;
   description: string;
