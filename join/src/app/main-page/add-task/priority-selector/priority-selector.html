@@ -5,8 +5,8 @@
       <button
         type="button"
         class="priority__button {{ option.modifierClass }}"
-        [class.is-active]="option.value === selectedPriority"
         (click)="selectPriority(option.value)"
+        [class.is-active]="option.value === selectedPriority"
       >
         {{ option.label }}
         <img class="priority__icon" [src]="option.iconPath" [alt]="option.label" />

@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  HostListener,
+  Input,
+  Output,
+  inject,
+  ElementRef,
+} from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
 import { FirebaseService } from '../../../shared/services/firebase-service';
 import { getTwoInitials } from '../../../shared/utilities/utils';
@@ -10,7 +18,9 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
   styleUrl: './dropdown-assignee.scss',
 })
 export class DropdownAssignee {
+  elementRef = inject(ElementRef);
   firebaseService = inject(FirebaseService);
+
   getTwoInitials = getTwoInitials;
 
   @Input() selectedContacts: Contact[] = [];
@@ -27,11 +37,20 @@ export class DropdownAssignee {
     );
   }
 
-  toggleDropdownOpen(): void {
+  toggleDropdownOpen(event?: Event): void {
+    event?.stopPropagation();
+    if (event && this.isDropdownOpen && event.target instanceof HTMLInputElement) return;
     this.isDropdownOpen = !this.isDropdownOpen;
-    if (!this.isDropdownOpen) {
-      this.assigneeQuery = '';
-    }
+    if (!this.isDropdownOpen) this.assigneeQuery = '';
+  }
+
+  @HostListener('document:click', ['$event'])
+  closeOnOutsideClick(event: MouseEvent): void {
+    if (!this.isDropdownOpen) return;
+    const target = event.target;
+    if (target && this.elementRef.nativeElement.contains(target)) return;
+    this.isDropdownOpen = false;
+    this.assigneeQuery = '';
   }
 
   toggleContact(contact: Contact, event?: Event): void {

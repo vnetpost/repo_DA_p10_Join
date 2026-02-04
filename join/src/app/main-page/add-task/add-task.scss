@@ -55,7 +55,7 @@
 }
 
 .add-task__column {
-  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 1.25rem);
+  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.8rem);
   flex: 1;
   min-width: 0;
 }
@@ -70,7 +70,7 @@
 }
 
 .add-task__footer {
-  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 1rem);
+  @include styles.setFlex($jc: space-between, $gap: 1rem);
   margin-top: auto;
 }
 
@@ -81,6 +81,20 @@
 .add-task__actions {
   align-self: flex-end;
   @include styles.setFlex($d: row, $ai: center, $jc: flex-end, $gap: 1rem);
+}
+
+.add-task__field-error {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
+  visibility: hidden;
+  min-height: 1em;
+}
+
+.add-task__field-error.is-visible {
+  visibility: visible;
+}
+
+.add-task__subtask-hint {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
 }
 
 .required {

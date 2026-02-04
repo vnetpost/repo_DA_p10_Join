@@ -53,6 +53,19 @@
 
 .form-field__icon {
   width: 3rem;
+
+  &:hover {
+    background-color: styles.$white-light;
+    border-radius: 50%;
+  }
+}
+
+.form-field__icon-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
 }
 
 .form-field__icon.is-open {

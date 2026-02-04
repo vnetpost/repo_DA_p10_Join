@@ -28,6 +28,14 @@
   }
 }
 
+.form-field__control--error {
+  border-color: styles.$red-error;
+
+  &:focus-within {
+    border-color: styles.$red-error;
+  }
+}
+
 .form-field__input {
   @include styles.setFont($size: 1em, $color: styles.$gray-dark);
   border: none;
@@ -39,13 +47,6 @@
 
   &::placeholder {
     color: styles.$gray-light;
-  }
-}
-
-.form-field__input--dark-placeholder {
-  &::placeholder {
-    color: styles.$black;
-    opacity: 1;
   }
 }
 

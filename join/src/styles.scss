@@ -24,8 +24,8 @@ html {
   }
 }
 
-body:has(dialog[open]){
-    overflow: hidden;
+body:has(dialog[open]) {
+  overflow: hidden;
 }
 
 // #region Button styles
@@ -42,7 +42,7 @@ button {
   background-color: styles.$gray-dark;
   color: white;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     padding: 14px;
   }
 
@@ -62,7 +62,7 @@ button {
   color: styles.$gray-dark;
   border: 1px solid styles.$gray-dark;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     padding: 14px;
   }
 
@@ -80,10 +80,9 @@ button {
 }
 
 .button--disabled {
-  color: styles.$gray-dark;
   border: 1px solid styles.$gray-dark;
   filter: opacity(0.5);
-  cursor: not-allowed;
+  pointer-events: none;
 }
 
 .button--icon {

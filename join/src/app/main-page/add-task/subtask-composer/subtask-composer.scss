@@ -82,6 +82,10 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  max-height: clamp(6rem, 22vh, 12rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 0.25rem;
 }
 
 .subtask-list__item {
