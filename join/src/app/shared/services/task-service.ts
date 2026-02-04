@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
-import { Task } from '../interfaces/task';
+import { Subtask, Task } from '../interfaces/task';
 import { Unsubscribe } from '@angular/fire/auth';
 
 export type TaskCategoryOption = { value: Task['category']; label: string };
@@ -49,10 +49,10 @@ export class TaskService {
       });
       snapshot.docChanges().forEach((change) => {
         if (change.type === "added") {
-            // console.log("New note: ", change.doc.data());
+            console.log("New note: ", change.doc.data());
         }
         if (change.type === "modified") {
-            // console.log("Modified note: ", change.doc.data());
+            console.log("Modified note: ", change.doc.data());
         }
         if (change.type === "removed") {
             console.log("Removed note: ", change.doc.data());
@@ -107,6 +107,23 @@ export class TaskService {
       assignees: task.assignees,
       category: task.category,
       subtasks: task.subtasks,
+    };
+  }
+
+  async updateSubtasks(task: Task) {
+    if (task.id) {
+      const docRef = this.getSingleDocRef('tasks', task.id);
+      await updateDoc(docRef, this.getCleanJsonSubtasks(task))
+        .catch((err) => {
+          console.log(err);
+        })
+        .then();
+    }
+  }
+
+  getCleanJsonSubtasks(task: Task): {} {
+    return {
+      subtasks: task.subtasks
     };
   }
 

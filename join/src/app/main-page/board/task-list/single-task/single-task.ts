@@ -1,4 +1,4 @@
-import { Component, inject, Input, OnInit } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Task } from '../../../../shared/interfaces/task';
 import { FirebaseService } from '../../../../shared/services/firebase-service';
 import { getTwoInitials } from '../../../../shared/utilities/utils';
@@ -20,6 +20,7 @@ export class SingleTask implements OnInit{
   userColor: string | null = null;
   moveMenuOpen: boolean = false;
   isMobile = false;
+  @Output() openTask = new EventEmitter<Task>();
 
   ngOnInit(): void {
     this.checkDevice();

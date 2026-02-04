@@ -20,7 +20,7 @@
       </div>
     } @else if (tasksByStatus.length > 0) { 
         @for (singleTask of tasksByStatus; track singleTask.id) {
-          <app-single-task [task]="singleTask"></app-single-task>
+          <app-single-task [task]="singleTask" (openTask)="openTask.emit($event)"></app-single-task>
         }
       } @else{
         <div class="no-tasks-box">

@@ -1,5 +1,5 @@
 <div class="task-drag-wrapper" cdkDrag [cdkDragData]="task" [cdkDragDisabled]="isMobile">
-  <article class="task-card">
+  <article class="task-card" (click)="openTask.emit(task)">
     <div class="header">
       <p class="category" [ngClass]="task.category">
         {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}

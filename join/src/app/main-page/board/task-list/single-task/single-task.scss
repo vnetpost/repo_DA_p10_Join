@@ -8,11 +8,12 @@ article{
   background-color: white;
   box-shadow: 0px 0px 4px 2px #00000014;
   padding: 16px 14px;
+  word-break: break-word;
 
 
   @include styles.up-xxl{
-    min-width: 0;
-    width: 100%;
+    min-width: 167px;
+    max-width: 100%;
     box-shadow: 0px 0px 10px 3px #00000014;
     padding: 16px 8px;
   }
@@ -185,6 +186,7 @@ article{
       border: 1px solid white;
       border-radius: 50%;
       color: white;
+      word-break: normal;
       
       &:first-child{
         margin-left: 0;
