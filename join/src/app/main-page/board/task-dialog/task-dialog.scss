@@ -3,27 +3,19 @@
 dialog {
   margin: auto;
   position: revert;
-  // position: fixed;
-  // top: 30px;
-
-  box-shadow: 0px 0px 4px 0px #0000001a;
   border: none;
   border-radius: 24px;
+  box-shadow: 0px 0px 4px 0px #0000001a;
   z-index: 6;
-  overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
 
   &.opened {
-    background: transparent;
-    border-radius: 24px;
     border: none;
+    border-radius: 24px;
+    background: transparent;
 
     &::backdrop {
-      opacity: 0.7;
       background: #b3b3b3;
+      opacity: 0.7;
     }
   }
 
@@ -31,11 +23,16 @@ dialog {
     @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 8px);
     width: 93dvw;
     max-width: 390px;
-    max-height: 880px;
+    max-height: 90dvh;
     background-color: white;
     border-radius: 24px;
     padding: 25px 20px;
     word-break: break-word;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+      width: 0px;
+    }
 
     @include styles.down-xs{
       width: 88dvw;
@@ -105,12 +102,12 @@ dialog {
 .title{
   margin-top: 4px;
   margin-bottom: 8px;
-  font-size: 33px;
+  font-size: 26px;
 
   @include styles.up-xxl{
-    font-size: 61px;
-    line-height: 1.15;
     margin-bottom: 24px;
+    font-size: 40px;
+    line-height: 1.15;
   }
 }
 
@@ -135,10 +132,10 @@ dialog {
 }
 
 .priority{
-  @include styles.setFlex($jc: flex-start, $gap: 28px);
+  @include styles.setFlex($jc: flex-start, $gap: 30px);
 
   @include styles.up-xxl{
-    gap: 39px;
+    gap: 42px;
   }
 
   div{
@@ -154,10 +151,14 @@ dialog {
   }
 
   .assignee-list{
-    @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 9px);
+    @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
     width: 100%;
-    max-height: 130px;
+    max-height: 135px;
     overflow-y: auto;
+
+    @include styles.up-xxl{
+      max-height: 150px;
+    }
 
     &::-webkit-scrollbar {
       width: 4px;
@@ -171,13 +172,9 @@ dialog {
       background: styles.$gray-light;
     }
 
-    @include styles.up-xxl{
-      max-height: 160px;
-    }
-
     .assignee-item{
       @include styles.setFlex($ai: center, $gap: 10px);
-      margin: 0 0 9px 16px;
+      margin-left: 16px;
       padding-right: 8px;
 
       @include styles.up-xxl{
@@ -213,7 +210,7 @@ dialog {
 
   .subtask-list{
     width: 100%;
-    max-height: 70px;
+    max-height: 110px;
     overflow-y: auto;
 
     &::-webkit-scrollbar {
@@ -276,7 +273,7 @@ dialog {
       }
 
       .subtask-title{
-        word-break: break-all;
+        word-break: break-word;
       }
     }
   }
