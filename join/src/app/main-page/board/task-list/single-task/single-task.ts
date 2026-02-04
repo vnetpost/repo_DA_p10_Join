@@ -31,18 +31,20 @@ export class SingleTask implements OnInit{
     this.isMobile = window.matchMedia('(hover: none) and (pointer: coarse)').matches;
   }
 
-  openMenu(): void {
+  openMenu(event: MouseEvent): void {
+    event.stopPropagation();
     this.moveMenuOpen = true;
   }
 
-  closeMenu(): void {
+  closeMenu(event: MouseEvent): void {
+    event.stopPropagation();
     this.moveMenuOpen = false;
   }
 
-  moveTo(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): void {
+  moveTo(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done', event: MouseEvent): void {
     this.task.status = status;
     this.taskService.updateDocument(this.task, 'tasks');
-    this.closeMenu();
+    this.closeMenu(event);
   }
 
   get doneCount(): number {
