@@ -8,6 +8,7 @@
       [value]="subtaskTitle"
       #input
       (input)="subtaskTitle = input.value"
+      (keydown.enter)="handleEnter($event)"
     />
     @if (hasSubtaskInput) {
       <div class="subtask-actions">

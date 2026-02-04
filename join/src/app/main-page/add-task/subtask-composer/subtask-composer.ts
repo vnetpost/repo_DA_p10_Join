@@ -37,6 +37,14 @@ export class SubtaskComposer {
     this.subtaskTitle = '';
   }
 
+  handleEnter(event: Event): void {
+    if (!this.hasSubtaskInput) {
+      return;
+    }
+    event.preventDefault();
+    this.addSubtask();
+  }
+
   clearSubtaskTitle(): void {
     this.subtaskTitle = '';
     this.editingIndex = null;

@@ -1,6 +1,11 @@
 <label class="form-field">
   <span class="form-field__label">Category<span class="required">*</span></span>
-  <div class="form-field__control" [class.is-open]="isDropdownOpen" (click)="toggleDropdownOpen()">
+  <div
+    class="form-field__control"
+    [class.is-open]="isDropdownOpen"
+    [class.form-field__control--error]="hasError"
+    (click)="toggleDropdownOpen($event)"
+  >
     <input
       class="form-field__input"
       type="text"
@@ -8,12 +13,19 @@
       [value]="selectedCategoryLabel"
       readonly
     />
-    <img
-      class="form-field__icon"
-      [class.is-open]="isDropdownOpen"
-      src="assets/img/icons/add-task/dropdown-arrow-down.svg"
-      alt=""
-    />
+    <button
+      type="button"
+      class="form-field__icon-button"
+      aria-label="Toggle category dropdown"
+      (click)="toggleDropdownOpen($event)"
+    >
+      <img
+        class="form-field__icon"
+        [class.is-open]="isDropdownOpen"
+        src="assets/img/icons/add-task/dropdown-arrow-down.svg"
+        alt="dropdown-arrow icon"
+      />
+    </button>
   </div>
 
   @if (isDropdownOpen) {

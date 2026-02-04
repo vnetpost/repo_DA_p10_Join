@@ -26,6 +26,14 @@
   }
 }
 
+.form-field__control--error {
+  border-color: styles.$red-error;
+
+  &:focus-within {
+    border-color: styles.$red-error;
+  }
+}
+
 .form-field__input {
   @include styles.setFont($size: 1em, $color: styles.$gray-dark);
   border: none;
@@ -53,6 +61,19 @@
 
 .form-field__icon {
   width: 3rem;
+
+  &:hover {
+    background-color: styles.$white-light;
+    border-radius: 50%;
+  }
+}
+
+.form-field__icon-button {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
 }
 
 .form-field__icon.is-open {

@@ -22,25 +22,23 @@ export class TaskService {
 
   constructor() {
     this.unsubCollection = this.subCollection();
-  } 
+  }
 
   getFilteredTasks() {
     if (!this.searchTerm) return this.tasks;
 
     return this.tasks.filter((task) => {
-      return task.title.toLowerCase().includes(this.searchTerm) ||
-      task.description.toLowerCase().includes(this.searchTerm)
+      return (
+        task.title.toLowerCase().includes(this.searchTerm) ||
+        task.description.toLowerCase().includes(this.searchTerm)
+      );
     });
   }
 
   subCollection() {
     this.loading = true;
 
-    const tasksQuery = query(
-      this.getTasksRef(),
-      orderBy('status'),
-      orderBy('order')
-    );
+    const tasksQuery = query(this.getTasksRef(), orderBy('status'), orderBy('order'));
 
     return onSnapshot(tasksQuery, (snapshot) => {
       this.tasks.length = 0;
@@ -54,8 +52,8 @@ export class TaskService {
         if (change.type === "modified") {
             console.log("Modified note: ", change.doc.data());
         }
-        if (change.type === "removed") {
-            console.log("Removed note: ", change.doc.data());
+        if (change.type === 'removed') {
+          console.log('Removed note: ', change.doc.data());
         }
       });
 
@@ -76,7 +74,7 @@ export class TaskService {
       assignees: obj.assignees || [],
       category: obj.category || '',
       subtasks: obj.subtasks || [],
-    }
+    };
   }
 
   async deleteDocument(colId: string, docId: string) {
@@ -84,7 +82,7 @@ export class TaskService {
       console.log(err);
     });
   }
-  
+
   async updateDocument(item: Task, colId: string) {
     if (item.id) {
       let docRef = this.getSingleDocRef(colId, item.id);

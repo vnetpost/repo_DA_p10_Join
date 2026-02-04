@@ -3,35 +3,59 @@
     <h1>Add Task</h1>
   </header>
 
-  <form class="add-task__form" autocomplete="off">
+  <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()">
     <div class="add-task__content">
       <div class="add-task__column">
         <app-task-form-field
           [label]="'Title'"
           [isRequired]="true"
           [placeholder]="'Enter a title'"
+          [hasError]="showTitleError"
+          (fieldBlur)="isTitleTouched = true"
+          [(value)]="taskTitle"
         ></app-task-form-field>
+        <span class="add-task__field-error" [class.is-visible]="showTitleError">
+          This field is required
+        </span>
 
         <app-task-form-field
           [label]="'Description'"
           [isTextarea]="true"
           [isRequired]="false"
           [placeholder]="'Enter a Description'"
+          [(value)]="taskDescription"
         ></app-task-form-field>
 
         <app-task-form-field
           [label]="'Due date'"
           [isRequired]="true"
-          [placeholder]="'dd/mm/yyyy'"
-          [iconSrc]="'assets/img/icons/board/date.svg'"
+          [placeholder]="'yyyy/mm/dd'"
+          [type]="'date'"
+          [min]="minDueDate"
+          [hasError]="showDueDateError"
+          (fieldBlur)="isDueDateTouched = true"
+          [(value)]="taskDueDate"
         ></app-task-form-field>
+        <span class="add-task__field-error" [class.is-visible]="showDueDateError">
+          This field is required
+        </span>
       </div>
 
       <div class="add-task__column add-task__column--divider">
         <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
         <app-dropdown-assignee [(selectedContacts)]="activeAssignees"></app-dropdown-assignee>
-        <app-dropdown-category [(selectedCategory)]="activeCategory"></app-dropdown-category>
+        <app-dropdown-category
+          [(selectedCategory)]="activeCategory"
+          [hasError]="showCategoryError"
+          (fieldBlur)="isCategoryTouched = true"
+        ></app-dropdown-category>
+        <span class="add-task__field-error" [class.is-visible]="showCategoryError">
+          This field is required
+        </span>
         <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
+        @if (showSubtaskHint) {
+          <span class="add-task__subtask-hint"> At least two subtasks are required. </span>
+        }
       </div>
     </div>
 
@@ -40,11 +64,16 @@
         ><span class="required">*</span> This field is required</span
       >
       <div class="add-task__actions">
-        <button type="button" class="button button--secondary button--icon">
+        <button type="button" class="button button--secondary button--icon" (click)="resetForm()">
           Clear
           <img class="button__icon" src="assets/img/icons/add-task/close.svg" alt="" />
         </button>
-        <button type="submit" class="button button--primary button--icon">
+        <button
+          type="submit"
+          class="button button--primary button--icon"
+          [disabled]="!isFormValid"
+          [class.button--disabled]="!isFormValid"
+          >
           Create Task
           <img class="button__icon" src="assets/img/icons/add-task/check.svg" alt="" />
         </button>

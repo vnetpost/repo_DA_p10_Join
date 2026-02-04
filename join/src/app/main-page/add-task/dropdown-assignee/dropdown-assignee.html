@@ -1,22 +1,32 @@
 <label class="form-field">
   <span class="form-field__label">Assigned to</span>
-  <div class="form-field__control" [class.is-open]="isDropdownOpen" (click)="toggleDropdownOpen()">
+  <div
+    class="form-field__control"
+    [class.is-open]="isDropdownOpen"
+    (click)="toggleDropdownOpen($event)"
+  >
     <input
       class="form-field__input"
       type="text"
       [placeholder]="isDropdownOpen ? '' : 'Select contacts to assign'"
       [value]="isDropdownOpen ? assigneeQuery : ''"
       [readonly]="!isDropdownOpen"
-      (focus)="isDropdownOpen = true"
       #input
       (input)="assigneeQuery = input.value"
     />
-    <img
-      class="form-field__icon"
-      [class.is-open]="isDropdownOpen"
-      src="assets/img/icons/add-task/dropdown-arrow-down.svg"
-      alt=""
-    />
+    <button
+      type="button"
+      class="form-field__icon-button"
+      aria-label="Toggle assignee dropdown"
+      (click)="toggleDropdownOpen($event)"
+    >
+      <img
+        class="form-field__icon"
+        [class.is-open]="isDropdownOpen"
+        src="assets/img/icons/add-task/dropdown-arrow-down.svg"
+        alt="dropdown-arrow icon"
+      />
+    </button>
   </div>
 
   @if (!isDropdownOpen && selectedContacts.length) {
