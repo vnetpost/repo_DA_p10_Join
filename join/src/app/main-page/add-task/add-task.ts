@@ -93,8 +93,9 @@ export class AddTask {
       return;
     }
 
-    const dueDate = Timestamp.fromDate(new Date(`${dueDateValue}T00:00:00`));
-    if (Number.isNaN(dueDate.toDate().getTime())) return;
+    const dueDateDate = this.parseDueDate(dueDateValue);
+    if (!dueDateDate) return;
+    const dueDate = Timestamp.fromDate(dueDateDate);
 
     const assigneeIds = this.activeAssignees
       .map((contact) => contact.id)
@@ -117,6 +118,23 @@ export class AddTask {
 
     await this.taskService.addDocument(task);
     this.resetForm();
+  }
+
+  private parseDueDate(value: string): Date | null {
+    const parts = value.split(/[\/-]/);
+    if (parts.length !== 3) return null;
+    const [yearStr, monthStr, dayStr] = parts;
+    const year = Number(yearStr);
+    const month = Number(monthStr);
+    const day = Number(dayStr);
+    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day))
+      return null;
+
+    const date = new Date(year, month - 1, day);
+    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
+      return null;
+
+    return date;
   }
 
   resetForm(): void {

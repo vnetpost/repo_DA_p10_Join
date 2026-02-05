@@ -10,8 +10,8 @@
           [label]="'Title'"
           [isRequired]="true"
           [placeholder]="'Enter a title'"
-          [hasError]="showTitleError"
           (fieldBlur)="isTitleTouched = true"
+          [hasError]="showTitleError"
           [(value)]="taskTitle"
         ></app-task-form-field>
         <span class="add-task__field-error" [class.is-visible]="showTitleError">
@@ -33,8 +33,8 @@
           [type]="'test'"
           [useFlatpickr]="true"
           [min]="minDueDate"
-          [hasError]="showDueDateError"
           (fieldBlur)="isDueDateTouched = true"
+          [hasError]="showDueDateError"
           [(value)]="taskDueDate"
           [iconSrc]="'assets/img/icons/board/date.svg'"
         ></app-task-form-field>
@@ -48,8 +48,8 @@
         <app-dropdown-assignee [(selectedContacts)]="activeAssignees"></app-dropdown-assignee>
         <app-dropdown-category
           [(selectedCategory)]="activeCategory"
-          [hasError]="showCategoryError"
           (fieldBlur)="isCategoryTouched = true"
+          [hasError]="showCategoryError"
         ></app-dropdown-category>
         <span class="add-task__field-error" [class.is-visible]="showCategoryError">
           This field is required
