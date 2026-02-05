@@ -258,41 +258,23 @@ button {
 // #endregion
 
 .scroll-shadows {
-    --white: #fff;
-    --black: #c1bbbb;
-    --scroll-shadow-size: 3px;
+  --white: #fff;
+  --black: #c1bbbb;
+  --scroll-shadow-size: 3px;
 
-    background:
-      linear-gradient(
-        180deg,
-        var( --white ) var( --scroll-shadow-size ),
-        transparent
-      ) center top,
-
-      linear-gradient(
-        0deg,
-        var( --white ) var( --scroll-shadow-size ),
-        transparent
-      ) center bottom,
-
-      linear-gradient(
-        180deg,
-        color-mix( in srgb, var( --black ), transparent 50% ),
-        transparent
-      ) center top,
-
-      linear-gradient(
-        0deg,
-        color-mix( in srgb, var( --black ), transparent 50% ),
-        transparent
-      ) center bottom,
-
-      var(--white);
-    background-size:
-      100% calc( 2 * var( --scroll-shadow-size ) ),
-      100% calc( 2 * var( --scroll-shadow-size ) ),
-      100% var( --scroll-shadow-size ),
-      100% var( --scroll-shadow-size );
-    background-attachment: local, local, scroll, scroll;
-    background-repeat: no-repeat;
-  }
+  background:
+    linear-gradient(180deg, var(--white) var(--scroll-shadow-size), transparent) center top,
+    linear-gradient(0deg, var(--white) var(--scroll-shadow-size), transparent) center bottom,
+    linear-gradient(180deg, color-mix(in srgb, var(--black), transparent 50%), transparent) center
+      top,
+    linear-gradient(0deg, color-mix(in srgb, var(--black), transparent 50%), transparent) center
+      bottom,
+    var(--white);
+  background-size:
+    100% calc(2 * var(--scroll-shadow-size)),
+    100% calc(2 * var(--scroll-shadow-size)),
+    100% var(--scroll-shadow-size),
+    100% var(--scroll-shadow-size);
+  background-attachment: local, local, scroll, scroll;
+  background-repeat: no-repeat;
+}

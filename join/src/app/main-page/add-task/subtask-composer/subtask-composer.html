@@ -18,16 +18,16 @@
           aria-label="Clear subtask title"
           (click)="clearSubtaskTitle()"
         >
-          <img src="assets/img/icons/add-task/close.svg" alt="" />
+          <img src="assets/img/icons/add-task/close.svg" alt="clear subtask icon" />
         </button>
         <span class="subtask-actions__divider" aria-hidden="true"></span>
         <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
-          <img src="assets/img/icons/add-task/check.svg" alt="" />
+          <img src="assets/img/icons/add-task/check.svg" alt="add subtask icon" />
         </button>
       </div>
     } @else {
       <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
-        <img src="assets/img/icons/add-task/add.svg" alt="" />
+        <img src="assets/img/icons/add-task/add.svg" alt="add subtask icon" />
       </button>
     }
   </div>
@@ -44,7 +44,7 @@
               aria-label="Edit subtask"
               (click)="startEditSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/edit.svg" alt="" />
+              <img src="assets/img/icons/add-task/edit.svg" alt="edit subtask icon" />
             </button>
             <span class="subtask-list__divider" aria-hidden="true"></span>
             <button
@@ -53,7 +53,7 @@
               aria-label="Delete subtask"
               (click)="removeSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/delete.svg" alt="" />
+              <img src="assets/img/icons/add-task/delete.svg" alt="delete subtask icon" />
             </button>
           </div>
         </li>

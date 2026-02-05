@@ -9,6 +9,7 @@ import { PrioritySelector } from './priority-selector/priority-selector';
 import { SubtaskComposer } from './subtask-composer/subtask-composer';
 import { TaskFormField } from './task-form-field/task-form-field';
 import { Timestamp } from '@angular/fire/firestore';
+import { getTodayDateString } from '../../shared/utilities/utils';
 
 @Component({
   selector: 'app-add-task',
@@ -26,7 +27,7 @@ import { Timestamp } from '@angular/fire/firestore';
 export class AddTask {
   taskService = inject(TaskService);
 
-  minDueDate = this.getTodayDateString();
+  minDueDate = getTodayDateString();
 
   taskTitle: Task['title'] = '';
   taskDescription: Task['description'] = '';
@@ -37,7 +38,7 @@ export class AddTask {
   activeCategory: TaskCategoryOption | null = null;
   activeSubtasks: Subtask[] = [];
   isTitleTouched = false;
-  
+
   isDueDateTouched = false;
   isCategoryTouched = false;
 
@@ -129,13 +130,5 @@ export class AddTask {
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
-  }
-
-  private getTodayDateString(): string {
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0');
-    const day = String(now.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 }
