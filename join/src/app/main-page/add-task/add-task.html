@@ -1,3 +1,14 @@
+<div class="contacts-toast">
+  <p
+    class="contacts-toast__message"
+    [class.contacts-toast__message--visible]="toastVisible"
+    role="status"
+    aria-live="polite"
+  >
+    Task successfully created
+  </p>
+</div>
+
 <section class="add-task">
   <header class="add-task__header">
     <h1>Add Task</h1>
@@ -56,7 +67,7 @@
         </span>
         <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
         @if (showSubtaskHint) {
-          <span class="add-task__subtask-hint"> At least two subtasks are required. </span>
+          <span class="add-task__subtask-hint"> Either add no subtasks or at least two.</span>
         }
       </div>
     </div>
@@ -68,16 +79,24 @@
       <div class="add-task__actions">
         <button type="button" class="button button--secondary button--icon" (click)="resetForm()">
           Clear
-          <img class="button__icon" src="assets/img/icons/add-task/close.svg" alt="clear form icon" />
+          <img
+            class="button__icon"
+            src="assets/img/icons/add-task/close.svg"
+            alt="clear form icon"
+          />
         </button>
         <button
           type="submit"
           class="button button--primary button--icon"
           [disabled]="!isFormValid"
           [class.button--disabled]="!isFormValid"
-          >
+        >
           Create Task
-          <img class="button__icon" src="assets/img/icons/add-task/check.svg" alt="create task icon" />
+          <img
+            class="button__icon"
+            src="assets/img/icons/add-task/check.svg"
+            alt="create task icon"
+          />
         </button>
       </div>
     </div>

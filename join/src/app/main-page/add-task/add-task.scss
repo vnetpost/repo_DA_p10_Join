@@ -101,6 +101,61 @@
   color: styles.$red-error;
 }
 
+.contacts-toast {
+  position: fixed;
+  inset: 0;
+  @include styles.setFlex();
+  z-index: 8;
+  pointer-events: none;
+  background-color: rgba(0, 0, 0, 0.12);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.contacts-toast__message {
+  padding: 16px 24px;
+  border-radius: 8px;
+  background-color: styles.$gray-dark;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.contacts-toast__message--visible {
+  opacity: 1;
+}
+
+.contacts-toast:has(.contacts-toast__message--visible) {
+  opacity: 1;
+}
+
+@include styles.up-xxl {
+  .contacts-toast {
+    transform: translate(7dvw, 25dvh);
+  }
+
+  .contacts-toast__message {
+    transform: translateX(100%);
+  }
+
+  .contacts-toast__message--visible {
+    transform: translateX(0);
+  }
+}
+
+@include styles.down-xxl {
+  .contacts-toast__message {
+    transform: translateY(100%);
+  }
+
+  .contacts-toast__message--visible {
+    transform: translateY(0);
+  }
+}
+
 @include styles.down-xxl {
   .add-task {
     height: calc(100dvh - 2 * styles.$header-height);

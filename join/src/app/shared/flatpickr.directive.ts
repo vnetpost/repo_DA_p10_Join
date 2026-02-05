@@ -9,7 +9,6 @@ import type { Options } from 'flatpickr/dist/types/options';
 })
 export class FlatpickrDirective implements OnInit, OnDestroy {
   @Input() fpOptions: Partial<Options> = {};
-
   private instance?: FlatpickrInstance;
 
   constructor(private el: ElementRef<HTMLInputElement>) {}
@@ -17,8 +16,8 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.instance = flatpickr(this.el.nativeElement, {
       dateFormat: 'Y/m/d',
-      ...this.fpOptions,
       allowInput: false,
+      ...this.fpOptions,
     });
   }
 

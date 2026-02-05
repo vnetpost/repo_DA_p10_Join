@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
 import { Subtask, Task } from '../../shared/interfaces/task';
@@ -26,6 +27,7 @@ import { getTodayDateString } from '../../shared/utilities/utils';
 })
 export class AddTask {
   taskService = inject(TaskService);
+  private router = inject(Router);
 
   minDueDate = getTodayDateString();
 
@@ -42,8 +44,11 @@ export class AddTask {
   isDueDateTouched = false;
   isCategoryTouched = false;
 
-  get hasMinSubtasks(): boolean {
-    return this.activeSubtasks.length >= 2;
+  toastVisible = false;
+  private toastTimer?: number;
+
+  get hasValidSubtasks(): boolean {
+    return this.activeSubtasks.length !== 1;
   }
 
   get showSubtaskHint(): boolean {
@@ -67,7 +72,7 @@ export class AddTask {
       this.taskTitle.trim().length > 0 &&
       this.taskDueDate.trim().length > 0 &&
       Boolean(this.activeCategory) &&
-      this.hasMinSubtasks
+      this.hasValidSubtasks
     );
   }
 
@@ -86,7 +91,7 @@ export class AddTask {
     const dueDateValue = this.taskDueDate.trim();
     const category = this.activeCategory?.value ?? null;
 
-    if (!title || !dueDateValue || !category || !this.hasMinSubtasks) {
+    if (!title || !dueDateValue || !category || !this.hasValidSubtasks) {
       if (!title) this.isTitleTouched = true;
       if (!dueDateValue) this.isDueDateTouched = true;
       if (!category) this.isCategoryTouched = true;
@@ -118,6 +123,7 @@ export class AddTask {
 
     await this.taskService.addDocument(task);
     this.resetForm();
+    this.showToast();
   }
 
   private parseDueDate(value: string): Date | null {
@@ -127,8 +133,7 @@ export class AddTask {
     const year = Number(yearStr);
     const month = Number(monthStr);
     const day = Number(dayStr);
-    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day))
-      return null;
+    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return null;
 
     const date = new Date(year, month - 1, day);
     if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
@@ -148,5 +153,16 @@ export class AddTask {
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
+  }
+
+  private showToast(): void {
+    this.toastVisible = true;
+    if (this.toastTimer) {
+      clearTimeout(this.toastTimer);
+    }
+    this.toastTimer = setTimeout(async () => {
+      this.toastVisible = false;
+      await this.router.navigateByUrl('/board');
+    }, 1200);
   }
 }
