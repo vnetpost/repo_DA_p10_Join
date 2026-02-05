@@ -23,7 +23,7 @@
       <app-task-list status="done" listTitle="Done" (openTask)="openTask($event)"></app-task-list>
     </div>
 
-    <button (click)="addTestTask('to-do')">Add Test Task</button><br>
+    <!-- <button (click)="addTestTask('to-do')">Add Test Task</button><br> -->
     <app-task-dialog #taskDialog [task]="selectedTask" (deleteTask)="deleteTask($event)"></app-task-dialog>
   </div>
 </section>

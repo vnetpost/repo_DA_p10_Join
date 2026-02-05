@@ -2,24 +2,19 @@
 
 section{
   @include styles.setFlex($ai: flex-start);
-  min-height: calc(100dvh - styles.$header-height);
-  
-  @include styles.up-xxl{
-    height: 100%;
-    overflow-y: auto;
-
-    &::-webkit-scrollbar {
-          display: none;
-    }
-  }
+  height: 100%;
 
   .content-wrapper{
     width: 93%;
-    padding: 4rem 0 12rem;
+    height: 100%;
+    padding: 9rem 0 12rem;
 
     @include styles.up-xxl{
       width: 90%;
-      padding: 8rem 0 12rem;
+      height: 925px;
+      padding: 8rem 0 0;
+      display: flex;
+      flex-direction: column;
     }
   }
 }
@@ -137,15 +132,28 @@ section{
 }
 
 .board{
-  app-task-list{
-    flex: 1;
-  }
-
   @include styles.up-xxl{
-    @include styles.setFlex($jc: flex-start, $ai: stretch, $gap: 4px);
+    flex: 1;
+    display: flex;
+    align-items: stretch;
+    overflow-y: auto;
+    max-width: 100%;
   }
 
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  
   @media(min-width: 1250px){
     gap: 20px;
+  }
+
+  app-task-list{
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    height: 100%;
+    // margin-bottom: 200px;
   }
 }

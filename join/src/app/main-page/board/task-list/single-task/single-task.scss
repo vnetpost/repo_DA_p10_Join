@@ -4,18 +4,20 @@ article{
   @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 23px);
   min-width: 211px;
   width: 235px;
+  padding: 16px 14px;
   border-radius: 20px;
   background-color: white;
-  box-shadow: 0px 0px 4px 2px #00000014;
-  padding: 16px 14px;
+  box-shadow: 0px 0px 2px 1px #00000014;
   word-break: break-word;
 
-
   @include styles.up-xxl{
-    min-width: 167px;
-    max-width: 100%;
-    box-shadow: 0px 0px 10px 3px #00000014;
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    flex: 1;
     padding: 16px 8px;
+    margin-bottom: 16px;
+    box-shadow: 0px 0px 1px 0.5px #00000014;
   }
 
   @media(min-width: 1120px){

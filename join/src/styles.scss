@@ -258,12 +258,41 @@ button {
 // #endregion
 
 .scroll-shadows {
-  background:
-    linear-gradient(white 30%, rgba(255, 255, 255, 0)) center top,
-    linear-gradient(rgba(255, 255, 255, 0), white 70% ) center bottom,
-    radial-gradient(farthest-side at 50% 0, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center top,
-    radial-gradient(farthest-side at 50% 100%, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0)) center bottom;
-  background-repeat: no-repeat;
-  background-size: 100% 30px, 100% 30px, 100% 6px, 100% 6px;
-  background-attachment: local, local, scroll, scroll;
-}
+    --white: #fff;
+    --black: #c1bbbb;
+    --scroll-shadow-size: 3px;
+
+    background:
+      linear-gradient(
+        180deg,
+        var( --white ) var( --scroll-shadow-size ),
+        transparent
+      ) center top,
+
+      linear-gradient(
+        0deg,
+        var( --white ) var( --scroll-shadow-size ),
+        transparent
+      ) center bottom,
+
+      linear-gradient(
+        180deg,
+        color-mix( in srgb, var( --black ), transparent 50% ),
+        transparent
+      ) center top,
+
+      linear-gradient(
+        0deg,
+        color-mix( in srgb, var( --black ), transparent 50% ),
+        transparent
+      ) center bottom,
+
+      var(--white);
+    background-size:
+      100% calc( 2 * var( --scroll-shadow-size ) ),
+      100% calc( 2 * var( --scroll-shadow-size ) ),
+      100% var( --scroll-shadow-size ),
+      100% var( --scroll-shadow-size );
+    background-attachment: local, local, scroll, scroll;
+    background-repeat: no-repeat;
+  }

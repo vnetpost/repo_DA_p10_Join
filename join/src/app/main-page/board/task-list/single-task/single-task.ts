@@ -42,7 +42,17 @@ export class SingleTask implements OnInit{
   }
 
   moveTo(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done', event: MouseEvent): void {
+    const otherTasks = this.taskService.tasks.filter(
+      t => t.status === status && t.id !== this.task.id
+    );
+    
+    for (const t of otherTasks) {
+      t.order = t.order + 1;
+      this.taskService.updateDocument(t, 'tasks');
+    }
+    
     this.task.status = status;
+    this.task.order = 0;
     this.taskService.updateDocument(this.task, 'tasks');
     this.closeMenu(event);
   }
