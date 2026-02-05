@@ -9,7 +9,7 @@
     }
   </div>
 
-  <div class="list" cdkDropList (cdkDropListDropped)="onDrop($event)" [id]="status" [cdkDropListConnectedTo]="connectedLists" [cdkDropListData]="tasksByStatus">
+  <div class="list" cdkDropList (cdkDropListDropped)="onDrop($event)" [id]="status" [cdkDropListConnectedTo]="connectedLists" [cdkDropListData]="tasksByStatus" role="list" aria-roledescription="Task drop zone">
     @if(taskService.loading || contactService.loading){
       <div class="loading-tasks-box" role="status" aria-live="polite">
         <p>Loading...</p>

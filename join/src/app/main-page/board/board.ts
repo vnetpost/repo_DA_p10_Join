@@ -20,7 +20,7 @@ export class Board {
   selectedTask!: Task;
 
   search(): void {
-    this.taskService.searchTerm = this.searchTerm.trim().toLowerCase();
+    this.taskService.setSearchTerm(this.searchTerm.trim().toLowerCase());
   }
 
   addTestTask(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): void {
