@@ -1,4 +1,4 @@
-<div class="task-drag-wrapper" cdkDrag [cdkDragData]="task" [cdkDragDisabled]="isMobile">
+<div class="task-drag-wrapper" cdkDrag [cdkDragData]="task" [cdkDragDisabled]="isMobile" role="listitem" aria-roledescription="Draggable task">
   <article class="task-card" (click)="openTask.emit(task)">
     <div class="header">
       <p class="category" [ngClass]="task.category">

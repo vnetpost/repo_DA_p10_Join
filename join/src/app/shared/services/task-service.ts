@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { addDoc, collection, deleteDoc, doc, Firestore, onSnapshot, orderBy, query, updateDoc, where } from '@angular/fire/firestore';
-import { Subtask, Task } from '../interfaces/task';
+import { Task } from '../interfaces/task';
 import { Unsubscribe } from '@angular/fire/auth';
 
 export type TaskCategoryOption = { value: Task['category']; label: string };
@@ -15,7 +15,6 @@ export class TaskService {
     { value: 'technical-task', label: 'Technical Task' },
     { value: 'user-story', label: 'User Story' },
   ];
-  // tasksVersion = 0;
   unsubCollection!: Unsubscribe;
   loading = true;
   searchTerm: string = '';
@@ -24,7 +23,12 @@ export class TaskService {
     this.unsubCollection = this.subCollection();
   }
 
-  getFilteredTasks() {
+  setSearchTerm(term: string): void {
+    this.searchTerm = term;
+    window.dispatchEvent(new Event('tasks-updated'));
+  }
+
+  getFilteredTasks(): Array<Task> {
     if (!this.searchTerm) return this.tasks;
 
     return this.tasks.filter((task) => {
@@ -35,7 +39,7 @@ export class TaskService {
     });
   }
 
-  subCollection() {
+  subCollection(): Unsubscribe {
     this.loading = true;
 
     const tasksQuery = query(this.getTasksRef(), orderBy('status'), orderBy('order'));
@@ -77,13 +81,13 @@ export class TaskService {
     };
   }
 
-  async deleteDocument(colId: string, docId: string) {
+  async deleteDocument(colId: string, docId: string): Promise<void> {
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch((err) => {
       console.log(err);
     });
   }
 
-  async updateDocument(item: Task, colId: string) {
+  async updateDocument(item: Task, colId: string): Promise<void> {
     if (item.id) {
       let docRef = this.getSingleDocRef(colId, item.id);
       await updateDoc(docRef, this.getCleanJson(item))
@@ -108,7 +112,7 @@ export class TaskService {
     };
   }
 
-  async updateSubtasks(task: Task) {
+  async updateSubtasks(task: Task): Promise<void> {
     if (task.id) {
       const docRef = this.getSingleDocRef('tasks', task.id);
       await updateDoc(docRef, this.getCleanJsonSubtasks(task))
@@ -125,7 +129,7 @@ export class TaskService {
     };
   }
 
-  async addDocument(item: Task) {
+  async addDocument(item: Task): Promise<string | null> {
     try {
       const docRef = await addDoc(this.getTasksRef(), item);
       return docRef.id;
@@ -135,7 +139,7 @@ export class TaskService {
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     this.unsubCollection();
   }
 

@@ -1,10 +1,9 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TaskService } from '../../../shared/services/task-service';
 import { SingleTask } from './single-task/single-task';
 import { FirebaseService } from '../../../shared/services/firebase-service';
 import { Task } from '../../../shared/interfaces/task';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
-import { TaskDialog } from '../task-dialog/task-dialog';
 
 @Component({
   selector: 'app-task-list',
