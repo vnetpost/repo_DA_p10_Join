@@ -1,5 +1,5 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { Router, RouterOutlet } from '@angular/router';
 import { Header } from './shared/components/header/header';
 import { Cockpit } from './shared/components/cockpit/cockpit';
 
@@ -10,5 +10,5 @@ import { Cockpit } from './shared/components/cockpit/cockpit';
   styleUrl: './app.scss',
 })
 export class App {
-  protected readonly title = signal('join');
+  constructor(public router: Router) {}
 }

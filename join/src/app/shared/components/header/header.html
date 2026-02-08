@@ -1,7 +1,7 @@
 <header>
   <div class="content-wrapper">
     <div class="content-left">
-      <a routerLink="" class="mobile-logo-link mobile-only" aria-label="Open start page">
+      <a routerLink="/login" class="mobile-logo-link mobile-only" aria-label="Open start page">
         <img src="assets/img/icons/logo-dark.svg" alt="Join" />
       </a>
       <p class="desktop-title desktop-only">Kanban Project Management Tool</p>
@@ -32,7 +32,7 @@
           <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
           <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
           <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
-          <a routerLink="" (click)="logout()" role="menuitem">Log out</a>
+          <a routerLink="/login" (click)="logout()" role="menuitem">Log out</a>
         </div>
       }
     </div>

@@ -1,1 +1,96 @@
-<p>main-page works!</p>
+<div class="layout-wrapper">
+  <div class="layout">
+  
+    <div class="logo">
+      <img src="assets/img/icons/logo-dark.svg" alt="">
+    </div>
+  
+    @if (!signUp) {
+      <div class="sign-up-option">
+        <p>Not a Join user?</p>
+        <button class="button button--primary" (click)="openSignUp()">Sign up</button>
+      </div>
+    }
+  
+    @if (!signUp) {
+      <section class="form-section">
+        <div class="form-wrapper">
+  
+          <div class="title">
+            <h1>Log in</h1>
+            <div class="divider"></div>
+          </div>
+          
+          <form class="log-in-form log-in-sign-up-form">
+            <div class="input-box">
+              <input type="email" placeholder="Email">
+              <img src="assets/img/icons/forms/email.svg" alt="">
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Password">
+              <img src="assets/img/icons/forms/password.svg" alt="">
+            </div>
+  
+            <div class="form-actions">
+              <button type="submit" class="button button--primary">Log in</button>
+              <button type="button" class="button button--secondary">Guest Log in</button>
+            </div>
+          </form>
+  
+        </div>
+      </section>
+    }
+
+    @if(signUp){
+      <section class="form-section sign-up-form-section">
+        <div class="form-wrapper">
+  
+          <div class="title sign-title">
+            <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">
+              <img src="assets/img/icons/buttons/back.svg" alt="" aria-hidden="true"/>
+            </button>
+            <div class="sign-up">
+              <h1>Sign up</h1>
+              <div class="divider"></div>
+            </div>
+          </div>
+          
+          <form class="sign-up-form log-in-sign-up-form">
+            <div class="input-box">
+              <input type="text" placeholder="Name">
+              <img src="assets/img/icons/forms/name.svg" alt="">
+            </div>
+            <div class="input-box">
+              <input type="email" placeholder="Email">
+              <img src="assets/img/icons/forms/email.svg" alt="">
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Password">
+              <img src="assets/img/icons/forms/password.svg" alt="">
+            </div>
+            <div class="input-box">
+              <input type="password" placeholder="Confirm Password">
+              <img src="assets/img/icons/forms/password.svg" alt="">
+            </div>
+            <label class="checkbox-wrapper">
+              <input class="checkbox" type="checkbox">
+              <span class="checkbox-ui"></span>
+              <span class="privacy-link">I accept the <a routerLink="/privacy">Privacy policy</a></span>
+            </label>
+  
+            <div class="form-actions">
+              <button type="submit" class="button button--primary">Sign up</button>
+            </div>
+          </form>
+  
+        </div>
+      </section>
+    }
+  
+    <footer>
+      <a routerLink="/privacy">Privacy Policy</a>
+      <a routerLink="/imprint">Legal notice</a>
+    </footer>
+  </div>
+</div>
+
