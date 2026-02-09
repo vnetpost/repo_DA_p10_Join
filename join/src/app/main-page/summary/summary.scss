@@ -6,19 +6,275 @@ section{
 
   .content-wrapper{
     width: 93%;
-    padding: 4rem 0 12rem;
+    padding: 3rem 0 1rem;
 
     @include styles.up-xxl{
       width: 90%;
-      padding: 8rem 0 12rem;
+      padding: 6rem 0 0;
     }
   }
 }
 
-h1{
-  font-size: 40px;
+.header{
+  @include styles.setFlex($d: column, $ai: flex-start, $gap: 4px);
+  margin-bottom: 36px;
+  
+  @include styles.up-xxl{
+    @include styles.setFlex($jc: flex-start, $gap: 30px);
+    margin-bottom: 40px;
+  }
+
+  h1{
+    font-size: 40px;
+  
+    @include styles.up-xxl{
+      font-size: 54px;
+    }
+  }
+
+  p{
+    font-size: 20px;
+
+    @include styles.up-xxl{
+      font-size: 24px;
+    }
+  }
+
+  .mobile-divider{
+    width: 80px;
+    height: 3px;
+    background-color: styles.$blue-sky;
+  }
+
+  .desktop-divider{
+    width: 3px;
+    height: 50px;
+    background-color: styles.$blue-sky;
+  }
+}
+
+.content{
+  @include styles.up-xxl{
+    @include styles.setFlex($jc: flex-start, $gap: 24px);
+  }
+
+  @media (min-width: 1200px) {
+    gap: 36px;
+  }
+}
+
+.boxes{
+  @include styles.setGrid($rows: auto auto auto, $row-gap: 20px);
+    width: 100%;
+    max-width: 500px;
 
   @include styles.up-xxl{
-    font-size: 60px;
+    row-gap: 24px;
+    width: 90%;
+    max-width: 500px;
+  }
+
+  @media (min-width: 1200px) {
+    width: 100%;
+    max-width: 550px;
+  }
+}
+
+.box{
+  @include styles.setFlex($gap: 8px);
+  width: 100%;
+  border-radius: 20px;
+  padding: 8px;
+  background-color: white;
+  box-shadow: 0px 0px 4px 0px #0000001A;
+  color: black;
+
+  transition: 
+    transform 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+
+  @include styles.up-xxl{
+    gap: 24px;
+    padding: 26px 30px;
+  }
+
+  &:hover{
+    transform: scale(1.05);
+    background-color: styles.$gray-dark;
+    color: white;
+  }
+}
+
+.number{
+  font-size: 38px;
+  font-weight: 600;
+
+  @include styles.up-xxl{
+    font-size: 56px;
+  }
+}
+
+.status-amount{
+  grid-row: 1/2;
+  @include styles.setFlex($gap: 20px);
+
+  .icon{
+    width: 32px;
+    height: 32px;
+
+    @include styles.up-xxl{
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .icon--hover{
+    display: none;
+  }
+
+  .amount{
+    @include styles.setFlex($d: column);
+  }
+
+  a:hover{
+    .icon--default{
+      display: none;
+    }
+
+    .icon--hover{
+      display: block;
+    }
+  }
+}
+
+.high-priority-amount{
+  grid-row: 2/3;
+  @include styles.setFlex($gap: 20px);
+  padding: 12px 0;
+
+  @include styles.up-xxl{
+    @include styles.setGrid($rows: auto, $columns: 46% 3% 1fr);
+    padding: 36px 8px;
+    gap: 0;
+  }
+
+  .urgent{
+    @include styles.setFlex($gap: 8px);
+    width: 30%;
+    padding-left: 16px;
+
+    @media(min-width: 400px){
+      grid-area: 1/1/2/2;
+      width: auto;
+      padding-left: 0px;
+    }
+
+    @include styles.up-xxl{
+      gap: 20px;
+    }
+
+    .urgent-logo-circle{
+      @include styles.setFlex();
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background-color: styles.$red-accent;
+
+      @include styles.up-xxl{
+        width: 60px;
+        height: 60px;
+      }
+
+      img{
+        @include styles.up-xxl{
+          width: 58px;
+          height: auto;
+        }
+      }
+    }
+
+    .amount{
+      @include styles.setFlex($d: column);
+    }
+  }
+
+  .divider{
+    width: 2px;
+    height: 80%;
+    background-color: styles.$gray-light;
+
+    @include styles.up-xxl{
+      grid-area: 1/2/2/3;
+      height: 100%;
+    }
+  }
+
+  .priority-info{
+    @include styles.up-xxl{
+      grid-area: 1/3/2/4;
+      padding-left: 8px;
+    }
+
+    @media(min-width: 1200px){
+      padding-left: 16px;
+    }
+
+    .deadline{
+      font-weight: bold;
+      margin-bottom: 2px;
+
+      @include styles.up-xxl{
+        font-size: 21px;
+        margin-bottom: 8px;
+      }
+    }
+  }
+}
+
+.tasks-amount{
+  grid-row: 3/4;
+  @include styles.setFlex($gap: 20px);
+  
+  .box-amount{
+    @include styles.setFlex($d: column);
+
+    @include styles.up-xxl{
+      padding: 28px 31px;
+    }
+
+    p{
+      text-align: center;
+      white-space: nowrap;
+    }
+  }
+}
+
+.goodday-message{
+  @include styles.setFlex($d: column);
+  font-size: 34px;
+  font-weight: 500;
+
+  @include styles.up-xxl{
+    align-items: flex-start;
+    font-size: 26px;
+  }
+
+  @media (min-width: 1200px) {
+    font-size: 40px;
+  }
+
+  .user-name{
+    color: styles.$blue-sky;
+    font-size: 50px;
+    font-weight: bold;
+
+    @include styles.up-xxl{
+      font-size: 30px;
+    }
+
+    @media (min-width: 1200px) {
+      font-size: 48px;
+    }
   }
 }

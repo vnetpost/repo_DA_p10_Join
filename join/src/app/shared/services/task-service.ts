@@ -23,6 +23,10 @@ export class TaskService {
     this.unsubCollection = this.subCollection();
   }
 
+  getTaskCountByStatus(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): number {
+    return this.tasks.filter(task => task.status === status).length;
+  }
+
   setSearchTerm(term: string): void {
     this.searchTerm = term;
     window.dispatchEvent(new Event('tasks-updated'));

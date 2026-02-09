@@ -1,0 +1,227 @@
+@use "../../styles/index.scss" as styles;
+
+.layout-wrapper{
+  @include styles.setFlex();
+  height: 100dvh;
+
+  @include styles.up-xxl{
+    height: 100%;
+  }
+
+  .layout{
+    @include styles.setGrid($rows: auto 1fr auto auto, $columns: 1fr);
+    width: 93%;
+    height: 100%;
+    padding: 4rem 0 4rem;
+  
+    @include styles.up-xxl{
+      @include styles.setGrid($rows: auto 1fr auto, $columns: auto 1fr);
+      width: 93%;
+      height: 100%;
+      padding: 4rem 0 4rem;
+    }
+  }
+}
+
+
+.logo{
+  grid-area: 1/1/2/2;
+  
+  @include styles.up-xxl{
+    grid-area: 1/1/4/2;
+  }
+
+  img{
+    width: 64px;
+
+    @include styles.up-xxl{
+      width: 100px;
+    }
+  }
+}
+
+.sign-up-option{
+  grid-area: 3/1/4/2;
+  @include styles.setFlex($gap: 16px);
+  width: 100%;
+  height: 50px;
+
+  @include styles.up-xxl{
+    grid-area: 1/2/2/3;
+    @include styles.setFlex($jc: flex-end, $gap: 16px);
+    height: 70px;
+  }
+}
+
+.form-section{
+  grid-area: 2/1/3/2;
+  @include styles.setFlex();
+
+  .form-wrapper{
+    @include styles.setFlex($d: column, $gap: 20px);
+    width: 90dvw;
+    max-width: 500px;
+    padding: 16px;
+    border-radius: 20px;
+    background-color: white;
+    box-shadow: 0px 0px 14px 3px #0000000A;
+
+    @include styles.up-xxl{
+      width: 40dvw;
+      max-width: 550px;
+    }
+
+    .title{
+      @include styles.setFlex($d: column, $gap: 8px);
+
+      h1{
+        font-size: 47px;
+      }
+  
+      .divider{
+        width: 100px;
+        height: 3px;
+        background-color: styles.$blue-sky;
+      }
+    }
+
+    .sign-title{
+      @include styles.setGrid($rows: auto, $columns: 40px 1fr);
+      width: 100%;
+
+      .back-btn{
+        grid-area: 1/1/2/2;
+        background-color: transparent;
+        align-self: start;
+        cursor: pointer;
+        z-index: 2;
+
+        img{
+          width: 24px;
+          height: 24px;
+        }
+      }
+
+      .sign-up{
+        grid-area: 1/1/2/3;
+        @include styles.setFlex($d: column, $gap: 8px);
+      }
+    }
+  }
+
+  @include styles.up-xxl{
+    grid-area: 2/1/3/3;
+  }
+}
+
+.log-in-sign-up-form{
+  width: 100%;
+
+  .input-box{
+    margin-bottom: 20px;
+    @include styles.setGrid($rows: 1fr, $columns: 1fr 11%, $jc: center, $ai: center);
+
+    input{
+      grid-area: 1/1/2/3;
+      width: 100%;
+      height: 30px;
+      border: 1px solid styles.$gray-light;
+      border-radius: 8px;
+      @include styles.setFont();
+      padding: 0 50px 0 16px;
+
+      @include styles.up-xxl{
+        height: 45px;
+      }
+
+      &::placeholder{
+        color: styles.$gray-light;
+      }
+
+      &:focus {
+        outline: none;
+        border-color: styles.$gray-dark;
+      }
+
+      &.ng-invalid.ng-touched {
+          border-color: styles.$red-error;
+      }
+    }
+
+    img{
+      grid-area: 1/2/2/3;
+    }
+  }
+
+
+  .form-actions{
+    @include styles.setFlex($d: column, $gap: 12px);
+    margin-top: 32px;
+
+    button{
+      width: 40%;
+    }
+  }
+}
+
+.sign-up-form{
+
+  .checkbox-wrapper{
+    @include styles.setFlex($gap: 8px);
+    margin-bottom: 6px;
+    cursor: pointer;
+
+    @include styles.up-xxl{
+      font-size: 16px;
+      gap: 14px;
+      margin-bottom: 6px;
+    }
+  
+    .checkbox{
+      display: none;
+
+      &:checked + .checkbox-ui {
+        background: url(../../../public/assets/img/icons/checkboxes/checkbox-checked.svg)
+        center / contain no-repeat;
+      }
+    }
+      
+    .checkbox-ui {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      background: url(../../../public/assets/img/icons/checkboxes/checkbox.svg)
+        center / contain no-repeat;
+    }
+    
+    &:hover .checkbox-ui {
+      background: url(../../../public/assets/img/icons/checkboxes/checkbox-hover.svg)
+      center / contain no-repeat;
+    }
+
+    &:hover .checkbox:checked + .checkbox-ui {
+      background: url(../../../public/assets/img/icons/checkboxes/checkbox-checked-hover.svg)
+      center / contain no-repeat;
+    }
+
+    .privacy-link a{
+      color: styles.$blue-sky;
+    }
+  }
+}
+
+footer{
+  grid-area: 4/1/5/2;
+  @include styles.setFlex($gap: 20px);
+  width: 100%;
+  height: 50px;
+
+  @include styles.up-xxl{
+    grid-area: 3/1/4/3;
+    height: 70px;
+  }
+
+  a{
+    color: #A8A8A8;
+  }
+}
