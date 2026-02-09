@@ -2,7 +2,7 @@
   <div class="layout">
   
     <div class="logo">
-      <img src="assets/img/icons/logo-dark.svg" alt="">
+      <img src="assets/img/icons/logo-dark.svg" alt="Join logo">
     </div>
   
     @if (!signUp) {
@@ -13,29 +13,62 @@
     }
   
     @if (!signUp) {
-      <section class="form-section">
+      <section class="form-section" aria-labelledby="login-title">
         <div class="form-wrapper">
   
           <div class="title">
-            <h1>Log in</h1>
-            <div class="divider"></div>
+            <h1 id="login-title">Log in</h1>
+            <div class="divider" aria-hidden="true"></div>
           </div>
           
-          <form class="log-in-form log-in-sign-up-form">
+          <form class="log-in-form log-in-sign-up-form" #logInForm="ngForm" (ngSubmit)="onLogin(logInForm)" novalidate autocomplete="off">
+            
             <div class="input-box">
-              <input type="email" placeholder="Email">
-              <img src="assets/img/icons/forms/email.svg" alt="">
+              <input type="email" name="email" placeholder="Email" [(ngModel)]="logInData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}" aria-label="Email address">
+              <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
+              @if (email.invalid && email.touched) {
+                <span class="form-error" aria-live="polite">
+                  @if (email.errors?.['required']) {
+                    Email is required.
+                  } @else if (email.errors?.['minlength']) {
+                      Email must be at least 5 characters.
+                    } @else if (email.errors?.['pattern']) {
+                        Please enter a valid email address.
+                    }
+                </span>
+              }
             </div>
+
+
             <div class="input-box">
-              <input [type]="showLogInPassword ? 'text' : 'password'" placeholder="Password">
-              <button type="button" class="visibility-btn" (click)="toggleLogInPassword()">
-                <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
-              </button>
+              <input [(ngModel)]="logInData.password" name="logInPassword" #logInPass="ngModel" required minlength="8" [type]="showLogInPassword ? 'text' : 'password'" placeholder="Password" aria-label="Password">
+              <div class="icon-slot">
+                @if (logInData.password.length > 0) {
+                  <button type="button" class="visibility-btn" (click)="toggleLogInPassword()" aria-label="Toggle password visibility">
+                    <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                  </button>
+                } @else {
+                  <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                }
+              </div>
+              @if (logInPass.invalid && logInPass.touched) {
+                <span class="form-error" aria-live="polite">
+                  @if (logInPass.errors?.['required']) {
+                    Password is required.
+                  } @else if (logInPass.errors?.['minlength']) {
+                      Password must be at least 8 characters.
+                    } 
+                </span>
+              }
             </div>
   
             <div class="form-actions">
-              <button type="submit" class="button button--primary">Log in</button>
-              <button type="button" class="button button--secondary">Guest Log in</button>
+              <button type="submit" [disabled]="logInForm.invalid" class="button button--primary">
+                Log in
+              </button>
+              <button type="button" class="button button--secondary">
+                Guest Log in
+              </button>
             </div>
           </form>
   
@@ -44,48 +77,111 @@
     }
 
     @if(signUp){
-      <section class="form-section sign-up-form-section">
+      <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
         <div class="form-wrapper">
   
           <div class="title sign-title">
             <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">
-              <img src="assets/img/icons/buttons/back.svg" alt="" aria-hidden="true"/>
+              <img src="assets/img/icons/buttons/back.svg" alt="" aria-hidden="true">
             </button>
             <div class="sign-up">
-              <h1>Sign up</h1>
+              <h1 id="signup-title">Sign up</h1>
               <div class="divider"></div>
             </div>
           </div>
           
-          <form class="sign-up-form log-in-sign-up-form">
+          <form class="sign-up-form log-in-sign-up-form" #signUpForm="ngForm" (ngSubmit)="onSignUp(signUpForm)" novalidate autocomplete="off">
             <div class="input-box">
-              <input type="text" placeholder="Name">
-              <img src="assets/img/icons/forms/name.svg" alt="">
+              <input type="text" placeholder="Name" name="name" ngModel #name="ngModel" aria-label="Name" required minlength="2" pattern="^[a-zA-Z\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z\xC0-\uFFFF]+){0,2}[.]{0,1}$">
+              <img src="assets/img/icons/forms/name.svg" alt="" aria-hidden="true">
+              @if (name.invalid && name.touched) {
+                <span class="form__error">
+                  @if (name.errors?.['required']) {
+                    Name is required.
+                  } @else if (name.errors?.['pattern']) {
+                      Please enter a valid name.
+                    } @else if (name.errors?.['minlength']) {
+                        Name must be at least 2 characters.
+                    } 
+                </span>
+              }
             </div>
             <div class="input-box">
-              <input type="email" placeholder="Email">
-              <img src="assets/img/icons/forms/email.svg" alt="">
+              <input type="email" placeholder="Email" name="email" [(ngModel)]="logInData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}">
+              <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
+              @if (email.invalid && email.touched) {
+                <span class="form-error">
+                  @if (email.errors?.['required']) {
+                    Email is required.
+                  } @else if (email.errors?.['minlength']) {
+                      Email must be at least 5 characters.
+                    } @else if (email.errors?.['pattern']) {
+                        Please enter a valid email address.
+                    }
+                </span>
+              }
             </div>
             <div class="input-box">
-              <input [type]="showSignUpPassword ? 'text' : 'password'" placeholder="Password">
-              <button type="button" class="visibility-btn" (click)="toggleSignUpPassword()">
-                <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
-              </button>
+              <input [(ngModel)]="signUpData.password" name="signUpPassword" #signUpPass="ngModel" required minlength="8" [type]="showSignUpPassword ? 'text' : 'password'" placeholder="Password" aria-label="Password">
+              <div class="icon-slot">
+                @if (signUpData.password.length > 0) {
+                  <button type="button" class="visibility-btn" (click)="toggleSignUpPassword()" aria-label="Toggle password visibility">
+                    <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                  </button>
+                } @else {
+                  <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                }
+              </div>
+              @if (signUpPass.invalid && signUpPass.touched) {
+                <span class="form-error" aria-live="polite">
+                  @if (signUpPass.errors?.['required']) {
+                    Password is required.
+                  } @else if (signUpPass.errors?.['minlength']) {
+                      Password must be at least 8 characters.
+                    } 
+                </span>
+              }
             </div>
             <div class="input-box">
-              <input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm Password">
-              <button type="button" class="visibility-btn" (click)="toggleConfirmPassword()">
-                <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
-              </button>
+              <input [(ngModel)]="confirmPassword" name="confirmPassword" #confirmPass="ngModel" required minlength="8" [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm Password" aria-label="Password">
+              <div class="icon-slot">
+                @if (confirmPassword.length > 0) {
+                  <button type="button" class="visibility-btn" (click)="toggleConfirmPassword()" aria-label="Toggle password visibility">
+                    <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                  </button>
+                } @else {
+                  <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                }
+              </div>
+              @if (confirmPass.invalid && confirmPass.touched) {
+                <span class="form-error" aria-live="polite">
+                  @if (confirmPass.errors?.['required']) {
+                    Password is required.
+                  } @else if (confirmPass.errors?.['minlength']) {
+                      Password must be at least 8 characters.
+                    } 
+                </span>
+              } @else if (confirmPass.touched && signUpData.password !== confirmPassword) {
+                  <span class="form-error">
+                    Passwords do not match.
+                  </span>
+                }
             </div>
             <label class="checkbox-wrapper">
-              <input class="checkbox" type="checkbox">
+              <input class="checkbox" type="checkbox" name="privacy" ngModel #privacy="ngModel" required aria-label="Accept privacy policy">
               <span class="checkbox-ui"></span>
-              <span class="privacy-link">I accept the <a routerLink="/privacy">Privacy policy</a></span>
+              <span class="privacy-link">I accept the <a href="/privacy" target="_blank" rel="noopener noreferrer">Privacy policy</a></span>
             </label>
+            @if (privacy.invalid && privacy.dirty) {
+              <span class="checkbox-error" aria-live="polite">
+                You must accept the privacy policy.
+              </span>
+            }
   
             <div class="form-actions">
-              <button type="submit" class="button button--primary">Sign up</button>
+              <button type="submit" [disabled]="signUpForm.invalid || signUpData.password !== confirmPassword" class="button button--primary">
+                Sign up
+              </button>
             </div>
           </form>
   
