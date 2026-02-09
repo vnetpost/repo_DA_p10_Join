@@ -1,20 +1,22 @@
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { TaskList } from './task-list/task-list';
 import { TaskService } from '../../shared/services/task-service';
 import { Timestamp } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { TaskDialog } from './task-dialog/task-dialog';
 import { Task } from '../../shared/interfaces/task';
+import { AddTask } from '../add-task/add-task';
 
 @Component({
   selector: 'app-board',
-  imports: [TaskList, FormsModule, TaskDialog],
+  imports: [TaskList, FormsModule, TaskDialog, AddTask],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
 export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
+  isAddTaskOverlayOpen = false;
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
 
@@ -91,5 +93,18 @@ export class Board {
 
     this.taskService.deleteDocument('tasks', taskId);
     this.selectedTask = null as any;
+  }
+
+  openAddTaskOverlay(): void {
+    this.isAddTaskOverlayOpen = true;
+  }
+
+  closeAddTaskOverlay(): void {
+    this.isAddTaskOverlayOpen = false;
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (this.isAddTaskOverlayOpen) this.closeAddTaskOverlay();
   }
 }

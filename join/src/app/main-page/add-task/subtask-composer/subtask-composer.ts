@@ -19,11 +19,18 @@ export class SubtaskComposer {
   }
 
   addSubtask(): void {
-    const title = this.subtaskTitle.trim();
-    if (!title) return;
+    const newTitle = this.subtaskTitle.trim();
+    if (!newTitle) return;
+    if (
+      this.editingIndex === null &&
+      this.subtasks.some((subtask) => subtask.title.trim().toLowerCase() === newTitle.toLowerCase())
+    ) {
+      return;
+    }
+
     if (this.editingIndex !== null) {
       const updated = this.subtasks.map((subtask, index) =>
-        index === this.editingIndex ? { ...subtask, title } : subtask,
+        index === this.editingIndex ? { ...subtask, title: newTitle } : subtask,
       );
       this.subtasks = updated;
       this.subtasksChange.emit(updated);
@@ -31,7 +38,7 @@ export class SubtaskComposer {
       this.subtaskTitle = '';
       return;
     }
-    const updated = [...this.subtasks, { title, done: false }];
+    const updated = [...this.subtasks, { title: newTitle, done: false }];
     this.subtasks = updated;
     this.subtasksChange.emit(updated);
     this.subtaskTitle = '';

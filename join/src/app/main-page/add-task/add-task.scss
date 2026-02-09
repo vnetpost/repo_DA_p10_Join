@@ -42,7 +42,7 @@
 }
 
 .add-task__content {
-  @include styles.setFlex($d: row, $ai: flex-start, $jc: flex-start, $gap: clamp(0rem, 0vw, 0rem));
+  @include styles.setFlex($d: row, $ai: flex-start, $jc: flex-start);
   flex: 1;
   min-height: 0;
   overflow-y: auto;
@@ -81,6 +81,10 @@
 .add-task__actions {
   align-self: flex-end;
   @include styles.setFlex($d: row, $ai: center, $jc: flex-end, $gap: 1rem);
+
+  .button--secondary:hover .button__icon {
+    filter: invert(62%) sepia(76%) saturate(1316%) hue-rotate(161deg) brightness(96%) contrast(88%);
+  }
 }
 
 .add-task__field-error {
@@ -97,6 +101,10 @@
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
 }
 
+.add-task__padding-top {
+  padding-top: 2rem;
+}
+
 .required {
   color: styles.$red-error;
 }
@@ -105,20 +113,21 @@
   position: fixed;
   inset: 0;
   @include styles.setFlex();
-  z-index: 8;
+  background-color: #00000077;
+  z-index: 30;
   pointer-events: none;
-  background-color: rgba(0, 0, 0, 0.12);
   opacity: 0;
   transition: opacity 0.2s ease;
 }
 
 .contacts-toast__message {
-  padding: 16px 24px;
-  border-radius: 8px;
+  padding: 1.6rem 2.4rem;
+  border-radius: 0.8rem;
   background-color: styles.$gray-dark;
   color: #ffffff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0.8rem 2.4rem #0000004e;
   opacity: 0;
+  transform: translateY(0.8rem);
   transition:
     transform 0.2s ease,
     opacity 0.2s ease;
@@ -126,34 +135,11 @@
 
 .contacts-toast__message--visible {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .contacts-toast:has(.contacts-toast__message--visible) {
   opacity: 1;
-}
-
-@include styles.up-xxl {
-  .contacts-toast {
-    transform: translate(7dvw, 25dvh);
-  }
-
-  .contacts-toast__message {
-    transform: translateX(100%);
-  }
-
-  .contacts-toast__message--visible {
-    transform: translateX(0);
-  }
-}
-
-@include styles.down-xxl {
-  .contacts-toast__message {
-    transform: translateY(100%);
-  }
-
-  .contacts-toast__message--visible {
-    transform: translateY(0);
-  }
 }
 
 @include styles.down-xxl {
@@ -188,7 +174,7 @@
 
   .add-task__column {
     flex: 0;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   .add-task__column:first-child {

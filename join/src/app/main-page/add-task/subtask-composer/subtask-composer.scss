@@ -77,6 +77,7 @@
 }
 
 .subtask-list {
+  // border: 1px solid red;
   @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.5rem);
   width: 100%;
   list-style: none;
@@ -86,14 +87,29 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding-right: 0.25rem;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(styles.$gray-dark, 0.45) transparent;
+
+  &::-webkit-scrollbar {
+    width: 0.4rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(styles.$gray-dark, 0.45);
+    border-radius: 999px;
+  }
 }
 
 .subtask-list__item {
   @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.5rem);
   width: 100%;
   // background-color: styles.$white-light;
-  border-radius: 0.75rem;
+  border-radius: 1rem;
   padding: clamp(0.45rem, 1vw, 0.65rem) clamp(0.75rem, 1.6vw, 1rem);
+
+  &:hover {
+    background-color: styles.$white-light;
+  }
 }
 
 .subtask-list__bullet {
@@ -102,6 +118,7 @@
 }
 
 .subtask-list__title {
+  // border: 1px solid red;
   @include styles.setFont($size: 1em, $weight: 300, $color: styles.$black);
   flex: 1;
   min-width: 0;

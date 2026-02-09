@@ -31,6 +31,7 @@
         type="button"
         class="add-task-btn button button--primary button--icon"
         aria-label="Add new task"
+        (click)="openAddTaskOverlay()"
       >
         <span class="desktop-only">Add task</span>
         <img
@@ -63,5 +64,36 @@
       [task]="selectedTask"
       (deleteTask)="deleteTask($event)"
     ></app-task-dialog>
+
+    @if (isAddTaskOverlayOpen) {
+      <div
+        class="add-task-overlay"
+        role="dialog"
+        aria-modal="true"
+        aria-label="Add new task"
+        (click)="closeAddTaskOverlay()"
+      >
+        <div class="add-task-overlay__panel" (click)="$event.stopPropagation()">
+          <button
+            type="button"
+            class="add-task-overlay__close"
+            aria-label="Close add task overlay"
+            (click)="closeAddTaskOverlay()"
+          >
+            <img
+              class="add-task-overlay__close-icon"
+              src="assets/img/icons/buttons/close.svg"
+              alt=""
+              aria-hidden="true"
+            />
+          </button>
+
+          <app-add-task
+            [isOverlay]="true"
+            (closeDialogRequested)="closeAddTaskOverlay()"
+          ></app-add-task>
+        </div>
+      </div>
+    }
   </div>
 </section>

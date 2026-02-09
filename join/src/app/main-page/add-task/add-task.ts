@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, EventEmitter, Input, OnDestroy, Output, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
@@ -25,11 +25,16 @@ import { getTodayDateString } from '../../shared/utilities/utils';
   templateUrl: './add-task.html',
   styleUrl: './add-task.scss',
 })
-export class AddTask {
+export class AddTask implements OnDestroy {
   taskService = inject(TaskService);
   private router = inject(Router);
+  @Input() isOverlay = false;
+  @Output() closeDialogRequested = new EventEmitter<void>();
 
   minDueDate = getTodayDateString();
+  readonly taskTitleMinLength = 3;
+  readonly taskTitleMaxLength = 100;
+  private readonly taskTitleRegex = /^[A-Za-zÄÖÜäöüß0-9 .,:;!?()_/#+'&"@-]+$/;
 
   taskTitle: Task['title'] = '';
   taskDescription: Task['description'] = '';
@@ -56,7 +61,22 @@ export class AddTask {
   }
 
   get showTitleError(): boolean {
+    return this.showTitleRequiredError || this.showTitlePatternError;
+  }
+
+  get showTitleRequiredError(): boolean {
     return this.isTitleTouched && !this.taskTitle.trim();
+  }
+
+  get showTitlePatternError(): boolean {
+    if (!this.isTitleTouched) return false;
+    const title = this.taskTitle.trim();
+    return title.length > 0 && !this.isTitleValid(title);
+  }
+
+  get titleErrorMessage(): string {
+    if (this.showTitleRequiredError) return 'This field is required';
+    return `Use ${this.taskTitleMinLength}-${this.taskTitleMaxLength} chars + valid symbols`;
   }
 
   get showDueDateError(): boolean {
@@ -69,7 +89,7 @@ export class AddTask {
 
   get isFormValid(): boolean {
     return (
-      this.taskTitle.trim().length > 0 &&
+      this.isTitleValid(this.taskTitle) &&
       this.taskDueDate.trim().length > 0 &&
       Boolean(this.activeCategory) &&
       this.hasValidSubtasks
@@ -82,7 +102,6 @@ export class AddTask {
 
   set activeAssignees(value: Contact[]) {
     this._activeAssignees = value;
-    console.log('activeAssignees', value);
   }
 
   async createTask(): Promise<void> {
@@ -91,8 +110,8 @@ export class AddTask {
     const dueDateValue = this.taskDueDate.trim();
     const category = this.activeCategory?.value ?? null;
 
-    if (!title || !dueDateValue || !category || !this.hasValidSubtasks) {
-      if (!title) this.isTitleTouched = true;
+    if (!this.isTitleValid(title) || !dueDateValue || !category || !this.hasValidSubtasks) {
+      if (!this.isTitleValid(title)) this.isTitleTouched = true;
       if (!dueDateValue) this.isDueDateTouched = true;
       if (!category) this.isCategoryTouched = true;
       return;
@@ -142,6 +161,15 @@ export class AddTask {
     return date;
   }
 
+  private isTitleValid(value: string): boolean {
+    const title = value.trim();
+    return (
+      title.length >= this.taskTitleMinLength &&
+      title.length <= this.taskTitleMaxLength &&
+      this.taskTitleRegex.test(title)
+    );
+  }
+
   resetForm(): void {
     this.taskTitle = '';
     this.taskDescription = '';
@@ -157,12 +185,18 @@ export class AddTask {
 
   private showToast(): void {
     this.toastVisible = true;
-    if (this.toastTimer) {
-      clearTimeout(this.toastTimer);
-    }
-    this.toastTimer = setTimeout(async () => {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.toastTimer = setTimeout(() => {
       this.toastVisible = false;
-      await this.router.navigateByUrl('/board');
+      if (this.isOverlay) {
+        this.closeDialogRequested.emit();
+        return;
+      }
+      this.router.navigateByUrl('/board');
     }, 1200);
+  }
+
+  ngOnDestroy(): void {
+    if (this.toastTimer) clearTimeout(this.toastTimer);
   }
 }

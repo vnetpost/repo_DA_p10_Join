@@ -17,6 +17,7 @@ export class FlatpickrDirective implements OnInit, OnDestroy {
     this.instance = flatpickr(this.el.nativeElement, {
       dateFormat: 'Y/m/d',
       allowInput: false,
+      disableMobile: true,
       ...this.fpOptions,
     });
   }

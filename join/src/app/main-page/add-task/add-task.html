@@ -1,14 +1,3 @@
-<div class="contacts-toast">
-  <p
-    class="contacts-toast__message"
-    [class.contacts-toast__message--visible]="toastVisible"
-    role="status"
-    aria-live="polite"
-  >
-    Task successfully created
-  </p>
-</div>
-
 <section class="add-task">
   <header class="add-task__header">
     <h1>Add Task</h1>
@@ -18,36 +7,37 @@
     <div class="add-task__content">
       <div class="add-task__column">
         <app-task-form-field
-          [label]="'Title'"
+          label="Title"
           [isRequired]="true"
-          [placeholder]="'Enter a title'"
+          placeholder="Enter a title"
           (fieldBlur)="isTitleTouched = true"
           [hasError]="showTitleError"
           [(value)]="taskTitle"
         ></app-task-form-field>
         <span class="add-task__field-error" [class.is-visible]="showTitleError">
-          This field is required
+          {{ titleErrorMessage }}
         </span>
 
         <app-task-form-field
-          [label]="'Description'"
+          label="Description"
           [isTextarea]="true"
           [isRequired]="false"
-          [placeholder]="'Enter a Description'"
+          placeholder="Enter a Description"
           [(value)]="taskDescription"
         ></app-task-form-field>
 
         <app-task-form-field
-          [label]="'Due date'"
+          class="add-task__padding-top"
+          label="Due date"
           [isRequired]="true"
-          [placeholder]="'yyyy/mm/dd'"
-          [type]="'test'"
+          placeholder="yyyy/mm/dd"
+          type="text"
           [useFlatpickr]="true"
           [min]="minDueDate"
           (fieldBlur)="isDueDateTouched = true"
           [hasError]="showDueDateError"
           [(value)]="taskDueDate"
-          [iconSrc]="'assets/img/icons/board/date.svg'"
+          iconSrc="assets/img/icons/board/date.svg"
         ></app-task-form-field>
         <span class="add-task__field-error" [class.is-visible]="showDueDateError">
           This field is required
@@ -56,8 +46,12 @@
 
       <div class="add-task__column add-task__column--divider">
         <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
-        <app-dropdown-assignee [(selectedContacts)]="activeAssignees"></app-dropdown-assignee>
+        <app-dropdown-assignee
+          class="add-task__padding-top"
+          [(selectedContacts)]="activeAssignees"
+        ></app-dropdown-assignee>
         <app-dropdown-category
+          class="add-task__padding-top"
           [(selectedCategory)]="activeCategory"
           (fieldBlur)="isCategoryTouched = true"
           [hasError]="showCategoryError"
@@ -82,7 +76,7 @@
           <img
             class="button__icon"
             src="assets/img/icons/add-task/close.svg"
-            alt="clear form icon"
+            alt="close.svg icon"
           />
         </button>
         <button
@@ -92,13 +86,20 @@
           [class.button--disabled]="!isFormValid"
         >
           Create Task
-          <img
-            class="button__icon"
-            src="assets/img/icons/add-task/check.svg"
-            alt="create task icon"
-          />
+          <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="save.svg icon" />
         </button>
       </div>
     </div>
   </form>
 </section>
+
+<div class="contacts-toast">
+  <p
+    class="contacts-toast__message"
+    [class.contacts-toast__message--visible]="toastVisible"
+    role="status"
+    aria-live="polite"
+  >
+    Task created
+  </p>
+</div>

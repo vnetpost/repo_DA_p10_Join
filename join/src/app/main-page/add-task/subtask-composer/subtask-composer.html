@@ -18,21 +18,21 @@
           aria-label="Clear subtask title"
           (click)="clearSubtaskTitle()"
         >
-          <img src="assets/img/icons/add-task/close.svg" alt="clear subtask icon" />
+          <img src="assets/img/icons/add-task/close.svg" alt="" />
         </button>
         <span class="subtask-actions__divider" aria-hidden="true"></span>
         <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
-          <img src="assets/img/icons/add-task/check.svg" alt="add subtask icon" />
+          <img src="assets/img/icons/add-task/check.svg" alt="" />
         </button>
       </div>
     } @else {
       <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
-        <img src="assets/img/icons/add-task/add.svg" alt="add subtask icon" />
+        <img src="assets/img/icons/add-task/add.svg" alt="" />
       </button>
     }
   </div>
   @if (subtasks.length) {
-    <ul class="subtask-list">
+    <ul class="subtask-list scroll-shadows">
       @for (subtask of subtasks; track $index) {
         <li class="subtask-list__item">
           <span class="subtask-list__bullet" aria-hidden="true">•</span>
@@ -44,7 +44,7 @@
               aria-label="Edit subtask"
               (click)="startEditSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/edit.svg" alt="edit subtask icon" />
+              <img src="assets/img/icons/add-task/edit.svg" alt="" />
             </button>
             <span class="subtask-list__divider" aria-hidden="true"></span>
             <button
@@ -53,7 +53,7 @@
               aria-label="Delete subtask"
               (click)="removeSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/delete.svg" alt="delete subtask icon" />
+              <img src="assets/img/icons/add-task/delete.svg" alt="" />
             </button>
           </div>
         </li>
