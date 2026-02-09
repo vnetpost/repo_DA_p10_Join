@@ -147,12 +147,17 @@
           border-color: styles.$red-error;
       }
     }
-
+    
     img{
       grid-area: 1/2/2/3;
     }
+    
+    .visibility-btn{
+      grid-area: 1/2/2/3;
+      @include styles.setFlex();
+      background-color: transparent;
+    }
   }
-
 
   .form-actions{
     @include styles.setFlex($d: column, $gap: 12px);

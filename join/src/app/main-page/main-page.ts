@@ -11,12 +11,27 @@ import { RouterLink } from "@angular/router";
 export class MainPage {
   firebaseService = inject(FirebaseService);
   signUp = false;
+  showLogInPassword = false;
+  showSignUpPassword = false;
+  showConfirmPassword = false;
 
-  openSignUp(): void{
+  openSignUp(): void {
     this.signUp = true;
   }
 
-  closeSignUp(): void{
+  closeSignUp(): void {
     this.signUp = false;
+  }
+
+  toggleLogInPassword(): void {
+    this.showLogInPassword = !this.showLogInPassword;
+  }
+
+  toggleSignUpPassword(): void {
+    this.showSignUpPassword = !this.showSignUpPassword;
+  }
+
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
   }
 }

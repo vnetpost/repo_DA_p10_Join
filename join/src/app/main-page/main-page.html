@@ -27,8 +27,10 @@
               <img src="assets/img/icons/forms/email.svg" alt="">
             </div>
             <div class="input-box">
-              <input type="password" placeholder="Password">
-              <img src="assets/img/icons/forms/password.svg" alt="">
+              <input [type]="showLogInPassword ? 'text' : 'password'" placeholder="Password">
+              <button type="button" class="visibility-btn" (click)="toggleLogInPassword()">
+                <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
+              </button>
             </div>
   
             <div class="form-actions">
@@ -65,12 +67,16 @@
               <img src="assets/img/icons/forms/email.svg" alt="">
             </div>
             <div class="input-box">
-              <input type="password" placeholder="Password">
-              <img src="assets/img/icons/forms/password.svg" alt="">
+              <input [type]="showSignUpPassword ? 'text' : 'password'" placeholder="Password">
+              <button type="button" class="visibility-btn" (click)="toggleSignUpPassword()">
+                <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
+              </button>
             </div>
             <div class="input-box">
-              <input type="password" placeholder="Confirm Password">
-              <img src="assets/img/icons/forms/password.svg" alt="">
+              <input [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm Password">
+              <button type="button" class="visibility-btn" (click)="toggleConfirmPassword()">
+                <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="">
+              </button>
             </div>
             <label class="checkbox-wrapper">
               <input class="checkbox" type="checkbox">
