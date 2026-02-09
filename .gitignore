@@ -76,3 +76,5 @@ connect.lock
 typings/
 __screenshots__/
 *.log
+src/app/app.config.ts
+
