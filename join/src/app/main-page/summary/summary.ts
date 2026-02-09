@@ -1,10 +1,11 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { TaskService } from '../../shared/services/task-service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-summary',
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe],
   templateUrl: './summary.html',
   styleUrl: './summary.scss',
 })
