@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink } from "@angular/router";
+import { TaskService } from '../../shared/services/task-service';
 
 @Component({
   selector: 'app-summary',
@@ -8,6 +9,7 @@ import { RouterLink } from "@angular/router";
   styleUrl: './summary.scss',
 })
 export class Summary {
+  taskService = inject(TaskService);
   loggedIn: boolean = true;
 
   get greeting(): string {
