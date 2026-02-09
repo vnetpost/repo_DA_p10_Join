@@ -46,8 +46,8 @@ export class DropdownCategory {
     this.fieldBlur.emit();
   }
 
-  @HostListener('document:click', ['$event'])
-  closeOnOutsideClick(event: MouseEvent): void {
+  @HostListener('document:pointerdown', ['$event'])
+  closeOnOutsidePointerDown(event: Event): void {
     if (!this.isDropdownOpen) return;
     const target = event.target;
     if (target && this.elementRef.nativeElement.contains(target)) return;
