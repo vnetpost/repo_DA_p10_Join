@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, ViewChild} from '@angular/core';
+import { Component, inject, ViewChild} from '@angular/core';
 import { TaskList } from './task-list/task-list';
 import { TaskService } from '../../shared/services/task-service';
 import { Timestamp } from '@angular/fire/firestore';
