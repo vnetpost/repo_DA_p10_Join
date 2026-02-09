@@ -12,17 +12,17 @@
   
         <div class="status-amount">
           <a routerLink="/board" class="box" aria-label="{{ taskService.getTaskCountByStatus('to-do') }} tasks in To-do. Open board.">
-            <img class="icon icon--default" src="assets/img/icons/summary/to-do.svg" alt="">
-            <img class="icon icon--hover" src="assets/img/icons/summary/to-do-hover.svg" alt="">
+            <img class="icon icon--default" src="assets/img/icons/summary/to-do.svg" alt="" aria-hidden="true">
+            <img class="icon icon--hover" src="assets/img/icons/summary/to-do-hover.svg" alt="" aria-hidden="true">
             <div class="amount">
               <p class="number">{{ taskService.getTaskCountByStatus('to-do') }}</p>
               <p>To-do</p>
             </div>
           </a>
     
-          <a routerLink="/board" class="box">
-            <img class="icon icon--default" src="assets/img/icons/summary/done.svg" alt="">
-            <img class="icon icon--hover" src="assets/img/icons/summary/done-hover.svg" alt="">
+          <a routerLink="/board" class="box" aria-label="{{ taskService.getTaskCountByStatus('done') }} tasks done. Open board.">
+            <img class="icon icon--default" src="assets/img/icons/summary/done.svg" alt="" aria-hidden="true">
+            <img class="icon icon--hover" src="assets/img/icons/summary/done-hover.svg" alt="" aria-hidden="true">
             <div class="amount">
               <p class="number">{{ taskService.getTaskCountByStatus('done') }}</p>
               <p>Done</p>
@@ -30,35 +30,39 @@
           </a>
         </div>
   
-        <a routerLink="/board" class="box high-priority-amount">
+        <a routerLink="/board" class="box high-priority-amount" aria-label="{{ taskService.getUrgentTaskCount() }} urgent tasks and next Deadline on {{ taskService.getNextDeadline() | date:'longDate' }}. Open board.">
           <div class="urgent">
             <div class="urgent-logo-circle">
-              <img src="assets/img/icons/priority/priority-high-white.svg" alt="">
+              <img src="assets/img/icons/priority/priority-high-white.svg" alt="" aria-hidden="true">
             </div>
             <div class="amount">
-              <p class="number">1</p>
+              <p class="number">{{ taskService.getUrgentTaskCount() }}</p>
               <p>Urgent</p>
             </div>
           </div>
-          <div class="divider"></div>
+          <div class="divider" aria-hidden="true"></div>
           <div class="priority-info">
-            <p class="deadline">October 16, 2022</p>
-            <p>Upcoming deadline</p>
+            @if (taskService.tasks.length === 0) {
+              <p>No upcoming deadline</p>
+            } @else {
+              <p class="deadline">{{ taskService.getNextDeadline() | date:'longDate' }}</p>
+              <p>Upcoming deadline</p>
+            }
           </div>
         </a>
   
         <div class="tasks-amount">
-          <a routerLink="/board" class="box box-amount">
+          <a routerLink="/board" class="box box-amount" aria-label="{{ taskService.tasks.length }} tasks in board. Open board.">
             <p class="number">{{ taskService.tasks.length }}</p>
             <p>Tasks in <br> Board</p>
           </a>
   
-          <a routerLink="/board" class="box box-amount">
+          <a routerLink="/board" class="box box-amount" aria-label="{{ taskService.getTaskCountByStatus('in-progress') }} tasks in progress. Open board.">
             <p class="number">{{ taskService.getTaskCountByStatus('in-progress') }}</p>
             <p>Tasks in <br> Progress</p>
           </a>
   
-          <a routerLink="/board" class="box box-amount">
+          <a routerLink="/board" class="box box-amount" aria-label="{{ taskService.getTaskCountByStatus('await-feedback') }} tasks awaiting feedback. Open board.">
             <p class="number">{{ taskService.getTaskCountByStatus('await-feedback') }}</p>
             <p>Awaiting <br> Feedback</p>
           </a>

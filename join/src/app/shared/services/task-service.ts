@@ -27,6 +27,23 @@ export class TaskService {
     return this.tasks.filter(task => task.status === status).length;
   }
 
+  getUrgentTaskCount(): number {
+    return this.tasks.filter(task => task.priority === 'high').length;
+  }
+
+  getNextDeadline(): Date | null {
+    let nextDate: Date | null = null;
+
+    for (const task of this.tasks){
+      const date = task.dueDate.toDate();
+
+      if(!nextDate || date < nextDate){
+        nextDate = date;
+      }
+    }
+    return nextDate;
+  }
+
   setSearchTerm(term: string): void {
     this.searchTerm = term;
     window.dispatchEvent(new Event('tasks-updated'));

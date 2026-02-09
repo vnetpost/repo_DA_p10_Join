@@ -54,6 +54,10 @@ section{
 }
 
 .content{
+  @media(min-width: 550px){
+    @include styles.setFlex($jc: center, $gap: 24px);
+  }
+
   @include styles.up-xxl{
     @include styles.setFlex($jc: flex-start, $gap: 24px);
   }
