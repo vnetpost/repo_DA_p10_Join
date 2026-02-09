@@ -20,6 +20,14 @@
           <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
           Doing
         </button>
+        <button (click)="moveTo('await-feedback', $event)" role="menuitem" aria-label="Move to await feedback">
+          <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+          Review
+        </button>
+        <button (click)="moveTo('done', $event)" role="menuitem" aria-label="Move to done">
+          <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+          Done
+        </button>
       }
       
       @if(task.status === "in-progress"){
@@ -31,9 +39,17 @@
           <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
           Review
         </button>
+        <button (click)="moveTo('done', $event)" role="menuitem" aria-label="Move to done">
+          <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+          Done
+        </button>
       }
 
       @if(task.status === "await-feedback"){
+        <button (click)="moveTo('to-do', $event)" role="menuitem" aria-label="Move to to do">
+          <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+          To-do
+        </button>
         <button (click)="moveTo('in-progress', $event)" role="menuitem" aria-label="Move to in progress">
           <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
           Doing
@@ -45,6 +61,14 @@
       }
 
       @if(task.status === "done"){
+        <button (click)="moveTo('to-do', $event)" role="menuitem" aria-label="Move to to do">
+          <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+          To-do
+        </button>
+        <button (click)="moveTo('in-progress', $event)" role="menuitem" aria-label="Move to in progress">
+          <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+          Doing
+        </button>
         <button (click)="moveTo('await-feedback', $event)" role="menuitem" aria-label="Move to await feedback">
           <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
           Review

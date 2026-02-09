@@ -82,8 +82,8 @@ article{
     right: -58px;
     @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);
     width: 110px;
-    height: 115px;
-    padding: 0px 8px;
+    height: auto;
+    padding: 16px 8px;
     border-radius: 0 20px 20px 20px;
     background-color: styles.$gray-dark;
     box-shadow: 0px 0px 5px 3px #0000000A;
