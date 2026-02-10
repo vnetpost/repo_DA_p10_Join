@@ -1,6 +1,6 @@
 <section class="add-task">
   <header class="add-task__header">
-    <h1>Add Task</h1>
+    <h1>{{ formTitle }}</h1>
   </header>
 
   <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()">
@@ -85,7 +85,7 @@
           [disabled]="!isFormValid"
           [class.button--disabled]="!isFormValid"
         >
-          Create Task
+          {{ submitButtonLabel }}
           <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="save.svg icon" />
         </button>
       </div>
@@ -100,6 +100,6 @@
     role="status"
     aria-live="polite"
   >
-    Task created
+    {{ toastMessage }}
   </p>
 </div>

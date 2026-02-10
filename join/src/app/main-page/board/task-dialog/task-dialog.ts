@@ -19,6 +19,7 @@ export class TaskDialog {
   userColor: string | null = null;
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
+  @Output() editTask = new EventEmitter<Task>();
   showDeleteConfirm = false;
 
   openDialog(): void {
@@ -29,6 +30,11 @@ export class TaskDialog {
 
   onDeleteClick(): void {
     this.showDeleteConfirm = true;
+  }
+
+  onEditClick(): void {
+    this.closeDialog();
+    this.editTask.emit(this.task);
   }
 
   confirmDelete() {

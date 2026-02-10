@@ -14,9 +14,10 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 export class TaskList {
   taskService = inject(TaskService);
   contactService = inject(FirebaseService);
-  @Input() status: string = "";
-  @Input() listTitle: string = "";
+  @Input() status: Task['status'] = 'to-do';
+  @Input() listTitle: string = '';
   @Output() openTask = new EventEmitter<Task>();
+  @Output() addTaskRequested = new EventEmitter<Task['status']>();
   connectedLists: Array<string> = ['to-do', 'in-progress', 'await-feedback', 'done'];
   tasksByStatus: Array<Task> = [];
 
@@ -51,5 +52,9 @@ export class TaskList {
       task.order = index;
       this.taskService.updateDocument(task, 'tasks');
     });
+  }
+
+  onAddTaskClick(): void {
+    this.addTaskRequested.emit(this.status);
   }
 }

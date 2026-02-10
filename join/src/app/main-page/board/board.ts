@@ -17,6 +17,8 @@ export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
   isAddTaskOverlayOpen = false;
+  taskToEdit: Task | null = null;
+  addTaskStatus: Task['status'] = 'to-do';
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
 
@@ -95,12 +97,22 @@ export class Board {
     this.selectedTask = null as any;
   }
 
-  openAddTaskOverlay(): void {
+  openAddTaskOverlay(status: Task['status'] = 'to-do'): void {
+    this.taskToEdit = null;
+    this.addTaskStatus = status;
+    this.isAddTaskOverlayOpen = true;
+  }
+
+  openEditTaskOverlay(task: Task): void {
+    this.taskToEdit = task;
+    this.addTaskStatus = task.status;
     this.isAddTaskOverlayOpen = true;
   }
 
   closeAddTaskOverlay(): void {
     this.isAddTaskOverlayOpen = false;
+    this.taskToEdit = null;
+    this.addTaskStatus = 'to-do';
   }
 
   @HostListener('document:keydown.escape')
