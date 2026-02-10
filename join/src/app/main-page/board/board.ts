@@ -91,9 +91,14 @@ export class Board {
    * @returns void
    */
   closeAddTaskOverlay(): void {
+    const editedTask = this.taskToEdit;
     this.isAddTaskOverlayOpen = false;
     this.taskToEdit = null;
     this.addTaskStatus = 'to-do';
+
+    if (editedTask?.id) {
+      this.openTask(this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask);
+    }
   }
 
   @HostListener('document:keydown.escape')

@@ -24,6 +24,10 @@
   }
 }
 
+.form-field__control--error {
+  border-color: styles.$red-error;
+}
+
 .form-field__input {
   @include styles.setFont($size: 1em, $color: styles.$gray-dark);
   border: none;
@@ -74,6 +78,10 @@
   width: 0.0625rem;
   height: 1.5rem;
   background-color: styles.$gray-light;
+}
+
+.subtask-pattern-error {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
 }
 
 .subtask-list {

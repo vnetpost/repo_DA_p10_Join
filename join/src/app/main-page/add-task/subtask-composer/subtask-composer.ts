@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
 import { Subtask } from '../../../shared/interfaces/task';
 
 @Component({
@@ -8,6 +8,11 @@ import { Subtask } from '../../../shared/interfaces/task';
   styleUrl: './subtask-composer.scss',
 })
 export class SubtaskComposer {
+  private hostElement = inject(ElementRef<HTMLElement>);
+  readonly subtaskTitleMinLength = 3;
+  readonly subtaskTitleMaxLength = 100;
+  private readonly subtaskTitleRegex = /^[A-Za-zÄÖÜäöüß0-9 .,:;!?()_/#+'&"@-]+$/;
+
   @Input() subtasks: Subtask[] = [];
   @Output() subtasksChange = new EventEmitter<Subtask[]>();
 
@@ -18,9 +23,15 @@ export class SubtaskComposer {
     return this.subtaskTitle.trim().length > 0;
   }
 
+  get showSubtaskPatternError(): boolean {
+    const title = this.subtaskTitle.trim();
+    return title.length > 0 && !this.isSubtaskTitleValid(title);
+  }
+
   addSubtask(): void {
     const newTitle = this.subtaskTitle.trim();
     if (!newTitle) return;
+    if (!this.isSubtaskTitleValid(newTitle)) return;
     if (
       this.editingIndex === null &&
       this.subtasks.some((subtask) => subtask.title.trim().toLowerCase() === newTitle.toLowerCase())
@@ -42,6 +53,7 @@ export class SubtaskComposer {
     this.subtasks = updated;
     this.subtasksChange.emit(updated);
     this.subtaskTitle = '';
+    this.scrollToLatestSubtask();
   }
 
   handleEnter(event: Event): void {
@@ -74,5 +86,23 @@ export class SubtaskComposer {
     } else if (this.editingIndex !== null && this.editingIndex > index) {
       this.editingIndex -= 1;
     }
+  }
+
+  private scrollToLatestSubtask(): void {
+    requestAnimationFrame(() => {
+      const host: HTMLElement = this.hostElement.nativeElement;
+      const newestSubtask: HTMLElement | null = host.querySelector(
+        '.subtask-list__item:last-child',
+      );
+      newestSubtask?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+    });
+  }
+
+  private isSubtaskTitleValid(value: string): boolean {
+    return (
+      value.length >= this.subtaskTitleMinLength &&
+      value.length <= this.subtaskTitleMaxLength &&
+      this.subtaskTitleRegex.test(value)
+    );
   }
 }
