@@ -2,7 +2,7 @@
   <div class="list-head">
     <h2>{{listTitle}}</h2>
     @if (status !== "done") {
-      <button class="add-to-list-btn" aria-label="Add task to {{ listTitle }}">
+      <button class="add-to-list-btn" type="button" aria-label="Add task to {{ listTitle }}" (click)="onAddTaskClick()">
         <img class="add-icon add-icon--default" src="assets/img/icons/board/add-task.svg" alt="" aria-hidden="true">
         <img class="add-icon add-icon--hover" src="assets/img/icons/board/add-task-hover.svg" alt="" aria-hidden="true">
       </button>

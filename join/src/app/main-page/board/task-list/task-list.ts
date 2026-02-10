@@ -11,28 +11,62 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
+/**
+ * TaskList component
+ *
+ * Represents a column of tasks filtered by a specific status.
+ * Handles task rendering, drag-and-drop interactions,
+ * and updates task ordering and status changes.
+ */
 export class TaskList {
   taskService = inject(TaskService);
   contactService = inject(FirebaseService);
-  @Input() status: string = "";
-  @Input() listTitle: string = "";
+  @Input() status: Task['status'] = 'to-do';
+  @Input() listTitle: string = '';
   @Output() openTask = new EventEmitter<Task>();
+  @Output() addTaskRequested = new EventEmitter<Task['status']>();
   connectedLists: Array<string> = ['to-do', 'in-progress', 'await-feedback', 'done'];
   tasksByStatus: Array<Task> = [];
 
+  /**
+   * Initializes the component.
+   *
+   * Loads the tasks for the current status and
+   * listens for task update events to refresh the list.
+   *
+   * @returns void
+   */
   ngOnInit(): void {
     this.updateTasks();
 
     window.addEventListener('tasks-updated', () => {
-    this.updateTasks();
-  });
+      this.updateTasks();
+    });
   }
 
+  /**
+   * Updates the task list based on the current status.
+   *
+   * Retrieves filtered tasks from the service
+   * and keeps only those matching the list status.
+   *
+   * @returns void
+   */
   updateTasks(): void {
     this.tasksByStatus = this.taskService.getFilteredTasks()
       .filter(task => task.status === this.status);
   }
 
+  /**
+   * Handles drag-and-drop operations between task lists.
+   *
+   * Updates the task status and order in both
+   * the source and target lists, and persists
+   * the changes through the task service.
+   *
+   * @param event The drag-and-drop event data
+   * @returns void
+   */
   onDrop(event: CdkDragDrop<Array<Task>>): void {
     const movedTask = event.item.data;
     const sourceTasks = event.previousContainer.data;
@@ -51,5 +85,9 @@ export class TaskList {
       task.order = index;
       this.taskService.updateDocument(task, 'tasks');
     });
+  }
+
+  onAddTaskClick(): void {
+    this.addTaskRequested.emit(this.status);
   }
 }

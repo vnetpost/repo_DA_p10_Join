@@ -13,74 +13,43 @@ import { AddTask } from '../add-task/add-task';
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
+/**
+ * Board component
+ *
+ * Represents the main task board view.
+ * Handles task searching, opening task details,
+ * deleting tasks, and managing the add-task overlay.
+ */
 export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
   isAddTaskOverlayOpen = false;
+  taskToEdit: Task | null = null;
+  addTaskStatus: Task['status'] = 'to-do';
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
 
+  /**
+   * Performs a search based on the current search term.
+   *
+   * Updates the search term in the task service
+   * after trimming and normalizing the input.
+   *
+   * @returns void
+   */
   search(): void {
     this.taskService.setSearchTerm(this.searchTerm.trim().toLowerCase());
   }
 
-  addTestTask(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): void {
-    const toDoTasks = this.taskService.tasks.filter((t) => t.status === status);
-    const newOrder = toDoTasks.length;
-
-    this.taskService.addDocument({
-      status: status,
-      order: newOrder,
-      title: 'Kochwelt Page & Recipe RecommenderRecommenderRecommenderRecommender',
-      description:
-        'Build start page with recipe recommendation Build start page with recipe recommendation. Kochwelt Page & Recipe RecommenderRecommenderRecommenderRecommenderKochwelt Page & Recipe RecommenderRecommenderRecommenderRecommender Kochwelt Page & Recipe RecommenderRecommenderRecommenderRecommender.',
-      dueDate: Timestamp.fromDate(new Date(2026, 7, 20)),
-      priority: 'low',
-      assignees: [
-        '1cDGsRRbp59SsjtonS2I',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-        'V2aQbKVzF7eFPsZfdhxB',
-      ],
-      category: 'technical-task',
-      subtasks: [
-        {
-          title: 'Kochwelt Page & Recipe RecommenderRecommenderRecommenderRecommender',
-          done: false,
-        },
-        { title: 'Sub 2', done: true },
-        { title: 'Sub 2', done: true },
-        { title: 'recipe recommendation Build start page', done: true },
-        { title: 'Sub 2', done: true },
-        {
-          title: 'Kochwelt Page & Recipe RecommenderRecommenderRecommenderRecommender',
-          done: true,
-        },
-        { title: 'Sub 2', done: true },
-        { title: 'Sub 2', done: true },
-      ],
-    });
-    // this.taskService.addDocument({
-    //   status: status,
-    //   order: newOrder,
-    //   title: 'Test Task',
-    //   description: 'Test Description Test Description Test Description',
-    //   dueDate: Timestamp.fromDate(new Date(2026, 7, 20)),
-    //   priority: 'low',
-    //   assignees: ['V2aQbKVzF7eFPsZfdhxB'],
-    //   category: 'technical-task',
-    //   subtasks: [
-    //     { title: 'Sub 1', done: false },
-    //     { title: 'Sub 2', done: true },
-    //   ],
-    // });
-  }
-
-  openTask(task: Task) {
+  /**
+   * Opens the task dialog for the selected task.
+   *
+   * Sets the selected task and triggers the dialog display.
+   *
+   * @param task The task to open in the dialog
+   * @returns void
+   */
+  openTask(task: Task): void {
     this.selectedTask = task;
 
     setTimeout(() => {
@@ -88,6 +57,15 @@ export class Board {
     });
   }
 
+  /**
+   * Deletes a task by its identifier.
+   *
+   * Removes the task from the data source
+   * and clears the selected task state.
+   *
+   * @param taskId The identifier of the task to delete
+   * @returns void
+   */
   deleteTask(taskId: string): void {
     if (!taskId) return;
 
@@ -95,12 +73,27 @@ export class Board {
     this.selectedTask = null as any;
   }
 
-  openAddTaskOverlay(): void {
+  openAddTaskOverlay(status: Task['status'] = 'to-do'): void {
+    this.taskToEdit = null;
+    this.addTaskStatus = status;
     this.isAddTaskOverlayOpen = true;
   }
 
+  openEditTaskOverlay(task: Task): void {
+    this.taskToEdit = task;
+    this.addTaskStatus = task.status;
+    this.isAddTaskOverlayOpen = true;
+  }
+
+  /**
+   * Closes the add-task overlay.
+   *
+   * @returns void
+   */
   closeAddTaskOverlay(): void {
     this.isAddTaskOverlayOpen = false;
+    this.taskToEdit = null;
+    this.addTaskStatus = 'to-do';
   }
 
   @HostListener('document:keydown.escape')
