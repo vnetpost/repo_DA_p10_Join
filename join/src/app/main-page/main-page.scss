@@ -132,11 +132,10 @@
   margin: 16px 0;
 
   .form-wrapper{
-    @include styles.setFlex($d: column, $gap: 26px);
+    @include styles.setFlex($d: column, $jc: flex-start, $gap: 26px);
     width: 90dvw;
     max-width: 500px;
-    min-height: 430px;
-    padding: 16px;
+    padding: 36px 16px;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0px 0px 14px 3px #0000000A;
@@ -145,7 +144,6 @@
       gap: 30px;
       width: 650px;
       max-width: unset;
-      min-height: 450px;
     }
 
     .title{
@@ -366,6 +364,23 @@
     @include styles.setFlex();
     margin-top: 2px;
     color: styles.$red-error;
+  }
+}
+
+.form-section .form-wrapper{
+  overflow: hidden;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.sign-up-form-section.scrollable .form-wrapper{
+  overflow-y: auto;
+  max-height: 430px; 
+  
+  @include styles.up-xxl{
+    max-height: 600px; 
   }
 }
 

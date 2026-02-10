@@ -77,7 +77,7 @@
       } @else {
         <ul>
           <li>
-            <a routerLink="/log-in" routerLinkActive="is-active" class="log-in-link">
+            <a routerLink="/" class="log-in-link">
               <img src="assets/img/icons/cockpit/log-in.svg" alt="" aria-hidden="true" />
               <span>Log In</span>
             </a>
@@ -86,19 +86,17 @@
       }
     </nav>
 
-    @if (user$ | async; as user){
-      @if (isDesktop || !user) {
-        <nav class="legal-nav" aria-label="Legal navigation">
-          <ul>
-            <li>
-              <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
-            </li>
-            <li>
-              <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
-            </li>
-          </ul>
-        </nav>
-      }
+    @if (isDesktop || !(user$ | async)) {
+      <nav class="legal-nav" aria-label="Legal navigation">
+        <ul>
+          <li>
+            <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
+          </li>
+          <li>
+            <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
+          </li>
+        </ul>
+      </nav>
     }
   </div>
 </section>

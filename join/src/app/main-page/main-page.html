@@ -18,7 +18,7 @@
     }
   
     @if (!showSignUp) {
-      <section class="form-section" aria-labelledby="login-title">
+      <section class="form-section log-in-form-section" [class.scrollable]="logInForm?.invalid && logInForm?.touched" aria-labelledby="login-title">
         <div class="form-wrapper">
   
           <div class="title">
@@ -43,7 +43,6 @@
                 </span>
               }
             </div>
-
 
             <div class="input-box">
               <input [(ngModel)]="logInData.password" name="logInPassword" #logInPass="ngModel" required minlength="8" [type]="showLogInPassword ? 'text' : 'password'" placeholder="Password" aria-label="Password">
@@ -82,7 +81,7 @@
     }
 
     @if(showSignUp){
-      <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
+      <section class="form-section sign-up-form-section" [class.scrollable]="signUpForm?.invalid && signUpForm?.touched" aria-labelledby="signup-title">
         <div class="form-wrapper">
   
           <div class="title sign-title">

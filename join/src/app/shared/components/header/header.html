@@ -5,7 +5,7 @@
       <p class="desktop-title desktop-only">Kanban Project Management Tool</p>
     </div>
     <div class="content-right">
-      @if (loggedIn) {
+      @if (user$ | async; as user) {
         <a
           routerLink="/help"
           class="desktop-help-link desktop-only"
