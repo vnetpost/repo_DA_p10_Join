@@ -7,18 +7,14 @@ section {
   .content-wrapper {
     width: 93%;
     height: 100%;
-    padding: 9rem 0 12rem;
+    padding: 6rem 0 12rem;
 
     @include styles.up-xxl {
       width: 90%;
       height: 100%;
-      padding: 8rem 0 0;
+      padding: 5rem 0 0;
       display: flex;
       flex-direction: column;
-    }
-
-    @media (max-height: 950px) and (hover: hover) {
-      padding: 3.5rem 0 0;
     }
   }
 }
