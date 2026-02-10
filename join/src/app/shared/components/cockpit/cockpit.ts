@@ -1,9 +1,11 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-cockpit',
-  imports: [RouterLink, RouterLinkActive],
+  imports: [RouterLink, RouterLinkActive, AsyncPipe],
   templateUrl: './cockpit.html',
   styleUrl: './cockpit.scss',
 })
@@ -16,7 +18,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
  * viewport size and updating the desktop state.
  */
 export class Cockpit {
-  loggedIn: boolean = true;
+  authService = inject(AuthService);
+  user$ = this.authService.user$;
   isDesktop: boolean = window.innerWidth >= 1025;
 
   /**

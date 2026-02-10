@@ -3,7 +3,7 @@
     <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="Join" />
 
     <nav class="main-nav" aria-label="Primary navigation">
-      @if (loggedIn) {
+      @if (user$ | async; as user) {
         <ul>
           <li>
             <a routerLink="/summary" routerLinkActive="is-active">
@@ -86,17 +86,19 @@
       }
     </nav>
 
-    @if (isDesktop || !loggedIn) {
-      <nav class="legal-nav" aria-label="Legal navigation">
-        <ul>
-          <li>
-            <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
-          </li>
-          <li>
-            <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
-          </li>
-        </ul>
-      </nav>
+    @if (user$ | async; as user){
+      @if (isDesktop || !user) {
+        <nav class="legal-nav" aria-label="Legal navigation">
+          <ul>
+            <li>
+              <a routerLink="/privacy" routerLinkActive="is-active"> Privacy Policy </a>
+            </li>
+            <li>
+              <a routerLink="/imprint" routerLinkActive="is-active"> Legal Notice </a>
+            </li>
+          </ul>
+        </nav>
+      }
     }
   </div>
 </section>
