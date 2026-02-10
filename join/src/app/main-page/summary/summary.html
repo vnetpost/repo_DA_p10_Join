@@ -71,9 +71,15 @@
       </div>
   
       <div class="goodday-message">
-        <p class="desktop-only">{{ greeting }}</p>
-        @if(loggedIn){
-          <p class="user-name desktop-only">Sofia Müller</p>
+        @if (user$ | async; as user) {
+          @if (user.isAnonymous) {
+            <p class="desktop-only">
+              {{ greeting }}!
+            </p>
+          } @else {
+            <p class="desktop-only">{{ greeting }},</p>
+            <p class="user-name">{{ user.displayName }}</p>
+          }
         }
       </div>
     </div>

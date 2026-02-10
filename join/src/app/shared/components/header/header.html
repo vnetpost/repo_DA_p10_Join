@@ -21,7 +21,15 @@
           aria-label="Open user menu"
           aria-controls="user-menu"
         >
-          <span aria-hidden="true">G</span>
+          @if (user$ | async; as user) {
+            @if (user.isAnonymous) {
+              <span aria-hidden="true">G</span>
+            } @else {
+              <span aria-hidden="true">
+                {{ getLoggedInUserInitials(user.displayName) }}
+              </span>
+            }
+          }
         </button>
         @if (menuOpen) {
           <div class="menu-overlay" (click)="closeMenu()"></div>
@@ -30,7 +38,7 @@
           <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
           <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
           <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
-          <a routerLink="/" (click)="logout()" role="menuitem">Log out</a>
+          <button (click)="logout()" role="menuitem">Log out</button>
         </div>
       }
     </div>

@@ -3,6 +3,7 @@ import { FirebaseService } from '../shared/services/firebase-service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
+import { AuthService } from '../shared/services/auth-service';
 
 @Component({
   selector: 'app-main-page',
@@ -13,6 +14,9 @@ import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-d
 export class MainPage implements OnInit {
   firebaseService = inject(FirebaseService);
   router = inject(Router);
+  authService = inject(AuthService);
+  user$ = this.authService.user$;
+
   isMobile = false;
   isLoggedIn = false;
   isGuest = false;
@@ -94,7 +98,30 @@ export class MainPage implements OnInit {
       return;
     }
 
+    this.authService.logIn(this.logInData.email, this.logInData.password)
+    .subscribe({
+      next: () => {
+        this.router.navigate(['/summary']);
+      },
+      error: (err) => {
+        console.error('Login failed', err);
+      },
+    });
+
     console.log('Login:', this.logInData);
+  }
+
+  guestLogin(): void {
+    this.authService.guestLogIn().subscribe({
+      next: () => {
+        this.router.navigate(['/summary']);
+      },
+      error: (err) => {
+        console.error('Guest login failed', err);
+      },
+    });
+    
+    console.log('Guest Login');
   }
 
   onSignUp(form: NgForm): void {
@@ -102,15 +129,16 @@ export class MainPage implements OnInit {
       return;
     }
 
-    this.signUpData.password = this.signUpData.password;
+    this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password)
+    .subscribe({
+      next: () => {
+        this.router.navigate(['/summary']);
+      },
+      error: (err) => {
+        console.error('Sign up failed', err);
+      },
+    });
 
     console.log('Sign up:', this.signUpData);
-  }
-
-  guestLogin(): void {
-    this.isLoggedIn = true;
-    this.isGuest = true;
-
-    this.router.navigate(['/summary']);
   }
 }

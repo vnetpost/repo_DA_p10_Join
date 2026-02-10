@@ -1,9 +1,12 @@
-import { Component, HostListener } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, HostListener, inject } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
+import { AuthService } from '../../services/auth-service';
+import { AsyncPipe } from '@angular/common';
+import { getTwoInitials } from '../../utilities/utils';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink],
+  imports: [RouterLink, AsyncPipe],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -17,6 +20,9 @@ import { RouterLink } from '@angular/router';
 export class Header {
   loggedIn: boolean = true;
   menuOpen: boolean = false;
+  authService = inject(AuthService);
+  router = inject(Router);
+  user$ = this.authService.user$;
 
   /**
    * Toggles the visibility of the navigation menu.
@@ -57,5 +63,15 @@ export class Header {
    */
   logout(): void {
     this.menuOpen = false;
+
+    this.authService.logout().subscribe(() => {
+      this.router.navigate(['/']);
+    });
+  }
+
+  getLoggedInUserInitials(username: string | null): string {
+    if (!username) return 'G';
+    
+    return getTwoInitials(username);
   }
 }
