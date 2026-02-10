@@ -40,23 +40,24 @@
       </div>
     </div>
     
-    <div class="assignees">
-      <p class="subtitle">Assigned To:</p>
-
-      <div class="assignee-list scroll-shadows" aria-label="Assignees" role="group">
-        @for (assignee of task.assignees; track $index) {
-          <div class="assignee-item">
-            <div class="initials" [style.backgroundColor]="getUserColor(assignee)" aria-label="Assigned to {{ getAssigneeName(assignee) }}">
-                {{ getAssigneeInitials(assignee) }}
+    @if (task.assignees.length > 0){
+      <div class="assignees">
+        <p class="subtitle">Assigned To:</p>
+  
+        <div class="assignee-list scroll-shadows" aria-label="Assignees" role="group">
+          @for (assignee of task.assignees; track $index) {
+            <div class="assignee-item">
+              <div class="initials" [style.backgroundColor]="getUserColor(assignee)" aria-label="Assigned to {{ getAssigneeName(assignee) }}">
+                  {{ getAssigneeInitials(assignee) }}
+              </div>
+              <p class="name">
+                {{ getAssigneeName(assignee) }}
+              </p>
             </div>
-            <p class="name">
-              {{ getAssigneeName(assignee) }}
-            </p>
-          </div>
-        }
+          }
+        </div>
       </div>
-    </div>
-
+    }
 
     @if (task.subtasks.length > 0) {
       <div class="subtasks">
