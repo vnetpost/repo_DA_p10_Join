@@ -44,23 +44,18 @@ section {
   @include styles.up-xxl{
     grid-area: 1/1/2/2;
     @include styles.setFlex();
+    width: auto;
     height: 100%;
+    max-height: 45%;
+    place-self: center;
 
     @media(max-height: 800px){
-        grid-area: 1/1/2/2;
-        height: 85%;
+      grid-area: 1/1/2/2;
+      height: 85%;
     }
 
     @media(max-height: 380px){
       display: none;
-    }
-  }
-
-  >img{
-    @include styles.up-xxl{
-      width: auto;
-      height: auto;
-      max-height: 45%;
     }
   }
 }

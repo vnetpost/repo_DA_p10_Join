@@ -1,18 +1,23 @@
 <div class="layout-wrapper">
   <div class="layout">
   
-    <div class="logo">
-      <img src="assets/img/icons/logo-dark.svg" alt="Join logo">
+    <div class="logo" [class.logo--move]="logoMoving">
+      <img class="logo-dark" src="assets/img/icons/logo-dark.svg" alt="Join logo">
+      <img class="logo-light" src="assets/img/icons/logo-light.svg" alt="">
     </div>
+
+    @if (introActive) {
+      <div class="intro-overlay"></div>
+    } 
   
-    @if (!signUp) {
+    @if (!showSignUp) {
       <div class="sign-up-option">
         <p>Not a Join user?</p>
         <button class="button button--primary" (click)="openSignUp()">Sign up</button>
       </div>
     }
   
-    @if (!signUp) {
+    @if (!showSignUp) {
       <section class="form-section" aria-labelledby="login-title">
         <div class="form-wrapper">
   
@@ -66,7 +71,7 @@
               <button type="submit" [disabled]="logInForm.invalid" class="button button--primary">
                 Log in
               </button>
-              <button type="button" class="button button--secondary">
+              <button type="button" (click)="guestLogin()" class="button button--secondary">
                 Guest Log in
               </button>
             </div>
@@ -76,7 +81,7 @@
       </section>
     }
 
-    @if(signUp){
+    @if(showSignUp){
       <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
         <div class="form-wrapper">
   
@@ -92,10 +97,10 @@
           
           <form class="sign-up-form log-in-sign-up-form" #signUpForm="ngForm" (ngSubmit)="onSignUp(signUpForm)" novalidate autocomplete="off">
             <div class="input-box">
-              <input type="text" placeholder="Name" name="name" ngModel #name="ngModel" aria-label="Name" required minlength="2" pattern="^[a-zA-Z\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z\xC0-\uFFFF]+){0,2}[.]{0,1}$">
+              <input type="text" placeholder="Name" name="name" [(ngModel)]="signUpData.name" #name="ngModel" aria-label="Name" required minlength="2" pattern="^[a-zA-Z\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z\xC0-\uFFFF]+){0,2}[.]{0,1}$">
               <img src="assets/img/icons/forms/name.svg" alt="" aria-hidden="true">
               @if (name.invalid && name.touched) {
-                <span class="form__error">
+                <span class="form-error">
                   @if (name.errors?.['required']) {
                     Name is required.
                   } @else if (name.errors?.['pattern']) {
@@ -107,7 +112,7 @@
               }
             </div>
             <div class="input-box">
-              <input type="email" placeholder="Email" name="email" [(ngModel)]="logInData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}">
+              <input type="email" placeholder="Email" name="email" [(ngModel)]="signUpData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}">
               <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
               @if (email.invalid && email.touched) {
                 <span class="form-error">
@@ -195,4 +200,5 @@
     </footer>
   </div>
 </div>
+
 

@@ -1,11 +1,10 @@
-@if (!router.url.startsWith('/login')){
+@if (router.url !== '/'){
   <div class="app-layout">
     <app-cockpit />
     <app-header />
     <div class="content-area">
       <router-outlet />
     </div>
-    <!-- <div class="empty-content-column"></div> -->
     <div class="empty-content-row"></div>
   </div>
 } @else {

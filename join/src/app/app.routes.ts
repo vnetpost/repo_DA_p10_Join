@@ -9,7 +9,7 @@ import { Board } from './main-page/board/board';
 import { Summary } from './main-page/summary/summary';
 
 export const routes: Routes = [
-  { path: 'login', component: MainPage },
+  { path: '', component: MainPage },
   { path: 'summary', component: Summary },
   { path: 'add-task', component: AddTask },
   { path: 'board', component: Board },

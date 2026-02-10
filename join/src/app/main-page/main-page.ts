@@ -1,7 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FirebaseService } from '../shared/services/firebase-service';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
+import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
 
 @Component({
   selector: 'app-main-page',
@@ -9,20 +10,60 @@ import { FormsModule, NgForm } from '@angular/forms';
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss',
 })
-export class MainPage {
+export class MainPage implements OnInit {
   firebaseService = inject(FirebaseService);
-  signUp = false;
+  router = inject(Router);
+  isMobile = false;
+  isLoggedIn = false;
+  isGuest = false;
+  showSignUp = false;
+
+  introActive = true;
+  logoMoving = false;
+
   confirmPassword = '';
   showLogInPassword = false;
   showSignUpPassword = false;
   showConfirmPassword = false;
 
+  ngOnInit(): void {
+    this.checkScreen();
+
+    window.addEventListener('resize', () => {
+      this.checkScreen();
+    });
+    
+    const guest = localStorage.getItem('guest');
+
+    if (guest) {
+      this.isLoggedIn = true;
+      this.router.navigate(['/summary']);
+      return;
+    }
+
+    this.showIntro();
+  }
+
+  checkScreen(): void {
+    this.isMobile = window.innerWidth < 1025;
+  }
+
+  showIntro(): void {
+    setTimeout(() => {
+      this.logoMoving = true;
+    }, 300);
+
+    setTimeout(() => {
+      this.introActive = false;
+    }, 1400);
+  }
+
   openSignUp(): void {
-    this.signUp = true;
+    this.showSignUp = true;
   }
 
   closeSignUp(): void {
-    this.signUp = false;
+    this.showSignUp = false;
   }
 
   toggleLogInPassword(): void {
@@ -37,12 +78,12 @@ export class MainPage {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  logInData: any = {
+  logInData: LogInFormData = {
     email: '',
     password: '',
   };
 
-  signUpData: any = {
+  signUpData: SignUpFormData = {
     name: '',
     email: '',
     password: '',
@@ -64,5 +105,12 @@ export class MainPage {
     this.signUpData.password = this.signUpData.password;
 
     console.log('Sign up:', this.signUpData);
+  }
+
+  guestLogin(): void {
+    this.isLoggedIn = true;
+    this.isGuest = true;
+
+    this.router.navigate(['/summary']);
   }
 }
