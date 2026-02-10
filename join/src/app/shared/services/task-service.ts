@@ -8,6 +8,13 @@ export type TaskCategoryOption = { value: Task['category']; label: string };
 @Injectable({
   providedIn: 'root',
 })
+/**
+ * TaskService
+ *
+ * Manages task data stored in Firestore.
+ * Handles task retrieval, filtering, creation,
+ * updates, deletions, and real-time synchronization.
+ */
 export class TaskService {
   firestore: Firestore = inject(Firestore);
   tasks: Array<Task> = [];
@@ -16,22 +23,41 @@ export class TaskService {
     { value: 'user-story', label: 'User Story' },
   ];
   unsubCollection!: Unsubscribe;
-  loading = true;
+  loading: boolean = true;
   searchTerm: string = '';
 
   constructor() {
     this.unsubCollection = this.subCollection();
   }
 
+  /**
+   * Returns the number of tasks for a given status.
+   *
+   * @param status The task status to count
+   * @returns The number of tasks with the specified status
+   */
   getTaskCountByStatus(status: 'to-do' | 'in-progress' | 'await-feedback' | 'done'): number {
     return this.tasks.filter(task => task.status === status).length;
   }
 
+  /**
+   * Sets the search term used for filtering tasks.
+   *
+   * Triggers a global update event for task lists.
+   *
+   * @param term The search term to apply
+   * @returns void
+   */
   setSearchTerm(term: string): void {
     this.searchTerm = term;
     window.dispatchEvent(new Event('tasks-updated'));
   }
 
+  /**
+   * Returns tasks filtered by the current search term.
+   *
+   * @returns An array of filtered tasks
+   */
   getFilteredTasks(): Array<Task> {
     if (!this.searchTerm) return this.tasks;
 
@@ -44,9 +70,16 @@ export class TaskService {
     });
   }
 
+  /**
+   * Subscribes to the tasks collection in Firestore.
+   *
+   * Listens for real-time updates and refreshes
+   * the local task array when changes occur.
+   *
+   * @returns The unsubscribe function for the listener
+   */
   subCollection(): Unsubscribe {
     this.loading = true;
-
     const tasksQuery = query(this.getTasksRef(), orderBy('status'), orderBy('order'));
 
     return onSnapshot(tasksQuery, (snapshot) => {
@@ -54,23 +87,19 @@ export class TaskService {
       snapshot.forEach((task) => {
         this.tasks.push(this.mapTaskObj(task.data(), task.id));
       });
-      snapshot.docChanges().forEach((change) => {
-        if (change.type === "added") {
-            console.log("New note: ", change.doc.data());
-        }
-        if (change.type === "modified") {
-            console.log("Modified note: ", change.doc.data());
-        }
-        if (change.type === 'removed') {
-          console.log('Removed note: ', change.doc.data());
-        }
-      });
 
       this.loading = false;
       window.dispatchEvent(new Event('tasks-updated'));
     });
   }
 
+  /**
+   * Maps raw Firestore data to a Task object.
+   *
+   * @param obj The raw Firestore document data
+   * @param id The document identifier
+   * @returns A mapped Task object
+   */
   mapTaskObj(obj: any, id: string): Task {
     return {
       id: id,
@@ -86,12 +115,26 @@ export class TaskService {
     };
   }
 
+  /**
+   * Deletes a document from the specified collection.
+   *
+   * @param colId The collection identifier
+   * @param docId The document identifier
+   * @returns A promise that resolves when deletion completes
+   */
   async deleteDocument(colId: string, docId: string): Promise<void> {
     await deleteDoc(this.getSingleDocRef(colId, docId)).catch((err) => {
       console.log(err);
     });
   }
 
+  /**
+   * Updates a task document in Firestore.
+   *
+   * @param item The task to update
+   * @param colId The collection identifier
+   * @returns A promise that resolves when the update completes
+   */
   async updateDocument(item: Task, colId: string): Promise<void> {
     if (item.id) {
       let docRef = this.getSingleDocRef(colId, item.id);
@@ -103,6 +146,15 @@ export class TaskService {
     }
   }
 
+  /**
+   * Creates a clean JSON object from a task.
+   *
+   * Used to remove unwanted properties before
+   * sending data to Firestore.
+   *
+   * @param task The task to clean
+   * @returns A plain JSON object representing the task
+   */
   getCleanJson(task: Task): {} {
     return {
       status: task.status,
@@ -117,6 +169,12 @@ export class TaskService {
     };
   }
 
+  /**
+   * Updates only the subtasks of a task in Firestore.
+   *
+   * @param task The task whose subtasks should be updated
+   * @returns A promise that resolves when the update completes
+   */
   async updateSubtasks(task: Task): Promise<void> {
     if (task.id) {
       const docRef = this.getSingleDocRef('tasks', task.id);
@@ -128,12 +186,24 @@ export class TaskService {
     }
   }
 
+  /**
+   * Creates a clean JSON object containing only subtasks.
+   *
+   * @param task The task containing subtasks
+   * @returns A plain JSON object with subtasks only
+   */
   getCleanJsonSubtasks(task: Task): {} {
     return {
       subtasks: task.subtasks
     };
   }
 
+  /**
+   * Adds a new task document to Firestore.
+   *
+   * @param item The task to add
+   * @returns The created document ID or null if an error occurs
+   */
   async addDocument(item: Task): Promise<string | null> {
     try {
       const docRef = await addDoc(this.getTasksRef(), item);
@@ -144,14 +214,31 @@ export class TaskService {
     }
   }
 
+  /**
+   * Cleans up the Firestore subscription when the service is destroyed.
+   *
+   * @returns void
+   */
   ngOnDestroy(): void {
     this.unsubCollection();
   }
 
+  /**
+   * Returns a reference to the tasks collection.
+   *
+   * @returns The Firestore collection reference
+   */
   getTasksRef() {
     return collection(this.firestore, 'tasks');
   }
 
+  /**
+   * Returns a reference to a single document.
+   *
+   * @param colId The collection identifier
+   * @param docId The document identifier
+   * @returns The Firestore document reference
+   */
   getSingleDocRef(colId: string, docId: string) {
     return doc(collection(this.firestore, colId), docId);
   }
