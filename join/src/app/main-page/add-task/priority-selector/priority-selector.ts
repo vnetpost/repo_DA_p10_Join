@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Task } from '../../../shared/interfaces/task';
 
+/** View model describing one priority button in the selector. */
 type PriorityOption = {
   value: Task['priority'];
   label: string;
@@ -8,6 +9,9 @@ type PriorityOption = {
   modifierClass: string;
 };
 
+/**
+ * Segmented selector for choosing task priority.
+ */
 @Component({
   selector: 'app-priority-selector',
   imports: [],
@@ -15,9 +19,12 @@ type PriorityOption = {
   styleUrl: './priority-selector.scss',
 })
 export class PrioritySelector {
+  /** Currently selected priority value. */
   @Input() selectedPriority: Task['priority'] = 'medium';
+  /** Emits when the selected priority changes. */
   @Output() selectedPriorityChange = new EventEmitter<Task['priority']>();
 
+  /** Available priority options rendered in the selector. */
   options: PriorityOption[] = [
     {
       value: 'high',
@@ -39,6 +46,10 @@ export class PrioritySelector {
     },
   ];
 
+  /**
+   * Updates and emits the selected priority.
+   * @param newPrio Priority chosen by the user.
+   */
   selectPriority(newPrio: Task['priority']): void {
     this.selectedPriority = newPrio;
     this.selectedPriorityChange.emit(newPrio);

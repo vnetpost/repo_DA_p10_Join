@@ -11,6 +11,9 @@ import { Contact } from '../../../shared/interfaces/contact';
 import { FirebaseService } from '../../../shared/services/firebase-service';
 import { getTwoInitials } from '../../../shared/utilities/utils';
 
+/**
+ * Searchable multi-select dropdown for choosing task assignees.
+ */
 @Component({
   selector: 'app-dropdown-assignee',
   imports: [],
@@ -23,12 +26,15 @@ export class DropdownAssignee {
 
   getTwoInitials = getTwoInitials;
 
+  /** Currently selected contacts. */
   @Input() selectedContacts: Contact[] = [];
+  /** Emits whenever the contact selection changes. */
   @Output() selectedContactsChange = new EventEmitter<Contact[]>();
 
   isDropdownOpen = false;
   assigneeQuery = '';
 
+  /** Contacts filtered by the current search query. */
   get filteredContacts(): Contact[] {
     const query = this.assigneeQuery.trim().toLowerCase();
     if (!query) return this.firebaseService.contacts;
@@ -37,6 +43,10 @@ export class DropdownAssignee {
     );
   }
 
+  /**
+   * Toggles dropdown visibility and resets search if it closes.
+   * @param event Optional trigger event used to stop propagation.
+   */
   toggleDropdownOpen(event?: Event): void {
     event?.stopPropagation();
     if (event && this.isDropdownOpen && event.target instanceof HTMLInputElement) return;
@@ -44,6 +54,10 @@ export class DropdownAssignee {
     if (!this.isDropdownOpen) this.assigneeQuery = '';
   }
 
+  /**
+   * Closes the dropdown when the pointer interaction happens outside this component.
+   * @param event Pointer-down event from the document.
+   */
   @HostListener('document:pointerdown', ['$event'])
   closeOnOutsidePointerDown(event: Event): void {
     if (!this.isDropdownOpen) return;
@@ -53,6 +67,11 @@ export class DropdownAssignee {
     this.assigneeQuery = '';
   }
 
+  /**
+   * Adds or removes a contact from the current selection.
+   * @param contact Contact to toggle.
+   * @param event Optional trigger event used to stop propagation.
+   */
   toggleContact(contact: Contact, event?: Event): void {
     event?.stopPropagation();
     const index = this.selectedContacts.findIndex((item) => item.id === contact.id);
@@ -65,10 +84,21 @@ export class DropdownAssignee {
     this.selectedContactsChange.emit(this.selectedContacts);
   }
 
+  /**
+   * Returns whether a contact is currently selected.
+   * @param contact Contact to check.
+   * @returns `true` if the contact is selected.
+   */
   isSelected(contact: Contact): boolean {
     return this.selectedContacts.some((item) => item.id === contact.id);
   }
 
+  /**
+   * Provides a stable identity for contact list rendering.
+   * @param contact Contact item from the rendered list.
+   * @param index Fallback index when no ID is available.
+   * @returns Stable key value for track-by usage.
+   */
   getContactId(contact: Contact, index: number): string {
     return contact.id ?? `${contact.name}-${index}`;
   }
