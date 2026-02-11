@@ -101,6 +101,11 @@ export class Board {
     }
   }
 
+  onAddTaskOverlayMouseDown(event: MouseEvent): void {
+    if (event.target !== event.currentTarget) return;
+    this.closeAddTaskOverlay();
+  }
+
   @HostListener('document:keydown.escape')
   onEscape(): void {
     if (this.isAddTaskOverlayOpen) this.closeAddTaskOverlay();

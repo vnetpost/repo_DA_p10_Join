@@ -14,7 +14,7 @@ export class SubtaskComposer {
   private hostElement = inject(ElementRef<HTMLElement>);
   readonly subtaskTitleMinLength = 3;
   readonly subtaskTitleMaxLength = 100;
-  private readonly subtaskTitleRegex = /^[A-Za-zÄÖÜäöüß0-9 .,:;!?()_/#+'&"@-]+$/;
+  readonly subtaskTitleMinLetters = 3;
 
   /** Current list of subtasks managed by the parent form. */
   @Input() subtasks: Subtask[] = [];
@@ -124,7 +124,7 @@ export class SubtaskComposer {
   }
 
   /**
-   * Validates subtask title length and allowed characters.
+   * Validates subtask title length and minimum-letter rules.
    * @param value Subtask title candidate.
    * @returns `true` if the title is valid.
    */
@@ -132,7 +132,18 @@ export class SubtaskComposer {
     return (
       value.length >= this.subtaskTitleMinLength &&
       value.length <= this.subtaskTitleMaxLength &&
-      this.subtaskTitleRegex.test(value)
+      this.hasMinimumLetters(value, this.subtaskTitleMinLetters)
     );
+  }
+
+  /**
+   * Checks whether a value contains a minimum amount of latin letters.
+   * @param value Candidate input string.
+   * @param minLetters Minimum amount of letters required.
+   * @returns `true` when the minimum is met.
+   */
+  private hasMinimumLetters(value: string, minLetters: number): boolean {
+    const letterMatches = value.match(/[a-z]/gi);
+    return (letterMatches?.length ?? 0) >= minLetters;
   }
 }

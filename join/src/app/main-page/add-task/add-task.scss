@@ -87,6 +87,11 @@
   }
 }
 
+.add-task__submit-button--disabled {
+  border: 1px solid styles.$gray-dark;
+  filter: opacity(0.5);
+}
+
 .add-task__field-error {
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
   visibility: hidden;

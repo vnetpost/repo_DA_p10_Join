@@ -84,8 +84,8 @@
         <button
           type="submit"
           class="button button--primary button--icon"
-          [disabled]="!isFormValid"
-          [class.button--disabled]="!isFormValid"
+          [class.add-task__submit-button--disabled]="!isFormValid"
+          [attr.aria-disabled]="!isFormValid ? 'true' : null"
         >
           {{ submitButtonLabel }}
           <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="save.svg icon" />

@@ -60,7 +60,7 @@ export class AddTask implements OnChanges, OnDestroy {
   minDueDate = getTodayDateString();
   readonly taskTitleMinLength = 3;
   readonly taskTitleMaxLength = 100;
-  private readonly taskTitleRegex = /^[A-Za-zÄÖÜäöüß0-9 .,:;!?()_/#+'&"@-]+$/;
+  readonly taskTitleMinLetters = 3;
   // #endregion
 
   // #region Form State
@@ -136,7 +136,7 @@ export class AddTask implements OnChanges, OnDestroy {
     return this.isTitleTouched && !this.taskTitle.trim();
   }
 
-  /** True when title violates allowed character or length constraints. */
+  /** True when title violates length or minimum-letter constraints. */
   get showTitlePatternError(): boolean {
     if (!this.isTitleTouched) return false;
     const title = this.taskTitle.trim();
@@ -146,7 +146,7 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Human-readable title validation message for the UI. */
   get titleErrorMessage(): string {
     if (this.showTitleRequiredError) return 'This field is required';
-    return `Use ${this.taskTitleMinLength}-${this.taskTitleMaxLength} chars + valid symbols`;
+    return `Use up to ${this.taskTitleMaxLength} chars with at least ${this.taskTitleMinLetters} letters (a-z)`;
   }
 
   /** True after due date touch when no date has been provided. */
@@ -348,7 +348,7 @@ export class AddTask implements OnChanges, OnDestroy {
   }
 
   /**
-   * Validates the title against length and character rules.
+   * Validates the title against length and minimum-letter rules.
    * @param value Title candidate from the form.
    * @returns `true` if title is valid.
    */
@@ -357,8 +357,19 @@ export class AddTask implements OnChanges, OnDestroy {
     return (
       title.length >= this.taskTitleMinLength &&
       title.length <= this.taskTitleMaxLength &&
-      this.taskTitleRegex.test(title)
+      this.hasMinimumLetters(title, this.taskTitleMinLetters)
     );
+  }
+
+  /**
+   * Checks whether a value contains a minimum amount of latin letters.
+   * @param value Candidate input string.
+   * @param minLetters Minimum amount of letters required.
+   * @returns `true` when the minimum is met.
+   */
+  private hasMinimumLetters(value: string, minLetters: number): boolean {
+    const letterMatches = value.match(/[a-z]/gi);
+    return (letterMatches?.length ?? 0) >= minLetters;
   }
 
   /** Shows a short toast and then exits add-task flow. */

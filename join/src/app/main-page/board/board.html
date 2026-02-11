@@ -84,13 +84,9 @@
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="taskToEdit ? 'Edit task' : 'Add new task'"
-        (mousedown)="closeAddTaskOverlay()"
+        (mousedown)="onAddTaskOverlayMouseDown($event)"
       >
-        <div
-          class="add-task-overlay__panel"
-          (mousedown)="$event.stopPropagation()"
-          (click)="$event.stopPropagation()"
-        >
+        <div class="add-task-overlay__panel">
           <button
             type="button"
             class="add-task-overlay__close"

@@ -33,7 +33,8 @@
   </div>
   @if (showSubtaskPatternError) {
     <span class="subtask-pattern-error">
-      Use {{ subtaskTitleMinLength }}-{{ subtaskTitleMaxLength }} chars + valid symbols
+      Use up to {{ subtaskTitleMaxLength }} chars with at least
+      {{ subtaskTitleMinLetters }} letters (a-z)
     </span>
   }
   @if (subtasks.length) {
