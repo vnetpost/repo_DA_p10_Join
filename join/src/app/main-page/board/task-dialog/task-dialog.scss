@@ -332,6 +332,10 @@ footer{
 
   p{
     font-weight: 500;
+    
+    .delete-highlight{
+      color: styles.$red-error;
+    }
   }
   
   .confirm-box {
@@ -355,6 +359,14 @@ footer{
         @include styles.up-xxl{
           padding-left: 24px;
           padding-right: 24px;
+        }
+      }
+
+      .delete-btn{
+        background-color: styles.$red-error;
+
+        &:hover{
+          background-color: styles.$blue-sky;
         }
       }
     }

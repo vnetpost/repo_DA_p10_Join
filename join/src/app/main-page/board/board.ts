@@ -91,9 +91,19 @@ export class Board {
    * @returns void
    */
   closeAddTaskOverlay(): void {
+    const editedTask = this.taskToEdit;
     this.isAddTaskOverlayOpen = false;
     this.taskToEdit = null;
     this.addTaskStatus = 'to-do';
+
+    if (editedTask?.id) {
+      this.openTask(this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask);
+    }
+  }
+
+  onAddTaskOverlayMouseDown(event: MouseEvent): void {
+    if (event.target !== event.currentTarget) return;
+    this.closeAddTaskOverlay();
   }
 
   @HostListener('document:keydown.escape')

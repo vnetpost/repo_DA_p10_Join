@@ -23,7 +23,8 @@ html {
   }
 }
 
-body:has(dialog[open]) {
+body:has(dialog[open]),
+body:has(.add-task-overlay) {
   overflow: hidden;
 }
 

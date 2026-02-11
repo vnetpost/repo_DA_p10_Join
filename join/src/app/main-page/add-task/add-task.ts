@@ -22,6 +22,9 @@ import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { FirebaseService } from '../../shared/services/firebase-service';
 
+/**
+ * Manages task creation and editing, including form state, validation and persistence.
+ */
 @Component({
   selector: 'app-add-task',
   imports: [
@@ -43,9 +46,13 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region Inputs & Outputs
+  /** Determines whether the form is rendered inside an overlay dialog. */
   @Input() isOverlay = false;
+  /** Existing task to edit. If `null`, the component creates a new task. */
   @Input() taskToEdit: Task | null = null;
+  /** Target status for newly created tasks. */
   @Input() initialStatus: Task['status'] = 'to-do';
+  /** Requests closing the overlay once submit feedback has finished. */
   @Output() closeDialogRequested = new EventEmitter<void>();
   // #endregion
 
@@ -53,7 +60,7 @@ export class AddTask implements OnChanges, OnDestroy {
   minDueDate = getTodayDateString();
   readonly taskTitleMinLength = 3;
   readonly taskTitleMaxLength = 100;
-  private readonly taskTitleRegex = /^[A-Za-zÄÖÜäöüß0-9 .,:;!?()_/#+'&"@-]+$/;
+  readonly taskTitleMinLetters = 3;
   // #endregion
 
   // #region Form State
@@ -75,69 +82,84 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region Lifecycle
+  /** Applies incoming task data to the form whenever edit input changes. */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['taskToEdit']) return;
     if (this.taskToEdit) this.populateFormForEdit(this.taskToEdit);
     else this.resetForm();
   }
 
+  /** Clears running timers to avoid side effects after component teardown. */
   ngOnDestroy(): void {
     if (this.toastTimer) clearTimeout(this.toastTimer);
   }
   // #endregion
 
   // #region Derived State
+  /** Indicates whether the form currently edits an existing task. */
   get isEditMode(): boolean {
     return Boolean(this.taskToEdit?.id);
   }
 
+  /** Returns the dynamic headline based on create or edit mode. */
   get formTitle(): string {
     return this.isEditMode ? 'Edit Task' : 'Add Task';
   }
 
+  /** Returns the submit button label for the active form mode. */
   get submitButtonLabel(): string {
     return this.isEditMode ? 'Save' : 'Create Task';
   }
 
+  /** Returns toast text matching create or update action. */
   get toastMessage(): string {
     return this.isEditMode ? 'Task updated' : 'Task created';
   }
 
+  /** Ensures the subtask list is valid for submit. */
   get hasValidSubtasks(): boolean {
     return this.activeSubtasks.length !== 1;
   }
 
+  /** Shows helper text when exactly one subtask exists. */
   get showSubtaskHint(): boolean {
     return this.activeSubtasks.length === 1;
   }
 
+  /** Aggregates all title-related validation states. */
   get showTitleError(): boolean {
     return this.showTitleRequiredError || this.showTitlePatternError;
   }
 
+  /** True after title touch when the required value is empty. */
   get showTitleRequiredError(): boolean {
     return this.isTitleTouched && !this.taskTitle.trim();
   }
 
+  /** True when title violates length or minimum-letter constraints. */
   get showTitlePatternError(): boolean {
     if (!this.isTitleTouched) return false;
     const title = this.taskTitle.trim();
     return title.length > 0 && !this.isTitleValid(title);
   }
 
+  /** Human-readable title validation message for the UI. */
   get titleErrorMessage(): string {
     if (this.showTitleRequiredError) return 'This field is required';
-    return `Use ${this.taskTitleMinLength}-${this.taskTitleMaxLength} chars + valid symbols`;
+    return `Use up to ${this.taskTitleMaxLength} chars with at least ${this.taskTitleMinLetters} letters (a-z)`;
   }
 
+  /** True after due date touch when no date has been provided. */
   get showDueDateError(): boolean {
     return this.isDueDateTouched && !this.taskDueDate.trim();
   }
 
+  /** True after category touch when no category is selected. */
   get showCategoryError(): boolean {
     return this.isCategoryTouched && !this.activeCategory;
   }
 
+  /** Aggregate validity of all required form sections. */
   get isFormValid(): boolean {
     return (
       this.isTitleValid(this.taskTitle) &&
@@ -149,6 +171,10 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region Public Actions
+  /**
+   * Validates and persists the current form as a new task or task update.
+   * Shows a toast afterwards and either closes overlay mode or navigates to board.
+   */
   async createTask(): Promise<void> {
     const title = this.taskTitle.trim();
     const description = this.taskDescription.trim();
@@ -201,6 +227,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.showToast();
   }
 
+  /** Resets all form fields and touch states to their defaults. */
   resetForm(): void {
     this.taskTitle = '';
     this.taskDescription = '';
@@ -216,6 +243,10 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region Private Helpers
+  /**
+   * Prefills the form with existing task data for edit mode.
+   * @param task Task entity that should be edited.
+   */
   private populateFormForEdit(task: Task): void {
     this.taskTitle = task.title;
     this.taskDescription = task.description;
@@ -232,6 +263,11 @@ export class AddTask implements OnChanges, OnDestroy {
     this.isCategoryTouched = false;
   }
 
+  /**
+   * Converts a `Date` to the form input format `YYYY/MM/DD`.
+   * @param date Source date object.
+   * @returns Date string formatted for form controls.
+   */
   private formatDateForInput(date: Date): string {
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -239,6 +275,13 @@ export class AddTask implements OnChanges, OnDestroy {
     return `${year}/${month}/${day}`;
   }
 
+  /**
+   * Validates required form fields and updates touch state when invalid.
+   * @param title Trimmed task title.
+   * @param dueDateValue Raw due date input value.
+   * @param category Selected category value.
+   * @returns The validated category or `null` if validation failed.
+   */
   private validateForm(
     title: Task['title'],
     dueDateValue: string,
@@ -256,6 +299,15 @@ export class AddTask implements OnChanges, OnDestroy {
     return category;
   }
 
+  /**
+   * Creates the shared task payload for create and update workflows.
+   * @param title Normalized task title.
+   * @param description Normalized task description.
+   * @param dueDate Due date timestamp.
+   * @param assignees Contact IDs assigned to the task.
+   * @param category Validated task category.
+   * @returns Base payload used for both create and update operations.
+   */
   private buildTaskPayload(
     title: Task['title'],
     description: Task['description'],
@@ -274,6 +326,11 @@ export class AddTask implements OnChanges, OnDestroy {
     };
   }
 
+  /**
+   * Parses a due date string from either `YYYY/MM/DD` or `YYYY-MM-DD`.
+   * @param value Date string entered in the form.
+   * @returns Parsed date or `null` when the value is invalid.
+   */
   private parseDueDate(value: string): Date | null {
     const parts = value.split(/[\/-]/);
     if (parts.length !== 3) return null;
@@ -290,15 +347,32 @@ export class AddTask implements OnChanges, OnDestroy {
     return date;
   }
 
+  /**
+   * Validates the title against length and minimum-letter rules.
+   * @param value Title candidate from the form.
+   * @returns `true` if title is valid.
+   */
   private isTitleValid(value: string): boolean {
     const title = value.trim();
     return (
       title.length >= this.taskTitleMinLength &&
       title.length <= this.taskTitleMaxLength &&
-      this.taskTitleRegex.test(title)
+      this.hasMinimumLetters(title, this.taskTitleMinLetters)
     );
   }
 
+  /**
+   * Checks whether a value contains a minimum amount of latin letters.
+   * @param value Candidate input string.
+   * @param minLetters Minimum amount of letters required.
+   * @returns `true` when the minimum is met.
+   */
+  private hasMinimumLetters(value: string, minLetters: number): boolean {
+    const letterMatches = value.match(/[a-z]/gi);
+    return (letterMatches?.length ?? 0) >= minLetters;
+  }
+
+  /** Shows a short toast and then exits add-task flow. */
   private showToast(): void {
     this.toastVisible = true;
     if (this.toastTimer) clearTimeout(this.toastTimer);
