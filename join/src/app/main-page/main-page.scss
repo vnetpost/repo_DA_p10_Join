@@ -409,3 +409,60 @@ footer{
     }
   }
 }
+
+.sign-up-toast {
+  position: fixed;
+  inset: 0;
+  @include styles.setFlex();
+  z-index: 8;
+  pointer-events: none;
+}
+
+.toast-message {
+  padding: 16px 24px;
+  border-radius: 8px;
+  background-color: styles.$gray-dark;
+  color: #ffffff;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+  transform: translateY(100%);
+}
+
+.toast-message--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.login-error{
+  color: styles.$red-error;
+  text-align: center;
+}
+
+.mobile-greeting-overlay{
+  position: fixed;
+  inset: 0;
+  @include styles.setFlex();
+  background-color: #f6f7f8;
+  z-index: 8;
+  animation: fadeInOut 2s ease forwards;
+
+  @include styles.up-xxl{
+    display: none;
+  }
+}
+
+.good-day-message{
+  font-size: 36px;
+  font-weight: 600;
+  color: styles.$gray-dark;
+}
+
+@keyframes fadeInOut{
+  0%   { opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { opacity: 0; }
+}
