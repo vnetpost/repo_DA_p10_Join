@@ -20,8 +20,8 @@
       }
     
       @if (!showSignUp) {
-        <section class="form-section log-in-form-section" [class.scrollable]="logInForm?.invalid && logInForm?.touched" aria-labelledby="login-title">
-          <div class="form-wrapper">
+        <section class="form-section log-in-form-section" aria-labelledby="login-title">
+          <div class="form-wrapper log-in-form-wrapper">
     
             <div class="title">
               <h1 id="login-title">Log in</h1>
@@ -89,8 +89,8 @@
       }
 
       @if(showSignUp){
-        <section class="form-section sign-up-form-section" [class.scrollable]="signUpForm?.invalid && signUpForm?.touched" aria-labelledby="signup-title">
-          <div class="form-wrapper">
+        <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
+          <div class="form-wrapper sign-up-form-wrapper">
     
             <div class="title sign-title">
               <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">

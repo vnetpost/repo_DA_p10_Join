@@ -37,3 +37,18 @@
     transform: rotate(360deg);
   }
 } 
+
+@keyframes fadeInOut{
+  0%   { 
+    opacity: 0; 
+  }
+  12%  { 
+    opacity: 1; 
+  }
+  88%  { 
+    opacity: 1; 
+  }
+  100% { 
+    opacity: 0; 
+  }
+}
