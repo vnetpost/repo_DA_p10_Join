@@ -238,6 +238,11 @@ header {
       &.ng-invalid.ng-touched {
           border-color: styles.$red-error;
       }
+
+      &[readonly] {
+        background-color: #f5f5f5;
+        color: styles.$gray-dark;
+      }
     }
 
     .form__icon{

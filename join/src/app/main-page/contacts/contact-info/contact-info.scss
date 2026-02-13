@@ -200,6 +200,10 @@
     border: 0.1rem solid transparent;
     border-radius: 0.8rem;
     cursor: pointer;
+    transition:
+      background-color 0.2s ease,
+      border-color 0.2s ease,
+      transform 0.15s ease;
     @include styles.setFont($size: 1em, $weight: 600);
   }
 
@@ -207,11 +211,21 @@
     border-color: #ffffff66;
     background: transparent;
     color: styles.$white;
+
+    &:hover {
+      background-color: #ffffff1a;
+      border-color: #ffffff99;
+    }
   }
 
   &__delete-btn--confirm {
     background: styles.$red-error;
     color: styles.$white;
+
+    &:hover {
+      background-color: #e04f4f;
+      transform: translateY(-1px);
+    }
   }
 
   &__fab {
