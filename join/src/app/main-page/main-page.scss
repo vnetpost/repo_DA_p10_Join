@@ -46,10 +46,11 @@
     transition-duration: 1.2s, 0.4s;
     transition-timing-function: ease, ease;
     transition-delay: 0s, 0s;
-    transform: translate(40vw, 40vh) scale(1.6);
+    transform: translate(34dvw, 40dvh) scale(1.6);
 
     @include styles.up-xxl{
       width: 100px;
+      transform: translate(40dvw, 33dvh) scale(1.6);
     }
 
     @media(max-width: 400px){
@@ -132,10 +133,10 @@
   margin: 16px 0;
 
   .form-wrapper{
-    @include styles.setFlex($d: column, $jc: flex-start, $gap: 26px);
+    @include styles.setFlex($d: column, $jc: flex-start, $gap: 20px);
     width: 90dvw;
     max-width: 500px;
-    padding: 36px 16px;
+    padding: 16px 16px;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0px 0px 14px 3px #0000000A;
@@ -144,6 +145,7 @@
       gap: 30px;
       width: 650px;
       max-width: unset;
+      padding: 36px 16px;
     }
 
     .title{
@@ -154,7 +156,7 @@
       }
 
       h1{
-        font-size: 47px;
+        font-size: 36px;
 
         @include styles.up-xxl{
           font-size: 60px;
@@ -199,6 +201,10 @@
   @include styles.up-xxl{
     grid-area: 2/1/3/3;
   }
+
+  .log-in-form-wrapper{
+      padding-bottom: 30px;
+    }
 }
 
 .log-in-sign-up-form{
@@ -210,14 +216,10 @@
 
   .input-box{
     @include styles.setGrid($rows: 1fr, $columns: 1fr 40px, $jc: center, $ai: center);
-    margin-bottom: 28px;
-
-    @media(max-width: 400px){
-      margin-bottom: 16px;
-    }
+    margin-bottom: 8px;
 
     @include styles.up-xxl{
-      margin-bottom: 32px;
+      margin-bottom: 26px;
     }
 
     input{
@@ -280,11 +282,7 @@
 
   .form-actions{
     @include styles.setFlex($d: column, $gap: 12px);
-    margin-top: 55px;
-
-    @media(max-width: 400px){
-      margin-top: 24px;
-    }
+    margin-top: 16px;
 
     @include styles.up-xxl{
       @include styles.setFlex($gap: 28px);
@@ -317,9 +315,10 @@
 }
 
 .sign-up-form{
+
   .checkbox-wrapper{
     @include styles.setFlex($gap: 8px);
-    margin-bottom: 6px;
+    margin: 6px 0;
     cursor: pointer;
 
     @include styles.up-xxl{
@@ -362,25 +361,8 @@
 
   .checkbox-error{
     @include styles.setFlex();
-    margin-top: 2px;
+    text-align: center;
     color: styles.$red-error;
-  }
-}
-
-.form-section .form-wrapper{
-  overflow: hidden;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-}
-
-.sign-up-form-section.scrollable .form-wrapper{
-  overflow-y: auto;
-  max-height: 430px; 
-  
-  @include styles.up-xxl{
-    max-height: 600px; 
   }
 }
 
@@ -447,22 +429,18 @@ footer{
   @include styles.setFlex();
   background-color: #f6f7f8;
   z-index: 8;
-  animation: fadeInOut 2s ease forwards;
+  animation-name: fadeInOut;
+  animation-duration: 2s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
 
   @include styles.up-xxl{
     display: none;
   }
-}
 
-.good-day-message{
-  font-size: 36px;
-  font-weight: 600;
-  color: styles.$gray-dark;
-}
-
-@keyframes fadeInOut{
-  0%   { opacity: 0; }
-  12%  { opacity: 1; }
-  88%  { opacity: 1; }
-  100% { opacity: 0; }
+  .good-day-message{
+    font-size: 36px;
+    font-weight: 600;
+    color: styles.$gray-dark;
+  }
 }

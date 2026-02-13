@@ -20,8 +20,11 @@ export class MainPage implements OnInit {
 
   isMobile = false;
   showSignUp = false;
-  toastVisible = false;
+  isLoggingIn = false;
   loginError = false;
+  isSigningUp = false;
+  signUpError = false;
+  toastVisible = false;
   showMobileGreeting = false;
 
   introActive = true;
@@ -92,16 +95,18 @@ export class MainPage implements OnInit {
       return;
     }
 
+    this.isLoggingIn = true;
     this.loginError = false;
 
     this.authService.logIn(this.logInData.email, this.logInData.password)
     .subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
+        this.isLoggingIn = false;
         this.handleLoginNavigation();
       },
       error: (err) => {
         console.error('Login failed', err);
+        this.isLoggingIn = false;
         this.loginError = true;
       },
     });
@@ -112,7 +117,6 @@ export class MainPage implements OnInit {
   guestLogin(): void {
     this.authService.guestLogIn().subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
         this.handleLoginNavigation();
       },
       error: (err) => {
@@ -141,22 +145,28 @@ export class MainPage implements OnInit {
       return;
     }
 
-    this.showSignUp = false;
-    this.showToast();
+    this.isSigningUp = true;
+    this.signUpError = false;
 
     this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password)
     .subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
+        this.isSigningUp = false;
+
         this.confirmPassword = '';
         this.signUpData = {
           name: '',
           email: '',
           password: '',
         };
+
+        this.showSignUp = false;
+        this.showToast();
       },
       error: (err) => {
         console.error('Sign up failed', err);
+        this.isSigningUp = false;
+        this.signUpError = true;
       },
     });
 

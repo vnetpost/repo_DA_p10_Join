@@ -20,8 +20,8 @@
       }
     
       @if (!showSignUp) {
-        <section class="form-section log-in-form-section" [class.scrollable]="logInForm?.invalid && logInForm?.touched" aria-labelledby="login-title">
-          <div class="form-wrapper">
+        <section class="form-section log-in-form-section" aria-labelledby="login-title">
+          <div class="form-wrapper log-in-form-wrapper">
     
             <div class="title">
               <h1 id="login-title">Log in</h1>
@@ -38,7 +38,7 @@
                     @if (email.errors?.['required']) {
                       Email is required.
                     } @else if (email.errors?.['minlength']) {
-                        Email must be at least 5 characters.
+                        At least 5 characters.
                       } @else if (email.errors?.['pattern']) {
                           Please enter a valid email address.
                       }
@@ -62,7 +62,7 @@
                     @if (logInPass.errors?.['required']) {
                       Password is required.
                     } @else if (logInPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 }
@@ -75,8 +75,12 @@
               }
     
               <div class="form-actions">
-                <button type="submit" [disabled]="logInForm.invalid" class="button button--primary">
-                  Log in
+                <button type="submit" [disabled]="logInForm.invalid" [disabled]="isLoggingIn" class="button button--primary">
+                  @if (isLoggingIn) {
+                    Logging in…
+                  } @else {
+                    Log in
+                  }
                 </button>
                 <button type="button" (click)="guestLogin()" class="button button--secondary">
                   Guest Log in
@@ -89,8 +93,8 @@
       }
 
       @if(showSignUp){
-        <section class="form-section sign-up-form-section" [class.scrollable]="signUpForm?.invalid && signUpForm?.touched" aria-labelledby="signup-title">
-          <div class="form-wrapper">
+        <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
+          <div class="form-wrapper sign-up-form-wrapper">
     
             <div class="title sign-title">
               <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">
@@ -113,7 +117,7 @@
                     } @else if (name.errors?.['pattern']) {
                         Please enter a valid name.
                       } @else if (name.errors?.['minlength']) {
-                          Name must be at least 2 characters.
+                          At least 2 characters.
                       } 
                   </span>
                 }
@@ -126,7 +130,7 @@
                     @if (email.errors?.['required']) {
                       Email is required.
                     } @else if (email.errors?.['minlength']) {
-                        Email must be at least 5 characters.
+                        At least 5 characters.
                       } @else if (email.errors?.['pattern']) {
                           Please enter a valid email address.
                       }
@@ -149,7 +153,7 @@
                     @if (signUpPass.errors?.['required']) {
                       Password is required.
                     } @else if (signUpPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 }
@@ -170,7 +174,7 @@
                     @if (confirmPass.errors?.['required']) {
                       Password is required.
                     } @else if (confirmPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 } @else if (confirmPass.touched && signUpData.password !== confirmPassword) {
@@ -186,13 +190,23 @@
               </label>
               @if (privacy.invalid && privacy.dirty) {
                 <span class="checkbox-error" aria-live="polite">
-                  You must accept the privacy policy.
+                  Please accept the privacy policy.
                 </span>
+              }
+
+              @if (signUpError) {
+                <p class="login-error" role="alert" aria-live="assertive">
+                  Email already in use.
+                </p>
               }
     
               <div class="form-actions">
-                <button type="submit" [disabled]="signUpForm.invalid || signUpData.password !== confirmPassword" class="button button--primary">
-                  Sign up
+                <button type="submit" [disabled]="signUpForm.invalid || signUpData.password !== confirmPassword" [disabled]="isSigningUp" class="button button--primary">
+                  @if (isSigningUp) {
+                    Signing up…
+                  } @else {
+                    Sign up
+                  }
                 </button>
               </div>
             </form>
