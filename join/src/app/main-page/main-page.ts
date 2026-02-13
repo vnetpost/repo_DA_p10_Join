@@ -97,7 +97,6 @@ export class MainPage implements OnInit {
     this.authService.logIn(this.logInData.email, this.logInData.password)
     .subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
         this.handleLoginNavigation();
       },
       error: (err) => {
@@ -112,7 +111,6 @@ export class MainPage implements OnInit {
   guestLogin(): void {
     this.authService.guestLogIn().subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
         this.handleLoginNavigation();
       },
       error: (err) => {
@@ -147,7 +145,6 @@ export class MainPage implements OnInit {
     this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password)
     .subscribe({
       next: () => {
-        // this.router.navigate(['/summary']);
         this.confirmPassword = '';
         this.signUpData = {
           name: '',

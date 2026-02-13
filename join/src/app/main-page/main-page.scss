@@ -46,10 +46,11 @@
     transition-duration: 1.2s, 0.4s;
     transition-timing-function: ease, ease;
     transition-delay: 0s, 0s;
-    transform: translate(40vw, 40vh) scale(1.6);
+    transform: translate(34dvw, 40dvh) scale(1.6);
 
     @include styles.up-xxl{
       width: 100px;
+      transform: translate(40dvw, 33dvh) scale(1.6);
     }
 
     @media(max-width: 400px){
@@ -204,14 +205,6 @@
   .log-in-form-wrapper{
       padding-bottom: 30px;
     }
-
-  .sign-up-form-wrapper{
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 20;
-  }
 }
 
 .log-in-sign-up-form{
@@ -325,7 +318,7 @@
 
   .checkbox-wrapper{
     @include styles.setFlex($gap: 8px);
-    margin-bottom: 6px;
+    margin: 6px 0;
     cursor: pointer;
 
     @include styles.up-xxl{
@@ -368,7 +361,6 @@
 
   .checkbox-error{
     @include styles.setFlex();
-    // margin-top: 0px;
     text-align: center;
     color: styles.$red-error;
   }

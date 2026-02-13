@@ -38,7 +38,7 @@
                     @if (email.errors?.['required']) {
                       Email is required.
                     } @else if (email.errors?.['minlength']) {
-                        Email must be at least 5 characters.
+                        At least 5 characters.
                       } @else if (email.errors?.['pattern']) {
                           Please enter a valid email address.
                       }
@@ -62,7 +62,7 @@
                     @if (logInPass.errors?.['required']) {
                       Password is required.
                     } @else if (logInPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 }
@@ -113,7 +113,7 @@
                     } @else if (name.errors?.['pattern']) {
                         Please enter a valid name.
                       } @else if (name.errors?.['minlength']) {
-                          Name must be at least 2 characters.
+                          At least 2 characters.
                       } 
                   </span>
                 }
@@ -126,7 +126,7 @@
                     @if (email.errors?.['required']) {
                       Email is required.
                     } @else if (email.errors?.['minlength']) {
-                        Email must be at least 5 characters.
+                        At least 5 characters.
                       } @else if (email.errors?.['pattern']) {
                           Please enter a valid email address.
                       }
@@ -149,7 +149,7 @@
                     @if (signUpPass.errors?.['required']) {
                       Password is required.
                     } @else if (signUpPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 }
@@ -170,7 +170,7 @@
                     @if (confirmPass.errors?.['required']) {
                       Password is required.
                     } @else if (confirmPass.errors?.['minlength']) {
-                        Password must be at least 8 characters.
+                        At least 8 characters.
                       } 
                   </span>
                 } @else if (confirmPass.touched && signUpData.password !== confirmPassword) {
@@ -186,7 +186,7 @@
               </label>
               @if (privacy.invalid && privacy.dirty) {
                 <span class="checkbox-error" aria-live="polite">
-                  You must accept the privacy policy.
+                  Please accept the privacy policy.
                 </span>
               }
     
