@@ -75,8 +75,12 @@
               }
     
               <div class="form-actions">
-                <button type="submit" [disabled]="logInForm.invalid" class="button button--primary">
-                  Log in
+                <button type="submit" [disabled]="logInForm.invalid" [disabled]="isLoggingIn" class="button button--primary">
+                  @if (isLoggingIn) {
+                    Logging in…
+                  } @else {
+                    Log in
+                  }
                 </button>
                 <button type="button" (click)="guestLogin()" class="button button--secondary">
                   Guest Log in
@@ -189,10 +193,20 @@
                   Please accept the privacy policy.
                 </span>
               }
+
+              @if (signUpError) {
+                <p class="login-error" role="alert" aria-live="assertive">
+                  Email already in use.
+                </p>
+              }
     
               <div class="form-actions">
-                <button type="submit" [disabled]="signUpForm.invalid || signUpData.password !== confirmPassword" class="button button--primary">
-                  Sign up
+                <button type="submit" [disabled]="signUpForm.invalid || signUpData.password !== confirmPassword" [disabled]="isSigningUp" class="button button--primary">
+                  @if (isSigningUp) {
+                    Signing up…
+                  } @else {
+                    Sign up
+                  }
                 </button>
               </div>
             </form>

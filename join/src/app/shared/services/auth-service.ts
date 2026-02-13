@@ -13,11 +13,13 @@ export class AuthService {
   user$ = authState(this.firebaseAuth);
 
   logIn(email: string, password: string): Observable<UserCredential> {
-    return from(signInWithEmailAndPassword(this.firebaseAuth, email, password));
+    const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password);
+    return from(promise);
   }
 
   guestLogIn(): Observable<UserCredential> {
-    return from(signInAnonymously(this.firebaseAuth));
+    const promise = signInAnonymously(this.firebaseAuth);
+    return from(promise);
   }
 
   signUp(name: string, email: string, password: string): Observable<UserCredential> {
@@ -40,7 +42,8 @@ export class AuthService {
   }
 
   logout(): Observable<void> {
-    return from(signOut(this.firebaseAuth));
+    const promise = signOut(this.firebaseAuth);
+    return from(promise);
   }
 } 
 
