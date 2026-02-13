@@ -97,7 +97,7 @@
               <img class="button__icon button__icon--default" src="assets/img/icons/buttons/cancel.svg" alt="" aria-hidden="true">
               <img class="button__icon button__icon--hover" src="assets/img/icons/buttons/cancel-hover.svg" alt="" aria-hidden="true">
           </button>
-        } @else {
+        } @else if (canDelete) {
             <button type="button" class="button button--secondary" (click)="onDeleteClick()" aria-label="Delete contact">
                 Delete
             </button>

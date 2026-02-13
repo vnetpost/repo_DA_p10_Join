@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Contact } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
@@ -20,6 +20,7 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
 export class ContactDialog {
   @ViewChild('contactDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('contactForm') contactForm!: NgForm;
+  @Input() canDelete = true;
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
   userColor: string | null = null;
@@ -131,6 +132,7 @@ export class ContactDialog {
    * @returns void
    */
   onDeleteClick(): void {
+    if (!this.canDelete) return;
     this.deleteContact.emit();
     this.closeDialog();
   }

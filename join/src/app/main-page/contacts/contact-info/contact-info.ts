@@ -21,14 +21,20 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
  */
 export class ContactInfo implements OnChanges {
   @Input() activeContact: Contact | null = null;
+  @Input() canDelete = true;
   @Output() back = new EventEmitter<void>();
   @Output() editContact = new EventEmitter<void>();
   @Output() deleteContact = new EventEmitter<void>();
 
   fabMenuOpen = false;
   profileAnimating = false;
+  deleteConfirmVisible = false;
 
   readonly getTwoInitials = getTwoInitials;
+
+  hasPhoneNumber(phone: Contact['phone'] | null | undefined): boolean {
+    return String(phone ?? '').trim().length > 0;
+  }
 
   /**
    * Emits a back event and prevents the default link action.
@@ -61,11 +67,35 @@ export class ContactInfo implements OnChanges {
   }
 
   /**
-   * Emits delete action and closes the action menu.
+   * Opens a small confirmation toast before deleting.
    */
   handleFabDelete(): void {
-    this.deleteContact.emit();
+    this.requestDeleteConfirmation();
+  }
+
+  /**
+   * Shows the delete confirmation toast.
+   */
+  requestDeleteConfirmation(): void {
+    if (!this.canDelete) return;
+    this.deleteConfirmVisible = true;
     this.closeFabMenu();
+  }
+
+  /**
+   * Cancels the delete confirmation.
+   */
+  cancelDeleteConfirmation(): void {
+    this.deleteConfirmVisible = false;
+  }
+
+  /**
+   * Confirms deletion and emits the delete action.
+   */
+  confirmDelete(): void {
+    if (!this.canDelete) return;
+    this.deleteConfirmVisible = false;
+    this.deleteContact.emit();
   }
 
   @HostListener('document:keydown.escape')
@@ -73,6 +103,10 @@ export class ContactInfo implements OnChanges {
    * Closes the action menu when Escape is pressed.
    */
   onEscape(): void {
+    if (this.deleteConfirmVisible) {
+      this.cancelDeleteConfirmation();
+      return;
+    }
     if (!this.fabMenuOpen) return;
     this.closeFabMenu();
   }
@@ -82,6 +116,7 @@ export class ContactInfo implements OnChanges {
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['activeContact'] || !this.activeContact) return;
+    this.deleteConfirmVisible = false;
     this.profileAnimating = false;
     setTimeout(() => {
       this.profileAnimating = true;

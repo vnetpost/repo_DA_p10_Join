@@ -6,6 +6,7 @@ import { FirebaseService } from '../../shared/services/firebase-service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
+import { AuthService } from '../../shared/services/auth-service';
 
 @Component({
   selector: 'app-contacts',
@@ -18,6 +19,7 @@ import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
  */
 export class Contacts implements DoCheck {
   firebaseService = inject(FirebaseService);
+  authService = inject(AuthService);
   private readonly mobileMaxWidth = 768;
   private lastContactsVersion = 0;
 
@@ -167,11 +169,32 @@ export class Contacts implements DoCheck {
    * Deletes a contact and clears the active selection.
    */
   onDelete(contact: Contact): void {
+    if (!this.canDeleteContact(contact)) return;
     if (!contact.id) return;
     this.firebaseService.deleteDocument('contacts', contact.id);
     this.activeContact = null;
     this.activeContactID = null;
     this.isDetailOpen = false;
+  }
+
+  /**
+   * Returns true when the selected contact is not the logged-in user.
+   */
+  canDeleteContact(contact: Contact | null): boolean {
+    if (!contact) return false;
+    const currentUserEmail = this.normalizeEmail(this.authService.firebaseAuth.currentUser?.email);
+    const contactEmail = this.normalizeEmail(contact.email);
+    if (!currentUserEmail) return true;
+    return currentUserEmail !== contactEmail;
+  }
+
+  /**
+   * Normalizes email values for a case-insensitive comparison.
+   */
+  private normalizeEmail(email: string | null | undefined): string {
+    return String(email ?? '')
+      .trim()
+      .toLowerCase();
   }
 
   /**

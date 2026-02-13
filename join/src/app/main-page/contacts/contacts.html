@@ -13,12 +13,17 @@
   <app-contact-info
     class="contacts__info"
     [activeContact]="activeContact"
+    [canDelete]="canDeleteContact(activeContact)"
     (back)="closeContactInfo()"
     (editContact)="openEditDialog(activeContact!)"
     (deleteContact)="onDelete(activeContact!)"
   />
 </div>
-<app-contact-dialog (saveContact)="onSave($event)" (deleteContact)="onDelete(activeContact!)" />
+<app-contact-dialog
+  [canDelete]="canDeleteContact(activeContact)"
+  (saveContact)="onSave($event)"
+  (deleteContact)="onDelete(activeContact!)"
+/>
 
 <div class="contacts-toast">
   <p
