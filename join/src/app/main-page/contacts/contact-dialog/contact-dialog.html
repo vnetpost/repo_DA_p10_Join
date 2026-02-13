@@ -86,17 +86,19 @@
             #name="ngModel"
           />
           <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="" />
-          @if (name.invalid && name.touched) {
-            <span class="form__error">
-              @if (name.errors?.['required']) {
-                Name is required.
-              } @else if (name.errors?.['pattern']) {
-                Please enter a valid name.
-              } @else if (name.errors?.['minlength']) {
-                Name must be at least 2 characters.
-              }
-            </span>
-          }
+          <div class="input-error-wrapper">
+            @if (name.invalid && name.touched) {
+              <span class="form__error">
+                @if (name.errors?.['required']) {
+                  Name is required.
+                } @else if (name.errors?.['pattern']) {
+                  Please enter a valid name.
+                } @else if (name.errors?.['minlength']) {
+                  At least 2 characters.
+                }
+              </span>
+            }
+          </div>
         </div>
 
         <div class="form__input-box">
@@ -115,17 +117,19 @@
             [attr.aria-readonly]="dialogMode === 'edit' ? 'true' : null"
           />
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="" />
-          @if (email.invalid && email.touched) {
-            <span class="form__error">
-              @if (email.errors?.['required']) {
-                Email is required.
-              } @else if (email.errors?.['minlength']) {
-                Email must be at least 5 characters.
-              } @else if (email.errors?.['pattern']) {
-                Please enter a valid email address.
-              }
-            </span>
-          }
+          <div class="input-error-wrapper">
+            @if (email.invalid && email.touched) {
+              <span class="form__error">
+                @if (email.errors?.['required']) {
+                  Email is required.
+                } @else if (email.errors?.['minlength']) {
+                  At least 5 characters.
+                } @else if (email.errors?.['pattern']) {
+                  Please enter a valid email address.
+                }
+              </span>
+            }
+          </div>
         </div>
 
         <div class="form__input-box">
@@ -142,17 +146,19 @@
             #phone="ngModel"
           />
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="" />
-          @if (phone.invalid && phone.touched) {
-            <span class="form__error">
-              @if (phone.errors?.['required']) {
-                Phone number is required.
-              } @else if (phone.errors?.['pattern']) {
-                Only numbers, spaces and + are allowed.
-              } @else if (phone.errors?.['minlength']) {
-                Number must be at least 5 characters.
-              }
-            </span>
-          }
+          <div class="input-error-wrapper">
+            @if (phone.invalid && phone.touched) {
+              <span class="form__error">
+                @if (phone.errors?.['required']) {
+                  Phone number is required.
+                } @else if (phone.errors?.['pattern']) {
+                  Only numbers, spaces and + are allowed.
+                } @else if (phone.errors?.['minlength']) {
+                  At least 5 characters.
+                }
+              </span>
+            }
+          </div>
         </div>
 
         <div class="form__actions">
@@ -190,7 +196,7 @@
           <button
             type="submit"
             class="button button--primary button--icon"
-            [disabled]="contactForm.invalid"
+            [class.button--disabled]="contactForm.invalid"
             aria-label="Save changes"
           >
             @if (dialogMode === 'add') {

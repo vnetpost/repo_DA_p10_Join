@@ -3,9 +3,10 @@
 dialog {
   margin: auto;
   position: revert;
-  box-shadow: 0px 0px 4px 0px #0000001a;
+  // min-height: 500px;
   border: none;
   border-radius: 16px;
+  box-shadow: 0px 0px 4px 0px #0000001a;
   z-index: 6;
 
   &.opened {
@@ -20,10 +21,11 @@ dialog {
   }
 
   .dialog-content {
-    @include styles.setGrid($rows: 38% 50px 1fr);
+    @include styles.setGrid($rows: 38% 50px 1fr, $columns: 1fr);
+    // @include styles.setGrid($rows: auto 50px auto, $columns: 1fr);
     width: 85dvw;
     max-width: 350px;
-    height: 590px;
+    height: 540px;
     background-color: white;
     border-radius: 16px;
 
@@ -185,7 +187,7 @@ header {
   }
 
   .form{
-    @include styles.setFlex($d: column, $ai: center, $gap: 10px);
+    @include styles.setFlex($d: column, $ai: center);
     width: 100%;
     margin-top: 60px; 
 
@@ -193,14 +195,8 @@ header {
       margin-top: 50px; 
     }
 
-    &.ng-invalid.ng-touched {
-      .form__actions button{
-        margin-top: 0px;
-      } 
-    }
-
     @include styles.up-xxl{
-      @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 24px);
+      @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 8px);
       width: 65%;
       height: 300px;
       margin-top: 45px; 
@@ -262,11 +258,17 @@ header {
       }
     }
 
+    .input-error-wrapper{
+      min-height: 20px;
+      margin-bottom: 4px;
+    }
+
       .form__actions{
         @include styles.setFlex($gap: 16px);
 
         button{
-          margin-top: 24px;
+          margin-top: 8px;
+          margin-bottom: 16px;
 
           @include styles.up-xxl{
             margin-top: 12px;
@@ -275,7 +277,6 @@ header {
           .button__icon--hover{
             display: none;
           }
-
           
           &:hover{
             .button__icon--default{
@@ -286,12 +287,6 @@ header {
               display: block;
             }
           }
-
-          &:disabled{
-              border: 1px solid styles.$gray-dark;
-              filter: opacity(0.5);
-              pointer-events: none;
-          }
         }
 
         .button--secondary{
@@ -300,10 +295,8 @@ header {
       }
 
       .form__error{
-          display: block;
-          margin-top: 2px;
-          color: styles.$red-error;
+        display: block;
+        color: styles.$red-error;
       }
     }
-  
 }

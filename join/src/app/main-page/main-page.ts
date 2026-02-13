@@ -5,6 +5,7 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
 import { AuthService } from '../shared/services/auth-service';
 import { AsyncPipe } from '@angular/common';
+import { getGreeting } from '../shared/utilities/utils';
 
 @Component({
   selector: 'app-main-page',
@@ -91,7 +92,10 @@ export class MainPage implements OnInit {
   };
 
   onLogin(form: NgForm): void {
+    if (this.isLoggingIn) return;
+
     if (form.invalid) {
+      form.control.markAllAsTouched();
       return;
     }
 
@@ -141,7 +145,10 @@ export class MainPage implements OnInit {
   }
 
   onSignUp(form: NgForm): void {
+    if (this.isSigningUp) return;
+
     if (form.invalid || this.signUpData.password !== this.confirmPassword) {
+      form.control.markAllAsTouched();
       return;
     }
 
@@ -179,5 +186,9 @@ export class MainPage implements OnInit {
     setTimeout(() => {
       this.toastVisible = false;
     }, 2500);
+  }
+
+  get greeting(): string {
+    return getGreeting();
   }
 } 

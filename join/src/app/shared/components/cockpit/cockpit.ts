@@ -19,6 +19,7 @@ import { AsyncPipe } from '@angular/common';
  */
 export class Cockpit {
   authService = inject(AuthService);
+  authLoading$ = this.authService.authLoading$;
   user$ = this.authService.user$;
   isDesktop: boolean = window.innerWidth >= 1025;
 

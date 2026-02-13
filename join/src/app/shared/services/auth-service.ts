@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { Auth, authState, createUserWithEmailAndPassword, signInAnonymously, signInWithEmailAndPassword, signOut, updateProfile, UserCredential } from '@angular/fire/auth';
-import { from, Observable } from 'rxjs';
+import { BehaviorSubject, from, Observable, tap } from 'rxjs';
 import { FirebaseService } from './firebase-service';
 import { capitalizeFullname, setUserColor } from '../utilities/utils';
 
@@ -10,7 +10,13 @@ import { capitalizeFullname, setUserColor } from '../utilities/utils';
 export class AuthService {
   firebaseAuth = inject(Auth);
   contactService = inject(FirebaseService);
-  user$ = authState(this.firebaseAuth);
+
+  private authLoadingSubject = new BehaviorSubject<boolean>(true);
+  authLoading$ = this.authLoadingSubject.asObservable();
+  
+  user$ = authState(this.firebaseAuth).pipe(
+    tap(() => this.authLoadingSubject.next(false))
+  );
 
   logIn(email: string, password: string): Observable<UserCredential> {
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password);

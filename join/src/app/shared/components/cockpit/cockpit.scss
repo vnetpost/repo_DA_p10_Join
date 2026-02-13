@@ -240,3 +240,28 @@ nav {
     }
   }
 }
+
+.cockpit-loading{
+  @include styles.setFlex();
+  width: 100%;
+}
+
+.loading-spinner {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  margin-top: 12px;
+  border-top: 3px solid white;
+  border-right: 3px solid transparent;
+  border-radius: 50%;
+  animation-name: rotation;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+
+  @include styles.up-xxl{
+    width: 36px;
+    height: 36px;
+    margin-top: 16px;
+  }
+}

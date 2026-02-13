@@ -136,7 +136,7 @@
     @include styles.setFlex($d: column, $jc: flex-start, $gap: 20px);
     width: 90dvw;
     max-width: 500px;
-    padding: 16px 16px;
+    padding: 16px 16px 26px;
     border-radius: 20px;
     background-color: white;
     box-shadow: 0px 0px 14px 3px #0000000A;
@@ -201,10 +201,6 @@
   @include styles.up-xxl{
     grid-area: 2/1/3/3;
   }
-
-  .log-in-form-wrapper{
-      padding-bottom: 30px;
-    }
 }
 
 .log-in-sign-up-form{
@@ -215,11 +211,10 @@
   }
 
   .input-box{
-    @include styles.setGrid($rows: 1fr, $columns: 1fr 40px, $jc: center, $ai: center);
-    margin-bottom: 8px;
+    @include styles.setGrid($rows: auto auto, $columns: 1fr 40px, $jc: center, $ai: center);
 
     @include styles.up-xxl{
-      margin-bottom: 26px;
+      margin-bottom: 8px;
     }
 
     input{
@@ -269,24 +264,29 @@
       .visibility-btn{
         @include styles.setFlex($jc: flex-start);
         background-color: transparent;
+        padding: 0;
         padding-left: 0;
       }
     }
 
-    .form-error{
-      display: block;
-      margin-top: 2px;
-      color: styles.$red-error;
+    .input-error-wrapper{
+      grid-area: 2/1/3/3;
+      min-height: 20px;
+      margin-bottom: 4px;
+
+      .form-error{
+        display: block;
+        color: styles.$red-error;
+      }
     }
   }
 
   .form-actions{
     @include styles.setFlex($d: column, $gap: 12px);
-    margin-top: 16px;
 
     @include styles.up-xxl{
       @include styles.setFlex($gap: 28px);
-      margin-top: 50px;
+      margin-top: 16px;
       font-size: 20px;
     }
 
@@ -303,12 +303,6 @@
       @include styles.up-xxl{
         width: fit-content;
         padding: 12px 30px;
-      }
-
-      &:disabled{
-        border: 1px solid styles.$gray-dark;
-        filter: opacity(0.5);
-        pointer-events: none;
       }
     }
   }
@@ -364,6 +358,10 @@
     text-align: center;
     color: styles.$red-error;
   }
+}
+
+.error-wrapper{
+  min-height: 20px;
 }
 
 footer{
@@ -436,11 +434,5 @@ footer{
 
   @include styles.up-xxl{
     display: none;
-  }
-
-  .good-day-message{
-    font-size: 36px;
-    font-weight: 600;
-    color: styles.$gray-dark;
   }
 }
