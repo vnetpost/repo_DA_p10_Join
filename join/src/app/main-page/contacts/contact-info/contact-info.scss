@@ -216,9 +216,13 @@
 
   &__fab {
     @include styles.setFlex($display: none);
+    // position: static;
     position: fixed;
+    position: absolute;
     right: clamp(1.6rem, 4vw, 2.4rem);
-    bottom: clamp(9rem, 4vw, 10rem);
+    bottom: clamp(1.6rem, 4vw, 2.4rem);
+    // bottom: clamp(9rem, 4vw, 10rem);
+
     width: clamp(5rem, 12vw, 6rem);
     height: clamp(5rem, 12vw, 6rem);
     border: none;
