@@ -104,14 +104,18 @@ button {
 
   .legal-page-article {
     width: 90%;
-    padding: 4rem 0 12rem;
+    padding: 2rem 0 12rem;
+
+    @include styles.up-xxl{
+      padding: 4rem 0 12rem;
+    }
 
     .heading {
       @include styles.setFlex($jc: space-between);
       padding-bottom: 16px;
 
       h1 {
-        font-size: 36px;
+        font-size: 32px;
   
         @include styles.up-xxl {
           font-size: 50px;

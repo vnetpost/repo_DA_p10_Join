@@ -156,10 +156,10 @@
       }
 
       h1{
-        font-size: 36px;
+        font-size: 32px;
 
         @include styles.up-xxl{
-          font-size: 60px;
+          font-size: 50px;
         }
       }
   
@@ -186,8 +186,8 @@
         z-index: 2;
 
         img{
-          width: 24px;
-          height: 24px;
+          width: 32px;
+          height: 32px;
         }
       }
 
