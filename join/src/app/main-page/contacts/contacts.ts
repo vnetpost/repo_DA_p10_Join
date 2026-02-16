@@ -23,11 +23,14 @@ export class Contacts implements DoCheck {
   private readonly mobileMaxWidth = 768;
   private lastContactsVersion = 0;
 
-  isMobile = false;
-  isDetailOpen = false;
+  isMobile: boolean = false;
+  isDetailOpen: boolean = false;
   activeContactID: string | null = null;
   activeContact: Contact | null = null;
-  toastVisible = false;
+  toastVisible: boolean = false;
+  showDeleteConfirm: boolean = false;
+  contactToDelete: Contact | null = null;
+
 
   @ViewChild(ContactDialog)
   dialog!: ContactDialog;
@@ -165,17 +168,42 @@ export class Contacts implements DoCheck {
     this.activeContactID = contact.id ?? null;
   }
 
-  /**
-   * Deletes a contact and clears the active selection.
-   */
-  onDelete(contact: Contact): void {
+  requestDelete(contact: Contact): void {
     if (!this.canDeleteContact(contact)) return;
-    if (!contact.id) return;
-    this.firebaseService.deleteDocument('contacts', contact.id);
+
+    this.contactToDelete = contact;
+    this.showDeleteConfirm = true;
+  }
+
+  confirmDelete(): void {
+    if (!this.contactToDelete?.id) return;
+
+    this.firebaseService.deleteDocument('contacts', this.contactToDelete.id);
+
     this.activeContact = null;
     this.activeContactID = null;
     this.isDetailOpen = false;
+
+    this.contactToDelete = null;
+    this.showDeleteConfirm = false;
   }
+
+  cancelDelete(): void {
+    this.contactToDelete = null;
+    this.showDeleteConfirm = false;
+  }
+
+  /**
+   * Deletes a contact and clears the active selection.
+   */
+  // onDelete(contact: Contact): void {
+  //   if (!this.canDeleteContact(contact)) return;
+  //   if (!contact.id) return;
+  //   this.firebaseService.deleteDocument('contacts', contact.id);
+  //   this.activeContact = null;
+  //   this.activeContactID = null;
+  //   this.isDetailOpen = false;
+  // }
 
   /**
    * Returns true when the selected contact is not the logged-in user.
@@ -204,7 +232,7 @@ export class Contacts implements DoCheck {
     this.toastVisible = true;
 
     setTimeout(() => {
-      this.toastVisible = false;
-    }, 1200);
+      this.toastVisible = false; 
+    }, 2000);
   }
 }

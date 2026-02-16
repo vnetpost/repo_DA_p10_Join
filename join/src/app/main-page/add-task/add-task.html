@@ -3,7 +3,7 @@
     <h1>{{ formTitle }}</h1>
   </header>
 
-  <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()">
+  <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()" (focusin)="markAsEdited()">
     <div class="add-task__content">
       <div class="add-task__column">
         <app-task-form-field
@@ -95,13 +95,38 @@
   </form>
 </section>
 
-<div class="contacts-toast">
+<div class="toast-wrapper">
   <p
-    class="contacts-toast__message"
-    [class.contacts-toast__message--visible]="toastVisible"
+    class="toast"
+    [class.toast--visible]="toastVisible"
     role="status"
     aria-live="polite"
   >
-    {{ toastMessage }}
+    @if(this.isEditMode){
+      Task updated
+    } @else {
+      Task created
+    }
   </p>
 </div>
+
+@if(showCloseConfirm){
+  <div class="confirm-backdrop">
+    <div class="confirm-box" role="dialog" aria-modal="true">
+      <p>
+        <span class="delete-highlight">Close </span>
+        @if (taskToEdit?.title) {
+          "{{ taskToEdit?.title }}?"
+        } @else {
+          this task?
+        }
+        Your changes will be lost.
+      </p>
+
+      <div class="confirm-actions">
+        <button class="button button--primary delete-btn" type="button" (click)="confirmClose()">Close</button>
+        <button class="button button--secondary" type="button" (click)="cancelClose()">Cancel</button>
+      </div>
+    </div>
+  </div>
+}

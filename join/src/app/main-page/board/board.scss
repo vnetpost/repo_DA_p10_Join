@@ -7,7 +7,7 @@ section {
   .content-wrapper {
     width: 93%;
     height: 100%;
-    padding: 6rem 0 12rem;
+    padding: 2rem 0 12rem;
 
     @include styles.up-xxl {
       width: 90%;
@@ -20,7 +20,7 @@ section {
 }
 
 .title-section {
-  @include styles.setGrid($rows: auto auto, $columns: 1fr 1fr, $ai: center, $row-gap: 35px);
+  @include styles.setGrid($rows: auto auto, $columns: 1fr 1fr, $ai: center, $row-gap: 20px);
   margin-bottom: 20px;
 
   @include styles.up-xxl {
@@ -30,7 +30,7 @@ section {
 
   h1 {
     grid-area: 1/1/2/2;
-    font-size: 40px;
+    font-size: 32px;
 
     @include styles.up-xxl {
       grid-area: 1/1/2/2;

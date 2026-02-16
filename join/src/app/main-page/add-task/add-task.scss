@@ -26,7 +26,7 @@
   width: 100%;
 
   h1 {
-    @include styles.setFont($size: clamp(2em, 3.5vw, 3.5em), $weight: 700, $color: styles.$black);
+    @include styles.setFont($size: clamp(2em, 3.5vw, 50px), $weight: 700, $color: styles.$black);
   }
 }
 
@@ -112,39 +112,6 @@
 
 .required {
   color: styles.$red-error;
-}
-
-.contacts-toast {
-  position: fixed;
-  inset: 0;
-  @include styles.setFlex();
-  background-color: #00000077;
-  z-index: 30;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-}
-
-.contacts-toast__message {
-  padding: 1.6rem 2.4rem;
-  border-radius: 0.8rem;
-  background-color: styles.$gray-dark;
-  color: #ffffff;
-  box-shadow: 0 0.8rem 2.4rem #0000004e;
-  opacity: 0;
-  transform: translateY(0.8rem);
-  transition:
-    transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.contacts-toast__message--visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.contacts-toast:has(.contacts-toast__message--visible) {
-  opacity: 1;
 }
 
 @include styles.down-xxl {

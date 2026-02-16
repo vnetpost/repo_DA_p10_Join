@@ -24,9 +24,11 @@ export class ContactDialog {
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
   userColor: string | null = null;
+  showDeleteConfirm: boolean = false;
 
   @Output() saveContact = new EventEmitter<ContactFormData>();
-  @Output() deleteContact = new EventEmitter<string>();
+  // @Output() deleteContact = new EventEmitter<string>();
+  @Output() requestDelete = new EventEmitter<void>();
 
   contactData: ContactFormData = {
     name: '',
@@ -132,10 +134,20 @@ export class ContactDialog {
    * @returns void
    */
   onDeleteClick(): void {
-    if (!this.canDelete) return;
-    this.deleteContact.emit();
-    this.closeDialog();
+    // this.showDeleteConfirm = true;
+    this.requestDelete.emit();
   }
+
+  // confirmDelete(): void {
+  //   if (!this.canDelete) return;
+  //   this.showDeleteConfirm = false;
+  //   this.deleteContact.emit();
+  //   this.closeDialog();
+  // }
+
+  // cancelDelete(): void {
+  //   this.showDeleteConfirm = false;
+  // }
 
   // #region Closing dialog
 

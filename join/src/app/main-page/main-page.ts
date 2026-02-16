@@ -175,10 +175,10 @@ export class MainPage implements OnInit {
   }
 
   showToast(): void {
-    this.toastVisible = true;
+    this.toastVisible = true; 
 
     setTimeout(() => {
-      this.toastVisible = false;
+      this.toastVisible = false; 
     }, 2500);
   }
 

@@ -6,7 +6,7 @@ section{
 
   .content-wrapper{
     width: 93%;
-    padding: 3rem 0 1rem;
+    padding: 2rem 0 1rem;
 
     @include styles.up-xxl{
       width: 90%;
@@ -25,7 +25,7 @@ section{
   }
 
   h1{
-    font-size: 40px;
+    font-size: 32px;
   
     @include styles.up-xxl{
       font-size: 50px;

@@ -70,7 +70,6 @@
       ></app-task-list>
     </div>
 
-    <!-- <button (click)="addTestTask('to-do')">Add Test Task</button><br> -->
     <app-task-dialog
       #taskDialog
       [task]="selectedTask"
@@ -91,7 +90,7 @@
             type="button"
             class="add-task-overlay__close"
             aria-label="Close add task overlay"
-            (click)="closeAddTaskOverlay()"
+            (click)="onCloseAddTaskClick()"
           >
             <img
               class="add-task-overlay__close-icon"
@@ -106,9 +105,31 @@
             [taskToEdit]="taskToEdit"
             [initialStatus]="addTaskStatus"
             (closeDialogRequested)="closeAddTaskOverlay()"
+            (dirtyChange)="onAddTaskDirtyChange($event)"
           ></app-add-task>
         </div>
       </div>
     }
   </div>
 </section>
+
+@if(showCloseConfirm){
+  <div class="confirm-backdrop">
+    <div class="confirm-box" role="dialog" aria-modal="true">
+      <p>
+        <span class="delete-highlight">Close </span>
+        @if (taskToEdit?.title) {
+          "{{ taskToEdit?.title }}?"
+        } @else {
+          this task?
+        }
+        Your changes will be lost.
+      </p>
+
+      <div class="confirm-actions">
+        <button class="button button--primary delete-btn" type="button" (click)="confirmClose()">Close</button>
+        <button class="button button--secondary" type="button" (click)="cancelClose()">Cancel</button>
+      </div>
+    </div>
+  </div>
+}
