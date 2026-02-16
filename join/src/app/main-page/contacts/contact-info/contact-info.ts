@@ -96,24 +96,24 @@ export class ContactInfo implements OnChanges {
   /**
    * Confirms deletion and emits the delete action.
    */
-  confirmDelete(): void {
-    if (!this.canDelete) return;
-    this.deleteConfirmVisible = false;
-    this.deleteContact.emit();
-  }
+  // confirmDelete(): void {
+  //   if (!this.canDelete) return;
+  //   this.deleteConfirmVisible = false;
+  //   this.deleteContact.emit();
+  // }
 
-  @HostListener('document:keydown.escape')
-  /**
-   * Closes the action menu when Escape is pressed.
-   */
-  onEscape(): void {
-    if (this.deleteConfirmVisible) {
-      this.cancelDeleteConfirmation();
-      return;
-    }
-    if (!this.fabMenuOpen) return;
-    this.closeFabMenu();
-  }
+  // @HostListener('document:keydown.escape')
+  // /**
+  //  * Closes the action menu when Escape is pressed.
+  //  */
+  // onEscape(): void {
+  //   if (this.deleteConfirmVisible) {
+  //     this.cancelDeleteConfirmation();
+  //     return;
+  //   }
+  //   if (!this.fabMenuOpen) return;
+  //   this.closeFabMenu();
+  // }
 
   @HostListener('window:resize')
   onResize(): void {
