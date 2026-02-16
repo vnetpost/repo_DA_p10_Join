@@ -364,6 +364,11 @@
   min-height: 20px;
 }
 
+.login-error{
+  color: styles.$red-error;
+  text-align: center;
+}
+
 footer{
   grid-area: 4/1/5/2;
   @include styles.setFlex($gap: 20px);
@@ -388,37 +393,6 @@ footer{
       font-weight: 600;
     }
   }
-}
-
-.sign-up-toast {
-  position: fixed;
-  inset: 0;
-  @include styles.setFlex();
-  z-index: 8;
-  pointer-events: none;
-}
-
-.toast-message {
-  padding: 16px 24px;
-  border-radius: 8px;
-  background-color: styles.$gray-dark;
-  color: #ffffff;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-  opacity: 0;
-  transition:
-    transform 0.3s ease,
-    opacity 0.3s ease;
-  transform: translateY(100%);
-}
-
-.toast-message--visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.login-error{
-  color: styles.$red-error;
-  text-align: center;
 }
 
 .mobile-greeting-overlay{

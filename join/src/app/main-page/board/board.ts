@@ -23,11 +23,13 @@ import { AddTask } from '../add-task/add-task';
 export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
-  isAddTaskOverlayOpen = false;
+  isAddTaskOverlayOpen: boolean = false;
   taskToEdit: Task | null = null;
   addTaskStatus: Task['status'] = 'to-do';
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
+  showCloseConfirm: boolean = false;
+  isAddTaskDirty: boolean = false;
 
   /**
    * Performs a search based on the current search term.
@@ -85,6 +87,52 @@ export class Board {
     this.isAddTaskOverlayOpen = true;
   }
 
+  onAddTaskDirtyChange(isDirty: boolean): void {
+    this.isAddTaskDirty = isDirty;
+  }
+
+  confirmClose() {
+    this.showCloseConfirm = false;
+    this.closeAddTaskOverlay();
+  }
+
+  cancelClose(): void {
+    this.showCloseConfirm = false;
+  }
+
+  onCloseAddTaskClick(): void {
+    if (!this.isAddTaskDirty) {
+      this.closeAddTaskOverlay();
+      return;
+    }
+
+    this.showCloseConfirm = true;
+  }
+  
+  onAddTaskOverlayMouseDown(event: MouseEvent): void {
+    if (event.target !== event.currentTarget) return;
+
+    if (!this.isAddTaskDirty) {
+      this.closeAddTaskOverlay();
+      return;
+    }
+
+    this.showCloseConfirm = true;
+  }
+  
+  @HostListener('document:keydown.escape')
+  onEscape(): void {
+    if (!this.isAddTaskOverlayOpen) return;
+    if (this.showCloseConfirm) return;
+
+    if (!this.isAddTaskDirty) {
+      this.closeAddTaskOverlay();
+      return;
+    }
+
+    this.showCloseConfirm = true;
+  }
+
   /**
    * Closes the add-task overlay.
    *
@@ -95,19 +143,10 @@ export class Board {
     this.isAddTaskOverlayOpen = false;
     this.taskToEdit = null;
     this.addTaskStatus = 'to-do';
-
+    this.isAddTaskDirty = false;
+  
     if (editedTask?.id) {
       this.openTask(this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask);
     }
-  }
-
-  onAddTaskOverlayMouseDown(event: MouseEvent): void {
-    if (event.target !== event.currentTarget) return;
-    this.closeAddTaskOverlay();
-  }
-
-  @HostListener('document:keydown.escape')
-  onEscape(): void {
-    if (this.isAddTaskOverlayOpen) this.closeAddTaskOverlay();
   }
 }

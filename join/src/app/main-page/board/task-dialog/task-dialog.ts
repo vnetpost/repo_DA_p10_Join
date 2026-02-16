@@ -27,7 +27,7 @@ export class TaskDialog {
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
-  showDeleteConfirm = false;
+  showDeleteConfirm: boolean = false;
 
   /**
    * Opens the task dialog.

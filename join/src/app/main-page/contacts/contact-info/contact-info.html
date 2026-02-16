@@ -35,7 +35,7 @@
               <span>Edit</span>
             </button>
             @if (canDelete) {
-              <button class="contact-info__action" type="button" (click)="requestDeleteConfirmation()">
+              <button class="contact-info__action" type="button" (click)="requestDelete.emit()">
                 <img
                   class="contact-info__action-icon"
                   src="assets/img/icons/buttons/delete.svg"
@@ -105,7 +105,7 @@
             class="contact-info__fab-action"
             type="button"
             role="menuitem"
-            (click)="handleFabDelete()"
+            (click)="requestDelete.emit()"
           >
             <img
               class="contact-info__fab-action-icon"
@@ -118,7 +118,7 @@
         }
       </div>
     }
-    @if (deleteConfirmVisible) {
+    <!-- @if (deleteConfirmVisible) {
       <div class="contact-info__delete-backdrop" (click)="cancelDeleteConfirmation()"></div>
       <div class="contact-info__delete-toast" role="alertdialog" aria-modal="true" aria-live="assertive">
         <p class="contact-info__delete-text">Are you sure you want to delete this contact?</p>
@@ -131,6 +131,19 @@
           </button>
         </div>
       </div>
-    }
+    }  -->
   }
 </section>
+
+<!-- @if(showDeleteConfirm){
+  <div class="confirm-backdrop">
+    <div class="confirm-box" role="dialog" aria-modal="true">
+      <p><span class="delete-highlight">Delete </span>"{{ activeContact?.name }}"?</p>
+
+      <div class="confirm-actions">
+        <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
+        <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
+      </div>
+    </div>
+  </div> 
+} -->

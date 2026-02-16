@@ -21,14 +21,15 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
  */
 export class ContactInfo implements OnChanges {
   @Input() activeContact: Contact | null = null;
-  @Input() canDelete = true;
+  @Input() canDelete: boolean = true;
   @Output() back = new EventEmitter<void>();
   @Output() editContact = new EventEmitter<void>();
-  @Output() deleteContact = new EventEmitter<void>();
+  // @Output() deleteContact = new EventEmitter<void>();
+  @Output() requestDelete = new EventEmitter<void>();
 
-  fabMenuOpen = false;
-  profileAnimating = false;
-  deleteConfirmVisible = false;
+  fabMenuOpen: boolean = false;
+  profileAnimating: boolean = false;
+  showDeleteConfirm: boolean = false;
 
   readonly getTwoInitials = getTwoInitials;
 
@@ -70,53 +71,41 @@ export class ContactInfo implements OnChanges {
    * Opens a small confirmation toast before deleting.
    */
   handleFabDelete(): void {
-    this.requestDeleteConfirmation();
+    // this.requestDeleteConfirmation();
+    this.requestDelete.emit();
   }
 
   /**
    * Shows the delete confirmation toast.
    */
-  requestDeleteConfirmation(): void {
-    if (!this.canDelete) return;
-    this.deleteConfirmVisible = true;
-    this.closeFabMenu();
-  }
+  // requestDeleteConfirmation(): void {
+  //   if (!this.canDelete) return;
+  //   this.showDeleteConfirm = true;
+  //   this.closeFabMenu();
+  // }
 
   /**
    * Cancels the delete confirmation.
    */
-  cancelDeleteConfirmation(): void {
-    this.deleteConfirmVisible = false;
-  }
+  // cancelDelete(): void {
+  //   this.showDeleteConfirm = false;
+  // }
 
   /**
    * Confirms deletion and emits the delete action.
    */
-  confirmDelete(): void {
-    if (!this.canDelete) return;
-    this.deleteConfirmVisible = false;
-    this.deleteContact.emit();
-  }
-
-  @HostListener('document:keydown.escape')
-  /**
-   * Closes the action menu when Escape is pressed.
-   */
-  onEscape(): void {
-    if (this.deleteConfirmVisible) {
-      this.cancelDeleteConfirmation();
-      return;
-    }
-    if (!this.fabMenuOpen) return;
-    this.closeFabMenu();
-  }
+  // confirmDelete(): void {
+  //   if (!this.canDelete) return;
+  //   this.showDeleteConfirm = false;
+  //   this.deleteContact.emit();
+  // }
 
   /**
    * Triggers the profile animation when the active contact changes.
    */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['activeContact'] || !this.activeContact) return;
-    this.deleteConfirmVisible = false;
+    this.showDeleteConfirm = false;
     this.profileAnimating = false;
     setTimeout(() => {
       this.profileAnimating = true;

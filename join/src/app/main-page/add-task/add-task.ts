@@ -54,6 +54,7 @@ export class AddTask implements OnChanges, OnDestroy {
   @Input() initialStatus: Task['status'] = 'to-do';
   /** Requests closing the overlay once submit feedback has finished. */
   @Output() closeDialogRequested = new EventEmitter<void>();
+  @Output() dirtyChange = new EventEmitter<boolean>();
   // #endregion
 
   // #region Constants
@@ -61,6 +62,8 @@ export class AddTask implements OnChanges, OnDestroy {
   readonly taskTitleMinLength = 3;
   readonly taskTitleMaxLength = 100;
   readonly taskTitleMinLetters = 3;
+  showCloseConfirm: boolean = false;
+  hasUserEdited: boolean = false;
   // #endregion
 
   // #region Form State
@@ -109,11 +112,6 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Returns the submit button label for the active form mode. */
   get submitButtonLabel(): string {
     return this.isEditMode ? 'Save' : 'Create Task';
-  }
-
-  /** Returns toast text matching create or update action. */
-  get toastMessage(): string {
-    return this.isEditMode ? 'Task updated' : 'Task created';
   }
 
   /** Ensures the subtask list is valid for submit. */
@@ -225,6 +223,7 @@ export class AddTask implements OnChanges, OnDestroy {
     }
 
     this.showToast();
+    this.resetDirtyState();
   }
 
   /** Resets all form fields and touch states to their defaults. */
@@ -261,6 +260,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
+    this.resetDirtyState();
   }
 
   /**
@@ -383,7 +383,30 @@ export class AddTask implements OnChanges, OnDestroy {
         return;
       }
       this.router.navigateByUrl('/board');
-    }, 1200);
+    }, 2000);
   }
   // #endregion
+
+  markAsEdited(): void {
+    if (this.hasUserEdited) return;
+    this.hasUserEdited = true;
+    this.dirtyChange.emit(true);
+  }
+
+  resetDirtyState(): void {
+    this.hasUserEdited = false;
+    this.dirtyChange.emit(false);
+  }
+
+  onCloseAddTaskClick(): void {
+    this.showCloseConfirm = true;
+  }
+
+  confirmClose() {
+    this.showCloseConfirm = false;
+  }
+
+  cancelClose(): void {
+    this.showCloseConfirm = false;
+  }
 }

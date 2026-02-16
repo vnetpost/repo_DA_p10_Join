@@ -16,22 +16,55 @@
     [canDelete]="canDeleteContact(activeContact)"
     (back)="closeContactInfo()"
     (editContact)="openEditDialog(activeContact!)"
-    (deleteContact)="onDelete(activeContact!)"
+    (requestDelete)="requestDelete(activeContact!)"
   />
 </div>
 <app-contact-dialog
   [canDelete]="canDeleteContact(activeContact)"
   (saveContact)="onSave($event)"
-  (deleteContact)="onDelete(activeContact!)"
+  (requestDelete)="requestDelete(activeContact!)"
 />
 
-<div class="contacts-toast">
+<div class="toast-wrapper">
   <p
-    class="contacts-toast__message"
-    [class.contacts-toast__message--visible]="toastVisible"
+    class="toast"
+    [class.toast--visible]="toastVisible"
     role="status"
     aria-live="polite"
   >
-    Contact successfully created
+    Contact successfully created 
   </p>
 </div>
+
+@if(showDeleteConfirm){
+  <dialog class="confirm-dialog">
+    <div class="dialog-content">
+
+      <!-- <div class="confirm-backdrop"> -->
+        <div class="confirm-box" role="dialog" aria-modal="true">
+          <p><span class="delete-highlight">Delete </span>"{{ contactToDelete?.name }}"?</p>
+
+          <div class="confirm-actions">
+            <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
+            <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
+          </div>
+        </div>
+      <!-- </div>  -->
+
+    </div>
+  </dialog>
+
+
+
+<!-- 
+  <div class="confirm-backdrop">
+    <div class="confirm-box" role="dialog" aria-modal="true">
+      <p><span class="delete-highlight">Delete </span>"{{ contactToDelete?.name }}"?</p>
+
+      <div class="confirm-actions">
+        <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
+        <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
+      </div>
+    </div>
+  </div>  -->
+}

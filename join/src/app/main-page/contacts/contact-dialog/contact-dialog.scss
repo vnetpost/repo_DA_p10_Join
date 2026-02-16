@@ -22,7 +22,6 @@ dialog {
 
   .dialog-content {
     @include styles.setGrid($rows: 38% 50px 1fr, $columns: 1fr);
-    // @include styles.setGrid($rows: auto 50px auto, $columns: 1fr);
     width: 85dvw;
     max-width: 350px;
     height: 540px;
