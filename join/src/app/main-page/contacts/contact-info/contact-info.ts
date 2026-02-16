@@ -26,6 +26,8 @@ export class ContactInfo implements OnChanges {
   @Output() editContact = new EventEmitter<void>();
   @Output() deleteContact = new EventEmitter<void>();
 
+  readonly downLgBreakpoint = 768;
+  isDownLg = this.isDownLgViewport();
   fabMenuOpen = false;
   profileAnimating = false;
   deleteConfirmVisible = false;
@@ -111,6 +113,12 @@ export class ContactInfo implements OnChanges {
     this.closeFabMenu();
   }
 
+  @HostListener('window:resize')
+  onResize(): void {
+    this.isDownLg = this.isDownLgViewport();
+    if (!this.isDownLg) this.closeFabMenu();
+  }
+
   /**
    * Triggers the profile animation when the active contact changes.
    */
@@ -121,5 +129,9 @@ export class ContactInfo implements OnChanges {
     setTimeout(() => {
       this.profileAnimating = true;
     }, 0);
+  }
+
+  private isDownLgViewport(): boolean {
+    return window.innerWidth <= this.downLgBreakpoint;
   }
 }

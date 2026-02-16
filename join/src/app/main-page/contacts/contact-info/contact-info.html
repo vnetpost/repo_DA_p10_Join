@@ -68,55 +68,57 @@
         </div>
       </div>
     </div>
-    <button
-      class="contact-info__fab"
-      type="button"
-      aria-label="Contact options"
-      aria-controls="contact-info-fab-menu"
-      [attr.aria-expanded]="fabMenuOpen"
-      (click)="toggleFabMenu()"
-    >
-      <img src="assets/img/icons/buttons/contact-options.svg" alt="" aria-hidden="true" />
-    </button>
-    @if (fabMenuOpen) {
-      <div class="contact-info__fab-overlay" (click)="closeFabMenu()"></div>
-      <div
-        id="contact-info-fab-menu"
-        class="contact-info__fab-menu"
-        role="menu"
-        (keydown.escape)="closeFabMenu()"
+    @if (isDownLg) {
+      <button
+        class="contact-info__fab"
+        type="button"
+        aria-label="Contact options"
+        aria-controls="contact-info-fab-menu"
+        [attr.aria-expanded]="fabMenuOpen"
+        (click)="toggleFabMenu()"
       >
-        <button
-          class="contact-info__fab-action"
-          type="button"
-          role="menuitem"
-          (click)="handleFabEdit()"
+        <img src="assets/img/icons/buttons/contact-options.svg" alt="" aria-hidden="true" />
+      </button>
+      @if (fabMenuOpen) {
+        <div class="contact-info__fab-overlay" (click)="closeFabMenu()"></div>
+        <div
+          id="contact-info-fab-menu"
+          class="contact-info__fab-menu"
+          role="menu"
+          (keydown.escape)="closeFabMenu()"
         >
-          <img
-            class="contact-info__fab-action-icon"
-            src="assets/img/icons/buttons/edit.svg"
-            alt=""
-            aria-hidden="true"
-          />
-          <span>Edit</span>
-        </button>
-        @if (canDelete) {
           <button
             class="contact-info__fab-action"
             type="button"
             role="menuitem"
-            (click)="handleFabDelete()"
+            (click)="handleFabEdit()"
           >
             <img
               class="contact-info__fab-action-icon"
-              src="assets/img/icons/buttons/delete.svg"
+              src="assets/img/icons/buttons/edit.svg"
               alt=""
               aria-hidden="true"
             />
-            <span>Delete</span>
+            <span>Edit</span>
           </button>
-        }
-      </div>
+          @if (canDelete) {
+            <button
+              class="contact-info__fab-action"
+              type="button"
+              role="menuitem"
+              (click)="handleFabDelete()"
+            >
+              <img
+                class="contact-info__fab-action-icon"
+                src="assets/img/icons/buttons/delete.svg"
+                alt=""
+                aria-hidden="true"
+              />
+              <span>Delete</span>
+            </button>
+          }
+        </div>
+      }
     }
     @if (deleteConfirmVisible) {
       <div class="contact-info__delete-backdrop" (click)="cancelDeleteConfirmation()"></div>
