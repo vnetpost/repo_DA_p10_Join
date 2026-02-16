@@ -23,6 +23,7 @@ export class SubtaskComposer {
 
   subtaskTitle = '';
   editingIndex: number | null = null;
+  showSubtaskDuplicateError = false;
 
   /** Indicates whether the subtask input contains non-whitespace text. */
   get hasSubtaskInput(): boolean {
@@ -37,18 +38,27 @@ export class SubtaskComposer {
 
   /**
    * Adds a new subtask or confirms edits for an existing one.
-   * Ignores duplicates in create mode and invalid input.
+   * Ignores duplicates and invalid input.
    */
   addSubtask(): void {
     const newTitle = this.subtaskTitle.trim();
-    if (!newTitle) return;
-    if (!this.isSubtaskTitleValid(newTitle)) return;
-    if (
-      this.editingIndex === null &&
-      this.subtasks.some((subtask) => subtask.title.trim().toLowerCase() === newTitle.toLowerCase())
-    ) {
+    if (!newTitle) {
+      this.showSubtaskDuplicateError = false;
       return;
     }
+    if (!this.isSubtaskTitleValid(newTitle)) {
+      this.showSubtaskDuplicateError = false;
+      return;
+    }
+    const hasDuplicate = this.subtasks.some((subtask, index) => {
+      if (this.editingIndex !== null && this.editingIndex === index) return false;
+      return subtask.title.trim().toLowerCase() === newTitle.toLowerCase();
+    });
+    if (hasDuplicate) {
+      this.showSubtaskDuplicateError = true;
+      return;
+    }
+    this.showSubtaskDuplicateError = false;
 
     if (this.editingIndex !== null) {
       const updated = this.subtasks.map((subtask, index) =>
@@ -72,9 +82,7 @@ export class SubtaskComposer {
    * @param event Keyboard-triggered submit event.
    */
   handleEnter(event: Event): void {
-    if (!this.hasSubtaskInput) {
-      return;
-    }
+    if (!this.hasSubtaskInput) return;
     event.preventDefault();
     this.addSubtask();
   }
@@ -83,6 +91,7 @@ export class SubtaskComposer {
   clearSubtaskTitle(): void {
     this.subtaskTitle = '';
     this.editingIndex = null;
+    this.showSubtaskDuplicateError = false;
   }
 
   /**
@@ -90,10 +99,20 @@ export class SubtaskComposer {
    * @param index Subtask index to edit.
    */
   startEditSubtask(index: number): void {
-    const subtask = this.subtasks[index];
-    if (!subtask) return;
-    this.subtaskTitle = subtask.title;
+    const subtaskToEdit = this.subtasks[index];
+    if (!subtaskToEdit) return;
+    this.subtaskTitle = subtaskToEdit.title;
     this.editingIndex = index;
+    this.showSubtaskDuplicateError = false;
+  }
+
+  /**
+   * Updates the input model and resets duplicate-error feedback while typing.
+   * @param value Current input value.
+   */
+  onSubtaskTitleInput(value: string): void {
+    this.subtaskTitle = value;
+    this.showSubtaskDuplicateError = false;
   }
 
   /**
@@ -107,9 +126,7 @@ export class SubtaskComposer {
     if (this.editingIndex === index) {
       this.editingIndex = null;
       this.subtaskTitle = '';
-    } else if (this.editingIndex !== null && this.editingIndex > index) {
-      this.editingIndex -= 1;
-    }
+    } else if (this.editingIndex !== null && this.editingIndex > index) this.editingIndex -= 1;
   }
 
   /** Scrolls the newest subtask item into view after rendering. */
