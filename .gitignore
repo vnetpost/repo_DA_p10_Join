@@ -49,6 +49,7 @@ libpeerconnection.log
 .env.*
 !.env.example
 !.env.template
+environment.ts
 
 ############################################
 # Editor / IDE
@@ -76,5 +77,4 @@ connect.lock
 typings/
 __screenshots__/
 *.log
-src/app/app.config.ts
 

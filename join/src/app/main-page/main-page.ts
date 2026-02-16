@@ -114,8 +114,6 @@ export class MainPage implements OnInit {
         this.loginError = true;
       },
     });
-
-    console.log('Login:', this.logInData);
   }
 
   guestLogin(): void {
@@ -127,8 +125,6 @@ export class MainPage implements OnInit {
         console.error('Guest login failed', err);
       },
     });
-    
-    console.log('Guest Login');
   }
 
   handleLoginNavigation(): void {
@@ -176,8 +172,6 @@ export class MainPage implements OnInit {
         this.signUpError = true;
       },
     });
-
-    console.log('Sign up:', this.signUpData);
   }
 
   showToast(): void {
