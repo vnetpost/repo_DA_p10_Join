@@ -65,7 +65,7 @@ export class Header {
     this.menuOpen = false;
 
     this.authService.logout().subscribe(() => {
-      this.router.navigate(['/']);
+      this.router.navigateByUrl('/', { replaceUrl: true });
     });
   }
 

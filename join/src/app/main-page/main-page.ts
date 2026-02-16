@@ -133,10 +133,10 @@ export class MainPage implements OnInit {
 
       setTimeout(() => {
         this.showMobileGreeting = false;
-        this.router.navigate(['/summary']);
+        this.router.navigateByUrl('/summary', { replaceUrl: true });
       }, 2000);
     } else {
-      this.router.navigate(['/summary']);
+      this.router.navigateByUrl('/summary', { replaceUrl: true });
     }
   }
 
