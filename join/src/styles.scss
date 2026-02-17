@@ -316,14 +316,12 @@ button {
 // #endregion
 
 // #region Confirm Delete/Close Task
-
 .confirm-dialog {
   margin: auto;
   position: revert;
   border: none;
   border-radius: 24px;
   box-shadow: 0px 0px 4px 0px #0000001a;
-  z-index: 300;
 
   &.opened {
     border: none;
@@ -331,21 +329,33 @@ button {
     background: transparent;
 
     &::backdrop {
-      background: #b3b3b3;
+      background: #000000;
       opacity: 0.7;
     }
   }
 }
 
-
-.confirm-backdrop { 
+.confirm-backdrop {
   @include styles.setFlex();
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.65);
-  z-index: 300;
+  background: rgba(0, 0, 0, 0.65);
+  z-index: 50;
 }
 
+.confirm-box {
+  min-width: 250px;
+  max-width: 60dvw;
+  padding: 32px;
+  border-radius: 20px;
+  background: white;
+  word-break: break-word;
+  
+  @include styles.up-xxl{
+    min-width: 380px;
+    max-width: 40dvw;
+  }
+  
   p{
     font-weight: 500;
     
@@ -353,41 +363,27 @@ button {
       color: styles.$red-error;
     }
   }
-  
-  .confirm-box {
-    min-width: 250px;
-    max-width: 60dvw;
-    padding: 32px;
-    border-radius: 20px;
-    background: white;
-    word-break: break-word;
 
-    @include styles.up-xxl{
-      min-width: 380px;
-      max-width: 40dvw;
-    }
-  
-    .confirm-actions{
-      @include styles.setFlex($gap: 24px);
-      margin-top: 24px;
+  .confirm-actions{
+    @include styles.setFlex($gap: 24px);
+    margin-top: 24px;
 
-      .button{
-        @include styles.up-xxl{
-          padding-left: 24px;
-          padding-right: 24px;
-        }
+    .button{
+      @include styles.up-xxl{
+        padding-left: 24px;
+        padding-right: 24px;
       }
+    }
 
-      .delete-btn{
-        background-color: styles.$red-error;
+    .delete-btn{
+      background-color: styles.$red-error;
 
-        &:hover{
-          background-color: styles.$blue-sky;
-        }
+      &:hover{
+        background-color: styles.$blue-sky;
       }
     }
   }
-
+}
 // #endregion
 
 // #region Toasts

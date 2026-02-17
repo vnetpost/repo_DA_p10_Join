@@ -1,4 +1,4 @@
-import { Component, DoCheck, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
 import { ContactInfo } from './contact-info/contact-info';
 import { ContactDialog } from './contact-dialog/contact-dialog';
@@ -30,10 +30,9 @@ export class Contacts implements DoCheck {
   toastVisible: boolean = false;
   showDeleteConfirm: boolean = false;
   contactToDelete: Contact | null = null;
-
-
-  @ViewChild(ContactDialog)
-  dialog!: ContactDialog;
+  
+  @ViewChild(ContactDialog) dialog!: ContactDialog;
+  @ViewChild('confirmDialog') confirmDialog!: ElementRef<HTMLDialogElement>;
 
   constructor() {
     this.updateIsMobile();
@@ -172,7 +171,8 @@ export class Contacts implements DoCheck {
     if (!this.canDeleteContact(contact)) return;
 
     this.contactToDelete = contact;
-    this.showDeleteConfirm = true;
+    this.confirmDialog.nativeElement.showModal();
+    this.confirmDialog.nativeElement.classList.add('opened');
   }
 
   confirmDelete(): void {
@@ -183,27 +183,16 @@ export class Contacts implements DoCheck {
     this.activeContact = null;
     this.activeContactID = null;
     this.isDetailOpen = false;
-
     this.contactToDelete = null;
-    this.showDeleteConfirm = false;
+    this.confirmDialog.nativeElement.close();
+    this.confirmDialog.nativeElement.classList.remove('opened');
   }
 
   cancelDelete(): void {
     this.contactToDelete = null;
-    this.showDeleteConfirm = false;
+    this.confirmDialog.nativeElement.close();
+    this.confirmDialog.nativeElement.classList.remove('opened');
   }
-
-  /**
-   * Deletes a contact and clears the active selection.
-   */
-  // onDelete(contact: Contact): void {
-  //   if (!this.canDeleteContact(contact)) return;
-  //   if (!contact.id) return;
-  //   this.firebaseService.deleteDocument('contacts', contact.id);
-  //   this.activeContact = null;
-  //   this.activeContactID = null;
-  //   this.isDetailOpen = false;
-  // }
 
   /**
    * Returns true when the selected contact is not the logged-in user.
