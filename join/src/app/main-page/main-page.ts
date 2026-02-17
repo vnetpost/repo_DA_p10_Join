@@ -78,7 +78,6 @@ export class MainPage implements OnInit {
       this.logoMoving = true;
     }
 
-    history.replaceState({}, '', this.router.url);
     window.addEventListener('resize', () => this.checkScreen());
   }
 
