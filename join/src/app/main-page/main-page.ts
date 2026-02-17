@@ -219,47 +219,79 @@ export class MainPage implements OnInit {
   /**
    * Handles user sign-up.
    *
-   * Validates input, creates a new user account,
-   * and displays a success notification.
+   * Validates the sign-up form, creates a new user account,
+   * and triggers the corresponding success or error flow.
    *
    * @param form The sign-up form instance
    * @returns void
    */
   onSignUp(form: NgForm): void {
     if (this.isSigningUp) return;
-
-    if (form.invalid || this.signUpData.password !== this.confirmPassword) {
-      form.control.markAllAsTouched();
-      return;
-    }
+    if (this.isSignUpFormInvalid(form)) return;
 
     this.isSigningUp = true;
     this.signUpError = false;
 
-    this.authService.signUp(
-      this.signUpData.name,
-      this.signUpData.email,
-      this.signUpData.password
+    this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password
     ).subscribe({
       next: () => {
-        this.isSigningUp = false;
-
-        this.confirmPassword = '';
-        this.signUpData = {
-          name: '',
-          email: '',
-          password: '',
-        };
-
-        this.showSignUp = false;
-        this.showToast();
+        this.onSignUpSuccess();
       },
       error: (err) => {
-        console.error('Sign up failed', err);
-        this.isSigningUp = false;
-        this.signUpError = true;
+        this.onSignUpError(err);
       },
     });
+  }
+
+  /**
+   * Validates the sign-up form state.
+   *
+   * Marks all form fields as touched when validation fails.
+   *
+   * @param form The sign-up form instance
+   * @returns True if the form is invalid
+   */
+  isSignUpFormInvalid(form: NgForm): boolean {
+    if (form.invalid || this.signUpData.password !== this.confirmPassword) {
+      form.control.markAllAsTouched();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Handles a successful sign-up.
+   *
+   * Resets form state, closes the sign-up view,
+   * and displays a success notification.
+   *
+   * @returns void
+   */
+  onSignUpSuccess(): void {
+    this.isSigningUp = false;
+    this.confirmPassword = '';
+    this.signUpData = {
+      name: '',
+      email: '',
+      password: '',
+    };
+    this.showSignUp = false;
+    this.showToast();
+  }
+
+  /**
+   * Handles a sign-up error.
+   *
+   * Logs the error and updates the UI
+   * to reflect the failed sign-up attempt.
+   *
+   * @param err The error returned during sign-up
+   * @returns void
+   */
+  onSignUpError(err: unknown): void {
+    console.error('Sign up failed', err);
+    this.isSigningUp = false;
+    this.signUpError = true;
   }
 
   /**
