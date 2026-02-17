@@ -30,7 +30,7 @@ export class Privacy {
    */
   back(): void {
     if (history.state?.openSignUp) {
-      this.router.navigateByUrl('/', {
+      this.router.navigate([''], {
         state: { openSignUp: true, skipIntro: true },
         replaceUrl: true,
       });
