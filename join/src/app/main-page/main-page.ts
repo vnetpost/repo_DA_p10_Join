@@ -185,4 +185,12 @@ export class MainPage implements OnInit {
   get greeting(): string {
     return getGreeting();
   }
+
+  getGreetingName(userEmail: string | null | undefined): string {
+    const email = userEmail?.trim().toLowerCase();
+    const contact = this.authService.contactService.contacts.find(
+      (item) => item.email?.trim().toLowerCase() === email,
+    );
+    return contact?.name ?? '';
+  }
 } 

@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { RouterLink } from '@angular/router';
 import { TaskService } from '../../shared/services/task-service';
 import { AsyncPipe, DatePipe } from '@angular/common';
 import { AuthService } from '../../shared/services/auth-service';
@@ -18,5 +18,13 @@ export class Summary {
 
   get greeting(): string {
     return getGreeting();
+  }
+
+  getGreetingName(userEmail: string | null | undefined): string {
+    const email = userEmail?.trim().toLowerCase();
+    const contact = this.authService.contactService.contacts.find(
+      (item) => item.email?.trim().toLowerCase() === email,
+    );
+    return contact?.name ?? '';
   }
 }

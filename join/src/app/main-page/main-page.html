@@ -256,7 +256,7 @@
               <p>{{ greeting }}!</p>
             } @else {
                 <p>{{ greeting }},</p>
-                <p class="user-name">{{ user.displayName }}</p>
+                <p class="user-name">{{ getGreetingName(user.email) }}</p>
               }
           </div>
         }
@@ -265,4 +265,3 @@
 
   </div>
 </div>
-
