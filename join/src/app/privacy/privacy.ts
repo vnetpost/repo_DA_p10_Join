@@ -1,5 +1,6 @@
 import { Location } from '@angular/common';
 import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-privacy',
@@ -11,21 +12,30 @@ import { Component, inject } from '@angular/core';
  * Privacy component
  *
  * Represents the privacy policy page of the application.
- * Provides navigation functionality to return to the
- * previous route.
+ * Handles navigation back to the previous view or
+ * redirects to the entry page with preserved state.
  */
 export class Privacy {
   location = inject(Location);
+  router = inject(Router);
 
   /**
-   * Navigates back to the previous page.
+   * Navigates back from the privacy page.
    *
-   * Uses the Angular Location service to
-   * return to the last route in history.
+   * Redirects to the main page when sign-up
+   * should be reopened, otherwise returns
+   * to the previous route in history.
    *
    * @returns void
    */
   back(): void {
-    this.location.back();
+    if (history.state?.openSignUp) {
+      this.router.navigateByUrl('/', {
+        state: { openSignUp: true, skipIntro: true },
+        replaceUrl: true,
+      });
+    } else {
+      this.location.back();
+    }
   }
 }

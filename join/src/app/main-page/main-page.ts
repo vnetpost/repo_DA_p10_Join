@@ -23,8 +23,8 @@ import { getGreeting } from '../shared/utilities/utils';
  */
 export class MainPage implements OnInit {
   firebaseService = inject(FirebaseService);
-  router = inject(Router);
   authService = inject(AuthService);
+  router = inject(Router);
   user$ = this.authService.user$;
 
   isMobile: boolean = false;
@@ -58,19 +58,28 @@ export class MainPage implements OnInit {
   /**
    * Initializes the component.
    *
-   * Sets up responsive checks and
-   * starts the intro animation.
+   * Sets up responsive checks , evaluates navigation state,
+   * and controls whether the intro animation is displayed.
    *
    * @returns void
    */
   ngOnInit(): void {
     this.checkScreen();
+    const state = history.state;
 
-    window.addEventListener('resize', () => {
-      this.checkScreen();
-    });
+    if (state?.openSignUp) {
+      this.showSignUp = true;
+    }
 
-    this.showIntro();
+    if (!state?.skipIntro) {
+      this.showIntro();
+    } else {
+      this.introActive = false;
+      this.logoMoving = true;
+    }
+
+    history.replaceState({}, '', this.router.url);
+    window.addEventListener('resize', () => this.checkScreen());
   }
 
   /**
