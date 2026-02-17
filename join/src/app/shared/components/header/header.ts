@@ -69,9 +69,19 @@ export class Header {
     });
   }
 
+  /**
+   * Returns the initials of the logged-in user.
+   *
+   * Falls no username is provided, a default
+   * guest initial is returned.
+   *
+   * @param username The name of the logged-in user
+   * @returns The extracted initials or a default value
+   */
   getLoggedInUserInitials(username: string | null): string {
     if (!username) return 'G';
-    
+
     return getTwoInitials(username);
   }
+
 }

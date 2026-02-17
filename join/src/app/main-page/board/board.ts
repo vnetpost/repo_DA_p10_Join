@@ -18,7 +18,8 @@ import { AddTask } from '../add-task/add-task';
  *
  * Represents the main task board view.
  * Handles task searching, opening task details,
- * deleting tasks, and managing the add-task overlay.
+ * deleting tasks, and managing the add-task overlay
+ * including edit and close confirmation behavior.
  */
 export class Board {
   taskService = inject(TaskService);
@@ -75,31 +76,74 @@ export class Board {
     this.selectedTask = null as any;
   }
 
+  /**
+   * Opens the add-task overlay in create mode.
+   *
+   * Resets edit state and sets the initial status
+   * for the new task.
+   *
+   * @param status The status the new task should start with
+   * @returns void
+   */
   openAddTaskOverlay(status: Task['status'] = 'to-do'): void {
     this.taskToEdit = null;
     this.addTaskStatus = status;
     this.isAddTaskOverlayOpen = true;
   }
 
+  /**
+   * Opens the add-task overlay in edit mode.
+   *
+   * Loads the selected task into the overlay
+   * for editing.
+   *
+   * @param task The task to edit
+   * @returns void
+   */
   openEditTaskOverlay(task: Task): void {
     this.taskToEdit = task;
     this.addTaskStatus = task.status;
     this.isAddTaskOverlayOpen = true;
   }
 
+  /**
+   * Updates the dirty state of the add-task overlay.
+   *
+   * @param isDirty Indicates whether the form has unsaved changes
+   * @returns void
+   */
   onAddTaskDirtyChange(isDirty: boolean): void {
     this.isAddTaskDirty = isDirty;
   }
 
-  confirmClose() {
+  /**
+   * Confirms closing of the add-task overlay.
+   *
+   * Resets confirmation state and closes the overlay.
+   *
+   * @returns void
+   */
+  confirmClose(): void {
     this.showCloseConfirm = false;
     this.closeAddTaskOverlay();
   }
 
+  /**
+   * Cancels the close confirmation dialog.
+   *
+   * @returns void
+   */
   cancelClose(): void {
     this.showCloseConfirm = false;
   }
 
+  /**
+   * Handles explicit close requests for the add-task overlay.
+   *
+   * Shows a confirmation dialog if unsaved changes exist.
+   *
+   * @returns void
+   */
   onCloseAddTaskClick(): void {
     if (!this.isAddTaskDirty) {
       this.closeAddTaskOverlay();
@@ -108,7 +152,16 @@ export class Board {
 
     this.showCloseConfirm = true;
   }
-  
+
+  /**
+   * Handles mouse interactions on the add-task overlay backdrop.
+   *
+   * Closes the overlay or shows a confirmation dialog
+   * depending on the dirty state.
+   *
+   * @param event The mouse event triggered by the interaction
+   * @returns void
+   */
   onAddTaskOverlayMouseDown(event: MouseEvent): void {
     if (event.target !== event.currentTarget) return;
 
@@ -119,7 +172,15 @@ export class Board {
 
     this.showCloseConfirm = true;
   }
-  
+
+  /**
+   * Handles the Escape key interaction.
+   *
+   * Closes the add-task overlay or opens a confirmation
+   * dialog if unsaved changes are present.
+   *
+   * @returns void
+   */
   @HostListener('document:keydown.escape')
   onEscape(): void {
     if (!this.isAddTaskOverlayOpen) return;
@@ -136,6 +197,9 @@ export class Board {
   /**
    * Closes the add-task overlay.
    *
+   * Resets overlay state and reopens the task dialog
+   * when returning from edit mode.
+   *
    * @returns void
    */
   closeAddTaskOverlay(): void {
@@ -144,9 +208,11 @@ export class Board {
     this.taskToEdit = null;
     this.addTaskStatus = 'to-do';
     this.isAddTaskDirty = false;
-  
+
     if (editedTask?.id) {
-      this.openTask(this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask);
+      this.openTask(
+        this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask
+      );
     }
   }
 }

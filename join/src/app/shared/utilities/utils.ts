@@ -1,5 +1,14 @@
 import { Contact } from '../interfaces/contact';
 
+/**
+ * Capitalizes a full name.
+ *
+ * Trims the input string, splits it into words,
+ * and capitalizes the first letter of each part.
+ *
+ * @param fullName The full name to format
+ * @returns The capitalized full name
+ */
 export function capitalizeFullname(fullName?: string): string {
   if (!fullName) return '';
   return fullName
@@ -9,6 +18,11 @@ export function capitalizeFullname(fullName?: string): string {
     .join(' ');
 }
 
+/**
+ * Predefined list of user colors.
+ *
+ * Used to assign a random display color to users.
+ */
 export const userColors = [
   '#ff4646',
   '#ff745e',
@@ -27,10 +41,27 @@ export const userColors = [
   '#9327ff',
 ];
 
-export function setUserColor() {
+/**
+ * Returns a random user color.
+ *
+ * Selects a color from the predefined
+ * list of available user colors.
+ *
+ * @returns A random color string
+ */
+export function setUserColor(): string {
   return userColors[Math.floor(Math.random() * userColors.length)];
 }
 
+/**
+ * Extracts up to two initials from a full name.
+ *
+ * Takes the first letter of the first two words
+ * and converts them to uppercase.
+ *
+ * @param fullName The full name to extract initials from
+ * @returns The extracted initials
+ */
 export function getTwoInitials(fullName?: string): string {
   if (!fullName) return '';
   return fullName
@@ -41,6 +72,13 @@ export function getTwoInitials(fullName?: string): string {
     .join('');
 }
 
+/**
+ * Returns today's date as a formatted string.
+ *
+ * Format: YYYY/MM/DD
+ *
+ * @returns The formatted date string
+ */
 export function getTodayDateString(): string {
   const now = new Date();
   const year = now.getFullYear();
@@ -49,6 +87,11 @@ export function getTodayDateString(): string {
   return `${year}/${month}/${day}`;
 }
 
+/**
+ * Returns a contextual greeting based on the current time.
+ *
+ * @returns A greeting string appropriate for the time of day
+ */
 export function getGreeting(): string {
   const hour = new Date().getHours();
 
