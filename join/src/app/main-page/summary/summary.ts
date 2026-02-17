@@ -11,11 +11,23 @@ import { getGreeting } from '../../shared/utilities/utils';
   templateUrl: './summary.html',
   styleUrl: './summary.scss',
 })
+/**
+ * Summary component
+ *
+ * Represents the summary dashboard of the application.
+ * Displays an overview of tasks and user-related information
+ * and provides navigation to other sections.
+ */
 export class Summary {
   taskService = inject(TaskService);
   authService = inject(AuthService);
   user$ = this.authService.user$;
 
+  /**
+   * Returns a contextual greeting message.
+   *
+   * @returns The greeting string
+   */
   get greeting(): string {
     return getGreeting();
   }

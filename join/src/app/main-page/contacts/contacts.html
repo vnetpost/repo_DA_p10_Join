@@ -36,35 +36,14 @@
   </p>
 </div>
 
-@if(showDeleteConfirm){
-  <dialog class="confirm-dialog">
-    <div class="dialog-content">
-
-      <!-- <div class="confirm-backdrop"> -->
-        <div class="confirm-box" role="dialog" aria-modal="true">
-          <p><span class="delete-highlight">Delete </span>"{{ contactToDelete?.name }}"?</p>
-
-          <div class="confirm-actions">
-            <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
-            <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
-          </div>
+<dialog #confirmDialog class="confirm-dialog">
+  <div class="dialog-content">
+      <div class="confirm-box" role="dialog" aria-modal="true">
+        <p><span class="delete-highlight">Delete </span>"{{ contactToDelete?.name }}"?</p>
+        <div class="confirm-actions">
+          <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
+          <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
         </div>
-      <!-- </div>  -->
-
-    </div>
-  </dialog>
-
-
-
-<!-- 
-  <div class="confirm-backdrop">
-    <div class="confirm-box" role="dialog" aria-modal="true">
-      <p><span class="delete-highlight">Delete </span>"{{ contactToDelete?.name }}"?</p>
-
-      <div class="confirm-actions">
-        <button class="button button--primary delete-btn" type="button" (click)="confirmDelete()">Delete</button>
-        <button class="button button--secondary" type="button" (click)="cancelDelete()">Cancel</button>
       </div>
-    </div>
-  </div>  -->
-}
+  </div>
+</dialog>

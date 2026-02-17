@@ -134,20 +134,8 @@ export class ContactDialog {
    * @returns void
    */
   onDeleteClick(): void {
-    // this.showDeleteConfirm = true;
     this.requestDelete.emit();
   }
-
-  // confirmDelete(): void {
-  //   if (!this.canDelete) return;
-  //   this.showDeleteConfirm = false;
-  //   this.deleteContact.emit();
-  //   this.closeDialog();
-  // }
-
-  // cancelDelete(): void {
-  //   this.showDeleteConfirm = false;
-  // }
 
   // #region Closing dialog
 

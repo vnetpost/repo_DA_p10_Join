@@ -15,7 +15,7 @@ import { FirebaseService } from '../../../shared/services/firebase-service';
  * TaskDialog component
  *
  * Represents a modal dialog displaying detailed information
- * about a task. Handles deletion confirmation, subtask updates,
+ * about a task. Handles edit and delete actions, subtask updates,
  * and dialog interactions.
  */
 export class TaskDialog {
@@ -52,12 +52,28 @@ export class TaskDialog {
     this.showDeleteConfirm = true;
   }
 
+  /**
+   * Triggers the edit action for the current task.
+   *
+   * Closes the dialog and emits the edit event
+   * with the selected task.
+   *
+   * @returns void
+   */
   onEditClick(): void {
     this.closeDialog();
     this.editTask.emit(this.task);
   }
 
-  confirmDelete() {
+  /**
+   * Confirms deletion of the current task.
+   *
+   * Emits the delete event, resets the confirmation state,
+   * and closes the dialog.
+   *
+   * @returns void
+   */
+  confirmDelete(): void {
     this.deleteTask.emit(this.task.id);
     this.showDeleteConfirm = false;
     this.closeDialog();
@@ -126,7 +142,7 @@ export class TaskDialog {
       return c.id === id;
     });
 
-    return getTwoInitials(contact?.name || "Unknown");
+    return getTwoInitials(contact?.name || 'Unknown');
   }
 
   /**
@@ -137,7 +153,7 @@ export class TaskDialog {
    */
   getAssigneeName(id: string): string {
     const contact = this.contactService.contacts.find((c) => {
-      return c.id === id
+      return c.id === id;
     });
 
     return contact?.name || 'Unknown';
@@ -168,7 +184,6 @@ export class TaskDialog {
    */
   toggleSubtask(index: number): void {
     this.task.subtasks[index].done = !this.task.subtasks[index].done;
-
     this.taskService.updateSubtasks(this.task);
   }
 }

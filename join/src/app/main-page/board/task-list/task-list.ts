@@ -87,6 +87,14 @@ export class TaskList {
     });
   }
 
+  /**
+   * Handles the add-task action for the current status.
+   *
+   * Emits a request to create a new task
+   * within the current task status.
+   *
+   * @returns void
+   */
   onAddTaskClick(): void {
     this.addTaskRequested.emit(this.status);
   }

@@ -13,72 +13,36 @@ import { getGreeting } from '../shared/utilities/utils';
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss',
 })
+/**
+ * MainPage component
+ *
+ * Represents the application's entry page.
+ * Handles user authentication flows including login,
+ * guest login, and sign-up, as well as responsive behavior
+ * and introductory animations.
+ */
 export class MainPage implements OnInit {
   firebaseService = inject(FirebaseService);
   router = inject(Router);
   authService = inject(AuthService);
   user$ = this.authService.user$;
 
-  isMobile = false;
-  showSignUp = false;
-  isLoggingIn = false;
-  loginError = false;
-  isSigningUp = false;
-  signUpError = false;
-  toastVisible = false;
-  showMobileGreeting = false;
+  isMobile: boolean = false;
+  showSignUp: boolean = false;
+  isLoggingIn: boolean = false;
+  loginError: boolean = false;
+  isSigningUp: boolean = false;
+  signUpError: boolean = false;
+  toastVisible: boolean = false;
+  showMobileGreeting: boolean = false;
 
-  introActive = true;
-  logoMoving = false;
+  introActive: boolean = true;
+  logoMoving: boolean = false;
 
   confirmPassword = '';
-  showLogInPassword = false;
-  showSignUpPassword = false;
-  showConfirmPassword = false;
-
-  ngOnInit(): void {
-    this.checkScreen();
-
-    window.addEventListener('resize', () => {
-      this.checkScreen();
-    });
-
-    this.showIntro();
-  }
-
-  checkScreen(): void {
-    this.isMobile = window.innerWidth < 1025;
-  }
-
-  showIntro(): void {
-    setTimeout(() => {
-      this.logoMoving = true;
-    }, 300);
-
-    setTimeout(() => {
-      this.introActive = false;
-    }, 1400);
-  }
-
-  openSignUp(): void {
-    this.showSignUp = true;
-  }
-
-  closeSignUp(): void {
-    this.showSignUp = false;
-  }
-
-  toggleLogInPassword(): void {
-    this.showLogInPassword = !this.showLogInPassword;
-  }
-
-  toggleSignUpPassword(): void {
-    this.showSignUpPassword = !this.showSignUpPassword;
-  }
-
-  toggleConfirmPassword(): void {
-    this.showConfirmPassword = !this.showConfirmPassword;
-  }
+  showLogInPassword: boolean = false;
+  showSignUpPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   logInData: LogInFormData = {
     email: '',
@@ -91,6 +55,105 @@ export class MainPage implements OnInit {
     password: '',
   };
 
+  /**
+   * Initializes the component.
+   *
+   * Sets up responsive checks and
+   * starts the intro animation.
+   *
+   * @returns void
+   */
+  ngOnInit(): void {
+    this.checkScreen();
+
+    window.addEventListener('resize', () => {
+      this.checkScreen();
+    });
+
+    this.showIntro();
+  }
+
+  /**
+   * Checks the current screen size.
+   *
+   * Updates the mobile state based
+   * on the viewport width.
+   *
+   * @returns void
+   */
+  checkScreen(): void {
+    this.isMobile = window.innerWidth < 1025;
+  }
+
+  /**
+   * Plays the intro animation sequence.
+   *
+   * @returns void
+   */
+  showIntro(): void {
+    setTimeout(() => {
+      this.logoMoving = true;
+    }, 300);
+
+    setTimeout(() => {
+      this.introActive = false;
+    }, 1400);
+  }
+
+  /**
+   * Opens the sign-up form.
+   *
+   * @returns void
+   */
+  openSignUp(): void {
+    this.showSignUp = true;
+  }
+
+  /**
+   * Closes the sign-up form.
+   *
+   * @returns void
+   */
+  closeSignUp(): void {
+    this.showSignUp = false;
+  }
+
+  /**
+   * Toggles visibility of the login password field.
+   *
+   * @returns void
+   */
+  toggleLogInPassword(): void {
+    this.showLogInPassword = !this.showLogInPassword;
+  }
+
+  /**
+   * Toggles visibility of the sign-up password field.
+   *
+   * @returns void
+   */
+  toggleSignUpPassword(): void {
+    this.showSignUpPassword = !this.showSignUpPassword;
+  }
+
+  /**
+   * Toggles visibility of the confirm-password field.
+   *
+   * @returns void
+   */
+  toggleConfirmPassword(): void {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
+  /**
+   * Handles user login.
+   *
+   * Validates the form, triggers authentication,
+   * and navigates after successful login.
+   *
+   * @param form The login form instance
+   * @returns void
+   */
   onLogin(form: NgForm): void {
     if (this.isLoggingIn) return;
 
@@ -103,19 +166,24 @@ export class MainPage implements OnInit {
     this.loginError = false;
 
     this.authService.logIn(this.logInData.email, this.logInData.password)
-    .subscribe({
-      next: () => {
-        this.isLoggingIn = false;
-        this.handleLoginNavigation();
-      },
-      error: (err) => {
-        console.error('Login failed', err);
-        this.isLoggingIn = false;
-        this.loginError = true;
-      },
-    });
+      .subscribe({
+        next: () => {
+          this.isLoggingIn = false;
+          this.handleLoginNavigation();
+        },
+        error: (err) => {
+          console.error('Login failed', err);
+          this.isLoggingIn = false;
+          this.loginError = true;
+        },
+      });
   }
 
+  /**
+   * Logs in the user as a guest.
+   *
+   * @returns void
+   */
   guestLogin(): void {
     this.authService.guestLogIn().subscribe({
       next: () => {
@@ -127,6 +195,14 @@ export class MainPage implements OnInit {
     });
   }
 
+  /**
+   * Handles navigation after successful login.
+   *
+   * Displays a greeting on mobile devices
+   * before redirecting to the summary page.
+   *
+   * @returns void
+   */
   handleLoginNavigation(): void {
     if (this.isMobile) {
       this.showMobileGreeting = true;
@@ -140,48 +216,102 @@ export class MainPage implements OnInit {
     }
   }
 
+  /**
+   * Handles user sign-up.
+   *
+   * Validates the sign-up form, creates a new user account,
+   * and triggers the corresponding success or error flow.
+   *
+   * @param form The sign-up form instance
+   * @returns void
+   */
   onSignUp(form: NgForm): void {
     if (this.isSigningUp) return;
-
-    if (form.invalid || this.signUpData.password !== this.confirmPassword) {
-      form.control.markAllAsTouched();
-      return;
-    }
+    if (this.isSignUpFormInvalid(form)) return;
 
     this.isSigningUp = true;
     this.signUpError = false;
 
-    this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password)
-    .subscribe({
+    this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password
+    ).subscribe({
       next: () => {
-        this.isSigningUp = false;
-
-        this.confirmPassword = '';
-        this.signUpData = {
-          name: '',
-          email: '',
-          password: '',
-        };
-
-        this.showSignUp = false;
-        this.showToast();
+        this.onSignUpSuccess();
       },
       error: (err) => {
-        console.error('Sign up failed', err);
-        this.isSigningUp = false;
-        this.signUpError = true;
+        this.onSignUpError(err);
       },
     });
   }
 
+  /**
+   * Validates the sign-up form state.
+   *
+   * Marks all form fields as touched when validation fails.
+   *
+   * @param form The sign-up form instance
+   * @returns True if the form is invalid
+   */
+  isSignUpFormInvalid(form: NgForm): boolean {
+    if (form.invalid || this.signUpData.password !== this.confirmPassword) {
+      form.control.markAllAsTouched();
+      return true;
+    }
+    return false;
+  }
+
+  /**
+   * Handles a successful sign-up.
+   *
+   * Resets form state, closes the sign-up view,
+   * and displays a success notification.
+   *
+   * @returns void
+   */
+  onSignUpSuccess(): void {
+    this.isSigningUp = false;
+    this.confirmPassword = '';
+    this.signUpData = {
+      name: '',
+      email: '',
+      password: '',
+    };
+    this.showSignUp = false;
+    this.showToast();
+  }
+
+  /**
+   * Handles a sign-up error.
+   *
+   * Logs the error and updates the UI
+   * to reflect the failed sign-up attempt.
+   *
+   * @param err The error returned during sign-up
+   * @returns void
+   */
+  onSignUpError(err: unknown): void {
+    console.error('Sign up failed', err);
+    this.isSigningUp = false;
+    this.signUpError = true;
+  }
+
+  /**
+   * Displays a temporary success toast.
+   *
+   * @returns void
+   */
   showToast(): void {
-    this.toastVisible = true; 
+    this.toastVisible = true;
 
     setTimeout(() => {
-      this.toastVisible = false; 
+      this.toastVisible = false;
     }, 2500);
   }
 
+  /**
+   * Returns a contextual greeting message.
+   *
+   * @returns The greeting string
+   */
   get greeting(): string {
     return getGreeting();
   }
@@ -193,4 +323,4 @@ export class MainPage implements OnInit {
     );
     return contact?.name ?? '';
   }
-} 
+}
