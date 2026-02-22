@@ -1,4 +1,5 @@
 import { deleteApp, initializeApp } from 'firebase/app';
+import { loadFirebaseConfig } from './load-firebase-config.mjs';
 import {
   addDoc,
   collection,
@@ -8,14 +9,7 @@ import {
   terminate,
 } from 'firebase/firestore';
 
-const firebaseConfig = {
-  apiKey: 'AIzaSyDYOAGoYWk3bIjjbbJvzy2r45bh35c6pcs',
-  authDomain: 'my-join-a5aae.firebaseapp.com',
-  projectId: 'my-join-a5aae',
-  storageBucket: 'my-join-a5aae.firebasestorage.app',
-  messagingSenderId: '259563977844',
-  appId: '1:259563977844:web:6b36e4de432db91feaa521',
-};
+const firebaseConfig = await loadFirebaseConfig();
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
