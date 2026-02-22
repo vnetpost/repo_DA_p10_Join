@@ -77,4 +77,4 @@ connect.lock
 typings/
 __screenshots__/
 *.log
-
+scripts/
