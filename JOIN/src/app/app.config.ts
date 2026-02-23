@@ -15,7 +15,7 @@ export const appConfig: ApplicationConfig = {
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(routes),
-    provideFirebaseApp(() => initializeApp(environment.my_firebase)),
+    provideFirebaseApp(() => initializeApp(environment.firebase_solo)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
   ],
