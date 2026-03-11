@@ -27,7 +27,6 @@
         ></app-task-form-field>
 
         <app-task-form-field
-          class="add-task__padding-top"
           label="Due date"
           [isRequired]="true"
           placeholder="yyyy/mm/dd"
@@ -42,14 +41,8 @@
         <span class="add-task__field-error" [class.is-visible]="showDueDateError">
           This field is required
         </span>
-      </div>
 
-      <div class="add-task__column add-task__column--divider">
-        <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
-        <app-dropdown-assignee
-          class="add-task__padding-top"
-          [(selectedContacts)]="activeAssignees"
-        ></app-dropdown-assignee>
+        <app-priority-selector class="add-task__padding-top" [(selectedPriority)]="activePriority"></app-priority-selector>
         <app-dropdown-category
           class="add-task__padding-top"
           [(selectedCategory)]="activeCategory"
@@ -59,10 +52,18 @@
         <span class="add-task__field-error" [class.is-visible]="showCategoryError">
           This field is required
         </span>
-        <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
+      </div>
+
+      <div class="add-task__column add-task__column--divider">
+        <app-file-upload [(selectedFile)]="selectedAttachment"></app-file-upload>
+        <app-subtask-composer class="add-task__padding-top" [(subtasks)]="activeSubtasks"></app-subtask-composer>
         @if (showSubtaskHint) {
           <span class="add-task__subtask-hint"> Either add no subtasks or at least two.</span>
         }
+        <app-dropdown-assignee
+          class="add-task__padding-top"
+          [(selectedContacts)]="activeAssignees"
+        ></app-dropdown-assignee>
       </div>
     </div>
 

@@ -1,0 +1,39 @@
+<div class="file-upload">
+  <span class="file-upload__label">Attachments</span>
+  <span class="file-upload__hint">Allowed file types are JPEG and PNG</span>
+
+  <button
+    type="button"
+    class="file-upload__dropzone"
+    [class.file-upload__dropzone--drag-over]="isDragOver"
+    (click)="openFilePicker()"
+    (dragover)="onDragOver($event)"
+    (dragleave)="onDragLeave($event)"
+    (drop)="onDrop($event)"
+    aria-label="Upload attachment"
+  >
+    <span class="file-upload__dropzone-text">Drag a file or browse</span>
+    <span class="file-upload__plus" aria-hidden="true">+</span>
+  </button>
+
+  <input
+    #fileInput
+    class="file-upload__native-input"
+    type="file"
+    accept="image/jpeg,image/png"
+    (change)="onFileSelected($event)"
+  />
+
+  @if (selectedFile) {
+    <div class="file-upload__selected-file">
+      <span class="file-upload__filename">{{ selectedFile.name }}</span>
+      <button type="button" class="file-upload__remove" (click)="clearSelectedFile($event)">
+        Remove
+      </button>
+    </div>
+  }
+
+  @if (showTypeError) {
+    <span class="file-upload__error">Only JPEG and PNG files are allowed.</span>
+  }
+</div>

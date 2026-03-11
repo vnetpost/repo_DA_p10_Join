@@ -18,6 +18,7 @@ import { DropdownCategory } from './dropdown-category/dropdown-category';
 import { PrioritySelector } from './priority-selector/priority-selector';
 import { SubtaskComposer } from './subtask-composer/subtask-composer';
 import { TaskFormField } from './task-form-field/task-form-field';
+import { FileUpload } from './file-upload/file-upload';
 import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { FirebaseService } from '../../shared/services/firebase-service';
@@ -34,6 +35,7 @@ import { FirebaseService } from '../../shared/services/firebase-service';
     DropdownAssignee,
     DropdownCategory,
     SubtaskComposer,
+    FileUpload,
   ],
   templateUrl: './add-task.html',
   styleUrl: './add-task.scss',
@@ -74,6 +76,7 @@ export class AddTask implements OnChanges, OnDestroy {
   activeAssignees: Contact[] = [];
   activeCategory: TaskCategoryOption | null = null;
   activeSubtasks: Subtask[] = [];
+  selectedAttachment: File | null = null;
   isTitleTouched = false;
   isDueDateTouched = false;
   isCategoryTouched = false;
@@ -235,6 +238,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.activeAssignees = [];
     this.activeCategory = null;
     this.activeSubtasks = [];
+    this.selectedAttachment = null;
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;

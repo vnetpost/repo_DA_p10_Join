@@ -1,0 +1,82 @@
+@use '../../../../styles/index.scss' as styles;
+
+.file-upload {
+  @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 0.45rem);
+  width: 100%;
+}
+
+.file-upload__label {
+  @include styles.setFont($size: 1.05em, $weight: 500, $color: styles.$gray-dark);
+}
+
+.file-upload__hint {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$gray-light);
+  opacity: 0.8;
+}
+
+.file-upload__dropzone {
+  @include styles.setFlex($d: row, $ai: center, $jc: center, $gap: 0.7rem);
+  width: 100%;
+  min-height: 3rem;
+  border: 0.09375rem dashed rgba(styles.$gray-light, 0.9);
+  border-radius: 1rem;
+  background-color: styles.$white;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  padding: clamp(0.7rem, 1.5vw, 0.85rem);
+
+  &:hover {
+    border-color: styles.$blue-sky;
+    background-color: rgba(styles.$blue-sky, 0.06);
+  }
+}
+
+.file-upload__dropzone--drag-over {
+  border-color: styles.$blue-sky;
+  background-color: rgba(styles.$blue-sky, 0.1);
+}
+
+.file-upload__dropzone-text {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$gray-light);
+}
+
+.file-upload__plus {
+  @include styles.setFont($size: 2em, $weight: 300, $color: styles.$gray-light);
+  line-height: 1;
+}
+
+.file-upload__native-input {
+  display: none;
+}
+
+.file-upload__selected-file {
+  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.7rem);
+  width: 100%;
+  padding: 0.45rem 0.6rem;
+  border-radius: 0.75rem;
+  background-color: styles.$white-light;
+}
+
+.file-upload__filename {
+  @include styles.setFont($size: 0.95em, $weight: 400, $color: styles.$gray-dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.file-upload__remove {
+  @include styles.setFont($size: 0.95em, $weight: 500, $color: styles.$blue-sky);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+
+  &:hover {
+    background-color: rgba(styles.$blue-sky, 0.1);
+  }
+}
+
+.file-upload__error {
+  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
+}
