@@ -47,32 +47,41 @@
         <div class="attachment-list scroll-shadows">
           @for (attachment of attachments; track $index) {
             <article class="attachment-card">
-              <button
-                type="button"
-                class="attachment-preview"
-                (click)="openAttachment(attachment)"
-                [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
-              >
-                <img
-                  class="attachment-thumbnail"
-                  [src]="getAttachmentPreviewSrc(attachment)"
-                  [alt]="getAttachmentFileName(attachment, $index)"
-                />
-              </button>
-
-              <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
-              <div class="attachment-actions">
-                <button type="button" class="attachment-action" (click)="openAttachment(attachment)">
-                  Open
+              <div class="attachment-preview">
+                <button
+                  type="button"
+                  class="attachment-preview-open"
+                  (click)="openAttachment(attachment)"
+                  [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
+                >
+                  <img
+                    class="attachment-thumbnail"
+                    [src]="getAttachmentPreviewSrc(attachment)"
+                    [alt]="getAttachmentFileName(attachment, $index)"
+                  />
                 </button>
                 <button
                   type="button"
-                  class="attachment-action"
+                  class="attachment-preview-download"
                   (click)="downloadAttachment(attachment, $index)"
+                  [attr.aria-label]="'Download ' + getAttachmentFileName(attachment, $index)"
                 >
-                  Download
+                  <img
+                    class="icon icon--default"
+                    src="assets/img/icons/buttons/download.svg"
+                    alt=""
+                    aria-hidden="true"
+                  />
+                  <img
+                    class="icon icon--hover"
+                    src="assets/img/icons/buttons/download-hover.svg"
+                    alt=""
+                    aria-hidden="true"
+                  />
                 </button>
               </div>
+
+              <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
             </article>
           }
         </div>

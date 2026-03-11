@@ -152,47 +152,93 @@ dialog {
   }
 
   .attachment-list {
-    @include styles.setFlex($d: row, $ai: stretch, $jc: flex-start, $gap: 10px);
+    @include styles.setFlex($d: row, $ai: stretch, $jc: flex-start, $gap: 0.6rem);
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 4px;
+    padding-bottom: 0.2rem;
     scrollbar-width: thin;
-    scrollbar-color: rgba(styles.$gray-dark, 0.45) transparent;
+    scrollbar-color: rgba(styles.$gray-dark, 0.35) transparent;
 
     &::-webkit-scrollbar {
-      height: 4px;
+      height: 0.35rem;
     }
 
     &::-webkit-scrollbar-thumb {
-      background: rgba(styles.$gray-dark, 0.45);
+      background: rgba(styles.$gray-dark, 0.35);
       border-radius: 999px;
     }
   }
 
   .attachment-card {
-    @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 6px);
-    width: 145px;
-    min-width: 145px;
-    padding: 8px;
-    border-radius: 8px;
-    background-color: styles.$white-light;
-    border: 1px solid rgba(styles.$gray-light, 0.8);
+    @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0);
+    width: 8rem;
+    min-width: 8rem;
+    border-radius: 0.75rem;
+    overflow: hidden;
+    border: 0.0625rem solid rgba(styles.$gray-light, 0.9);
+    background-color: styles.$white;
   }
 
   .attachment-preview {
+    position: relative;
     width: 100%;
-    height: 86px;
+    height: 5.25rem;
+    overflow: hidden;
+    background-color: styles.$white-light;
+    flex-shrink: 0;
+  }
+  
+  .attachment-preview-open {
+    width: 100%;
+    height: 100%;
     border: none;
-    border-radius: 8px;
+    border-radius: 0;
     overflow: hidden;
     cursor: pointer;
-    background-color: #e9edf3;
-    flex-shrink: 0;
+    background: transparent;
     padding: 0;
+  }
+  
+  .attachment-preview-download {
+    @include styles.setFlex($d: row, $ai: center, $jc: center, $gap: 0);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    width: 3rem;
+    height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
+    background-color: rgba(styles.$gray-dark, 0.75);
+    transform: translate(-50%, -50%) scale(0.92);
+    opacity: 0;
+    pointer-events: none;
+    cursor: pointer;
+    transition: opacity 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
 
     &:hover {
-      filter: brightness(0.95);
+      background-color: rgba(styles.$gray-dark, 0.9);
+    }
+
+    .icon {
+      width: 2.7rem;
+      height: 2.7rem;
+      display: block;
+    }
+
+    .icon--hover {
+      display: none;
+    }
+
+    &:hover .icon--default,
+    &:focus-visible .icon--default {
+      display: none;
+    }
+
+    &:hover .icon--hover,
+    &:focus-visible .icon--hover {
+      display: block;
     }
   }
 
@@ -201,34 +247,30 @@ dialog {
     height: 100%;
     object-fit: cover;
     display: block;
+    transition: filter 0.18s ease, transform 0.18s ease;
+  }
+
+  .attachment-preview:hover .attachment-thumbnail,
+  .attachment-preview:focus-within .attachment-thumbnail {
+    filter: brightness(0.62);
+    transform: scale(1.03);
+  }
+
+  .attachment-preview:hover .attachment-preview-download,
+  .attachment-preview:focus-within .attachment-preview-download {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translate(-50%, -50%) scale(1);
   }
 
   .attachment-name {
-    @include styles.setFont($size: 13px, $weight: 400, $color: styles.$black);
+    @include styles.setFont($size: 0.8em, $weight: 400, $color: styles.$gray-dark);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
     margin: 0;
     width: 100%;
-  }
-
-  .attachment-actions {
-    @include styles.setFlex($d: row, $ai: center, $jc: flex-end, $gap: 4px);
-    width: 100%;
-  }
-
-  .attachment-action {
-    @include styles.setFont($size: 12px, $weight: 500, $color: styles.$blue-primary);
-    border: none;
-    border-radius: 6px;
-    background: transparent;
-    padding: 3px 6px;
-    cursor: pointer;
-
-    &:hover {
-      background-color: rgba(styles.$blue-sky, 0.12);
-      color: styles.$blue-sky;
-    }
+    padding: 0.35rem 0.4rem 0.4rem;
   }
 }
 

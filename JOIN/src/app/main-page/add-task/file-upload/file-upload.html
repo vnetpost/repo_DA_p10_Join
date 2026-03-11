@@ -37,22 +37,42 @@
     <div class="file-upload__gallery scroll-shadows">
       @for (attachment of existingAttachments; track $index) {
         <article class="file-upload__thumb-card">
-          <img
-            class="file-upload__thumb-image"
-            [src]="getExistingAttachmentPreview(attachment)"
-            [alt]="getAttachmentName(attachment, $index)"
-          />
+          <div class="file-upload__thumb-media">
+            <img
+              class="file-upload__thumb-image"
+              [src]="getExistingAttachmentPreview(attachment)"
+              [alt]="getAttachmentName(attachment, $index)"
+            />
+            <button
+              type="button"
+              class="file-upload__thumb-delete"
+              [attr.aria-label]="'Delete ' + getAttachmentName(attachment, $index)"
+              (click)="removeExistingAttachment($index, $event)"
+            >
+              <img src="assets/img/icons/add-task/delete.svg" alt="" aria-hidden="true" />
+            </button>
+          </div>
           <span class="file-upload__thumb-name">{{ getAttachmentName(attachment, $index) }}</span>
         </article>
       }
 
       @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
         <article class="file-upload__thumb-card">
-          <img
-            class="file-upload__thumb-image"
-            [src]="getSelectedFilePreview(selectedFile)"
-            [alt]="selectedFile.name"
-          />
+          <div class="file-upload__thumb-media">
+            <img
+              class="file-upload__thumb-image"
+              [src]="getSelectedFilePreview(selectedFile)"
+              [alt]="selectedFile.name"
+            />
+            <button
+              type="button"
+              class="file-upload__thumb-delete"
+              [attr.aria-label]="'Delete ' + selectedFile.name"
+              (click)="removeSelectedFile($index, $event)"
+            >
+              <img src="assets/img/icons/add-task/delete.svg" alt="" aria-hidden="true" />
+            </button>
+          </div>
           <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
         </article>
       }
