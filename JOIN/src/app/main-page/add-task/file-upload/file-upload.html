@@ -1,6 +1,14 @@
 <div class="file-upload">
   <span class="file-upload__label">Attachments</span>
-  <span class="file-upload__hint">Allowed file types are JPEG and PNG</span>
+  <div class="file-upload__top-row">
+    <span class="file-upload__hint">Allowed file types are JPEG and PNG</span>
+    @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
+      <button type="button" class="file-upload__delete-all" (click)="deleteAllAttachments($event)">
+        <img src="assets/img/icons/add-task/delete.svg" alt="" aria-hidden="true" />
+        <span>Delete all</span>
+      </button>
+    }
+  </div>
 
   <button
     type="button"
@@ -12,7 +20,7 @@
     (drop)="onDrop($event)"
     aria-label="Upload attachment"
   >
-    <span class="file-upload__dropzone-text">Drag files or browse</span>
+    <span class="file-upload__dropzone-text">Drag a file or browse</span>
     <span class="file-upload__plus" aria-hidden="true">+</span>
   </button>
 
@@ -25,48 +33,29 @@
     (change)="onFileSelected($event)"
   />
 
-  @if (existingAttachments.length > 0) {
-    <div class="file-upload__existing">
-      <span class="file-upload__existing-title">Current attachments</span>
-      <ul class="file-upload__existing-list">
-        @for (attachment of existingAttachments; track $index) {
-          <li class="file-upload__existing-item">
-            <span class="file-upload__existing-name">{{ getAttachmentName(attachment, $index) }}</span>
-            <button
-              type="button"
-              class="file-upload__existing-remove"
-              (click)="removeExistingAttachment($index, $event)"
-            >
-              Remove
-            </button>
-          </li>
-        }
-      </ul>
-    </div>
-  }
+  @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
+    <div class="file-upload__gallery scroll-shadows">
+      @for (attachment of existingAttachments; track $index) {
+        <article class="file-upload__thumb-card">
+          <img
+            class="file-upload__thumb-image"
+            [src]="getExistingAttachmentPreview(attachment)"
+            [alt]="getAttachmentName(attachment, $index)"
+          />
+          <span class="file-upload__thumb-name">{{ getAttachmentName(attachment, $index) }}</span>
+        </article>
+      }
 
-  @if (selectedFiles.length > 0) {
-    <div class="file-upload__selected-file-list">
-      <div class="file-upload__selected-file-header">
-        <span class="file-upload__existing-title">New attachments</span>
-        <button type="button" class="file-upload__remove" (click)="clearSelectedFiles($event)">
-          Remove all
-        </button>
-      </div>
-      <ul class="file-upload__existing-list">
-        @for (selectedFile of selectedFiles; track $index) {
-          <li class="file-upload__existing-item">
-            <span class="file-upload__existing-name">{{ selectedFile.name }}</span>
-            <button
-              type="button"
-              class="file-upload__existing-remove"
-              (click)="removeSelectedFile($index, $event)"
-            >
-              Remove
-            </button>
-          </li>
-        }
-      </ul>
+      @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
+        <article class="file-upload__thumb-card">
+          <img
+            class="file-upload__thumb-image"
+            [src]="getSelectedFilePreview(selectedFile)"
+            [alt]="selectedFile.name"
+          />
+          <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
+        </article>
+      }
     </div>
   }
 
@@ -75,7 +64,5 @@
       Only JPEG and PNG files are allowed.
       Unsupported files were ignored.
     </span>
-  } @else if (selectedFiles.length > 0) {
-    <span class="file-upload__count">{{ selectedFiles.length }} file(s) selected.</span>
   }
 </div>

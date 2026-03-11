@@ -46,38 +46,34 @@
 
         <div class="attachment-list scroll-shadows">
           @for (attachment of attachments; track $index) {
-            <div class="attachment-item">
-              @if (isImageAttachment(attachment)) {
+            <article class="attachment-card">
+              <button
+                type="button"
+                class="attachment-preview"
+                (click)="openAttachment(attachment)"
+                [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
+              >
+                <img
+                  class="attachment-thumbnail"
+                  [src]="getAttachmentPreviewSrc(attachment)"
+                  [alt]="getAttachmentFileName(attachment, $index)"
+                />
+              </button>
+
+              <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
+              <div class="attachment-actions">
+                <button type="button" class="attachment-action" (click)="openAttachment(attachment)">
+                  Open
+                </button>
                 <button
                   type="button"
-                  class="attachment-preview"
-                  (click)="openAttachment(attachment)"
-                  [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
+                  class="attachment-action"
+                  (click)="downloadAttachment(attachment, $index)"
                 >
-                  <img
-                    class="attachment-thumbnail"
-                    [src]="getAttachmentPreviewSrc(attachment)"
-                    [alt]="getAttachmentFileName(attachment, $index)"
-                  />
+                  Download
                 </button>
-              }
-
-              <div class="attachment-meta">
-                <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
-                <div class="attachment-actions">
-                  <button type="button" class="attachment-action" (click)="openAttachment(attachment)">
-                    Open
-                  </button>
-                  <button
-                    type="button"
-                    class="attachment-action"
-                    (click)="downloadAttachment(attachment, $index)"
-                  >
-                    Download
-                  </button>
-                </div>
               </div>
-            </div>
+            </article>
           }
         </div>
       </div>
