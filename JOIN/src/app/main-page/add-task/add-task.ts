@@ -11,7 +11,7 @@ import {
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
-import { Subtask, Task } from '../../shared/interfaces/task';
+import { Subtask, Task, TaskAttachment } from '../../shared/interfaces/task';
 import { TaskCategoryOption, TaskService } from '../../shared/services/task-service';
 import { DropdownAssignee } from './dropdown-assignee/dropdown-assignee';
 import { DropdownCategory } from './dropdown-category/dropdown-category';
@@ -57,6 +57,7 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Requests closing the overlay once submit feedback has finished. */
   @Output() closeDialogRequested = new EventEmitter<void>();
   @Output() dirtyChange = new EventEmitter<boolean>();
+  @Output() taskSaved = new EventEmitter<Task>();
   // #endregion
 
   // #region Constants
@@ -64,6 +65,9 @@ export class AddTask implements OnChanges, OnDestroy {
   readonly taskTitleMinLength = 3;
   readonly taskTitleMaxLength = 100;
   readonly taskTitleMinLetters = 3;
+  readonly attachmentMaxWidth = 800;
+  readonly attachmentMaxHeight = 800;
+  readonly attachmentQuality = 0.8;
   showCloseConfirm: boolean = false;
   hasUserEdited: boolean = false;
   // #endregion
@@ -76,7 +80,8 @@ export class AddTask implements OnChanges, OnDestroy {
   activeAssignees: Contact[] = [];
   activeCategory: TaskCategoryOption | null = null;
   activeSubtasks: Subtask[] = [];
-  selectedAttachment: File | null = null;
+  editableExistingAttachments: TaskAttachment[] = [];
+  selectedAttachments: File[] = [];
   isTitleTouched = false;
   isDueDateTouched = false;
   isCategoryTouched = false;
@@ -84,6 +89,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   // #region UI State
   toastVisible = false;
+  attachmentUploadError = '';
   private toastTimer?: number;
   // #endregion
 
@@ -191,6 +197,10 @@ export class AddTask implements OnChanges, OnDestroy {
     const dueDateDate = this.parseDueDate(dueDateValue);
     if (!dueDateDate) return;
     const dueDate = Timestamp.fromDate(dueDateDate);
+    this.attachmentUploadError = '';
+
+    const { attachments, warningMessage } = await this.resolveAttachmentsForSave();
+    this.attachmentUploadError = warningMessage;
 
     const assigneeIds = this.activeAssignees
       .map((contact) => contact.id)
@@ -201,7 +211,10 @@ export class AddTask implements OnChanges, OnDestroy {
       dueDate,
       assigneeIds,
       validatedCategory,
+      attachments,
     );
+
+    let persistedTask: Task | null = null;
 
     if (this.isEditMode && this.taskToEdit?.id) {
       const updatedTask: Task = {
@@ -209,6 +222,8 @@ export class AddTask implements OnChanges, OnDestroy {
         ...taskPayload,
       };
       await this.taskService.updateDocument(updatedTask, 'tasks');
+      persistedTask = updatedTask;
+      this.selectedAttachments = [];
     } else {
       const tasksInTargetColumn = this.taskService.tasks.filter(
         (task) => task.status === this.initialStatus,
@@ -221,10 +236,12 @@ export class AddTask implements OnChanges, OnDestroy {
         ...taskPayload,
       };
 
-      await this.taskService.addDocument(task);
+      const createdTaskId = await this.taskService.addDocument(task);
+      persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
       this.resetForm();
     }
 
+    if (persistedTask) this.taskSaved.emit(persistedTask);
     this.showToast();
     this.resetDirtyState();
   }
@@ -238,7 +255,9 @@ export class AddTask implements OnChanges, OnDestroy {
     this.activeAssignees = [];
     this.activeCategory = null;
     this.activeSubtasks = [];
-    this.selectedAttachment = null;
+    this.editableExistingAttachments = [];
+    this.selectedAttachments = [];
+    this.attachmentUploadError = '';
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
@@ -261,6 +280,11 @@ export class AddTask implements OnChanges, OnDestroy {
     this.activeCategory =
       this.taskService.taskCategories.find((category) => category.value === task.category) ?? null;
     this.activeSubtasks = task.subtasks.map((subtask) => ({ ...subtask }));
+    this.editableExistingAttachments = (task.attachments ?? []).map((attachment) => ({
+      ...attachment,
+    }));
+    this.selectedAttachments = [];
+    this.attachmentUploadError = '';
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
@@ -310,6 +334,7 @@ export class AddTask implements OnChanges, OnDestroy {
    * @param dueDate Due date timestamp.
    * @param assignees Contact IDs assigned to the task.
    * @param category Validated task category.
+   * @param attachments Uploaded attachments for the task.
    * @returns Base payload used for both create and update operations.
    */
   private buildTaskPayload(
@@ -318,6 +343,7 @@ export class AddTask implements OnChanges, OnDestroy {
     dueDate: Timestamp,
     assignees: Array<string>,
     category: Task['category'],
+    attachments: TaskAttachment[],
   ): Omit<Task, 'id' | 'status' | 'order'> {
     return {
       title,
@@ -327,7 +353,188 @@ export class AddTask implements OnChanges, OnDestroy {
       assignees,
       category,
       subtasks: [...this.activeSubtasks],
+      attachments,
     };
+  }
+
+  /**
+   * Resolves attachments to persist: keeps existing ones and appends new uploads in edit mode.
+   * Falls back to existing attachments if upload fails so task save is not blocked.
+   * @returns Attachment list and optional warning message.
+   */
+  private async resolveAttachmentsForSave(): Promise<{
+    attachments: TaskAttachment[];
+    warningMessage: string;
+  }> {
+    const existingAttachments = [...this.editableExistingAttachments];
+    if (!this.selectedAttachments.length) {
+      return {
+        attachments: [...existingAttachments],
+        warningMessage: '',
+      };
+    }
+
+    const newAttachments: TaskAttachment[] = [];
+    let failedAttachments = 0;
+
+    for (const selectedFile of this.selectedAttachments) {
+      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
+      if (createdAttachment) newAttachments.push(createdAttachment);
+      else failedAttachments += 1;
+    }
+
+    if (failedAttachments > 0) {
+      const pluralSuffix = failedAttachments > 1 ? 's were' : ' was';
+      return {
+        attachments: [...existingAttachments, ...newAttachments],
+        warningMessage: `${failedAttachments} attachment${pluralSuffix} skipped because processing failed.`,
+      };
+    }
+
+    return {
+      attachments: [...existingAttachments, ...newAttachments],
+      warningMessage: '',
+    };
+  }
+
+  /**
+   * Converts a selected file to base64 and returns attachment metadata for Firestore.
+   * @param file Attachment file selected by the user.
+   * @returns Attachment metadata or `null` when conversion fails.
+   */
+  private async createAttachmentFromFile(file: File): Promise<TaskAttachment | null> {
+    try {
+      const compressedDataUrl = await this.compressImage(
+        file,
+        this.attachmentMaxWidth,
+        this.attachmentMaxHeight,
+        this.attachmentQuality,
+      );
+      const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
+      const base64DataUrl = compressedDataUrl ?? fallbackDataUrl;
+      if (!base64DataUrl) return null;
+
+      const fileType = this.extractMimeTypeFromDataUrl(base64DataUrl) || file.type || 'image/jpeg';
+      const base64 = this.extractBase64Value(base64DataUrl);
+      const fileName = this.buildFileNameForMimeType(file.name, fileType);
+
+      return {
+        fileName,
+        fileType,
+        base64Size: base64.length,
+        base64,
+        uploadedAt: Timestamp.now(),
+      };
+    } catch (error) {
+      console.error('Attachment processing failed:', error);
+      return null;
+    }
+  }
+
+  /**
+   * Reads a file as a data URL.
+   * @param file Source file from file input.
+   * @returns Data URL or `null` when reading fails.
+   */
+  private readFileAsDataUrl(file: File): Promise<string | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const result = reader.result;
+        resolve(typeof result === 'string' ? result : null);
+      };
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Compresses an image file while keeping aspect ratio.
+   * Returns a JPEG data URL.
+   */
+  private compressImage(
+    file: File,
+    maxWidth = 800,
+    maxHeight = 800,
+    quality = 0.8,
+  ): Promise<string | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (typeof result !== 'string') {
+          resolve(null);
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(null);
+            return;
+          }
+
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            } else {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = Math.round(width);
+          canvas.height = Math.round(height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+
+        img.onerror = () => resolve(null);
+        img.src = result;
+      };
+
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Extracts the pure base64 value from a data URL.
+   * @param dataUrl Data URL returned by `FileReader`.
+   * @returns Base64 payload without mime prefix.
+   */
+  private extractBase64Value(dataUrl: string): string {
+    const separatorIndex = dataUrl.indexOf(',');
+    if (separatorIndex === -1) return dataUrl;
+    return dataUrl.slice(separatorIndex + 1);
+  }
+
+  /**
+   * Extracts the mime type from a data URL.
+   */
+  private extractMimeTypeFromDataUrl(dataUrl: string): string {
+    const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/i);
+    return mimeMatch?.[1] ?? '';
+  }
+
+  /**
+   * Adapts filename extension to the resulting mime type.
+   */
+  private buildFileNameForMimeType(fileName: string, mimeType: string): string {
+    const lastDotIndex = fileName.lastIndexOf('.');
+    const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
+
+    if (mimeType === 'image/jpeg') return `${baseName}.jpg`;
+    if (mimeType === 'image/png') return `${baseName}.png`;
+    return fileName;
   }
 
   /**

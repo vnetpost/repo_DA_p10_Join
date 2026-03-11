@@ -49,19 +49,60 @@
   display: none;
 }
 
-.file-upload__selected-file {
-  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.7rem);
+.file-upload__selected-file-list {
+  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.35rem);
   width: 100%;
-  padding: 0.45rem 0.6rem;
+  padding: 0.5rem 0.6rem;
   border-radius: 0.75rem;
   background-color: styles.$white-light;
 }
 
-.file-upload__filename {
-  @include styles.setFont($size: 0.95em, $weight: 400, $color: styles.$gray-dark);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+.file-upload__selected-file-header {
+  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.7rem);
+}
+
+.file-upload__existing {
+  @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 0.35rem);
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.75rem;
+  background-color: styles.$white-light;
+}
+
+.file-upload__existing-title {
+  @include styles.setFont($size: 0.9em, $weight: 500, $color: styles.$gray-dark);
+}
+
+.file-upload__existing-list {
+  width: 100%;
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.file-upload__existing-item {
+  @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.5rem);
+  @include styles.setFont($size: 0.9em, $weight: 400, $color: styles.$gray-dark);
+  margin-bottom: 0.2rem;
+  word-break: break-word;
+}
+
+.file-upload__existing-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.file-upload__existing-remove {
+  @include styles.setFont($size: 0.85em, $weight: 500, $color: styles.$blue-sky);
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  padding: 0.1rem 0.3rem;
+  border-radius: 0.3rem;
+
+  &:hover {
+    background-color: rgba(styles.$blue-sky, 0.1);
+  }
 }
 
 .file-upload__remove {
@@ -79,4 +120,8 @@
 
 .file-upload__error {
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
+}
+
+.file-upload__count {
+  @include styles.setFont($size: 0.9em, $weight: 500, $color: styles.$gray-dark);
 }

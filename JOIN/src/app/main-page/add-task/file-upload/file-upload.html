@@ -12,7 +12,7 @@
     (drop)="onDrop($event)"
     aria-label="Upload attachment"
   >
-    <span class="file-upload__dropzone-text">Drag a file or browse</span>
+    <span class="file-upload__dropzone-text">Drag files or browse</span>
     <span class="file-upload__plus" aria-hidden="true">+</span>
   </button>
 
@@ -20,20 +20,62 @@
     #fileInput
     class="file-upload__native-input"
     type="file"
+    multiple
     accept="image/jpeg,image/png"
     (change)="onFileSelected($event)"
   />
 
-  @if (selectedFile) {
-    <div class="file-upload__selected-file">
-      <span class="file-upload__filename">{{ selectedFile.name }}</span>
-      <button type="button" class="file-upload__remove" (click)="clearSelectedFile($event)">
-        Remove
-      </button>
+  @if (existingAttachments.length > 0) {
+    <div class="file-upload__existing">
+      <span class="file-upload__existing-title">Current attachments</span>
+      <ul class="file-upload__existing-list">
+        @for (attachment of existingAttachments; track $index) {
+          <li class="file-upload__existing-item">
+            <span class="file-upload__existing-name">{{ getAttachmentName(attachment, $index) }}</span>
+            <button
+              type="button"
+              class="file-upload__existing-remove"
+              (click)="removeExistingAttachment($index, $event)"
+            >
+              Remove
+            </button>
+          </li>
+        }
+      </ul>
+    </div>
+  }
+
+  @if (selectedFiles.length > 0) {
+    <div class="file-upload__selected-file-list">
+      <div class="file-upload__selected-file-header">
+        <span class="file-upload__existing-title">New attachments</span>
+        <button type="button" class="file-upload__remove" (click)="clearSelectedFiles($event)">
+          Remove all
+        </button>
+      </div>
+      <ul class="file-upload__existing-list">
+        @for (selectedFile of selectedFiles; track $index) {
+          <li class="file-upload__existing-item">
+            <span class="file-upload__existing-name">{{ selectedFile.name }}</span>
+            <button
+              type="button"
+              class="file-upload__existing-remove"
+              (click)="removeSelectedFile($index, $event)"
+            >
+              Remove
+            </button>
+          </li>
+        }
+      </ul>
     </div>
   }
 
   @if (showTypeError) {
-    <span class="file-upload__error">Only JPEG and PNG files are allowed.</span>
+    <span class="file-upload__error">
+      Only JPEG and PNG files are allowed.
+      Unsupported files were ignored.
+    </span>
+  } @else if (selectedFiles.length > 0) {
+    <span class="file-upload__count">{{ selectedFiles.length }} file(s) selected.</span>
   }
 </div>

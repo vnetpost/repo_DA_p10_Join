@@ -39,6 +39,49 @@
         }
       </div>
     </div>
+
+    @if (attachments.length > 0) {
+      <div class="attachments">
+        <p class="subtitle">Attachments:</p>
+
+        <div class="attachment-list scroll-shadows">
+          @for (attachment of attachments; track $index) {
+            <div class="attachment-item">
+              @if (isImageAttachment(attachment)) {
+                <button
+                  type="button"
+                  class="attachment-preview"
+                  (click)="openAttachment(attachment)"
+                  [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
+                >
+                  <img
+                    class="attachment-thumbnail"
+                    [src]="getAttachmentPreviewSrc(attachment)"
+                    [alt]="getAttachmentFileName(attachment, $index)"
+                  />
+                </button>
+              }
+
+              <div class="attachment-meta">
+                <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
+                <div class="attachment-actions">
+                  <button type="button" class="attachment-action" (click)="openAttachment(attachment)">
+                    Open
+                  </button>
+                  <button
+                    type="button"
+                    class="attachment-action"
+                    (click)="downloadAttachment(attachment, $index)"
+                  >
+                    Download
+                  </button>
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
     
     @if (task.assignees.length > 0){
       <div class="assignees">

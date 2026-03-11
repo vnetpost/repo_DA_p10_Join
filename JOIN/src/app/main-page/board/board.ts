@@ -31,6 +31,7 @@ export class Board {
   selectedTask!: Task;
   showCloseConfirm: boolean = false;
   isAddTaskDirty: boolean = false;
+  latestSavedTask: Task | null = null;
 
   /**
    * Performs a search based on the current search term.
@@ -87,6 +88,7 @@ export class Board {
    */
   openAddTaskOverlay(status: Task['status'] = 'to-do'): void {
     this.taskToEdit = null;
+    this.latestSavedTask = null;
     this.addTaskStatus = status;
     this.isAddTaskOverlayOpen = true;
   }
@@ -102,8 +104,19 @@ export class Board {
    */
   openEditTaskOverlay(task: Task): void {
     this.taskToEdit = task;
+    this.latestSavedTask = null;
     this.addTaskStatus = task.status;
     this.isAddTaskOverlayOpen = true;
+  }
+
+  /**
+   * Receives the latest persisted task from the add-task form.
+   *
+   * @param task Newly created or updated task.
+   * @returns void
+   */
+  onTaskSaved(task: Task): void {
+    this.latestSavedTask = task;
   }
 
   /**
@@ -204,15 +217,19 @@ export class Board {
    */
   closeAddTaskOverlay(): void {
     const editedTask = this.taskToEdit;
+    const latestSavedTask = this.latestSavedTask;
     this.isAddTaskOverlayOpen = false;
     this.taskToEdit = null;
+    this.latestSavedTask = null;
     this.addTaskStatus = 'to-do';
     this.isAddTaskDirty = false;
 
-    if (editedTask?.id) {
-      this.openTask(
-        this.taskService.tasks.find((task) => task.id === editedTask.id) ?? editedTask
-      );
+    const taskIdToReopen = latestSavedTask?.id ?? editedTask?.id;
+    if (taskIdToReopen) {
+      const freshestTask = this.taskService.tasks.find((task) => task.id === taskIdToReopen);
+      const taskToOpen = freshestTask ?? latestSavedTask ?? editedTask;
+      if (!taskToOpen) return;
+      this.openTask(taskToOpen);
     }
   }
 }

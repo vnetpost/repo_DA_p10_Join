@@ -106,6 +106,7 @@
             [initialStatus]="addTaskStatus"
             (closeDialogRequested)="closeAddTaskOverlay()"
             (dirtyChange)="onAddTaskDirtyChange($event)"
+            (taskSaved)="onTaskSaved($event)"
           ></app-add-task>
         </div>
       </div>

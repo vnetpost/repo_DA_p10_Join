@@ -121,6 +121,7 @@ export class TaskService {
       assignees: obj.assignees || [],
       category: obj.category || '',
       subtasks: obj.subtasks || [],
+      attachments: obj.attachments || [],
     };
   }
 
@@ -175,6 +176,7 @@ export class TaskService {
       assignees: task.assignees,
       category: task.category,
       subtasks: task.subtasks,
+      attachments: task.attachments || [],
     };
   }
 

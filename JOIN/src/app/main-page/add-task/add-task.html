@@ -55,7 +55,13 @@
       </div>
 
       <div class="add-task__column add-task__column--divider">
-        <app-file-upload [(selectedFile)]="selectedAttachment"></app-file-upload>
+        <app-file-upload
+          [(existingAttachments)]="editableExistingAttachments"
+          [(selectedFiles)]="selectedAttachments"
+        ></app-file-upload>
+        <span class="add-task__field-error" [class.is-visible]="attachmentUploadError.length > 0">
+          {{ attachmentUploadError }}
+        </span>
         <app-subtask-composer class="add-task__padding-top" [(subtasks)]="activeSubtasks"></app-subtask-composer>
         @if (showSubtaskHint) {
           <span class="add-task__subtask-hint"> Either add no subtasks or at least two.</span>
