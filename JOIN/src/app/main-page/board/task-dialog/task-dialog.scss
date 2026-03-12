@@ -311,18 +311,12 @@ dialog {
       .initials {
         @include styles.setFlex();
         overflow: hidden;
-        width: 36px;
-        height: 36px;
-        padding: 8px;
+        width: 32px;
+        height: 32px;
         border: 1px solid white;
         border-radius: 50%;
         color: white;
         word-break: normal;
-
-        @include styles.up-xxl {
-          width: 40px;
-          height: 40px;
-        }
 
         .assignee-avatar-image {
           width: 100%;

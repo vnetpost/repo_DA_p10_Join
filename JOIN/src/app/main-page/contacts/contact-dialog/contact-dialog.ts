@@ -31,6 +31,9 @@ export class ContactDialog {
   avatar: ContactAvatar | null = null;
   avatarPreviewSrc: string | null = null;
   readonly avatarAllowedMimeTypes = ['image/jpeg', 'image/png'];
+  readonly avatarMaxWidth = 800;
+  readonly avatarMaxHeight = 800;
+  readonly avatarQuality = 0.8;
 
   @Output() saveContact = new EventEmitter<ContactFormData>();
   // @Output() deleteContact = new EventEmitter<string>();
@@ -241,15 +244,24 @@ export class ContactDialog {
       return;
     }
 
-    const dataUrl = await this.readFileAsDataUrl(file);
+    const compressedDataUrl = await this.compressImage(
+      file,
+      this.avatarMaxWidth,
+      this.avatarMaxHeight,
+      this.avatarQuality,
+    );
+    const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
+    const dataUrl = compressedDataUrl ?? fallbackDataUrl;
     if (!dataUrl) return;
 
     const base64 = this.extractBase64FromDataUrl(dataUrl);
     if (!base64) return;
 
     const fileType = this.extractMimeTypeFromDataUrl(dataUrl) || file.type || 'image/jpeg';
+    const fileName = this.buildFileNameForMimeType(file.name || 'avatar.jpg', fileType);
+
     this.avatar = {
-      fileName: file.name || 'avatar.jpg',
+      fileName,
       fileType,
       base64Size: base64.length,
       base64,
@@ -269,6 +281,64 @@ export class ContactDialog {
     return new Promise((resolve) => {
       const reader = new FileReader();
       reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Compresses an image file while keeping aspect ratio.
+   * Returns a JPEG data URL.
+   */
+  private compressImage(
+    file: File,
+    maxWidth = 800,
+    maxHeight = 800,
+    quality = 0.8,
+  ): Promise<string | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        const result = event.target?.result;
+        if (typeof result !== 'string') {
+          resolve(null);
+          return;
+        }
+
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          if (!ctx) {
+            resolve(null);
+            return;
+          }
+
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxWidth || height > maxHeight) {
+            if (width > height) {
+              height = (height * maxWidth) / width;
+              width = maxWidth;
+            } else {
+              width = (width * maxHeight) / height;
+              height = maxHeight;
+            }
+          }
+
+          canvas.width = Math.round(width);
+          canvas.height = Math.round(height);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+          resolve(canvas.toDataURL('image/jpeg', quality));
+        };
+
+        img.onerror = () => resolve(null);
+        img.src = result;
+      };
+
       reader.onerror = () => resolve(null);
       reader.readAsDataURL(file);
     });
@@ -295,6 +365,18 @@ export class ContactDialog {
     const separatorIndex = dataUrl.indexOf(',');
     if (separatorIndex === -1) return dataUrl;
     return dataUrl.slice(separatorIndex + 1);
+  }
+
+  /**
+   * Adapts filename extension to the resulting mime type.
+   */
+  private buildFileNameForMimeType(fileName: string, mimeType: string): string {
+    const lastDotIndex = fileName.lastIndexOf('.');
+    const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
+
+    if (mimeType === 'image/jpeg') return `${baseName}.jpg`;
+    if (mimeType === 'image/png') return `${baseName}.png`;
+    return fileName;
   }
   // #endregion
 }

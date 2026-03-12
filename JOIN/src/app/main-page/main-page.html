@@ -112,7 +112,7 @@
             
             <form class="sign-up-form log-in-sign-up-form" #signUpForm="ngForm" (ngSubmit)="onSignUp(signUpForm)" novalidate autocomplete="off">
               <div class="input-box">
-                <input type="text" placeholder="Name" name="name" [(ngModel)]="signUpData.name" #name="ngModel" aria-label="Name" required minlength="2" pattern="^[a-zA-Z\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z\xC0-\uFFFF]+){0,2}[.]{0,1}$">
+                <input type="text" placeholder="Name" name="name" [(ngModel)]="signUpData.name" #name="ngModel" aria-label="Name" required minlength="2" pattern="^(?=(?:.*[a-zA-Z\xC0-\uFFFF]){2,})[a-zA-Z0-9\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z0-9\xC0-\uFFFF]+){0,2}[.]{0,1}$">
                 <img src="assets/img/icons/forms/name.svg" alt="" aria-hidden="true">
                 <div class="input-error-wrapper">
                   @if (name.invalid && name.touched) {

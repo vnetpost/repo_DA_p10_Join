@@ -102,7 +102,7 @@
             aria-label="Name"
             required
             minlength="2"
-            pattern="^[a-zA-Z\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z\xC0-\uFFFF]+){0,2}[.]{0,1}$"
+            pattern="^(?=(?:.*[a-zA-Z\xC0-\uFFFF]){2,})[a-zA-Z0-9\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z0-9\xC0-\uFFFF]+){0,2}[.]{0,1}$"
             [(ngModel)]="contactData.name"
             #name="ngModel"
           />

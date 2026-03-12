@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { EnvironmentInjector, inject, Injectable, runInInjectionContext } from '@angular/core';
 import {
   addDoc,
   collection,
@@ -27,6 +27,7 @@ import { capitalizeFullname, setUserColor } from '../utilities/utils';
  */
 export class FirebaseService {
   firestore: Firestore = inject(Firestore);
+  private injector = inject(EnvironmentInjector);
   contacts: Array<Contact> = [];
   contactsVersion = 0;
   unsubCollection!: Unsubscribe;
@@ -47,13 +48,13 @@ export class FirebaseService {
   subCollection(): Unsubscribe {
     this.loading = true;
 
-    const contactsQuery = query(
+    const contactsQuery = this.executeInInjectionContext(() => query(
       this.getContactsRef(),
       where('isAvailable', '==', true),
       orderBy('name', 'asc'),
-    );
+    ));
 
-    return onSnapshot(contactsQuery, (snapshot) => {
+    return this.executeInInjectionContext(() => onSnapshot(contactsQuery, (snapshot) => {
       this.contacts.length = 0;
       snapshot.forEach((contact) => {
         this.contacts.push(this.mapContactObj(contact.data(), contact.id));
@@ -61,7 +62,17 @@ export class FirebaseService {
 
       this.loading = false;
       this.contactsVersion += 1;
-    });
+    }));
+  }
+
+  /**
+   * Executes Firebase API calls within a stable Angular injection context.
+   *
+   * @param callback Function that calls Firebase APIs.
+   * @returns Callback result.
+   */
+  private executeInInjectionContext<T>(callback: () => T): T {
+    return runInInjectionContext(this.injector, callback);
   }
 
   /**
@@ -91,7 +102,7 @@ export class FirebaseService {
    * @returns A promise that resolves when deletion completes
    */
   async deleteDocument(colId: string, docId: string): Promise<void> {
-    await deleteDoc(this.getSingleDocRef(colId, docId)).catch((err) => {
+    await this.executeInInjectionContext(() => deleteDoc(this.getSingleDocRef(colId, docId))).catch((err) => {
       console.log(err);
     });
   }
@@ -106,7 +117,7 @@ export class FirebaseService {
   async updateDocument(item: Contact, colId: string): Promise<void> {
     if (item.id) {
       const docRef = this.getSingleDocRef(colId, item.id);
-      await updateDoc(docRef, this.getCleanJson(item))
+      await this.executeInInjectionContext(() => updateDoc(docRef, this.getCleanJson(item)))
         .catch((err) => {
           console.log(err);
         })
@@ -161,7 +172,7 @@ export class FirebaseService {
    */
   async addDocument(item: Contact): Promise<string | null> {
     try {
-      const docRef = await addDoc(this.getContactsRef(), item);
+      const docRef = await this.executeInInjectionContext(() => addDoc(this.getContactsRef(), item));
       return docRef.id;
     } catch (err) {
       console.error(err);
@@ -184,7 +195,7 @@ export class FirebaseService {
    * @returns The Firestore collection reference
    */
   getContactsRef() {
-    return collection(this.firestore, 'contacts');
+    return this.executeInInjectionContext(() => collection(this.firestore, 'contacts'));
   }
 
   /**
@@ -195,6 +206,6 @@ export class FirebaseService {
    * @returns The Firestore document reference
    */
   getSingleDocRef(colId: string, docId: string) {
-    return doc(collection(this.firestore, colId), docId);
+    return this.executeInInjectionContext(() => doc(collection(this.firestore, colId), docId));
   }
 }
