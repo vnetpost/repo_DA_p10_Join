@@ -55,9 +55,13 @@
 }
 
 .add-task__column {
-  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.8rem);
+  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 1rem);
   flex: 1;
   min-width: 0;
+}
+
+.add-task__field-group {
+  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.2rem);
 }
 
 .add-task__column:first-child {
@@ -95,7 +99,7 @@
 .add-task__field-error {
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
   visibility: hidden;
-  min-height: 1em;
+  min-height: 1.15em;
 }
 
 .add-task__field-error.is-visible {
@@ -103,11 +107,7 @@
 }
 
 .add-task__subtask-hint {
-  @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
-}
-
-.add-task__padding-top {
-  padding-top: 2rem;
+  color: styles.$red-error;
 }
 
 .required {

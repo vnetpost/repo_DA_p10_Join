@@ -34,11 +34,11 @@ dialog {
       width: 0px;
     }
 
-    @include styles.down-xs{
+    @include styles.down-xs {
       width: 88dvw;
     }
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       width: 505px;
       max-width: 550px;
       padding: 46px 36px 36px;
@@ -48,97 +48,97 @@ dialog {
   }
 }
 
-.header{
+.header {
   @include styles.setFlex($jc: space-between);
 
-  .category{
+  .category {
     @include styles.setFlex();
     width: fit-content;
     padding: 3px 16px;
     border-radius: 8px;
     color: white;
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       padding: 4px 30px;
       font-size: 20px;
     }
   }
-  
-  .technical-task{
+
+  .technical-task {
     background-color: styles.$mint-accent;
   }
-  
-  .user-story{
+
+  .user-story {
     background-color: styles.$blue-primary;
   }
 
-  .close-btn{
+  .close-btn {
     @include styles.setFlex();
     background-color: transparent;
     width: 32px;
     height: 32px;
 
-    .icon{
+    .icon {
       width: 24px;
       height: 24px;
     }
 
-    .icon--hover{
+    .icon--hover {
       display: none;
     }
 
-    &:hover{
-      .icon--default{
+    &:hover {
+      .icon--default {
         display: none;
       }
 
-      .icon--hover{
+      .icon--hover {
         display: block;
       }
     }
   }
 }
 
-.title{
+.title {
   margin-top: 4px;
   margin-bottom: 8px;
   font-size: 26px;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     margin-bottom: 24px;
     font-size: 40px;
     line-height: 1.15;
   }
 }
 
-.description{
+.description {
   margin-bottom: 4px;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     margin-bottom: 0px;
   }
 }
 
-.subtitle{
-  color: #42526E;
+.subtitle {
+  color: #42526e;
 }
 
-.due-date{
+.due-date {
   @include styles.setFlex($jc: flex-start, $gap: 16px);
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     gap: 24px;
   }
 }
 
-.priority{
+.priority {
   @include styles.setFlex($jc: flex-start, $gap: 30px);
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     gap: 42px;
   }
 
-  div{
+  div {
     @include styles.setFlex($gap: 2px);
   }
 }
@@ -188,7 +188,7 @@ dialog {
     background-color: styles.$white-light;
     flex-shrink: 0;
   }
-  
+
   .attachment-preview-open {
     width: 100%;
     height: 100%;
@@ -199,46 +199,40 @@ dialog {
     background: transparent;
     padding: 0;
   }
-  
+
   .attachment-preview-download {
     @include styles.setFlex($d: row, $ai: center, $jc: center, $gap: 0);
     position: absolute;
     top: 50%;
     left: 50%;
     z-index: 2;
-    width: 3rem;
-    height: 3rem;
+    width: 2.8rem;
+    height: 2.8rem;
     border: none;
-    border-radius: 0.5rem;
-    background-color: rgba(styles.$gray-dark, 0.75);
-    transform: translate(-50%, -50%) scale(0.92);
+    border-radius: 50%;
+    background-color: transparent;
+    // transform: translate(-50%, -50%) scale(0.92);
+    transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
     cursor: pointer;
-    transition: opacity 0.18s ease, transform 0.18s ease, background-color 0.18s ease;
-
-    &:hover {
-      background-color: rgba(styles.$gray-dark, 0.9);
-    }
+    transition:
+      opacity 0.18s ease,
+      transform 0.18s ease,
+      background-color 0.18s ease;
 
     .icon {
-      width: 2.7rem;
-      height: 2.7rem;
+      width: 2.1rem;
+      height: 2.1rem;
       display: block;
+      filter: invert(1);
+      transition: filter 0.18s ease;
     }
 
-    .icon--hover {
-      display: none;
-    }
-
-    &:hover .icon--default,
-    &:focus-visible .icon--default {
-      display: none;
-    }
-
-    &:hover .icon--hover,
-    &:focus-visible .icon--hover {
-      display: block;
+    &:hover .icon,
+    &:focus-visible .icon {
+      filter: brightness(0) saturate(100%) invert(62%) sepia(76%) saturate(1316%)
+        hue-rotate(161deg) brightness(96%) contrast(88%);
     }
   }
 
@@ -247,13 +241,15 @@ dialog {
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: filter 0.18s ease, transform 0.18s ease;
+    transition:
+      filter 0.18s ease,
+      transform 0.18s ease;
   }
 
   .attachment-preview:hover .attachment-thumbnail,
   .attachment-preview:focus-within .attachment-thumbnail {
-    filter: brightness(0.62);
-    transform: scale(1.03);
+    filter: brightness(0.60);
+    // transform: scale(1.03);
   }
 
   .attachment-preview:hover .attachment-preview-download,
@@ -274,20 +270,20 @@ dialog {
   }
 }
 
-.assignees{
+.assignees {
   @include styles.setFlex($d: column, $ai: flex-start, $gap: 9px);
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     gap: 16px;
   }
 
-  .assignee-list{
+  .assignee-list {
     @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
     width: 100%;
     max-height: 135px;
     overflow-y: auto;
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       max-height: 150px;
     }
 
@@ -303,16 +299,16 @@ dialog {
       background: styles.$gray-light;
     }
 
-    .assignee-item{
+    .assignee-item {
       @include styles.setFlex($ai: center, $gap: 10px);
       margin-left: 16px;
       padding-right: 8px;
 
-      @include styles.up-xxl{
+      @include styles.up-xxl {
         gap: 16px;
       }
 
-      .initials{
+      .initials {
         @include styles.setFlex();
         width: 36px;
         height: 36px;
@@ -321,8 +317,8 @@ dialog {
         border-radius: 50%;
         color: white;
         word-break: normal;
-  
-        @include styles.up-xxl{
+
+        @include styles.up-xxl {
           width: 40px;
           height: 40px;
         }
@@ -331,15 +327,15 @@ dialog {
   }
 }
 
-.subtasks{
+.subtasks {
   @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);
   width: 100%;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     gap: 10px;
   }
 
-  .subtask-list{
+  .subtask-list {
     width: 100%;
     max-height: 110px;
     overflow-y: auto;
@@ -356,101 +352,101 @@ dialog {
       background: styles.$gray-light;
     }
 
-    .checkbox-wrapper{
+    .checkbox-wrapper {
       @include styles.setFlex($jc: flex-start, $gap: 10px);
       width: fit-content;
       padding-left: 16px;
       padding-right: 16px;
       margin-bottom: 6px;
       cursor: pointer;
-  
-      @include styles.up-xxl{
+
+      @include styles.up-xxl {
         font-size: 16px;
         gap: 14px;
         margin-bottom: 6px;
       }
-      
-      &:hover{
+
+      &:hover {
         padding-right: 16px;
         border-radius: 8px;
         background-color: styles.$white-light;
       }
-  
-      .checkbox{
+
+      .checkbox {
         display: none;
-  
+
         &:checked + .checkbox-ui {
           background: url(../../../../../public/assets/img/icons/checkboxes/checkbox-checked.svg)
-          center / contain no-repeat;
+            center / contain no-repeat;
         }
       }
-      
+
       .checkbox-ui {
         width: 24px;
         height: 24px;
         flex-shrink: 0;
-        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox.svg)
-          center / contain no-repeat;
-      }
-      
-      &:hover .checkbox-ui {
-        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox-hover.svg)
-        center / contain no-repeat;
-      }
-  
-      &:hover .checkbox:checked + .checkbox-ui {
-        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox-checked-hover.svg)
-        center / contain no-repeat;
+        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox.svg) center /
+          contain no-repeat;
       }
 
-      .subtask-title{
+      &:hover .checkbox-ui {
+        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox-hover.svg)
+          center / contain no-repeat;
+      }
+
+      &:hover .checkbox:checked + .checkbox-ui {
+        background: url(../../../../../public/assets/img/icons/checkboxes/checkbox-checked-hover.svg)
+          center / contain no-repeat;
+      }
+
+      .subtask-title {
         word-break: break-word;
       }
     }
   }
 }
 
-footer{
+footer {
   @include styles.setFlex($jc: flex-end);
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     margin-top: -8px;
   }
 
-  button{
+  button {
     @include styles.setFlex($gap: 4px);
     background-color: transparent;
-    color: #2A3647;
+    color: #2a3647;
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       font-size: 16px;
     }
 
-    .icon{
+    .icon {
       width: 22px;
       height: 22px;
     }
 
-    .icon--hover{
+    .icon--hover {
       display: none;
     }
 
-    &:hover{
+    &:hover {
       color: styles.$blue-sky;
 
-      .icon--default{
+      .icon--default {
         display: none;
       }
 
-      .icon--hover{
+      .icon--hover {
         display: block;
       }
     }
   }
 
-  .separator{
+  .separator {
     width: 1px;
     height: 18px;
-    background-color: #D1D1D1;
+    background-color: #d1d1d1;
   }
 }

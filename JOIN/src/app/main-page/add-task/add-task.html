@@ -6,70 +6,87 @@
   <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()" (focusin)="markAsEdited()">
     <div class="add-task__content">
       <div class="add-task__column">
-        <app-task-form-field
-          label="Title"
-          [isRequired]="true"
-          placeholder="Enter a title"
-          (fieldBlur)="isTitleTouched = true"
-          [hasError]="showTitleError"
-          [(value)]="taskTitle"
-        ></app-task-form-field>
-        <span class="add-task__field-error" [class.is-visible]="showTitleError">
-          {{ titleErrorMessage }}
-        </span>
+        <div class="add-task__field-group">
+          <app-task-form-field
+            label="Title"
+            [isRequired]="true"
+            placeholder="Enter a title"
+            (fieldBlur)="isTitleTouched = true"
+            [hasError]="showTitleError"
+            [(value)]="taskTitle"
+          ></app-task-form-field>
+          <span class="add-task__field-error" [class.is-visible]="showTitleError">
+            {{ titleErrorMessage }}
+          </span>
+        </div>
 
-        <app-task-form-field
-          label="Description"
-          [isTextarea]="true"
-          [isRequired]="false"
-          placeholder="Enter a Description"
-          [(value)]="taskDescription"
-        ></app-task-form-field>
+        <div class="add-task__field-group">
+          <app-task-form-field
+            label="Description"
+            [isTextarea]="true"
+            [isRequired]="false"
+            placeholder="Enter a Description"
+            [(value)]="taskDescription"
+          ></app-task-form-field>
+        </div>
 
-        <app-task-form-field
-          label="Due date"
-          [isRequired]="true"
-          placeholder="yyyy/mm/dd"
-          type="text"
-          [useFlatpickr]="true"
-          [min]="minDueDate"
-          (fieldBlur)="isDueDateTouched = true"
-          [hasError]="showDueDateError"
-          [(value)]="taskDueDate"
-          iconSrc="assets/img/icons/board/date.svg"
-        ></app-task-form-field>
-        <span class="add-task__field-error" [class.is-visible]="showDueDateError">
-          This field is required
-        </span>
+        <div class="add-task__field-group">
+          <app-task-form-field
+            label="Due date"
+            [isRequired]="true"
+            placeholder="yyyy/mm/dd"
+            type="text"
+            [useFlatpickr]="true"
+            [min]="minDueDate"
+            (fieldBlur)="isDueDateTouched = true"
+            [hasError]="showDueDateError"
+            [(value)]="taskDueDate"
+            iconSrc="assets/img/icons/board/date.svg"
+          ></app-task-form-field>
+          <span class="add-task__field-error" [class.is-visible]="showDueDateError">
+            This field is required
+          </span>
+        </div>
 
-        <app-priority-selector class="add-task__padding-top" [(selectedPriority)]="activePriority"></app-priority-selector>
-        <app-dropdown-category
-          class="add-task__padding-top"
-          [(selectedCategory)]="activeCategory"
-          (fieldBlur)="isCategoryTouched = true"
-          [hasError]="showCategoryError"
-        ></app-dropdown-category>
-        <span class="add-task__field-error" [class.is-visible]="showCategoryError">
-          This field is required
-        </span>
+        <div class="add-task__field-group">
+          <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
+        </div>
+
+        <div class="add-task__field-group">
+          <app-dropdown-category
+            [(selectedCategory)]="activeCategory"
+            (fieldBlur)="isCategoryTouched = true"
+            [hasError]="showCategoryError"
+          ></app-dropdown-category>
+          <span class="add-task__field-error" [class.is-visible]="showCategoryError">
+            This field is required
+          </span>
+        </div>
       </div>
 
       <div class="add-task__column add-task__column--divider">
-        <app-file-upload
-          [(existingAttachments)]="editableExistingAttachments"
-          [(selectedFiles)]="selectedAttachments"
-        ></app-file-upload>
-        <span class="add-task__field-error" [class.is-visible]="attachmentUploadError.length > 0">
-          {{ attachmentUploadError }}
-        </span>
-        <app-subtask-composer class="add-task__padding-top" [(subtasks)]="activeSubtasks"></app-subtask-composer>
-        @if (showSubtaskHint) {
-          <span class="add-task__subtask-hint"> Either add no subtasks or at least two.</span>
-        }
-        <app-dropdown-assignee
-          class="add-task__padding-top"
-          [(selectedContacts)]="activeAssignees"
-        ></app-dropdown-assignee>
+        <div class="add-task__field-group">
+          <app-file-upload
+            [(existingAttachments)]="editableExistingAttachments"
+            [(selectedFiles)]="selectedAttachments"
+          ></app-file-upload>
+          <span class="add-task__field-error" [class.is-visible]="attachmentUploadError.length > 0">
+            {{ attachmentUploadError }}
+          </span>
+        </div>
+
+        <div class="add-task__field-group">
+          <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
+          <span class="add-task__field-error add-task__subtask-hint" [class.is-visible]="showSubtaskHint">
+            Either add no subtasks or at least two.
+          </span>
+        </div>
+
+        <div class="add-task__field-group">
+          <app-dropdown-assignee
+            [(selectedContacts)]="activeAssignees"
+          ></app-dropdown-assignee>
+        </div>
       </div>
     </div>
 
