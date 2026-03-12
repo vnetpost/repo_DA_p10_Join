@@ -26,13 +26,18 @@
   (requestDelete)="requestDelete(activeContact!)"
 />
 
-<aside class="toast-wrapper" aria-live="polite" aria-atomic="true">
+<aside
+  class="toast-wrapper toast-wrapper--blocking"
+  [class.toast-wrapper--active]="toastVisible"
+  aria-live="polite"
+  aria-atomic="true"
+>
   <p
     class="toast"
     [class.toast--visible]="toastVisible"
     role="status"
   >
-    Contact successfully created 
+    Contact successfully created
   </p>
 </aside>
 

@@ -1,10 +1,10 @@
 @use '../../../styles/index.scss' as styles;
 
-section {
+:host > section {
   @include styles.setFlex($ai: flex-start);
   height: 100%;
 
-  .content-wrapper {
+  > .content-wrapper {
     width: 93%;
     height: 100%;
     padding: 2rem 0 12rem;
@@ -41,6 +41,7 @@ section {
   .search-bar {
     grid-area: 2/1/3/3;
     @include styles.setGrid($rows: 1fr, $columns: 1fr 1px 60px);
+    height: 46px;
 
     @include styles.up-xxl {
       grid-area: 1/2/2/3;
