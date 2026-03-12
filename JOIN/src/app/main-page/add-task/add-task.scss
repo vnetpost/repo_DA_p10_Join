@@ -115,7 +115,7 @@
 }
 
 @include styles.down-xxl {
-  .add-task {
+  .add-task:not(.add-task--overlay) {
     height: calc(100dvh - 2 * styles.$header-height);
   }
 }
