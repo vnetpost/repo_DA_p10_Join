@@ -2,7 +2,7 @@
 
 .contacts {
   @include styles.setFlex($ai: stretch);
-  height: 100%;
+  min-height: calc(100dvh - styles.$header-height);
   width: 100%;
 
   &__list {
