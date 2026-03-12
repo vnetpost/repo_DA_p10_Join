@@ -2,10 +2,12 @@
 
 .contact-info {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
-  height: 100%;
+  height: calc(100dvh - styles.$header-height);
   width: 100%;
   padding: clamp(2rem, 13vmin, 5rem) clamp(2rem, 3vw, 5rem);
   overflow: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 
   &__header {
     @include styles.setFlex($jc: flex-start, $gap: clamp(1rem, 1vw, 3rem));
