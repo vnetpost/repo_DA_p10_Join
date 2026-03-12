@@ -55,13 +55,34 @@
     <section class="form-section">
       @if (dialogMode === 'add') {
         <div class="avatar" aria-hidden="true">
-          <img src="assets/img/icons/forms/contact-white.svg" alt="" />
+          <img class="avatar__placeholder-icon" src="assets/img/icons/forms/contact-white.svg" alt="" />
         </div>
       } @else {
-        <div class="avatar" [style.backgroundColor]="userColor" aria-hidden="true">
-          <span class="initials">
-            {{ getTwoInitials(contactData.name) }}
-          </span>
+        <div class="avatar" [style.backgroundColor]="avatarPreviewSrc ? null : userColor">
+          @if (avatarPreviewSrc) {
+            <img class="avatar__image" [src]="avatarPreviewSrc" alt="" aria-hidden="true" />
+          } @else {
+            <span class="initials">
+              {{ getTwoInitials(contactData.name) }}
+            </span>
+          }
+          @if (canUploadAvatar) {
+            <button
+              type="button"
+              class="avatar__upload-button"
+              aria-label="Upload avatar image"
+              (click)="openAvatarPicker($event)"
+            >
+              <img src="assets/img/icons/buttons/camera.svg" alt="" aria-hidden="true" />
+            </button>
+            <input
+              #avatarInput
+              class="avatar__upload-input"
+              type="file"
+              accept="image/jpeg,image/png"
+              (change)="onAvatarSelected($event)"
+            />
+          }
         </div>
       }
 

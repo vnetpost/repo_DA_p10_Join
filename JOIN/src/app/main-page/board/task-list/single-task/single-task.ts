@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Task } from '../../../../shared/interfaces/task';
 import { FirebaseService } from '../../../../shared/services/firebase-service';
-import { getTwoInitials } from '../../../../shared/utilities/utils';
+import { getContactAvatarSrc, getTwoInitials } from '../../../../shared/utilities/utils';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../shared/services/task-service';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
@@ -152,5 +152,16 @@ export class SingleTask implements OnInit {
     });
 
     return contact?.userColor || '#9327ff';
+  }
+
+  /**
+   * Resolves the avatar image source for an assignee.
+   *
+   * @param id Contact identifier.
+   * @returns Data URL or `null`.
+   */
+  getAssigneeAvatarSrc(id: string): string | null {
+    const contact = this.contactService.contacts.find((c) => c.id === id);
+    return getContactAvatarSrc(contact);
   }
 }

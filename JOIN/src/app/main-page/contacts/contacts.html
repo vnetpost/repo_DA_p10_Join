@@ -21,6 +21,7 @@
 </div>
 <app-contact-dialog
   [canDelete]="canDeleteContact(activeContact)"
+  [canUploadAvatar]="canEditAvatar(activeContact)"
   (saveContact)="onSave($event)"
   (requestDelete)="requestDelete(activeContact!)"
 />

@@ -79,6 +79,7 @@ export class FirebaseService {
       phone: obj.phone || '',
       isAvailable: obj.isAvailable || false,
       userColor: obj.userColor ?? setUserColor(),
+      avatar: this.mapContactAvatar(obj.avatar),
     };
   }
 
@@ -129,6 +130,26 @@ export class FirebaseService {
       phone: contact.phone,
       isAvailable: contact.isAvailable,
       userColor: contact.userColor,
+      avatar: contact.avatar ?? null,
+    };
+  }
+
+  /**
+   * Maps raw avatar payloads to a normalized contact avatar object.
+   *
+   * @param avatar Raw avatar value from Firestore.
+   * @returns Normalized avatar or `null` when unavailable.
+   */
+  private mapContactAvatar(avatar: any): Contact['avatar'] {
+    const base64 = String(avatar?.base64 ?? '').trim();
+    if (!base64) return null;
+
+    return {
+      fileName: String(avatar?.fileName ?? 'avatar.jpg'),
+      fileType: String(avatar?.fileType ?? 'image/jpeg'),
+      base64Size: Number(avatar?.base64Size ?? base64.length),
+      base64,
+      uploadedAt: avatar?.uploadedAt,
     };
   }
 

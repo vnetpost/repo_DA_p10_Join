@@ -167,6 +167,7 @@ export class Contacts implements DoCheck {
       phone: data.phone,
       isAvailable: true,
       userColor: setUserColor(),
+      avatar: null,
     };
 
     const newContactId = await this.firebaseService.addDocument(contact);
@@ -203,6 +204,7 @@ export class Contacts implements DoCheck {
       phone: data.phone,
       isAvailable: this.activeContact.isAvailable,
       userColor: this.activeContact.userColor,
+      avatar: data.avatar ?? this.activeContact.avatar ?? null,
     };
 
     this.firebaseService.updateDocument(contact, 'contacts');
@@ -276,6 +278,19 @@ export class Contacts implements DoCheck {
 
     if (!currentUserEmail) return true;
     return currentUserEmail !== contactEmail;
+  }
+
+  /**
+   * Determines whether avatar upload is allowed in contact edit mode.
+   *
+   * Any authenticated user may upload avatars for contacts.
+   *
+   * @param contact Contact to evaluate.
+   * @returns True if avatar upload should be enabled.
+   */
+  canEditAvatar(contact: Contact | null): boolean {
+    if (!contact) return false;
+    return Boolean(this.authService.firebaseAuth.currentUser);
   }
 
   /**

@@ -4,6 +4,7 @@ import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { TaskService } from '../../../shared/services/task-service';
 import { FirebaseService } from '../../../shared/services/firebase-service';
+import { getContactAvatarSrc } from '../../../shared/utilities/utils';
 
 @Component({
   selector: 'app-task-dialog',
@@ -176,6 +177,17 @@ export class TaskDialog {
     });
 
     return contact?.userColor || '#9327ff';
+  }
+
+  /**
+   * Resolves the avatar image source for an assignee.
+   *
+   * @param id The contact identifier.
+   * @returns Data URL or `null` when unavailable.
+   */
+  getAssigneeAvatarSrc(id: string): string | null {
+    const contact = this.contactService.contacts.find((c) => c.id === id);
+    return getContactAvatarSrc(contact);
   }
 
   /**

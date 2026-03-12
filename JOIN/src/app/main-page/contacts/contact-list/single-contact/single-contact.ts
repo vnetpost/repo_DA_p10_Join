@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../shared/interfaces/contact';
-import { getTwoInitials } from '../../../../shared/utilities/utils';
+import { getContactAvatarSrc, getTwoInitials } from '../../../../shared/utilities/utils';
 
 @Component({
   selector: 'app-single-contact',
@@ -17,6 +17,7 @@ export class SingleContact {
   @Output() selected = new EventEmitter<Contact>();
 
   readonly getTwoInitials = getTwoInitials;
+  readonly getContactAvatarSrc = getContactAvatarSrc;
 
   /**
    * Emits the current contact as the selected item.

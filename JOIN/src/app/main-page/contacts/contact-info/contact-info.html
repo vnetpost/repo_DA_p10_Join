@@ -17,10 +17,14 @@
       <div class="contact-info__main">
         <div
           class="contact-info__avatar"
-          [style.backgroundColor]="activeContact.userColor"
+          [style.backgroundColor]="getContactAvatarSrc(activeContact) ? null : activeContact.userColor"
           aria-hidden="true"
         >
-          <span class="contact-info__initials">{{ getTwoInitials(activeContact.name) }}</span>
+          @if (getContactAvatarSrc(activeContact); as avatarSrc) {
+            <img class="contact-info__avatar-image" [src]="avatarSrc" alt="" />
+          } @else {
+            <span class="contact-info__initials">{{ getTwoInitials(activeContact.name) }}</span>
+          }
         </div>
         <div class="contact-info__identity">
           <h2 class="contact-info__name">{{ activeContact.name }}</h2>
@@ -122,4 +126,3 @@
     }
   }
 </section>
-

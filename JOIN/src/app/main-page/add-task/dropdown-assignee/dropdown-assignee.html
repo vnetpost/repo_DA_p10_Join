@@ -34,10 +34,14 @@
       @for (contact of selectedContacts; track getContactId(contact, $index)) {
         <span
           class="assignees-preview__avatar"
-          [style.backgroundColor]="contact.userColor ?? '#cccccc'"
+          [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact.userColor ?? '#cccccc'"
           aria-hidden="true"
         >
-          {{ getTwoInitials(contact.name) }}
+          @if (getContactAvatarSrc(contact); as avatarSrc) {
+            <img class="assignees-preview__avatar-image" [src]="avatarSrc" alt="" />
+          } @else {
+            {{ getTwoInitials(contact.name) }}
+          }
         </span>
       }
     </div>
@@ -61,10 +65,14 @@
           >
             <span
               class="dropdown__avatar"
-              [style.backgroundColor]="contact.userColor ?? '#cccccc'"
+              [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact.userColor ?? '#cccccc'"
               aria-hidden="true"
             >
-              {{ getTwoInitials(contact.name) }}
+              @if (getContactAvatarSrc(contact); as avatarSrc) {
+                <img class="dropdown__avatar-image" [src]="avatarSrc" alt="" />
+              } @else {
+                {{ getTwoInitials(contact.name) }}
+              }
             </span>
             <span class="dropdown__name">{{ contact.name }}</span>
             <span class="dropdown__checkbox" aria-hidden="true"></span>

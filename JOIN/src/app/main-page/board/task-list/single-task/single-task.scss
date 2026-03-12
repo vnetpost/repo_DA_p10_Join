@@ -182,9 +182,10 @@ article{
 
     div{
       @include styles.setFlex();
+      overflow: hidden;
       width: 32px;
       height: 32px;
-      padding: 8px;
+      // padding: 8px;
       margin-left: -8px;
       border: 1px solid white;
       border-radius: 50%;
@@ -193,6 +194,13 @@ article{
       
       &:first-child{
         margin-left: 0;
+      }
+
+      .assignee-avatar-image{
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
       }
     }
 

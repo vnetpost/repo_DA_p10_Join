@@ -89,8 +89,16 @@
         <div class="assignee-list scroll-shadows" aria-label="Assignees" role="group">
           @for (assignee of task.assignees; track $index) {
             <div class="assignee-item">
-              <div class="initials" [style.backgroundColor]="getUserColor(assignee)" aria-label="Assigned to {{ getAssigneeName(assignee) }}">
+              <div
+                class="initials"
+                [style.backgroundColor]="getAssigneeAvatarSrc(assignee) ? null : getUserColor(assignee)"
+                aria-label="Assigned to {{ getAssigneeName(assignee) }}"
+              >
+                @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
+                  <img class="assignee-avatar-image" [src]="avatarSrc" alt="" aria-hidden="true" />
+                } @else {
                   {{ getAssigneeInitials(assignee) }}
+                }
               </div>
               <p class="name">
                 {{ getAssigneeName(assignee) }}

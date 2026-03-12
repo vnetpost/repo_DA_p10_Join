@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
 import { FirebaseService } from '../../../shared/services/firebase-service';
-import { getTwoInitials } from '../../../shared/utilities/utils';
+import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 
 /**
  * Searchable multi-select dropdown for choosing task assignees.
@@ -25,6 +25,7 @@ export class DropdownAssignee {
   firebaseService = inject(FirebaseService);
 
   getTwoInitials = getTwoInitials;
+  getContactAvatarSrc = getContactAvatarSrc;
 
   /** Currently selected contacts. */
   @Input() selectedContacts: Contact[] = [];

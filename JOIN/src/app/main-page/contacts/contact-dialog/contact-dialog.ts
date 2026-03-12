@@ -1,8 +1,9 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Contact } from '../../../shared/interfaces/contact';
+import { Timestamp } from '@angular/fire/firestore';
+import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
-import { getTwoInitials } from '../../../shared/utilities/utils';
+import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -20,11 +21,16 @@ import { getTwoInitials } from '../../../shared/utilities/utils';
 export class ContactDialog {
   @ViewChild('contactDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('contactForm') contactForm!: NgForm;
+  @ViewChild('avatarInput') avatarInput?: ElementRef<HTMLInputElement>;
   @Input() canDelete = true;
+  @Input() canUploadAvatar = false;
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
+  avatar: ContactAvatar | null = null;
+  avatarPreviewSrc: string | null = null;
+  readonly avatarAllowedMimeTypes = ['image/jpeg', 'image/png'];
 
   @Output() saveContact = new EventEmitter<ContactFormData>();
   // @Output() deleteContact = new EventEmitter<string>();
@@ -55,6 +61,9 @@ export class ContactDialog {
       email: '',
       phone: '',
     };
+    this.userColor = null;
+    this.avatar = null;
+    this.avatarPreviewSrc = null;
 
     this.openDialog();
   }
@@ -75,6 +84,8 @@ export class ContactDialog {
     this.contactData.email = contact.email;
     this.contactData.phone = String(contact.phone);
     this.userColor = contact.userColor ?? null;
+    this.avatar = contact.avatar ?? null;
+    this.avatarPreviewSrc = getContactAvatarSrc(contact);
 
     this.openDialog();
   }
@@ -109,11 +120,13 @@ export class ContactDialog {
       return;
     }
 
-    this.saveContact.emit({
+    const formData: ContactFormData = {
       name: this.contactData.name,
       email: this.contactData.email,
       phone: this.contactData.phone,
-    });
+    };
+    if (this.dialogMode === 'edit') formData.avatar = this.avatar ?? null;
+    this.saveContact.emit(formData);
 
     this.closeDialog();
 
@@ -159,6 +172,7 @@ export class ContactDialog {
         phone: '',
       });
     });
+    if (this.avatarInput) this.avatarInput.nativeElement.value = '';
   }
 
   /**
@@ -197,6 +211,90 @@ export class ContactDialog {
    */
   onContextMenu(event: Event): void {
     event.preventDefault();
+  }
+
+  /**
+   * Opens the avatar file picker for editable own-contact profiles.
+   *
+   * @param event Triggering click event.
+   * @returns void
+   */
+  openAvatarPicker(event?: Event): void {
+    event?.stopPropagation();
+    if (!this.canUploadAvatar || this.dialogMode !== 'edit') return;
+    this.avatarInput?.nativeElement.click();
+  }
+
+  /**
+   * Handles avatar image selection and stores it as contact avatar payload.
+   *
+   * @param event Native input change event.
+   * @returns Promise<void>
+   */
+  async onAvatarSelected(event: Event): Promise<void> {
+    const target = event.target as HTMLInputElement;
+    const file = target.files?.[0];
+    if (!file) return;
+
+    if (!this.avatarAllowedMimeTypes.includes(file.type)) {
+      if (this.avatarInput) this.avatarInput.nativeElement.value = '';
+      return;
+    }
+
+    const dataUrl = await this.readFileAsDataUrl(file);
+    if (!dataUrl) return;
+
+    const base64 = this.extractBase64FromDataUrl(dataUrl);
+    if (!base64) return;
+
+    const fileType = this.extractMimeTypeFromDataUrl(dataUrl) || file.type || 'image/jpeg';
+    this.avatar = {
+      fileName: file.name || 'avatar.jpg',
+      fileType,
+      base64Size: base64.length,
+      base64,
+      uploadedAt: Timestamp.now(),
+    };
+    this.avatarPreviewSrc = `data:${fileType};base64,${base64}`;
+    if (this.avatarInput) this.avatarInput.nativeElement.value = '';
+  }
+
+  /**
+   * Reads a file and returns a Base64 data URL.
+   *
+   * @param file Selected file.
+   * @returns Promise resolving to data URL or `null`.
+   */
+  private readFileAsDataUrl(file: File): Promise<string | null> {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null);
+      reader.onerror = () => resolve(null);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Extracts MIME type from a data URL header.
+   *
+   * @param dataUrl Data URL string.
+   * @returns MIME type or empty string.
+   */
+  private extractMimeTypeFromDataUrl(dataUrl: string): string {
+    const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/i);
+    return mimeMatch?.[1]?.trim() || '';
+  }
+
+  /**
+   * Extracts pure base64 payload from a data URL.
+   *
+   * @param dataUrl Data URL string.
+   * @returns Raw base64 value.
+   */
+  private extractBase64FromDataUrl(dataUrl: string): string {
+    const separatorIndex = dataUrl.indexOf(',');
+    if (separatorIndex === -1) return dataUrl;
+    return dataUrl.slice(separatorIndex + 1);
   }
   // #endregion
 }

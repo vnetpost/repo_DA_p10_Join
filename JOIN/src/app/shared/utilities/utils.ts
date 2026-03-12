@@ -105,3 +105,18 @@ export function getGreeting(): string {
     return 'Good night';
   }
 }
+
+/**
+ * Builds a browser-safe image source for a contact avatar.
+ *
+ * @param contact Contact object that may contain avatar data
+ * @returns Data URL string or `null` when no avatar is available
+ */
+export function getContactAvatarSrc(contact?: Contact | null): string | null {
+  const rawBase64 = contact?.avatar?.base64?.trim();
+  if (!rawBase64) return null;
+  if (rawBase64.startsWith('data:')) return rawBase64;
+
+  const mimeType = contact?.avatar?.fileType?.trim() || 'image/jpeg';
+  return `data:${mimeType};base64,${rawBase64}`;
+}

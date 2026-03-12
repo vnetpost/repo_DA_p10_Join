@@ -8,7 +8,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
-import { getTwoInitials } from '../../../shared/utilities/utils';
+import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 
 @Component({
   selector: 'app-contact-info',
@@ -34,6 +34,7 @@ export class ContactInfo implements OnChanges {
   showDeleteConfirm: boolean = false;
 
   readonly getTwoInitials = getTwoInitials;
+  readonly getContactAvatarSrc = getContactAvatarSrc;
 
   hasPhoneNumber(phone: Contact['phone'] | null | undefined): boolean {
     return String(phone ?? '').trim().length > 0;

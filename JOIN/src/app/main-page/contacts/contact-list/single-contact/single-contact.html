@@ -3,8 +3,15 @@
   [class.single-contact--active]="isActive"
   (click)="setContactAsSelected()"
 >
-  <div class="single-contact__avatar" [style.backgroundColor]="contact?.userColor || null">
-    <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
+  <div
+    class="single-contact__avatar"
+    [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact?.userColor || null"
+  >
+    @if (getContactAvatarSrc(contact); as avatarSrc) {
+      <img class="single-contact__avatar-image" [src]="avatarSrc" alt="" aria-hidden="true" />
+    } @else {
+      <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
+    }
   </div>
   <div class="single-contact__text">
     <div class="single-contact__name">{{ contact?.name }}</div>
