@@ -23,8 +23,8 @@
       <img
         class="form-field__icon"
         [class.is-open]="isDropdownOpen"
-        src="assets/img/icons/add-task/dropdown-arrow-down.svg"
-        alt="dropdown-arrow icon"
+        src="assets/img/icons/add-task/dropdown-arrow-down.svg" alt="Dropdown arrow icon"
+        aria-hidden="true"
       />
     </button>
   </section>
@@ -38,7 +38,7 @@
           aria-hidden="true"
         >
           @if (getContactAvatarSrc(contact); as avatarSrc) {
-            <img class="assignees-preview__avatar-image" [src]="avatarSrc" alt="" />
+            <img class="assignees-preview__avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
           } @else {
             {{ getTwoInitials(contact.name) }}
           }
@@ -69,7 +69,7 @@
               aria-hidden="true"
             >
               @if (getContactAvatarSrc(contact); as avatarSrc) {
-                <img class="dropdown__avatar-image" [src]="avatarSrc" alt="" />
+                <img class="dropdown__avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
               } @else {
                 {{ getTwoInitials(contact.name) }}
               }

@@ -6,8 +6,8 @@
         {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
       </p>
       <button class="close-btn" (click)="closeDialog()" aria-label="Close dialog">
-        <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="" aria-hidden="true">
-        <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="" aria-hidden="true">
+        <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="Close icon" aria-hidden="true">
+        <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="Close icon" aria-hidden="true">
       </button>
     </header>
 
@@ -69,7 +69,7 @@
                   <img
                     class="icon"
                     src="assets/img/icons/buttons/download.svg"
-                    alt=""
+                    alt="Download icon"
                     aria-hidden="true"
                   />
                 </button>
@@ -95,7 +95,7 @@
                 aria-label="Assigned to {{ getAssigneeName(assignee) }}"
               >
                 @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
-                  <img class="assignee-avatar-image" [src]="avatarSrc" alt="" aria-hidden="true" />
+                  <img class="assignee-avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
                 } @else {
                   {{ getAssigneeInitials(assignee) }}
                 }
@@ -129,14 +129,14 @@
 
     <footer>
       <button type="button" (click)="onDeleteClick()">
-        <img class="icon icon--default" src="assets/img/icons/buttons/delete.svg" alt="" aria-hidden="true">
-        <img class="icon icon--hover" src="assets/img/icons/buttons/delete-hover.svg" alt="" aria-hidden="true">
+        <img class="icon icon--default" src="assets/img/icons/buttons/delete.svg" alt="Delete icon" aria-hidden="true">
+        <img class="icon icon--hover" src="assets/img/icons/buttons/delete-hover.svg" alt="Delete icon" aria-hidden="true">
         Delete
       </button>
       <span class="separator" aria-hidden="true"></span>
       <button type="button" (click)="onEditClick()">
-        <img class="icon icon--default" src="assets/img/icons/buttons/edit.svg" alt="" aria-hidden="true">
-        <img class="icon icon--hover" src="assets/img/icons/buttons/edit-hover.svg" alt="" aria-hidden="true">
+        <img class="icon icon--default" src="assets/img/icons/buttons/edit.svg" alt="Edit icon" aria-hidden="true">
+        <img class="icon icon--hover" src="assets/img/icons/buttons/edit-hover.svg" alt="Edit icon" aria-hidden="true">
         Edit
       </button>
     </footer>

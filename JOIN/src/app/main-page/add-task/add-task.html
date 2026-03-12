@@ -100,8 +100,8 @@
             Clear
             <img
               class="button__icon"
-              src="assets/img/icons/add-task/close.svg"
-              alt="close.svg icon"
+              src="assets/img/icons/add-task/close.svg" alt="Close icon"
+              aria-hidden="true"
             />
           </button>
         }
@@ -112,7 +112,7 @@
           [attr.aria-disabled]="!isFormValid ? 'true' : null"
         >
           {{ submitButtonLabel }}
-          <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="save.svg icon" />
+          <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="Save icon" aria-hidden="true" />
         </button>
       </nav>
     </footer>

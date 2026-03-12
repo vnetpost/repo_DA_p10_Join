@@ -5,7 +5,7 @@
   
       <header class="logo" [class.logo--move]="logoMoving">
         <img class="logo-dark" src="assets/img/icons/logo-dark.svg" alt="Join logo">
-        <img class="logo-light" src="assets/img/icons/logo-light.svg" alt="">
+        <img class="logo-light" src="assets/img/icons/logo-light.svg" alt="Join logo" aria-hidden="true">
       </header>
 
       @if (introActive) {
@@ -32,7 +32,7 @@
               
               <section class="input-box">
                 <input type="email" name="email" placeholder="Email" [(ngModel)]="logInData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}" aria-label="Email address">
-                <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
+                <img src="assets/img/icons/forms/email.svg" alt="Email icon" aria-hidden="true">
                 <section class="input-error-wrapper">
                   @if (email.invalid && email.touched) {
                     <span class="form-error" aria-live="polite">
@@ -53,10 +53,10 @@
                 <section class="icon-slot">
                   @if (logInData.password.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleLogInPassword()" aria-label="Toggle password visibility">
-                      <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                      <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="Password visibility icon" aria-hidden="true">
                     </button>
                   } @else {
-                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="Password icon" aria-hidden="true">
                   }
                 </section>
                 <section class="input-error-wrapper">
@@ -102,7 +102,7 @@
     
             <header class="title sign-title">
               <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">
-                <img src="assets/img/icons/buttons/back.svg" alt="" aria-hidden="true">
+                <img src="assets/img/icons/buttons/back.svg" alt="Back arrow icon" aria-hidden="true">
               </button>
               <section class="sign-up">
                 <h1 id="signup-title">Sign up</h1>
@@ -113,7 +113,7 @@
             <form class="sign-up-form log-in-sign-up-form" #signUpForm="ngForm" (ngSubmit)="onSignUp(signUpForm)" novalidate autocomplete="off">
               <section class="input-box">
                 <input type="text" placeholder="Name" name="name" [(ngModel)]="signUpData.name" #name="ngModel" aria-label="Name" required minlength="2" pattern="^(?=(?:.*[a-zA-Z\xC0-\uFFFF]){2,})[a-zA-Z0-9\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z0-9\xC0-\uFFFF]+){0,2}[.]{0,1}$">
-                <img src="assets/img/icons/forms/name.svg" alt="" aria-hidden="true">
+                <img src="assets/img/icons/forms/name.svg" alt="Name icon" aria-hidden="true">
                 <section class="input-error-wrapper">
                   @if (name.invalid && name.touched) {
                     <span class="form-error">
@@ -130,7 +130,7 @@
               </section>
               <section class="input-box">
                 <input type="email" placeholder="Email" name="email" [(ngModel)]="signUpData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}">
-                <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
+                <img src="assets/img/icons/forms/email.svg" alt="Email icon" aria-hidden="true">
                 <section class="input-error-wrapper">
                   @if (email.invalid && email.touched) {
                     <span class="form-error">
@@ -150,10 +150,10 @@
                 <section class="icon-slot">
                   @if (signUpData.password.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleSignUpPassword()" aria-label="Toggle password visibility">
-                      <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                      <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="Password visibility icon" aria-hidden="true">
                     </button>
                   } @else {
-                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="Password icon" aria-hidden="true">
                   }
                 </section>
                 <section class="input-error-wrapper">
@@ -173,10 +173,10 @@
                 <section class="icon-slot">
                   @if (confirmPassword.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleConfirmPassword()" aria-label="Toggle password visibility">
-                      <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
+                      <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="Password visibility icon" aria-hidden="true">
                     </button>
                   } @else {
-                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
+                    <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="Password icon" aria-hidden="true">
                   }
                 </section>
                 <section class="input-error-wrapper">

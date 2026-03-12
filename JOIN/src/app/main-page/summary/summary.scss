@@ -1,10 +1,10 @@
 @use "../../../styles/index.scss" as styles;
 
-section{
+:host > section{
   @include styles.setFlex($ai: flex-start);
   min-height: calc(100dvh - styles.$header-height);
 
-  .content-wrapper{
+  > .content-wrapper{
     width: 93%;
     padding: 2rem 0 1rem;
 

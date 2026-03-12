@@ -12,7 +12,7 @@
       {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
     </p>
     <button class="mobile-move-btn" (click)="openMenu($event)" aria-label="Move task to other list" aria-controls="move-menu">
-      <img src="assets/img/icons/board/move.svg" alt="" aria-hidden="true">
+      <img src="assets/img/icons/board/move.svg" alt="Move icon" aria-hidden="true">
     </button>
   </header>
 
@@ -24,60 +24,60 @@
 
     @if(task.status === "to-do"){
       <button (click)="moveTo('in-progress', $event)" role="menuitem" aria-label="Move to in progress">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Doing
       </button>
       <button (click)="moveTo('await-feedback', $event)" role="menuitem" aria-label="Move to await feedback">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Review
       </button>
       <button (click)="moveTo('done', $event)" role="menuitem" aria-label="Move to done">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Done
       </button>
     }
     
     @if(task.status === "in-progress"){
       <button (click)="moveTo('to-do', $event)" role="menuitem" aria-label="Move to to do">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         To-do
       </button>
       <button (click)="moveTo('await-feedback', $event)" role="menuitem" aria-label="Move to await feedback">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Review
       </button>
       <button (click)="moveTo('done', $event)" role="menuitem" aria-label="Move to done">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Done
       </button>
     }
 
     @if(task.status === "await-feedback"){
       <button (click)="moveTo('to-do', $event)" role="menuitem" aria-label="Move to to do">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         To-do
       </button>
       <button (click)="moveTo('in-progress', $event)" role="menuitem" aria-label="Move to in progress">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         Doing
       </button>
       <button (click)="moveTo('done', $event)" role="menuitem" aria-label="Move to done">
-        <img src="assets/img/icons/board/arrow-downward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-downward.svg" alt="Arrow down icon" aria-hidden="true">
         Done
       </button>
     }
 
     @if(task.status === "done"){
       <button (click)="moveTo('to-do', $event)" role="menuitem" aria-label="Move to to do">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         To-do
       </button>
       <button (click)="moveTo('in-progress', $event)" role="menuitem" aria-label="Move to in progress">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         Doing
       </button>
       <button (click)="moveTo('await-feedback', $event)" role="menuitem" aria-label="Move to await feedback">
-        <img src="assets/img/icons/board/arrow-upward.svg" alt="" aria-hidden="true">
+        <img src="assets/img/icons/board/arrow-upward.svg" alt="Arrow up icon" aria-hidden="true">
         Review
       </button>
     }
@@ -108,7 +108,7 @@
           aria-label="Assigned to {{ getAssigneeInitials(assignee) }}"
         >
           @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
-            <img class="assignee-avatar-image" [src]="avatarSrc" alt="" aria-hidden="true" />
+            <img class="assignee-avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
           } @else {
             <span>{{ getAssigneeInitials(assignee) }}</span>
           }

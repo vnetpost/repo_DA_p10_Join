@@ -13,11 +13,11 @@
         aria-label="Close contact dialog"
         (click)="closeDialog()"
       >
-        <img src="assets/img/icons/buttons/close-white.svg" alt="" aria-hidden="true" />
+        <img src="assets/img/icons/buttons/close-white.svg" alt="Close icon" aria-hidden="true" />
       </button>
 
       <section class="title">
-        <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="" />
+        <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="Join logo" />
         <h1 id="contact-dialog-title">
           @if (dialogMode === 'add') {
             Add contact
@@ -40,14 +40,12 @@
     >
       <img
         class="icon icon--default"
-        src="assets/img/icons/buttons/close.svg"
-        alt=""
+        src="assets/img/icons/buttons/close.svg" alt="Close icon"
         aria-hidden="true"
       />
       <img
         class="icon icon--hover"
-        src="assets/img/icons/buttons/close-hover.svg"
-        alt=""
+        src="assets/img/icons/buttons/close-hover.svg" alt="Close icon"
         aria-hidden="true"
       />
     </button>
@@ -55,12 +53,12 @@
     <section class="form-section">
       @if (dialogMode === 'add') {
         <figure class="avatar" aria-hidden="true">
-          <img class="avatar__placeholder-icon" src="assets/img/icons/forms/contact-white.svg" alt="" />
+          <img class="avatar__placeholder-icon" src="assets/img/icons/forms/contact-white.svg" alt="Contact placeholder icon" aria-hidden="true" />
         </figure>
       } @else {
         <figure class="avatar" [style.backgroundColor]="avatarPreviewSrc ? null : userColor">
           @if (avatarPreviewSrc) {
-            <img class="avatar__image" [src]="avatarPreviewSrc" alt="" aria-hidden="true" />
+            <img class="avatar__image" [src]="avatarPreviewSrc" alt="Contact avatar image" aria-hidden="true" />
           } @else {
             <span class="initials">
               {{ getTwoInitials(contactData.name) }}
@@ -73,7 +71,7 @@
               aria-label="Upload avatar image"
               (click)="openAvatarPicker($event)"
             >
-              <img src="assets/img/icons/buttons/camera.svg" alt="" aria-hidden="true" />
+              <img src="assets/img/icons/buttons/camera.svg" alt="Camera icon" aria-hidden="true" />
             </button>
             <input
               #avatarInput
@@ -106,7 +104,7 @@
             [(ngModel)]="contactData.name"
             #name="ngModel"
           />
-          <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="" />
+          <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="Name icon" aria-hidden="true" />
           <section class="input-error-wrapper">
             @if (name.invalid && name.touched) {
               <span class="form__error">
@@ -137,7 +135,7 @@
             [readonly]="dialogMode === 'edit'"
             [attr.aria-readonly]="dialogMode === 'edit' ? 'true' : null"
           />
-          <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="" />
+          <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="Email icon" aria-hidden="true" />
           <section class="input-error-wrapper">
             @if (email.invalid && email.touched) {
               <span class="form__error">
@@ -166,7 +164,7 @@
             [(ngModel)]="contactData.phone"
             #phone="ngModel"
           />
-          <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="" />
+          <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="Phone icon" aria-hidden="true" />
           <section class="input-error-wrapper">
             @if (phone.invalid && phone.touched) {
               <span class="form__error">
@@ -193,14 +191,12 @@
               Cancel
               <img
                 class="button__icon button__icon--default"
-                src="assets/img/icons/buttons/cancel.svg"
-                alt=""
+                src="assets/img/icons/buttons/cancel.svg" alt="Cancel icon"
                 aria-hidden="true"
               />
               <img
                 class="button__icon button__icon--hover"
-                src="assets/img/icons/buttons/cancel-hover.svg"
-                alt=""
+                src="assets/img/icons/buttons/cancel-hover.svg" alt="Cancel icon"
                 aria-hidden="true"
               />
             </button>
@@ -227,8 +223,7 @@
             }
             <img
               class="button__icon"
-              src="assets/img/icons/buttons/save.svg"
-              alt=""
+              src="assets/img/icons/buttons/save.svg" alt="Save icon"
               aria-hidden="true"
             />
           </button>

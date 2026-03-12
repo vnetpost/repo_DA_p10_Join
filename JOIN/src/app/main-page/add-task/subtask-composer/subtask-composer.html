@@ -21,17 +21,17 @@
           aria-label="Clear subtask title"
           (click)="clearSubtaskTitle()"
         >
-          <img src="assets/img/icons/add-task/close.svg" alt="" />
+          <img src="assets/img/icons/add-task/close.svg" alt="Close icon" aria-hidden="true" />
         </button>
         <span class="subtask-actions__divider" aria-hidden="true"></span>
         <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
-          <img src="assets/img/icons/add-task/check.svg" alt="" />
+          <img src="assets/img/icons/add-task/check.svg" alt="Check icon" aria-hidden="true" />
         </button>
       </section>
     } @else {
-      <button type="button" class="icon-button" aria-hidden="true">
-        <img src="assets/img/icons/add-task/add.svg" alt="" />
-      </button>
+      <span class="icon-button" aria-hidden="true">
+        <img src="assets/img/icons/add-task/add.svg" alt="Add icon" aria-hidden="true" />
+      </span>
     }
   </section>
   @if (showSubtaskPatternError) {
@@ -56,7 +56,7 @@
               aria-label="Edit subtask"
               (click)="startEditSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/edit.svg" alt="" />
+              <img src="assets/img/icons/add-task/edit.svg" alt="Edit icon" aria-hidden="true" />
             </button>
             <span class="subtask-list__divider" aria-hidden="true"></span>
             <button
@@ -65,7 +65,7 @@
               aria-label="Delete subtask"
               (click)="removeSubtask($index)"
             >
-              <img src="assets/img/icons/add-task/delete.svg" alt="" />
+              <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
             </button>
           </section>
         </li>

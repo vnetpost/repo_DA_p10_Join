@@ -5,8 +5,8 @@
     <p class="contact-info__subtitle">Better with a team</p>
   </header>
 
-  <a class="contact-info__back-arrow" href="#" (click)="handleBack($event)">
-    <img src="assets/img/icons/buttons/back.svg" alt="Back icon" />
+  <a class="contact-info__back-arrow" href="#" (click)="handleBack($event)" aria-label="Go back">
+    <img src="assets/img/icons/buttons/back.svg" alt="Back arrow icon" aria-hidden="true" />
   </a>
 
   @if (activeContact) {
@@ -21,7 +21,7 @@
           aria-hidden="true"
         >
           @if (getContactAvatarSrc(activeContact); as avatarSrc) {
-            <img class="contact-info__avatar-image" [src]="avatarSrc" alt="" />
+            <img class="contact-info__avatar-image" [src]="avatarSrc" alt="Contact avatar image" aria-hidden="true" />
           } @else {
             <span class="contact-info__initials">{{ getTwoInitials(activeContact.name) }}</span>
           }
@@ -32,8 +32,7 @@
             <button class="contact-info__action" type="button" (click)="editContact.emit()">
               <img
                 class="contact-info__action-icon"
-                src="assets/img/icons/buttons/edit.svg"
-                alt="Edit icon"
+                src="assets/img/icons/buttons/edit.svg" alt="Edit icon"
                 aria-hidden="true"
               />
               <span>Edit</span>
@@ -42,8 +41,7 @@
               <button class="contact-info__action" type="button" (click)="requestDelete.emit()">
                 <img
                   class="contact-info__action-icon"
-                  src="assets/img/icons/buttons/delete.svg"
-                  alt="Delete icon"
+                  src="assets/img/icons/buttons/delete.svg" alt="Delete icon"
                   aria-hidden="true"
                 />
                 <span>Delete</span>
@@ -81,7 +79,7 @@
         [attr.aria-expanded]="fabMenuOpen"
         (click)="toggleFabMenu()"
       >
-        <img src="assets/img/icons/buttons/contact-options.svg" alt="" aria-hidden="true" />
+        <img src="assets/img/icons/buttons/contact-options.svg" alt="Contact options icon" aria-hidden="true" />
       </button>
       @if (fabMenuOpen) {
         <aside class="contact-info__fab-overlay" (click)="closeFabMenu()"></aside>
@@ -99,8 +97,7 @@
           >
             <img
               class="contact-info__fab-action-icon"
-              src="assets/img/icons/buttons/edit.svg"
-              alt=""
+              src="assets/img/icons/buttons/edit.svg" alt="Edit icon"
               aria-hidden="true"
             />
             <span>Edit</span>
@@ -114,8 +111,7 @@
             >
               <img
                 class="contact-info__fab-action-icon"
-                src="assets/img/icons/buttons/delete.svg"
-                alt=""
+                src="assets/img/icons/buttons/delete.svg" alt="Delete icon"
                 aria-hidden="true"
               />
               <span>Delete</span>

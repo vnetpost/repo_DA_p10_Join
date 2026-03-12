@@ -8,7 +8,7 @@
     [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact?.userColor || null"
   >
     @if (getContactAvatarSrc(contact); as avatarSrc) {
-      <img class="single-contact__avatar-image" [src]="avatarSrc" alt="" aria-hidden="true" />
+      <img class="single-contact__avatar-image" [src]="avatarSrc" alt="Contact avatar image" aria-hidden="true" />
     } @else {
       <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
     }
