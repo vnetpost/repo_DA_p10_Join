@@ -5,7 +5,7 @@
   role="dialog"
   aria-labelledby="contact-dialog-title"
 >
-  <div class="dialog-content">
+  <article class="dialog-content">
     <header>
       <button
         class="close-btn-mobile mobile-only"
@@ -16,7 +16,7 @@
         <img src="assets/img/icons/buttons/close-white.svg" alt="" aria-hidden="true" />
       </button>
 
-      <div class="title">
+      <section class="title">
         <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="" />
         <h1 id="contact-dialog-title">
           @if (dialogMode === 'add') {
@@ -28,8 +28,8 @@
         @if (dialogMode === 'add') {
           <p>Tasks are better with a team!</p>
         }
-        <div class="line"></div>
-      </div>
+        <section class="line" aria-hidden="true"></section>
+      </section>
     </header>
 
     <button
@@ -54,11 +54,11 @@
 
     <section class="form-section">
       @if (dialogMode === 'add') {
-        <div class="avatar" aria-hidden="true">
+        <figure class="avatar" aria-hidden="true">
           <img class="avatar__placeholder-icon" src="assets/img/icons/forms/contact-white.svg" alt="" />
-        </div>
+        </figure>
       } @else {
-        <div class="avatar" [style.backgroundColor]="avatarPreviewSrc ? null : userColor">
+        <figure class="avatar" [style.backgroundColor]="avatarPreviewSrc ? null : userColor">
           @if (avatarPreviewSrc) {
             <img class="avatar__image" [src]="avatarPreviewSrc" alt="" aria-hidden="true" />
           } @else {
@@ -83,7 +83,7 @@
               (change)="onAvatarSelected($event)"
             />
           }
-        </div>
+        </figure>
       }
 
       <form
@@ -93,7 +93,7 @@
         novalidate
         autocomplete="off"
       >
-        <div class="form__input-box">
+        <section class="form__input-box">
           <input
             class="form__input"
             type="text"
@@ -107,7 +107,7 @@
             #name="ngModel"
           />
           <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="" />
-          <div class="input-error-wrapper">
+          <section class="input-error-wrapper">
             @if (name.invalid && name.touched) {
               <span class="form__error">
                 @if (name.errors?.['required']) {
@@ -119,10 +119,10 @@
                 }
               </span>
             }
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <div class="form__input-box">
+        <section class="form__input-box">
           <input
             class="form__input"
             type="email"
@@ -138,7 +138,7 @@
             [attr.aria-readonly]="dialogMode === 'edit' ? 'true' : null"
           />
           <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="" />
-          <div class="input-error-wrapper">
+          <section class="input-error-wrapper">
             @if (email.invalid && email.touched) {
               <span class="form__error">
                 @if (email.errors?.['required']) {
@@ -150,10 +150,10 @@
                 }
               </span>
             }
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <div class="form__input-box">
+        <section class="form__input-box">
           <input
             class="form__input"
             type="tel"
@@ -167,7 +167,7 @@
             #phone="ngModel"
           />
           <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="" />
-          <div class="input-error-wrapper">
+          <section class="input-error-wrapper">
             @if (phone.invalid && phone.touched) {
               <span class="form__error">
                 @if (phone.errors?.['required']) {
@@ -179,10 +179,10 @@
                 }
               </span>
             }
-          </div>
-        </div>
+          </section>
+        </section>
 
-        <div class="form__actions">
+        <nav class="form__actions" aria-label="Contact form actions">
           @if (dialogMode === 'add') {
             <button
               type="button"
@@ -232,8 +232,8 @@
               aria-hidden="true"
             />
           </button>
-        </div>
+        </nav>
       </form>
     </section>
-  </div>
+  </article>
 </dialog>

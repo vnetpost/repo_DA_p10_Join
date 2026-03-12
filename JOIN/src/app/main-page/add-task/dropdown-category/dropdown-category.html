@@ -1,6 +1,6 @@
 <label class="form-field">
   <span class="form-field__label">Category<span class="required">*</span></span>
-  <div
+  <section
     class="form-field__control"
     [class.is-open]="isDropdownOpen"
     [class.form-field__control--error]="hasError"
@@ -26,15 +26,15 @@
         alt="dropdown-arrow icon"
       />
     </button>
-  </div>
+  </section>
 
   @if (isDropdownOpen) {
-    <div class="dropdown">
+    <section class="dropdown" aria-label="Task category options">
       @for (category of taskService.taskCategories; track category.value) {
         <button type="button" class="dropdown__item" (click)="selectCategory(category, $event)">
           <span class="dropdown__name">{{ category.label }}</span>
         </button>
       }
-    </div>
+    </section>
   }
 </label>

@@ -1,9 +1,9 @@
-<li
+<article
   class="single-contact"
   [class.single-contact--active]="isActive"
   (click)="setContactAsSelected()"
 >
-  <div
+  <figure
     class="single-contact__avatar"
     [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact?.userColor || null"
   >
@@ -12,9 +12,9 @@
     } @else {
       <span class="single-contact__initials">{{ getTwoInitials(contact?.name) }}</span>
     }
-  </div>
-  <div class="single-contact__text">
-    <div class="single-contact__name">{{ contact?.name }}</div>
-    <div class="single-contact__email">{{ contact?.email }}</div>
-  </div>
-</li>
+  </figure>
+  <section class="single-contact__text">
+    <h3 class="single-contact__name">{{ contact?.name }}</h3>
+    <p class="single-contact__email">{{ contact?.email }}</p>
+  </section>
+</article>

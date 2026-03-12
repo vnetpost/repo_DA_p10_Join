@@ -5,7 +5,7 @@
       <span class="required">*</span>
     }
   </span>
-  <div class="form-field__control" [class.form-field__control--error]="hasError">
+  <section class="form-field__control" [class.form-field__control--error]="hasError">
     @if (!isTextarea) {
       @if (useFlatpickr) {
         <input
@@ -52,5 +52,5 @@
         [attr.alt]="label ? label + ' icon' : 'form field icon'"
       />
     }
-  </div>
+  </section>
 </label>

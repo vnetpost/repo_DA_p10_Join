@@ -1,6 +1,6 @@
 <label class="form-field">
   <span class="form-field__label">Assigned to</span>
-  <div
+  <section
     class="form-field__control"
     [class.is-open]="isDropdownOpen"
     (click)="toggleDropdownOpen($event)"
@@ -27,10 +27,10 @@
         alt="dropdown-arrow icon"
       />
     </button>
-  </div>
+  </section>
 
   @if (!isDropdownOpen && selectedContacts.length) {
-    <div class="assignees-preview">
+    <section class="assignees-preview" aria-label="Selected assignees">
       @for (contact of selectedContacts; track getContactId(contact, $index)) {
         <span
           class="assignees-preview__avatar"
@@ -44,17 +44,17 @@
           }
         </span>
       }
-    </div>
+    </section>
   }
 
   @if (isDropdownOpen) {
-    <div class="dropdown">
+    <section class="dropdown" aria-label="Assignee options">
       @if (firebaseService.loading && !filteredContacts.length) {
-        <div class="dropdown__empty">Loading contacts...</div>
+        <p class="dropdown__empty">Loading contacts...</p>
       } @else if (!firebaseService.loading && !filteredContacts.length) {
-        <div class="dropdown__empty">
+        <p class="dropdown__empty">
           {{ assigneeQuery ? 'No matches found' : 'No contacts yet' }}
-        </div>
+        </p>
       } @else {
         @for (contact of filteredContacts; track getContactId(contact, $index)) {
           <button
@@ -79,6 +79,6 @@
           </button>
         }
       }
-    </div>
+    </section>
   }
 </label>

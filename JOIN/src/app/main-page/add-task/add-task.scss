@@ -62,6 +62,10 @@
 
 .add-task__field-group {
   @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 0.2rem);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .add-task__column:first-child {

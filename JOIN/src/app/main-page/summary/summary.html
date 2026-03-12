@@ -1,15 +1,15 @@
 <section>
-  <div class="content-wrapper">
-    <div class="header">
+  <section class="content-wrapper">
+    <header class="header">
       <h1>Join 360</h1>
-      <div class="desktop-divider desktop-only" aria-hidden="true"></div>
+      <section class="desktop-divider desktop-only" aria-hidden="true"></section>
       <p>Key Metrics at a Glance</p>
-      <div class="mobile-divider mobile-only" aria-hidden="true"></div>
-    </div>
+      <section class="mobile-divider mobile-only" aria-hidden="true"></section>
+    </header>
 
-    <div class="content">
-      <div class="boxes">
-        <div class="status-amount">
+    <section class="content">
+      <section class="boxes">
+        <section class="status-amount">
           <a
             routerLink="/board"
             class="box"
@@ -27,14 +27,14 @@
               alt=""
               aria-hidden="true"
             />
-            <div class="amount">
+            <section class="amount">
               @if (taskService.loading) {
                 <span class="loading-spinner"></span>
               } @else {
                 <p class="number">{{ taskService.getTaskCountByStatus('to-do') }}</p>
               }
               <p>To-do</p>
-            </div>
+            </section>
           </a>
 
           <a
@@ -54,16 +54,16 @@
               alt=""
               aria-hidden="true"
             />
-            <div class="amount">
+            <section class="amount">
               @if (taskService.loading) {
                 <span class="loading-spinner"></span>
               } @else {
                 <p class="number">{{ taskService.getTaskCountByStatus('done') }}</p>
               }
               <p>Done</p>
-            </div>
+            </section>
           </a>
-        </div>
+        </section>
 
         <a
           routerLink="/board"
@@ -72,25 +72,25 @@
             taskService.getNextDeadline() | date: 'longDate'
           }}. Open board."
         >
-          <div class="urgent">
-            <div class="urgent-logo-circle">
+          <section class="urgent">
+            <section class="urgent-logo-circle">
               <img
                 src="assets/img/icons/priority/priority-high-white.svg"
                 alt=""
                 aria-hidden="true"
               />
-            </div>
-            <div class="amount">
+            </section>
+            <section class="amount">
               @if (taskService.loading) {
                 <span class="loading-spinner"></span>
               } @else {
                 <p class="number">{{ taskService.getUrgentTaskCount() }}</p>
               }
               <p>Urgent</p>
-            </div>
-          </div>
-          <div class="divider" aria-hidden="true"></div>
-          <div class="priority-info">
+            </section>
+          </section>
+          <section class="divider" aria-hidden="true"></section>
+          <section class="priority-info">
             @if (taskService.loading) {
               <span class="loading-spinner"></span>
             } @else if (taskService.tasks.length === 0) {
@@ -99,10 +99,10 @@
               <p class="deadline">{{ taskService.getNextDeadline() | date: 'longDate' }}</p>
               <p>Upcoming deadline</p>
             }
-          </div>
+          </section>
         </a>
 
-        <div class="tasks-amount">
+        <section class="tasks-amount">
           <a
             routerLink="/board"
             class="box box-amount"
@@ -154,10 +154,10 @@
               Feedback
             </p>
           </a>
-        </div>
-      </div>
+        </section>
+      </section>
 
-      <div class="good-day-message">
+      <aside class="good-day-message">
         @if (user$ | async; as user) {
           @if (user.isAnonymous) {
             <p class="desktop-only">{{ greeting }}!</p>
@@ -167,7 +167,7 @@
             <p class="user-name desktop-only">{{ getGreetingName(user.email) }}</p>
           }
         }
-      </div>
-    </div>
-  </div>
+      </aside>
+    </section>
+  </section>
 </section>

@@ -10,12 +10,12 @@
   </a>
 
   @if (activeContact) {
-    <div
+    <article
       class="contact-info__profile"
       [class.contact-info__profile--animating]="profileAnimating"
       >
-      <div class="contact-info__main">
-        <div
+      <section class="contact-info__main">
+        <figure
           class="contact-info__avatar"
           [style.backgroundColor]="getContactAvatarSrc(activeContact) ? null : activeContact.userColor"
           aria-hidden="true"
@@ -25,10 +25,10 @@
           } @else {
             <span class="contact-info__initials">{{ getTwoInitials(activeContact.name) }}</span>
           }
-        </div>
-        <div class="contact-info__identity">
+        </figure>
+        <section class="contact-info__identity">
           <h2 class="contact-info__name">{{ activeContact.name }}</h2>
-          <div class="contact-info__actions">
+          <nav class="contact-info__actions" aria-label="Contact actions">
             <button class="contact-info__action" type="button" (click)="editContact.emit()">
               <img
                 class="contact-info__action-icon"
@@ -49,18 +49,18 @@
                 <span>Delete</span>
               </button>
             }
-          </div>
-        </div>
-      </div>
-      <div class="contact-info__details">
+          </nav>
+        </section>
+      </section>
+      <section class="contact-info__details">
         <h3 class="contact-info__section-title">Contact Information</h3>
-        <div class="contact-info__detail">
+        <article class="contact-info__detail">
           <span class="contact-info__label">Email</span>
           <a class="contact-info__value" [attr.href]="'mailto:' + activeContact.email">
             {{ activeContact.email }}
           </a>
-        </div>
-        <div class="contact-info__detail">
+        </article>
+        <article class="contact-info__detail">
           <span class="contact-info__label">Phone</span>
           @if (hasPhoneNumber(activeContact.phone)) {
             <a class="contact-info__value contact-info__value--phone" [attr.href]="'tel:' + activeContact.phone">
@@ -69,9 +69,9 @@
           } @else {
             <span class="contact-info__value contact-info__value--phone contact-info__value--empty-phone">no phone number yet</span>
           }
-        </div>
-      </div>
-    </div>
+        </article>
+      </section>
+    </article>
     @if (isDownLg) {
       <button
         class="contact-info__fab"
@@ -84,8 +84,8 @@
         <img src="assets/img/icons/buttons/contact-options.svg" alt="" aria-hidden="true" />
       </button>
       @if (fabMenuOpen) {
-        <div class="contact-info__fab-overlay" (click)="closeFabMenu()"></div>
-        <div
+        <aside class="contact-info__fab-overlay" (click)="closeFabMenu()"></aside>
+        <nav
           id="contact-info-fab-menu"
           class="contact-info__fab-menu"
           role="menu"
@@ -121,7 +121,7 @@
               <span>Delete</span>
             </button>
           }
-        </div>
+        </nav>
       }
     }
   }

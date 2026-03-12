@@ -138,7 +138,7 @@ dialog {
     gap: 42px;
   }
 
-  div {
+  p {
     @include styles.setFlex($gap: 2px);
   }
 }
@@ -280,6 +280,9 @@ dialog {
   .assignee-list {
     @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
     width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     max-height: 135px;
     overflow-y: auto;
 
@@ -339,6 +342,9 @@ dialog {
 
   .subtask-list {
     width: 100%;
+    margin: 0;
+    padding: 0;
+    list-style: none;
     max-height: 110px;
     overflow-y: auto;
 

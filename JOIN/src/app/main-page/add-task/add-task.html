@@ -4,9 +4,9 @@
   </header>
 
   <form class="add-task__form" autocomplete="on" (ngSubmit)="createTask()" (focusin)="markAsEdited()">
-    <div class="add-task__content">
-      <div class="add-task__column">
-        <div class="add-task__field-group">
+    <section class="add-task__content" aria-label="Task form fields">
+      <section class="add-task__column" aria-label="Task basics">
+        <fieldset class="add-task__field-group">
           <app-task-form-field
             label="Title"
             [isRequired]="true"
@@ -18,9 +18,9 @@
           <span class="add-task__field-error" [class.is-visible]="showTitleError">
             {{ titleErrorMessage }}
           </span>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-task-form-field
             label="Description"
             [isTextarea]="true"
@@ -28,9 +28,9 @@
             placeholder="Enter a Description"
             [(value)]="taskDescription"
           ></app-task-form-field>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-task-form-field
             label="Due date"
             [isRequired]="true"
@@ -46,13 +46,13 @@
           <span class="add-task__field-error" [class.is-visible]="showDueDateError">
             This field is required
           </span>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-dropdown-category
             [(selectedCategory)]="activeCategory"
             (fieldBlur)="isCategoryTouched = true"
@@ -61,11 +61,11 @@
           <span class="add-task__field-error" [class.is-visible]="showCategoryError">
             This field is required
           </span>
-        </div>
-      </div>
+        </fieldset>
+      </section>
 
-      <div class="add-task__column add-task__column--divider">
-        <div class="add-task__field-group">
+      <section class="add-task__column add-task__column--divider" aria-label="Task extras">
+        <fieldset class="add-task__field-group">
           <app-file-upload
             [(existingAttachments)]="editableExistingAttachments"
             [(selectedFiles)]="selectedAttachments"
@@ -73,28 +73,28 @@
           <span class="add-task__field-error" [class.is-visible]="attachmentUploadError.length > 0">
             {{ attachmentUploadError }}
           </span>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
           <span class="add-task__field-error add-task__subtask-hint" [class.is-visible]="showSubtaskHint">
             Either add no subtasks or at least two.
           </span>
-        </div>
+        </fieldset>
 
-        <div class="add-task__field-group">
+        <fieldset class="add-task__field-group">
           <app-dropdown-assignee
             [(selectedContacts)]="activeAssignees"
           ></app-dropdown-assignee>
-        </div>
-      </div>
-    </div>
+        </fieldset>
+      </section>
+    </section>
 
-    <div class="add-task__footer">
+    <footer class="add-task__footer">
       <span class="add-task__required-note"
         ><span class="required">*</span> This field is required</span
       >
-      <div class="add-task__actions">
+      <nav class="add-task__actions" aria-label="Task form actions">
         @if (!isEditMode) {
           <button type="button" class="button button--secondary button--icon" (click)="resetForm()">
             Clear
@@ -114,17 +114,16 @@
           {{ submitButtonLabel }}
           <img class="button__icon" src="assets/img/icons/buttons/save.svg" alt="save.svg icon" />
         </button>
-      </div>
-    </div>
+      </nav>
+    </footer>
   </form>
 </section>
 
-<div class="toast-wrapper">
+<aside class="toast-wrapper" aria-live="polite" aria-atomic="true">
   <p
     class="toast"
     [class.toast--visible]="toastVisible"
     role="status"
-    aria-live="polite"
   >
     @if(this.isEditMode){
       Task updated
@@ -132,11 +131,11 @@
       Task created
     }
   </p>
-</div>
+</aside>
 
 @if(showCloseConfirm){
-  <div class="confirm-backdrop">
-    <div class="confirm-box" role="dialog" aria-modal="true">
+  <section class="confirm-backdrop">
+    <article class="confirm-box" role="dialog" aria-modal="true">
       <p>
         <span class="delete-highlight">Close </span>
         @if (taskToEdit?.title) {
@@ -147,10 +146,10 @@
         Your changes will be lost.
       </p>
 
-      <div class="confirm-actions">
+      <nav class="confirm-actions" aria-label="Close confirmation actions">
         <button class="button button--primary delete-btn" type="button" (click)="confirmClose()">Close</button>
         <button class="button button--secondary" type="button" (click)="cancelClose()">Cancel</button>
-      </div>
-    </div>
-  </div>
+      </nav>
+    </article>
+  </section>
 }

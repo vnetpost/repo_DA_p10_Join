@@ -1,6 +1,6 @@
-<div class="priority-field">
+<section class="priority-field">
   <span class="priority-field__label">Priority</span>
-  <div class="priority">
+  <section class="priority" aria-label="Priority options">
     @for (option of options; track option.value) {
       <button
         type="button"
@@ -12,5 +12,5 @@
         <img class="priority__icon" [src]="option.iconPath" [alt]="option.label" />
       </button>
     }
-  </div>
-</div>
+  </section>
+</section>

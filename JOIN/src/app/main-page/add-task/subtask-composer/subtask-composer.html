@@ -1,6 +1,6 @@
 <label class="form-field">
   <span class="form-field__label">Subtasks</span>
-  <div
+  <section
     class="form-field__control"
     [class.form-field__control--error]="showSubtaskPatternError || showSubtaskDuplicateError"
   >
@@ -14,7 +14,7 @@
       (keydown.enter)="handleEnter($event)"
     />
     @if (hasSubtaskInput) {
-      <div class="subtask-actions">
+      <section class="subtask-actions">
         <button
           type="button"
           class="icon-button"
@@ -27,13 +27,13 @@
         <button type="button" class="icon-button" aria-label="Add subtask" (click)="addSubtask()">
           <img src="assets/img/icons/add-task/check.svg" alt="" />
         </button>
-      </div>
+      </section>
     } @else {
       <button type="button" class="icon-button" aria-hidden="true">
         <img src="assets/img/icons/add-task/add.svg" alt="" />
       </button>
     }
-  </div>
+  </section>
   @if (showSubtaskPatternError) {
     <span class="subtask-pattern-error">
       Use up to {{ subtaskTitleMaxLength }} chars with at least {{ subtaskTitleMinLetters }} letters
@@ -49,7 +49,7 @@
         <li class="subtask-list__item">
           <span class="subtask-list__bullet" aria-hidden="true">•</span>
           <span class="subtask-list__title">{{ subtask.title }}</span>
-          <div class="subtask-list__actions">
+          <section class="subtask-list__actions" aria-label="Subtask actions">
             <button
               type="button"
               class="icon-button icon-button--small"
@@ -67,7 +67,7 @@
             >
               <img src="assets/img/icons/add-task/delete.svg" alt="" />
             </button>
-          </div>
+          </section>
         </li>
       }
     </ul>

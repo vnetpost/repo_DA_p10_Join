@@ -1,39 +1,39 @@
-<div class="layout-wrapper">
-  <div class="layout">
+<section class="layout-wrapper">
+  <section class="layout">
 
     @if (!showMobileGreeting) {
   
-      <div class="logo" [class.logo--move]="logoMoving">
+      <header class="logo" [class.logo--move]="logoMoving">
         <img class="logo-dark" src="assets/img/icons/logo-dark.svg" alt="Join logo">
         <img class="logo-light" src="assets/img/icons/logo-light.svg" alt="">
-      </div>
+      </header>
 
       @if (introActive) {
-        <div class="intro-overlay"></div>
+        <aside class="intro-overlay" aria-hidden="true"></aside>
       } 
     
       @if (!showSignUp) {
-        <div class="sign-up-option">
+        <aside class="sign-up-option">
           <p>Not a Join user?</p>
           <button class="button button--primary" (click)="openSignUp()">Sign up</button>
-        </div>
+        </aside>
       }
     
       @if (!showSignUp) {
         <section class="form-section log-in-form-section" aria-labelledby="login-title">
-          <div class="form-wrapper log-in-form-wrapper">
+          <article class="form-wrapper log-in-form-wrapper">
     
-            <div class="title">
+            <header class="title">
               <h1 id="login-title">Log in</h1>
-              <div class="divider" aria-hidden="true"></div>
-            </div>
+              <section class="divider" aria-hidden="true"></section>
+            </header>
             
             <form class="log-in-form log-in-sign-up-form" #logInForm="ngForm" (ngSubmit)="onLogin(logInForm)" novalidate autocomplete="off">
               
-              <div class="input-box">
+              <section class="input-box">
                 <input type="email" name="email" placeholder="Email" [(ngModel)]="logInData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}" aria-label="Email address">
                 <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
-                <div class="input-error-wrapper">
+                <section class="input-error-wrapper">
                   @if (email.invalid && email.touched) {
                     <span class="form-error" aria-live="polite">
                       @if (email.errors?.['required']) {
@@ -45,12 +45,12 @@
                         }
                     </span>
                   }
-                </div>
-              </div>
+                </section>
+              </section>
 
-              <div class="input-box">
+              <section class="input-box">
                 <input [(ngModel)]="logInData.password" name="logInPassword" #logInPass="ngModel" required minlength="8" [type]="showLogInPassword ? 'text' : 'password'" placeholder="Password" aria-label="Password">
-                <div class="icon-slot">
+                <section class="icon-slot">
                   @if (logInData.password.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleLogInPassword()" aria-label="Toggle password visibility">
                       <img [src]="showLogInPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
@@ -58,8 +58,8 @@
                   } @else {
                     <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
                   }
-                </div>
-                <div class="input-error-wrapper">
+                </section>
+                <section class="input-error-wrapper">
                   @if (logInPass.invalid && logInPass.touched) {
                     <span class="form-error" aria-live="polite">
                       @if (logInPass.errors?.['required']) {
@@ -69,8 +69,8 @@
                         } 
                     </span>
                   }
-                </div>
-              </div>
+                </section>
+              </section>
 
               @if (loginError) {
                 <p class="login-error" role="alert" aria-live="assertive">
@@ -78,7 +78,7 @@
                 </p>
               }
     
-              <div class="form-actions">
+              <nav class="form-actions" aria-label="Log in actions">
                 <button type="submit" [class.button--disabled]="isLoggingIn || logInForm.invalid" class="button button--primary">
                   @if (isLoggingIn) {
                     Logging in…
@@ -89,32 +89,32 @@
                 <button type="button" (click)="guestLogin()" class="button button--secondary">
                   Guest Log in
                 </button>
-              </div>
+              </nav>
             </form>
     
-          </div>
+          </article>
         </section>
       }
 
       @if(showSignUp){
         <section class="form-section sign-up-form-section" aria-labelledby="signup-title">
-          <div class="form-wrapper sign-up-form-wrapper">
+          <article class="form-wrapper sign-up-form-wrapper">
     
-            <div class="title sign-title">
+            <header class="title sign-title">
               <button class="back-btn" (click)="closeSignUp()" aria-label="Go back to previous page">
                 <img src="assets/img/icons/buttons/back.svg" alt="" aria-hidden="true">
               </button>
-              <div class="sign-up">
+              <section class="sign-up">
                 <h1 id="signup-title">Sign up</h1>
-                <div class="divider"></div>
-              </div>
-            </div>
+                <section class="divider" aria-hidden="true"></section>
+              </section>
+            </header>
             
             <form class="sign-up-form log-in-sign-up-form" #signUpForm="ngForm" (ngSubmit)="onSignUp(signUpForm)" novalidate autocomplete="off">
-              <div class="input-box">
+              <section class="input-box">
                 <input type="text" placeholder="Name" name="name" [(ngModel)]="signUpData.name" #name="ngModel" aria-label="Name" required minlength="2" pattern="^(?=(?:.*[a-zA-Z\xC0-\uFFFF]){2,})[a-zA-Z0-9\xC0-\uFFFF]+([ \-']{0,1}[a-zA-Z0-9\xC0-\uFFFF]+){0,2}[.]{0,1}$">
                 <img src="assets/img/icons/forms/name.svg" alt="" aria-hidden="true">
-                <div class="input-error-wrapper">
+                <section class="input-error-wrapper">
                   @if (name.invalid && name.touched) {
                     <span class="form-error">
                       @if (name.errors?.['required']) {
@@ -126,12 +126,12 @@
                         } 
                     </span>
                   }
-                </div>
-              </div>
-              <div class="input-box">
+                </section>
+              </section>
+              <section class="input-box">
                 <input type="email" placeholder="Email" name="email" [(ngModel)]="signUpData.email" #email="ngModel" required minlength="5" pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}">
                 <img src="assets/img/icons/forms/email.svg" alt="" aria-hidden="true">
-                <div class="input-error-wrapper">
+                <section class="input-error-wrapper">
                   @if (email.invalid && email.touched) {
                     <span class="form-error">
                       @if (email.errors?.['required']) {
@@ -143,11 +143,11 @@
                         }
                     </span>
                   }
-                </div>
-              </div>
-              <div class="input-box">
+                </section>
+              </section>
+              <section class="input-box">
                 <input [(ngModel)]="signUpData.password" name="signUpPassword" #signUpPass="ngModel" required minlength="8" [type]="showSignUpPassword ? 'text' : 'password'" placeholder="Password" aria-label="Password">
-                <div class="icon-slot">
+                <section class="icon-slot">
                   @if (signUpData.password.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleSignUpPassword()" aria-label="Toggle password visibility">
                       <img [src]="showSignUpPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
@@ -155,8 +155,8 @@
                   } @else {
                     <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
                   }
-                </div>
-                <div class="input-error-wrapper">
+                </section>
+                <section class="input-error-wrapper">
                   @if (signUpPass.invalid && signUpPass.touched) {
                     <span class="form-error">
                       @if (signUpPass.errors?.['required']) {
@@ -166,11 +166,11 @@
                         } 
                     </span>
                   }
-                </div>
-              </div>
-              <div class="input-box">
+                </section>
+              </section>
+              <section class="input-box">
                 <input [(ngModel)]="confirmPassword" name="confirmPassword" #confirmPass="ngModel" required minlength="8" [type]="showConfirmPassword ? 'text' : 'password'" placeholder="Confirm Password" aria-label="Password">
-                <div class="icon-slot">
+                <section class="icon-slot">
                   @if (confirmPassword.length > 0) {
                     <button type="button" class="visibility-btn" (click)="toggleConfirmPassword()" aria-label="Toggle password visibility">
                       <img [src]="showConfirmPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'" alt="" aria-hidden="true">
@@ -178,8 +178,8 @@
                   } @else {
                     <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="" aria-hidden="true">
                   }
-                </div>
-                <div class="input-error-wrapper">
+                </section>
+                <section class="input-error-wrapper">
                   @if (confirmPass.invalid && confirmPass.touched) {
                     <span class="form-error" aria-live="polite">
                       @if (confirmPass.errors?.['required']) {
@@ -193,8 +193,8 @@
                         Passwords do not match.
                       </span>
                     }
-                </div>
-              </div>
+                </section>
+              </section>
               <label class="checkbox-wrapper">
                 <input class="checkbox" type="checkbox" name="privacy" ngModel #privacy="ngModel" required aria-label="Accept privacy policy">
                 <span class="checkbox-ui"></span>
@@ -204,23 +204,23 @@
                   </a>
                 </span>
               </label>
-              <div class="error-wrapper">
+              <section class="error-wrapper">
                 @if (privacy.invalid && privacy.touched) {
                   <p class="checkbox-error" aria-live="polite">
                     Please accept the privacy policy.
                   </p>
                 }
-              </div>
+              </section>
 
-              <div class="error-wrapper">
+              <section class="error-wrapper">
                 @if (signUpError) {
                   <p class="login-error" role="alert" aria-live="assertive">
                     Email already in use.
                   </p>
                 }
-              </div>
+              </section>
     
-              <div class="form-actions">
+              <nav class="form-actions" aria-label="Sign up actions">
                 <button type="submit" [class.button--disabled]="isSigningUp || signUpForm.invalid || signUpData.password !== confirmPassword" class="button button--primary">
                   @if (isSigningUp) {
                     Signing up…
@@ -228,10 +228,10 @@
                     Sign up
                   }
                 </button>
-              </div>
+              </nav>
             </form>
     
-          </div>
+          </article>
         </section>
       }
     
@@ -240,32 +240,31 @@
         <a routerLink="/imprint">Legal notice</a>
       </footer>
 
-      <div class="toast-wrapper">
+      <aside class="toast-wrapper" aria-live="polite" aria-atomic="true">
         <p
           class="toast"
           [class.toast--visible]="toastVisible"
           role="status"
-          aria-live="polite"
         >
           You signed up successfully
         </p>
-      </div> 
+      </aside> 
     }
     
     @if (showMobileGreeting) {
-      <div class="mobile-greeting-overlay">
+      <aside class="mobile-greeting-overlay">
         @if (user$ | async; as user) {
-          <div class="good-day-message">
+          <section class="good-day-message">
             @if (user.isAnonymous) {
               <p>{{ greeting }}!</p>
             } @else {
                 <p>{{ greeting }},</p>
                 <p class="user-name">{{ getGreetingName(user.email) }}</p>
               }
-          </div>
+          </section>
         }
-      </div>
+      </aside>
     }
 
-  </div>
-</div>
+  </section>
+</section>

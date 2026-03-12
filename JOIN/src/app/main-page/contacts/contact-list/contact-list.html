@@ -9,18 +9,18 @@
     />
   </button>
 
-  <ul class="contact-list__scroll">
+  <section class="contact-list__scroll" aria-label="Contact list">
     @if (loading && !contacts.length){
-      <li class="contact-list__empty">Loading contacts...</li>
+      <p class="contact-list__empty">Loading contacts...</p>
     } @else if (!loading && !contacts.length) {
-      <li class="contact-list__empty">No contacts yet</li>
+      <p class="contact-list__empty">No contacts yet</p>
     }
 
     @for (contact of contacts; track getContactId(contact, $index); let idx = $index) {
-      <div class="contact-list__alphab-section">
+      <article class="contact-list__alphab-section">
         @if (isNewLetter(idx)) {
-          <div class="contact-list__letter">{{ getFirstLetter(contact) }}</div>
-          <div class="contact-list__divider"></div>
+          <h2 class="contact-list__letter">{{ getFirstLetter(contact) }}</h2>
+          <section class="contact-list__divider" aria-hidden="true"></section>
         }
 
         <app-single-contact
@@ -29,7 +29,7 @@
           [isActive]="activeContactID === getContactId(contact, idx)"
           (selected)="setActiveContact(contact, idx)"
         />
-      </div>
+      </article>
     }
-  </ul>
+  </section>
 </section>

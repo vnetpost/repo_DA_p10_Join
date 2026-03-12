@@ -1,8 +1,8 @@
 <section>
-  <div class="content-wrapper">
-    <div class="title-section">
+  <section class="content-wrapper">
+    <header class="title-section">
       <h1>Board</h1>
-      <div class="search-bar" role="search">
+      <section class="search-bar" role="search">
         <input
           class="search-bar__input"
           [(ngModel)]="searchTerm"
@@ -11,7 +11,7 @@
           placeholder="Find Task"
           aria-label="Search tasks by title or description"
         />
-        <div class="search-bar__divider" aria-hidden="true"></div>
+        <section class="search-bar__divider" aria-hidden="true"></section>
         <button type="button" class="search-bar__button" (click)="search()" aria-label="Search">
           <img
             class="search-bar__icon search-bar__icon--default"
@@ -26,7 +26,7 @@
             aria-hidden="true"
           />
         </button>
-      </div>
+      </section>
       <button
         type="button"
         class="add-task-btn button button--primary button--icon"
@@ -41,9 +41,9 @@
           aria-hidden="true"
         />
       </button>
-    </div>
+    </header>
 
-    <div class="board" aria-label="Task board columns">
+    <section class="board" aria-label="Task board columns">
       <app-task-list
         status="to-do"
         listTitle="To do"
@@ -68,7 +68,7 @@
         (openTask)="openTask($event)"
         (addTaskRequested)="openAddTaskOverlay($event)"
       ></app-task-list>
-    </div>
+    </section>
 
     <app-task-dialog
       #taskDialog
@@ -78,14 +78,14 @@
     ></app-task-dialog>
 
     @if (isAddTaskOverlayOpen) {
-      <div
+      <section
         class="add-task-overlay"
         role="dialog"
         aria-modal="true"
         [attr.aria-label]="taskToEdit ? 'Edit task' : 'Add new task'"
         (mousedown)="onAddTaskOverlayMouseDown($event)"
       >
-        <div class="add-task-overlay__panel">
+        <article class="add-task-overlay__panel">
           <button
             type="button"
             class="add-task-overlay__close"
@@ -108,15 +108,15 @@
             (dirtyChange)="onAddTaskDirtyChange($event)"
             (taskSaved)="onTaskSaved($event)"
           ></app-add-task>
-        </div>
-      </div>
+        </article>
+      </section>
     }
-  </div>
+  </section>
 </section>
 
 @if(showCloseConfirm){
-  <div class="confirm-backdrop">
-    <div class="confirm-box" role="dialog" aria-modal="true">
+  <section class="confirm-backdrop">
+    <article class="confirm-box" role="dialog" aria-modal="true">
       <p>
         <span class="delete-highlight">Close </span>
         @if (taskToEdit?.title) {
@@ -127,10 +127,10 @@
         Your changes will be lost.
       </p>
 
-      <div class="confirm-actions">
+      <nav class="confirm-actions" aria-label="Close confirmation actions">
         <button class="button button--primary delete-btn" type="button" (click)="confirmClose()">Close</button>
         <button class="button button--secondary" type="button" (click)="cancelClose()">Cancel</button>
-      </div>
-    </div>
-  </div>
+      </nav>
+    </article>
+  </section>
 }

@@ -1,19 +1,19 @@
 @if (router.url !== '/'){
-  <div class="app-layout">
+  <main class="app-layout">
     <app-cockpit />
     <app-header />
-    <div class="content-area">
+    <section class="content-area">
       <router-outlet />
-    </div>
-    <div class="empty-content-column"></div>
-    <div class="empty-content-row"></div>
-  </div>
+    </section>
+    <aside class="empty-content-column" aria-hidden="true"></aside>
+    <aside class="empty-content-row" aria-hidden="true"></aside>
+  </main>
 } @else {
-  <div class="app-layout-login">
-    <div class="content-area">
+  <main class="app-layout-login">
+    <section class="content-area">
       <router-outlet />
-    </div>
-    <div class="empty-content-column"></div>
-    <div class="empty-content-row"></div>
-  </div>
+    </section>
+    <aside class="empty-content-column" aria-hidden="true"></aside>
+    <aside class="empty-content-row" aria-hidden="true"></aside>
+  </main>
 } 

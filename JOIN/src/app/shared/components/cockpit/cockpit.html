@@ -1,11 +1,11 @@
 <section>
-  <div class="content-wrapper">
+  <section class="content-wrapper">
     <img class="logo desktop-only" src="assets/img/icons/logo-light.svg" alt="Join" />
 
     @if (authLoading$ | async){
-      <div class="cockpit-loading">
-        <div class="loading-spinner"></div>
-      </div>
+      <section class="cockpit-loading">
+        <article class="loading-spinner"></article>
+      </section>
     } @else {
       <nav class="main-nav" aria-label="Primary navigation">
         @if (user$ | async) {
@@ -105,5 +105,5 @@
       }
     }
 
-  </div>
+  </section>
 </section>

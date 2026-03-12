@@ -1,10 +1,10 @@
 <header>
-  <div class="content-wrapper">
-    <div class="content-left">
+  <section class="content-wrapper">
+    <section class="content-left">
       <img class="mobile-logo mobile-only" src="assets/img/icons/logo-dark.svg" alt="Join" />
       <p class="desktop-title desktop-only">Kanban Project Management Tool</p>
-    </div>
-    <div class="content-right">
+    </section>
+    <section class="content-right">
       @if (user$ | async; as user) {
         <a
           routerLink="/help"
@@ -32,15 +32,15 @@
           }
         </button>
         @if (menuOpen) {
-          <div class="menu-overlay" (click)="closeMenu()"></div>
+          <aside class="menu-overlay" (click)="closeMenu()" aria-hidden="true"></aside>
         }
-        <div id="user-menu" class="user-menu" [class.is-open]="menuOpen" role="menu">
+        <nav id="user-menu" class="user-menu" [class.is-open]="menuOpen" role="menu">
           <a routerLink="/help" class="mobile-only" (click)="closeMenu()" role="menuitem">Help</a>
           <a routerLink="/imprint" (click)="closeMenu()" role="menuitem">Legal Notice</a>
           <a routerLink="/privacy" (click)="closeMenu()" role="menuitem">Privacy Policy</a>
           <button (click)="logout()" role="menuitem">Log out</button>
-        </div>
+        </nav>
       }
-    </div>
-  </div>
+    </section>
+  </section>
 </header>

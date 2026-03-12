@@ -1,6 +1,6 @@
-<div class="file-upload">
+<section class="file-upload">
   <span class="file-upload__label">Attachments</span>
-  <div class="file-upload__top-row">
+  <section class="file-upload__top-row">
     <span class="file-upload__hint">Allowed file types are JPEG and PNG</span>
     @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
       <button type="button" class="file-upload__delete-all" (click)="deleteAllAttachments($event)">
@@ -8,7 +8,7 @@
         <span>Delete all</span>
       </button>
     }
-  </div>
+  </section>
 
   <button
     type="button"
@@ -34,10 +34,10 @@
   />
 
   @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
-    <div class="file-upload__gallery scroll-shadows">
+    <section class="file-upload__gallery scroll-shadows" aria-label="Uploaded attachments">
       @for (attachment of existingAttachments; track $index) {
         <article class="file-upload__thumb-card">
-          <div class="file-upload__thumb-media">
+          <section class="file-upload__thumb-media">
             <img
               class="file-upload__thumb-image"
               [src]="getExistingAttachmentPreview(attachment)"
@@ -51,14 +51,14 @@
             >
               <img src="assets/img/icons/add-task/delete.svg" alt="" aria-hidden="true" />
             </button>
-          </div>
+          </section>
           <span class="file-upload__thumb-name">{{ getAttachmentName(attachment, $index) }}</span>
         </article>
       }
 
       @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
         <article class="file-upload__thumb-card">
-          <div class="file-upload__thumb-media">
+          <section class="file-upload__thumb-media">
             <img
               class="file-upload__thumb-image"
               [src]="getSelectedFilePreview(selectedFile)"
@@ -72,11 +72,11 @@
             >
               <img src="assets/img/icons/add-task/delete.svg" alt="" aria-hidden="true" />
             </button>
-          </div>
+          </section>
           <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
         </article>
       }
-    </div>
+    </section>
   }
 
   @if (showTypeError) {
@@ -85,4 +85,4 @@
       Unsupported files were ignored.
     </span>
   }
-</div>
+</section>

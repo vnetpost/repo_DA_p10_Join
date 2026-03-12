@@ -179,13 +179,16 @@ article{
 
   .assignees{
     @include styles.setFlex();
+    margin: 0;
+    padding: 0;
+    list-style: none;
 
-    div{
+    .assignee-bubble{
       @include styles.setFlex();
+      flex-shrink: 0;
       overflow: hidden;
       width: 32px;
       height: 32px;
-      // padding: 8px;
       margin-left: -8px;
       border: 1px solid white;
       border-radius: 50%;
@@ -205,6 +208,7 @@ article{
     }
 
     .more-contacts-sign{
+      @include styles.setFlex();
       border: 1px solid transparent;
       background-color: transparent;
       
