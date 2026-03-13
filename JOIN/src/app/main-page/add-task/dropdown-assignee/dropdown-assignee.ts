@@ -23,6 +23,7 @@ import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/u
 export class DropdownAssignee {
   elementRef = inject(ElementRef);
   firebaseService = inject(FirebaseService);
+  readonly assigneePreviewLimit = 5;
 
   getTwoInitials = getTwoInitials;
   getContactAvatarSrc = getContactAvatarSrc;
@@ -42,6 +43,20 @@ export class DropdownAssignee {
     return this.firebaseService.contacts.filter((contact) =>
       contact.name.toLowerCase().includes(query),
     );
+  }
+
+  /**
+   * Contacts shown as visible bubbles in the collapsed preview.
+   */
+  get visibleSelectedContacts(): Contact[] {
+    return this.selectedContacts.slice(0, this.assigneePreviewLimit);
+  }
+
+  /**
+   * Number of selected contacts that remain hidden behind the counter bubble.
+   */
+  get hiddenSelectedContactsCount(): number {
+    return Math.max(this.selectedContacts.length - this.assigneePreviewLimit, 0);
   }
 
   /**

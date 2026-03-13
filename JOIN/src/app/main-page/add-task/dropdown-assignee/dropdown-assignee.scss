@@ -64,7 +64,20 @@
 .assignees-preview {
   @include styles.setFlex($d: row, $ai: center, $jc: flex-start, $gap: 0.625rem);
   width: 100%;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(styles.$gray-dark, 0.35) transparent;
+  padding-bottom: 0.25rem;
+
+  &::-webkit-scrollbar {
+    height: 0.35rem;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba(styles.$gray-dark, 0.35);
+    border-radius: 999px;
+  }
 }
 
 .assignees-preview__avatar {
@@ -75,6 +88,10 @@
   border-radius: 50%;
   @include styles.setFont($size: 1em, $weight: 500, $color: styles.$white);
   flex: 0 0 auto;
+}
+
+.assignees-preview__avatar--counter {
+  background-color: styles.$gray-dark;
 }
 
 .assignees-preview__avatar-image {

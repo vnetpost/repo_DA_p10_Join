@@ -31,7 +31,7 @@
 
   @if (!isDropdownOpen && selectedContacts.length) {
     <section class="assignees-preview" aria-label="Selected assignees">
-      @for (contact of selectedContacts; track getContactId(contact, $index)) {
+      @for (contact of visibleSelectedContacts; track getContactId(contact, $index)) {
         <span
           class="assignees-preview__avatar"
           [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact.userColor ?? '#cccccc'"
@@ -42,6 +42,14 @@
           } @else {
             {{ getTwoInitials(contact.name) }}
           }
+        </span>
+      }
+      @if (hiddenSelectedContactsCount > 0) {
+        <span
+          class="assignees-preview__avatar assignees-preview__avatar--counter"
+          [attr.aria-label]="hiddenSelectedContactsCount + ' more selected contacts'"
+        >
+          +{{ hiddenSelectedContactsCount }}
         </span>
       }
     </section>
