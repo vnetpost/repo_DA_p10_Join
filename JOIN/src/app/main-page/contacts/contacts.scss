@@ -2,16 +2,26 @@
 
 .contacts {
   @include styles.setFlex($ai: stretch);
-  min-height: calc(100dvh - styles.$header-height);
+  height: calc(100dvh - 2 * styles.$header-height);
   width: 100%;
+
+  @include styles.up-xxl {
+    height: calc(100dvh - styles.$header-height);
+  }
 
   &__list {
     background-color: #ffffff;
+    height: 100%;
+    min-height: 0;
+    display: flex;
   }
 
   &__info {
     flex: 1;
+    height: 100%;
+    min-height: 0;
     min-width: 0;
+    display: flex;
   }
 }
 

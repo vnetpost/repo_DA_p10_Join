@@ -2,7 +2,11 @@
 
 :host > section {
   @include styles.setFlex($ai: flex-start);
-  min-height: calc(100dvh - styles.$header-height);
+  min-height: calc(100dvh - 2 * styles.$header-height);
+
+  @include styles.up-xxl {
+    min-height: calc(100dvh - styles.$header-height);
+  }
 
   > .content-wrapper {
     width: 93%;

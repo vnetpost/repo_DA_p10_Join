@@ -2,7 +2,8 @@
 
 .contact-info {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: flex-start, $gap: 4rem);
-  height: calc(100dvh - styles.$header-height);
+  height: 100%;
+  min-height: 0;
   width: 100%;
   padding: clamp(2rem, 13vmin, 5rem) clamp(2rem, 3vw, 5rem);
   overflow: hidden;
@@ -328,12 +329,6 @@
 
   .contact-info__main {
     @include styles.setFlex($jc: flex-start, $gap: 2rem);
-  }
-}
-
-@include styles.down-xxl {
-  .contact-info {
-    height: calc(100dvh - 2 * styles.$header-height);
   }
 }
 
