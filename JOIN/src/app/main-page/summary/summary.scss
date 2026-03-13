@@ -6,6 +6,7 @@
   overflow: hidden;
   overflow-y: auto;
   scrollbar-gutter: stable;
+  padding-bottom: 2.5rem;
 
   @include styles.up-xxl{
     height: calc(100dvh - styles.$header-height);
