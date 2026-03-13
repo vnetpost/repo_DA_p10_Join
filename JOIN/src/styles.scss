@@ -17,9 +17,11 @@ a {
 
 html {
   @include styles.setFont($size: 10px);
+  scrollbar-gutter: stable;
 
   > body {
     @include styles.setFont($size: 16px, $weight: 400);
+    min-height: 100dvh;
   }
 }
 
@@ -338,6 +340,7 @@ button {
 
     &::backdrop {
       background: styles.$backdrop-neutral;
+      animation: backdropFadeIn 0.2s ease;
     }
   }
 }
@@ -355,15 +358,8 @@ button {
   min-height: 100dvh;
   background: styles.$backdrop-neutral;
   z-index: 50;
+  animation: backdropFadeIn 0.2s ease;
 }
-
-// .confirm-backdrop > .confirm-box {
-//   position: relative;
-//   top: auto;
-//   left: auto;
-//   transform: none;
-//   margin: 0;
-// }
 
 .confirm-box {
   position: fixed;
@@ -380,6 +376,7 @@ button {
   border-radius: 20px;
   background: white;
   word-break: break-word;
+  animation: confirmFadeIn 0.16s ease;
   
   @include styles.up-xxl{
     min-width: 380px;
@@ -428,6 +425,7 @@ button {
 .toast-wrapper--blocking.toast-wrapper--active {
   background: styles.$backdrop-neutral;
   pointer-events: auto;
+  animation: backdropFadeIn 0.2s ease;
 }
 
 .toast {
