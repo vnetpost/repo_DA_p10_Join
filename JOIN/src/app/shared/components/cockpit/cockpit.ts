@@ -21,7 +21,7 @@ export class Cockpit {
   authService = inject(AuthService);
   authLoading$ = this.authService.authLoading$;
   user$ = this.authService.user$;
-  isDesktop: boolean = window.innerWidth >= 1025;
+  isDesktop: boolean = window.innerWidth >= 1120;
 
   /**
    * Handles window resize events.
@@ -33,6 +33,6 @@ export class Cockpit {
    */
   @HostListener('window:resize')
   onResize(): void {
-    this.isDesktop = window.innerWidth >= 1025;
+    this.isDesktop = window.innerWidth >= 1120;
   }
 }

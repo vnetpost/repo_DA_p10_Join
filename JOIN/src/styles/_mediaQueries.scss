@@ -29,7 +29,7 @@
 }
 
 @mixin down-xxl {
-  @media (max-width: 1024px) {
+  @media (max-width: 1119px) {
     @content;
   }
 }
@@ -41,7 +41,7 @@
 }
 
 @mixin up-xxl {
-  @media (min-width: 1025px) {
+  @media (min-width: 1120px) {
     @content;
   }
 }

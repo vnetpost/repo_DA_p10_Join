@@ -90,7 +90,7 @@ export class MainPage implements OnInit {
    * @returns void
    */
   checkScreen(): void {
-    this.isMobile = window.innerWidth < 1025;
+    this.isMobile = window.innerWidth < 1120;
   }
 
   /**
