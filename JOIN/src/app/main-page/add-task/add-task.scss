@@ -14,12 +14,15 @@
   );
   padding: clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 4vw, 6rem);
   background-color: styles.$white;
-  // height: 100%;
-  // min-height: 100%;
   height: calc(100dvh - 1 * styles.$header-height);
   overflow: hidden;
   overflow-y: auto;
   scrollbar-gutter: stable;
+}
+
+.add-task--overlay {
+  height: 100%;
+  overflow: hidden;
 }
 
 .add-task__header {
@@ -86,6 +89,25 @@
   margin-top: auto;
 }
 
+.add-task--overlay .add-task__form {
+  overflow: hidden;
+}
+
+.add-task--overlay .add-task__content {
+  padding-bottom: 1rem;
+}
+
+.add-task--overlay .add-task__footer {
+  position: sticky;
+  bottom: 0;
+  z-index: 4;
+  flex-shrink: 0;
+  margin-top: 0;
+  padding: 1rem 0 0.25rem;
+  background-color: styles.$white;
+  box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.08);
+}
+
 .add-task__required-note {
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$gray-dark);
 }
@@ -132,6 +154,10 @@
   .add-task {
     padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 1.5rem);
   }
+
+  .add-task--overlay .add-task__footer {
+    padding-bottom: 0.5rem;
+  }
 }
 
 @include styles.down-md {
@@ -169,6 +195,12 @@
   .add-task__footer {
     @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 1rem);
     position: relative;
+  }
+
+  .add-task--overlay .add-task__footer {
+    position: sticky;
+    bottom: 0;
+    padding: 1rem 0 0.75rem;
   }
 
   .add-task__actions {
