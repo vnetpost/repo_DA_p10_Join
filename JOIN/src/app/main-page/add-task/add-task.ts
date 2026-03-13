@@ -89,6 +89,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   // #region UI State
   toastVisible = false;
+  isSubmitting = false;
   attachmentUploadError = '';
   formResetVersion = 0;
   private toastTimer?: number;
@@ -173,6 +174,8 @@ export class AddTask implements OnChanges, OnDestroy {
    * Shows a toast afterwards and either closes overlay mode or navigates to board.
    */
   async createTask(): Promise<void> {
+    if (this.isSubmitting) return;
+
     const title = this.taskTitle.trim();
     const description = this.taskDescription.trim();
     const dueDateValue = this.taskDueDate.trim();
@@ -186,54 +189,60 @@ export class AddTask implements OnChanges, OnDestroy {
 
     const dueDateDate = this.parseDueDate(dueDateValue);
     if (!dueDateDate) return;
-    const dueDate = Timestamp.fromDate(dueDateDate);
-    this.attachmentUploadError = '';
+    this.isSubmitting = true;
 
-    const { attachments, warningMessage } = await this.resolveAttachmentsForSave();
-    this.attachmentUploadError = warningMessage;
+    try {
+      const dueDate = Timestamp.fromDate(dueDateDate);
+      this.attachmentUploadError = '';
 
-    const assigneeIds = this.activeAssignees
-      .map((contact) => contact.id)
-      .filter((id): id is string => Boolean(id));
-    const taskPayload = this.buildTaskPayload(
-      title,
-      description,
-      dueDate,
-      assigneeIds,
-      validatedCategory,
-      attachments,
-    );
+      const { attachments, warningMessage } = await this.resolveAttachmentsForSave();
+      this.attachmentUploadError = warningMessage;
 
-    let persistedTask: Task | null = null;
-
-    if (this.isEditMode && this.taskToEdit?.id) {
-      const updatedTask: Task = {
-        ...this.taskToEdit,
-        ...taskPayload,
-      };
-      await this.taskService.updateDocument(updatedTask, 'tasks');
-      persistedTask = updatedTask;
-      this.selectedAttachments = [];
-    } else {
-      const tasksInTargetColumn = this.taskService.tasks.filter(
-        (task) => task.status === this.initialStatus,
+      const assigneeIds = this.activeAssignees
+        .map((contact) => contact.id)
+        .filter((id): id is string => Boolean(id));
+      const taskPayload = this.buildTaskPayload(
+        title,
+        description,
+        dueDate,
+        assigneeIds,
+        validatedCategory,
+        attachments,
       );
-      const newOrder = tasksInTargetColumn.length;
 
-      const task: Task = {
-        status: this.initialStatus,
-        order: newOrder,
-        ...taskPayload,
-      };
+      let persistedTask: Task | null = null;
 
-      const createdTaskId = await this.taskService.addDocument(task);
-      persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
-      this.resetForm();
+      if (this.isEditMode && this.taskToEdit?.id) {
+        const updatedTask: Task = {
+          ...this.taskToEdit,
+          ...taskPayload,
+        };
+        await this.taskService.updateDocument(updatedTask, 'tasks');
+        persistedTask = updatedTask;
+        this.selectedAttachments = [];
+      } else {
+        const tasksInTargetColumn = this.taskService.tasks.filter(
+          (task) => task.status === this.initialStatus,
+        );
+        const newOrder = tasksInTargetColumn.length;
+
+        const task: Task = {
+          status: this.initialStatus,
+          order: newOrder,
+          ...taskPayload,
+        };
+
+        const createdTaskId = await this.taskService.addDocument(task);
+        persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
+        this.resetForm();
+      }
+
+      if (persistedTask) this.taskSaved.emit(persistedTask);
+      this.showToast();
+      this.resetDirtyState();
+    } finally {
+      this.isSubmitting = false;
     }
-
-    if (persistedTask) this.taskSaved.emit(persistedTask);
-    this.showToast();
-    this.resetDirtyState();
   }
 
   /** Resets all form fields and touch states to their defaults. */

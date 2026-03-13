@@ -213,7 +213,9 @@
           <button
             type="submit"
             class="button button--primary button--icon"
-            [class.button--disabled]="contactForm.invalid"
+            [class.button--disabled]="contactForm.invalid || isSubmitting"
+            [disabled]="contactForm.invalid || isSubmitting"
+            [attr.aria-disabled]="contactForm.invalid || isSubmitting ? 'true' : null"
             aria-label="Save changes"
           >
             @if (dialogMode === 'add') {

@@ -29,6 +29,7 @@ export class ContactDialog {
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
   showCloseConfirm: boolean = false;
+  isSubmitting: boolean = false;
   avatar: ContactAvatar | null = null;
   avatarPreviewSrc: string | null = null;
   readonly avatarAllowedMimeTypes = ['image/jpeg', 'image/png'];
@@ -60,6 +61,7 @@ export class ContactDialog {
   openAddDialog(): void {
     this.dialogMode = 'add';
     this.showCloseConfirm = false;
+    this.isSubmitting = false;
 
     this.contactData = {
       name: '',
@@ -85,6 +87,7 @@ export class ContactDialog {
   openEditDialog(contact: Contact): void {
     this.dialogMode = 'edit';
     this.showCloseConfirm = false;
+    this.isSubmitting = false;
 
     this.contactData.name = contact.name;
     this.contactData.email = contact.email;
@@ -106,6 +109,7 @@ export class ContactDialog {
   openDialog(): void {
     const el = this.dialog.nativeElement;
     this.showCloseConfirm = false;
+    this.isSubmitting = false;
     el.showModal();
     el.classList.add('opened');
   }
@@ -122,27 +126,36 @@ export class ContactDialog {
    * @returns void
    */
   onSubmit(form: NgForm): void {
+    if (this.isSubmitting) return;
+
     if (form.invalid) {
       form.control.markAllAsTouched();
       return;
     }
 
-    const formData: ContactFormData = {
-      name: this.contactData.name,
-      email: this.contactData.email,
-      phone: this.contactData.phone,
-    };
-    if (this.dialogMode === 'edit') formData.avatar = this.avatar ?? null;
-    this.saveContact.emit(formData);
+    this.isSubmitting = true;
 
-    this.closeDialog();
+    try {
+      const formData: ContactFormData = {
+        name: this.contactData.name,
+        email: this.contactData.email,
+        phone: this.contactData.phone,
+      };
+      if (this.dialogMode === 'edit') formData.avatar = this.avatar ?? null;
+      this.saveContact.emit(formData);
 
-    if (this.dialogMode === 'add') {
-      form.resetForm({
-        name: '',
-        email: '',
-        phone: '',
-      });
+      this.closeDialog();
+
+      if (this.dialogMode === 'add') {
+        form.resetForm({
+          name: '',
+          email: '',
+          phone: '',
+        });
+      }
+    } catch (error) {
+      this.isSubmitting = false;
+      throw error;
     }
   }
 
@@ -169,6 +182,7 @@ export class ContactDialog {
    */
   closeDialog(): void {
     this.showCloseConfirm = false;
+    this.isSubmitting = false;
     const el = this.dialog.nativeElement;
     el.classList.remove('opened');
     el.close();
