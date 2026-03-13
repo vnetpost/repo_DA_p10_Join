@@ -14,8 +14,7 @@ dialog {
     border: none;
 
     &::backdrop {
-      opacity: 0.7;
-      background: #b3b3b3;
+      background: styles.$backdrop-neutral;
     }
   }
 

@@ -172,7 +172,7 @@
   inset: 0;
   z-index: 20;
   padding: clamp(0.75rem, 3vw, 2rem);
-  background-color: #00000059;
+  background-color: styles.$backdrop-neutral;
   @include styles.setFlex();
 }
 

@@ -337,8 +337,7 @@ button {
     background: transparent;
 
     &::backdrop {
-      background: #000000;
-      opacity: 0.7;
+      background: styles.$backdrop-neutral;
     }
   }
 }
@@ -354,7 +353,7 @@ button {
   height: 100dvh;
   min-width: 100dvw;
   min-height: 100dvh;
-  background: #000000a6;
+  background: styles.$backdrop-neutral;
   z-index: 50;
 }
 
@@ -427,7 +426,7 @@ button {
 }
 
 .toast-wrapper--blocking.toast-wrapper--active {
-  background: #b3b3b3b3;
+  background: styles.$backdrop-neutral;
   pointer-events: auto;
 }
 
