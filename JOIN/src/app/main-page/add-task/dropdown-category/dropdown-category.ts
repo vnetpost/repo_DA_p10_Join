@@ -4,7 +4,9 @@ import {
   HostListener,
   ElementRef,
   Input,
+  OnChanges,
   Output,
+  SimpleChanges,
   inject,
 } from '@angular/core';
 import { TaskCategoryOption, TaskService } from '../../../shared/services/task-service';
@@ -28,6 +30,7 @@ export class DropdownCategory {
   @Output() selectedCategoryChange = new EventEmitter<TaskCategoryOption | null>();
   /** Visual error state passed from the parent form. */
   @Input() hasError = false;
+  @Input() resetTrigger = 0;
   /** Emits blur-like events so parent can update touch state. */
   @Output() fieldBlur = new EventEmitter<void>();
 
@@ -36,6 +39,11 @@ export class DropdownCategory {
   /** Human-readable label of the selected category. */
   get selectedCategoryLabel(): string {
     return this.selectedCategory?.label ?? '';
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['resetTrigger']) return;
+    this.isDropdownOpen = false;
   }
 
   /**

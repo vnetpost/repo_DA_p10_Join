@@ -1,4 +1,13 @@
-import { Component, ElementRef, EventEmitter, Input, Output, inject } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+  inject,
+} from '@angular/core';
 import { Subtask } from '../../../shared/interfaces/task';
 
 /**
@@ -18,6 +27,7 @@ export class SubtaskComposer {
 
   /** Current list of subtasks managed by the parent form. */
   @Input() subtasks: Subtask[] = [];
+  @Input() resetTrigger = 0;
   /** Emits whenever the subtask list changes. */
   @Output() subtasksChange = new EventEmitter<Subtask[]>();
 
@@ -34,6 +44,11 @@ export class SubtaskComposer {
   get showSubtaskPatternError(): boolean {
     const title = this.subtaskTitle.trim();
     return title.length > 0 && !this.isSubtaskTitleValid(title);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes['resetTrigger']) return;
+    this.clearSubtaskTitle();
   }
 
   /**

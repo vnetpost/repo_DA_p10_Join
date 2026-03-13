@@ -90,6 +90,7 @@ export class AddTask implements OnChanges, OnDestroy {
   // #region UI State
   toastVisible = false;
   attachmentUploadError = '';
+  formResetVersion = 0;
   private toastTimer?: number;
   // #endregion
 
@@ -121,16 +122,6 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Returns the submit button label for the active form mode. */
   get submitButtonLabel(): string {
     return this.isEditMode ? 'Save' : 'Create Task';
-  }
-
-  /** Ensures the subtask list is valid for submit. */
-  get hasValidSubtasks(): boolean {
-    return this.activeSubtasks.length !== 1;
-  }
-
-  /** Shows helper text when exactly one subtask exists. */
-  get showSubtaskHint(): boolean {
-    return this.activeSubtasks.length === 1;
   }
 
   /** Aggregates all title-related validation states. */
@@ -171,8 +162,7 @@ export class AddTask implements OnChanges, OnDestroy {
     return (
       this.isTitleValid(this.taskTitle) &&
       this.taskDueDate.trim().length > 0 &&
-      Boolean(this.activeCategory) &&
-      this.hasValidSubtasks
+      Boolean(this.activeCategory)
     );
   }
   // #endregion
@@ -261,6 +251,8 @@ export class AddTask implements OnChanges, OnDestroy {
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
+    this.formResetVersion += 1;
+    this.resetDirtyState();
   }
   // #endregion
 
@@ -317,7 +309,7 @@ export class AddTask implements OnChanges, OnDestroy {
   ): Task['category'] | null {
     const isTitleValid = this.isTitleValid(title);
 
-    if (!isTitleValid || !dueDateValue || !category || !this.hasValidSubtasks) {
+    if (!isTitleValid || !dueDateValue || !category) {
       if (!isTitleValid) this.isTitleTouched = true;
       if (!dueDateValue) this.isDueDateTouched = true;
       if (!category) this.isCategoryTouched = true;

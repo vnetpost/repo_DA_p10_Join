@@ -57,6 +57,7 @@
             [(selectedCategory)]="activeCategory"
             (fieldBlur)="isCategoryTouched = true"
             [hasError]="showCategoryError"
+            [resetTrigger]="formResetVersion"
           ></app-dropdown-category>
           <span class="add-task__field-error" [class.is-visible]="showCategoryError">
             This field is required
@@ -76,10 +77,10 @@
         </fieldset>
 
         <fieldset class="add-task__field-group">
-          <app-subtask-composer [(subtasks)]="activeSubtasks"></app-subtask-composer>
-          <span class="add-task__field-error add-task__subtask-hint" [class.is-visible]="showSubtaskHint">
-            Either add no subtasks or at least two.
-          </span>
+          <app-subtask-composer
+            [(subtasks)]="activeSubtasks"
+            [resetTrigger]="formResetVersion"
+          ></app-subtask-composer>
         </fieldset>
 
         <fieldset class="add-task__field-group">
