@@ -28,6 +28,7 @@ dialog {
     padding: 25px 20px;
     word-break: break-word;
     overflow-y: auto;
+    scrollbar-gutter: stable;
 
     &::-webkit-scrollbar {
       width: 0px;
@@ -156,6 +157,7 @@ dialog {
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 0.2rem;
+    scrollbar-gutter: stable;
     scrollbar-width: thin;
     scrollbar-color: rgba(styles.$gray-dark, 0.35) transparent;
 
@@ -284,6 +286,7 @@ dialog {
     list-style: none;
     max-height: 135px;
     overflow-y: auto;
+    scrollbar-gutter: stable;
 
     @include styles.up-xxl {
       max-height: 150px;
@@ -346,6 +349,7 @@ dialog {
     list-style: none;
     max-height: 110px;
     overflow-y: auto;
+    scrollbar-gutter: stable;
 
     &::-webkit-scrollbar {
       width: 4px;

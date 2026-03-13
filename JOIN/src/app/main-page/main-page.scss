@@ -283,11 +283,14 @@
 
   .form-actions{
     @include styles.setFlex($d: column, $gap: 12px);
+    min-height: 112px;
+    align-items: center;
 
     @include styles.up-xxl{
       @include styles.setFlex($gap: 28px);
       margin-top: 16px;
       font-size: 20px;
+      min-height: 78px;
     }
 
     button{

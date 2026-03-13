@@ -11,7 +11,7 @@
         class="close-btn-mobile mobile-only"
         type="button"
         aria-label="Close contact dialog"
-        (click)="closeDialog()"
+        (click)="requestCloseDialog()"
       >
         <img src="assets/img/icons/buttons/close-white.svg" alt="Close icon" aria-hidden="true" />
       </button>
@@ -36,7 +36,7 @@
       class="close-btn-desktop desktop-only"
       type="button"
       aria-label="Close contact dialog"
-      (click)="closeDialog()"
+      (click)="requestCloseDialog()"
     >
       <img
         class="icon icon--default"
@@ -185,7 +185,7 @@
             <button
               type="button"
               class="button button--secondary button--icon desktop-only"
-              (click)="closeDialog()"
+              (click)="requestCloseDialog()"
               aria-label="Cancel and close dialog"
             >
               Cancel
@@ -231,4 +231,19 @@
       </form>
     </section>
   </article>
+
+  @if (showCloseConfirm) {
+    <section class="confirm-backdrop">
+      <article class="confirm-box" role="dialog" aria-modal="true" aria-label="Close contact dialog confirmation">
+        <p><span class="delete-highlight">Close</span> this contact? Your changes will be lost.</p>
+
+        <nav class="confirm-actions" aria-label="Close confirmation actions">
+          <button class="button button--primary delete-btn" type="button" (click)="confirmCloseDialog()">
+            Close
+          </button>
+          <button class="button button--secondary" type="button" (click)="cancelCloseDialog()">Cancel</button>
+        </nav>
+      </article>
+    </section>
+  }
 </dialog>

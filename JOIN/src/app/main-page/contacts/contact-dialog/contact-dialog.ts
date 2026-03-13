@@ -28,6 +28,7 @@ export class ContactDialog {
   readonly getTwoInitials = getTwoInitials;
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
+  showCloseConfirm: boolean = false;
   avatar: ContactAvatar | null = null;
   avatarPreviewSrc: string | null = null;
   readonly avatarAllowedMimeTypes = ['image/jpeg', 'image/png'];
@@ -58,6 +59,7 @@ export class ContactDialog {
    */
   openAddDialog(): void {
     this.dialogMode = 'add';
+    this.showCloseConfirm = false;
 
     this.contactData = {
       name: '',
@@ -82,6 +84,7 @@ export class ContactDialog {
    */
   openEditDialog(contact: Contact): void {
     this.dialogMode = 'edit';
+    this.showCloseConfirm = false;
 
     this.contactData.name = contact.name;
     this.contactData.email = contact.email;
@@ -102,6 +105,7 @@ export class ContactDialog {
    */
   openDialog(): void {
     const el = this.dialog.nativeElement;
+    this.showCloseConfirm = false;
     el.showModal();
     el.classList.add('opened');
   }
@@ -164,12 +168,13 @@ export class ContactDialog {
    * @returns void
    */
   closeDialog(): void {
+    this.showCloseConfirm = false;
     const el = this.dialog.nativeElement;
     el.classList.remove('opened');
     el.close();
 
     queueMicrotask(() => {
-      this.contactForm.resetForm({
+      this.contactForm?.resetForm({
         name: '',
         email: '',
         phone: '',
@@ -189,7 +194,7 @@ export class ContactDialog {
    */
   onBackdropClick(event: MouseEvent): void {
     if (event.target === this.dialog.nativeElement) {
-      this.closeDialog();
+      this.requestCloseDialog();
     }
   }
 
@@ -204,9 +209,46 @@ export class ContactDialog {
    */
   onEsc(event: Event): void {
     event.preventDefault();
-    this.closeDialog();
+    if (this.showCloseConfirm) {
+      this.cancelCloseDialog();
+      return;
+    }
+
+    this.requestCloseDialog();
   }
   // #endregion
+
+  /**
+   * Opens a warning before closing the add-contact dialog with entered content.
+   *
+   * @returns void
+   */
+  requestCloseDialog(): void {
+    if (this.shouldConfirmClose()) {
+      this.showCloseConfirm = true;
+      return;
+    }
+
+    this.closeDialog();
+  }
+
+  /**
+   * Confirms the close action and discards the current dialog values.
+   *
+   * @returns void
+   */
+  confirmCloseDialog(): void {
+    this.closeDialog();
+  }
+
+  /**
+   * Keeps the contact dialog open and hides the close confirmation.
+   *
+   * @returns void
+   */
+  cancelCloseDialog(): void {
+    this.showCloseConfirm = false;
+  }
 
   @HostListener('contextmenu', ['$event'])
   /**
@@ -377,6 +419,17 @@ export class ContactDialog {
     if (mimeType === 'image/jpeg') return `${baseName}.jpg`;
     if (mimeType === 'image/png') return `${baseName}.png`;
     return fileName;
+  }
+
+  /**
+   * Checks whether the add-contact form already contains user-entered values.
+   *
+   * @returns `true` if closing should require confirmation.
+   */
+  private shouldConfirmClose(): boolean {
+    if (this.dialogMode !== 'add') return false;
+
+    return Object.values(this.contactData).some((value) => String(value).trim().length > 0);
   }
   // #endregion
 }

@@ -6,6 +6,7 @@
 }
 
 .add-task {
+  --overlay-footer-space: 6.75rem;
   @include styles.setFlex(
     $d: column,
     $ai: stretch,
@@ -94,7 +95,7 @@
 }
 
 .add-task--overlay .add-task__content {
-  padding-bottom: 1rem;
+  padding-bottom: var(--overlay-footer-space);
 }
 
 .add-task--overlay .add-task__footer {
@@ -102,6 +103,7 @@
   bottom: 0;
   z-index: 4;
   flex-shrink: 0;
+  min-height: var(--overlay-footer-space);
   margin-top: 0;
   padding: 1rem 0 0.25rem;
   background-color: styles.$white;
@@ -152,6 +154,7 @@
 
 @include styles.down-lg {
   .add-task {
+    --overlay-footer-space: 7.25rem;
     padding: clamp(1.5rem, 4vw, 4rem) clamp(1rem, 4vw, 1.5rem);
   }
 
@@ -162,6 +165,7 @@
 
 @include styles.down-md {
   .add-task {
+    --overlay-footer-space: 9.5rem;
     padding: clamp(1.25rem, 3.5vw, 2.5rem);
     overflow: hidden;
   }

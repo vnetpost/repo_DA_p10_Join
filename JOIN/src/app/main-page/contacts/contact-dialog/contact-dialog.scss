@@ -23,6 +23,8 @@ dialog {
     width: 85dvw;
     max-width: 350px;
     height: 540px;
+    overflow-y: auto;
+    scrollbar-gutter: stable;
     background-color: white;
     border-radius: 16px;
 
@@ -300,6 +302,8 @@ header {
 
       .form__actions{
         @include styles.setFlex($gap: 16px);
+        // min-height: 72px;
+        // align-items: flex-start;
 
         button{
           margin-top: 8px;
