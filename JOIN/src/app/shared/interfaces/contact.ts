@@ -1,5 +1,8 @@
 import { Timestamp } from '@angular/fire/firestore';
 
+/**
+ * Contact entity stored in Firestore and used across the app UI.
+ */
 export interface Contact {
   id?: string;
   name: string;
@@ -10,6 +13,9 @@ export interface Contact {
   avatar?: ContactAvatar | null;
 }
 
+/**
+ * Serialized avatar payload stored directly on a contact document.
+ */
 export interface ContactAvatar {
   fileName: string;
   fileType: string;

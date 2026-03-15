@@ -1,5 +1,8 @@
 import { Timestamp } from '@angular/fire/firestore';
 
+/**
+ * Task entity rendered on the board and persisted in Firestore.
+ */
 export interface Task {
   status: 'to-do' | 'in-progress' | 'await-feedback' | 'done';
   order: number;
@@ -14,11 +17,17 @@ export interface Task {
   attachments?: Array<TaskAttachment>;
 }
 
+/**
+ * Small checklist item that belongs to a task.
+ */
 export interface Subtask {
   title: string;
   done: boolean;
 }
 
+/**
+ * Serialized task attachment payload stored directly on a task document.
+ */
 export interface TaskAttachment {
   fileName: string;
   fileType: string;

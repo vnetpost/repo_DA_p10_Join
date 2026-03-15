@@ -11,6 +11,9 @@ import {
 } from '@angular/core';
 import { TaskAttachment } from '../../../shared/interfaces/task';
 
+/**
+ * Handles attachment selection, preview generation and removal inside the task form.
+ */
 @Component({
   selector: 'app-file-upload',
   imports: [],
@@ -30,6 +33,12 @@ export class FileUpload implements OnChanges, OnDestroy {
   showTypeError = false;
   private previewUrlsByFileKey = new Map<string, string>();
 
+  /**
+   * Keeps preview object URLs in sync when the parent updates selected files.
+   *
+   * @param changes Angular change map for current inputs.
+   * @returns void
+   */
   ngOnChanges(changes: SimpleChanges): void {
     const selectedFilesChange = changes['selectedFiles'];
     if (!selectedFilesChange) return;
@@ -40,14 +49,30 @@ export class FileUpload implements OnChanges, OnDestroy {
     if (this.fileInput) this.fileInput.nativeElement.value = '';
   }
 
+  /**
+   * Releases all generated preview URLs on component teardown.
+   *
+   * @returns void
+   */
   ngOnDestroy(): void {
     this.clearPreviewUrls();
   }
 
+  /**
+   * Opens the hidden native file input.
+   *
+   * @returns void
+   */
   openFilePicker(): void {
     this.fileInput?.nativeElement.click();
   }
 
+  /**
+   * Adds files chosen through the native file picker.
+   *
+   * @param event Native change event from the hidden file input.
+   * @returns void
+   */
   onFileSelected(event: Event): void {
     const target = event.target as HTMLInputElement;
     const files = Array.from(target.files ?? []);
@@ -55,16 +80,34 @@ export class FileUpload implements OnChanges, OnDestroy {
     if (this.fileInput) this.fileInput.nativeElement.value = '';
   }
 
+  /**
+   * Marks the dropzone as active while files are dragged over it.
+   *
+   * @param event Native drag-over event.
+   * @returns void
+   */
   onDragOver(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver = true;
   }
 
+  /**
+   * Removes the drag-over highlight once the pointer leaves the dropzone.
+   *
+   * @param event Native drag-leave event.
+   * @returns void
+   */
   onDragLeave(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver = false;
   }
 
+  /**
+   * Adds files dropped onto the dropzone.
+   *
+   * @param event Native drop event.
+   * @returns void
+   */
   onDrop(event: DragEvent): void {
     event.preventDefault();
     this.isDragOver = false;
@@ -72,6 +115,12 @@ export class FileUpload implements OnChanges, OnDestroy {
     this.addSelectedFiles(droppedFiles);
   }
 
+  /**
+   * Clears all newly selected files without touching existing attachments.
+   *
+   * @param event Optional trigger event used to stop propagation.
+   * @returns void
+   */
   clearSelectedFiles(event?: Event): void {
     event?.stopPropagation();
     this.selectedFiles = [];
@@ -83,6 +132,9 @@ export class FileUpload implements OnChanges, OnDestroy {
 
   /**
    * Removes all existing and newly selected attachments.
+   *
+   * @param event Optional trigger event used to stop propagation.
+   * @returns void
    */
   deleteAllAttachments(event?: Event): void {
     event?.stopPropagation();
@@ -93,8 +145,10 @@ export class FileUpload implements OnChanges, OnDestroy {
 
   /**
    * Removes one existing attachment from the editable list.
+   *
    * @param index Attachment index to remove.
    * @param event Triggering click event.
+   * @returns void
    */
   removeExistingAttachment(index: number, event: Event): void {
     event.stopPropagation();
@@ -107,8 +161,10 @@ export class FileUpload implements OnChanges, OnDestroy {
 
   /**
    * Removes one newly selected file from the pending upload list.
+   *
    * @param index Selected file index to remove.
    * @param event Triggering click event.
+   * @returns void
    */
   removeSelectedFile(index: number, event: Event): void {
     event.stopPropagation();
@@ -123,6 +179,10 @@ export class FileUpload implements OnChanges, OnDestroy {
   /**
    * Resolves a stable attachment name for display.
    * Supports both current and legacy task attachment shapes.
+   *
+   * @param attachment Persisted attachment payload.
+   * @param index Fallback index when no filename exists.
+   * @returns Safe attachment name for the UI.
    */
   getAttachmentName(attachment: TaskAttachment, index: number): string {
     const fileName = attachment.fileName?.trim();
@@ -135,6 +195,9 @@ export class FileUpload implements OnChanges, OnDestroy {
 
   /**
    * Builds a preview source for already persisted attachments.
+   *
+   * @param attachment Persisted attachment payload.
+   * @returns Previewable image source string.
    */
   getExistingAttachmentPreview(attachment: TaskAttachment): string {
     const withLegacyUrl = attachment as TaskAttachment & { url?: string };
@@ -149,6 +212,9 @@ export class FileUpload implements OnChanges, OnDestroy {
 
   /**
    * Builds and caches object URLs for selected image files.
+   *
+   * @param file Newly selected browser file.
+   * @returns Object URL used in the thumbnail preview.
    */
   getSelectedFilePreview(file: File): string {
     const fileKey = this.getFileKey(file);
@@ -160,10 +226,23 @@ export class FileUpload implements OnChanges, OnDestroy {
     return generatedUrl;
   }
 
+  /**
+   * Returns a stable track-by key for selected file thumbnails.
+   *
+   * @param _index Unused Angular index parameter.
+   * @param file Selected browser file.
+   * @returns Stable file identity string.
+   */
   trackSelectedFile(_index: number, file: File): string {
     return this.getFileKey(file);
   }
 
+  /**
+   * Validates and merges new files into the current selection.
+   *
+   * @param files Raw files from picker or dropzone.
+   * @returns void
+   */
   private addSelectedFiles(files: File[]): void {
     if (!files.length) return;
 
@@ -189,10 +268,22 @@ export class FileUpload implements OnChanges, OnDestroy {
     this.selectedFilesChange.emit(mergedFiles);
   }
 
+  /**
+   * Builds a unique key for one browser file.
+   *
+   * @param file Browser file reference.
+   * @returns Unique key derived from file metadata.
+   */
   private getFileKey(file: File): string {
     return `${file.name}|${file.size}|${file.lastModified}`;
   }
 
+  /**
+   * Revokes the generated preview URL of one file.
+   *
+   * @param file Browser file whose preview should be released.
+   * @returns void
+   */
   private revokePreviewUrl(file: File): void {
     const fileKey = this.getFileKey(file);
     const previewUrl = this.previewUrlsByFileKey.get(fileKey);
@@ -201,6 +292,11 @@ export class FileUpload implements OnChanges, OnDestroy {
     this.previewUrlsByFileKey.delete(fileKey);
   }
 
+  /**
+   * Removes cached preview URLs for files that are no longer selected.
+   *
+   * @returns void
+   */
   private syncPreviewUrlsWithSelectedFiles(): void {
     const activeKeys = new Set(this.selectedFiles.map((file) => this.getFileKey(file)));
     for (const [previewKey, previewUrl] of this.previewUrlsByFileKey.entries()) {
@@ -210,6 +306,11 @@ export class FileUpload implements OnChanges, OnDestroy {
     }
   }
 
+  /**
+   * Releases all cached preview URLs.
+   *
+   * @returns void
+   */
   private clearPreviewUrls(): void {
     for (const previewUrl of this.previewUrlsByFileKey.values()) {
       URL.revokeObjectURL(previewUrl);
