@@ -22,7 +22,14 @@ html {
   > body {
     @include styles.setFont($size: 16px, $weight: 400);
     min-height: 100dvh;
+    background-color: #f6f7f8;
   }
+}
+
+app-root {
+  display: block;
+  min-height: 100dvh;
+  background-color: #f6f7f8;
 }
 
 body:has(dialog[open]),
@@ -52,7 +59,7 @@ button {
       background-color: styles.$blue-sky;
       box-shadow: 0px 4px 4px 0px #00000040;
     }
-  
+
     &:active {
       background-color: styles.$navy-dark;
       box-shadow: 0px 4px 4px 0px #00000040;
@@ -73,7 +80,7 @@ button {
       border-color: styles.$blue-sky;
       box-shadow: 0px 4px 4px 0px #00000040;
     }
-  
+
     &:active {
       color: styles.$gray-dark;
       border-color: styles.$gray-dark;
@@ -102,14 +109,17 @@ button {
 .legal-content-wrapper {
   @include styles.setFlex($ai: flex-start);
   height: 100%;
+  height: calc(100dvh - styles.$header-height);
+  // scrollbar-width: none;
+  overflow: hidden;
   overflow-y: auto;
-  scrollbar-width: none;
+  scrollbar-gutter: stable;
 
   .legal-page-article {
     width: 90%;
     padding: 2rem 0 12rem;
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       padding: 4rem 0 12rem;
     }
 
@@ -119,7 +129,7 @@ button {
 
       h1 {
         font-size: 32px;
-  
+
         @include styles.up-xxl {
           font-size: 50px;
         }
@@ -287,14 +297,14 @@ button {
 }
 
 // #region Goodday message after login
-.good-day-message{
+.good-day-message {
   @include styles.setFlex($d: column);
   font-size: 30px;
   font-weight: 500;
   color: styles.$gray-dark;
   max-width: 100%;
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     align-items: flex-start;
     font-size: 26px;
   }
@@ -303,7 +313,7 @@ button {
     font-size: 40px;
   }
 
-  .user-name{
+  .user-name {
     color: styles.$blue-sky;
     font-size: 36px;
     font-weight: bold;
@@ -314,7 +324,7 @@ button {
     word-break: break-word;
     white-space: normal;
 
-    @include styles.up-xxl{
+    @include styles.up-xxl {
       font-size: 30px;
     }
 
@@ -377,35 +387,35 @@ button {
   background: white;
   word-break: break-word;
   animation: confirmFadeIn 0.16s ease;
-  
-  @include styles.up-xxl{
+
+  @include styles.up-xxl {
     min-width: 380px;
     max-width: 40dvw;
   }
-  
-  p{
+
+  p {
     font-weight: 500;
-    
-    .delete-highlight{
+
+    .delete-highlight {
       color: styles.$red-error;
     }
   }
 
-  .confirm-actions{
+  .confirm-actions {
     @include styles.setFlex($gap: 24px);
     margin-top: 24px;
 
-    .button{
-      @include styles.up-xxl{
+    .button {
+      @include styles.up-xxl {
         padding-left: 24px;
         padding-right: 24px;
       }
     }
 
-    .delete-btn{
+    .delete-btn {
       background-color: styles.$red-error;
 
-      &:hover{
+      &:hover {
         background-color: styles.$blue-sky;
       }
     }
@@ -439,11 +449,11 @@ button {
     transform 0.25s ease,
     opacity 0.25s ease;
 
-  @include styles.down-xxl{
+  @include styles.down-xxl {
     transform: translateY(100%);
-  }  
+  }
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     transform: translateX(100%);
   }
 }
@@ -451,11 +461,11 @@ button {
 .toast--visible {
   opacity: 1;
 
-  @include styles.down-xxl{
+  @include styles.down-xxl {
     transform: translateY(0);
-  }  
+  }
 
-  @include styles.up-xxl{
+  @include styles.up-xxl {
     transform: translateX(0);
   }
 }

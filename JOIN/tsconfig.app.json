@@ -8,7 +8,7 @@
   },
   "include": [
     "src/**/*.ts"
-, "src/app/shared/utilities"  ],
+, "src/app/shared/utilities", "src/environments/environment.ts-TEMPLATE"  ],
   "exclude": [
     "src/**/*.spec.ts"
   ]

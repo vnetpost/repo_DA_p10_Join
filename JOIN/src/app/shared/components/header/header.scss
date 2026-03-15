@@ -23,6 +23,7 @@ header {
 
     @include styles.up-xxl {
       width: 100%;
+      // max-width: 1600px;
       max-width: 1208px;
       padding-left: 120px;
       padding-right: 32px;
