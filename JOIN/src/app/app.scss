@@ -6,7 +6,9 @@
   @include styles.up-xxl {
     @include styles.setGrid($rows: styles.$header-height minmax(0, 1fr) auto, $columns: 232px minmax(0, 1208px) auto);
     width: 100%;
+    max-width: 1440px;
     min-height: 100dvh;
+    margin-inline: auto;
 
     > * {
       min-width: 0;
@@ -44,7 +46,9 @@
   @include styles.up-xxl {
     @include styles.setGrid($rows: minmax(0, 1fr), $columns: minmax(0, 1440px));
     width: 100%;
+    max-width: 1440px;
     min-height: 100dvh;
+    margin-inline: auto;
 
     > * {
       min-width: 0;
