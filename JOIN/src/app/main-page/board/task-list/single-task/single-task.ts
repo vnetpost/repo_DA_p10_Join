@@ -30,6 +30,13 @@ export class SingleTask implements OnInit {
   @Output() openTask = new EventEmitter<Task>();
 
   /**
+   * Stable element id for the mobile move menu of this task card.
+   */
+  get moveMenuId(): string {
+    return this.task.id ? `move-menu-${this.task.id}` : `move-menu-${this.task.order}`;
+  }
+
+  /**
    * Initializes the component.
    *
    * Detects the current device type and listens

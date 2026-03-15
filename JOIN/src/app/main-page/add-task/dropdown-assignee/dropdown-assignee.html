@@ -18,6 +18,9 @@
       type="button"
       class="form-field__icon-button"
       aria-label="Toggle assignee dropdown"
+      aria-haspopup="listbox"
+      [attr.aria-controls]="dropdownId"
+      [attr.aria-expanded]="isDropdownOpen ? 'true' : 'false'"
       (click)="toggleDropdownOpen($event)"
     >
       <img
@@ -56,7 +59,13 @@
   }
 
   @if (isDropdownOpen) {
-    <section class="dropdown" aria-label="Assignee options">
+    <section
+      class="dropdown"
+      [id]="dropdownId"
+      role="listbox"
+      aria-label="Assignee options"
+      aria-multiselectable="true"
+    >
       @if (firebaseService.loading && !filteredContacts.length) {
         <p class="dropdown__empty">Loading contacts...</p>
       } @else if (!firebaseService.loading && !filteredContacts.length) {
@@ -69,6 +78,8 @@
             type="button"
             class="dropdown__item"
             [class.is-selected]="isSelected(contact)"
+            role="option"
+            [attr.aria-selected]="isSelected(contact) ? 'true' : 'false'"
             (click)="toggleContact(contact, $event)"
           >
             <span

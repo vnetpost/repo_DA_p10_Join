@@ -11,7 +11,14 @@
     <p class="category" [ngClass]="task.category">
       {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
     </p>
-    <button class="mobile-move-btn" (click)="openMenu($event)" aria-label="Move task to other list" aria-controls="move-menu">
+    <button
+      class="mobile-move-btn"
+      (click)="openMenu($event)"
+      aria-label="Move task to other list"
+      [attr.aria-controls]="moveMenuId"
+      aria-haspopup="menu"
+      [attr.aria-expanded]="moveMenuOpen ? 'true' : 'false'"
+    >
       <img src="assets/img/icons/board/move.svg" alt="Move icon" aria-hidden="true">
     </button>
   </header>
@@ -19,7 +26,7 @@
   @if (moveMenuOpen) {
     <aside class="menu-overlay mobile-only" (click)="closeMenu($event)" aria-hidden="true"></aside>
   }
-  <nav id="move-menu" class="move-menu mobile-only" [class.is-open]="moveMenuOpen" aria-label="Move task menu" role="menu">
+  <nav [id]="moveMenuId" class="move-menu mobile-only" [class.is-open]="moveMenuOpen" aria-label="Move task menu" role="menu">
     <p>Move to</p>
 
     @if(task.status === "to-do"){

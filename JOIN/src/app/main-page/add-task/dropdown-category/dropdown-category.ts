@@ -21,8 +21,10 @@ import { TaskCategoryOption, TaskService } from '../../../shared/services/task-s
   styleUrl: './dropdown-category.scss',
 })
 export class DropdownCategory {
+  private static nextDropdownId = 0;
   elementRef = inject(ElementRef);
   taskService = inject(TaskService);
+  readonly dropdownId = `task-category-dropdown-${DropdownCategory.nextDropdownId++}`;
 
   /** Active category selection. */
   @Input() selectedCategory: TaskCategoryOption | null = null;

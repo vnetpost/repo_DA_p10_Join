@@ -17,6 +17,9 @@
       type="button"
       class="form-field__icon-button"
       aria-label="Toggle category dropdown"
+      aria-haspopup="listbox"
+      [attr.aria-controls]="dropdownId"
+      [attr.aria-expanded]="isDropdownOpen ? 'true' : 'false'"
       (click)="toggleDropdownOpen($event)"
     >
       <img
@@ -29,9 +32,20 @@
   </section>
 
   @if (isDropdownOpen) {
-    <section class="dropdown" aria-label="Task category options">
+    <section
+      class="dropdown"
+      [id]="dropdownId"
+      role="listbox"
+      aria-label="Task category options"
+    >
       @for (category of taskService.taskCategories; track category.value) {
-        <button type="button" class="dropdown__item" (click)="selectCategory(category, $event)">
+        <button
+          type="button"
+          class="dropdown__item"
+          role="option"
+          [attr.aria-selected]="selectedCategory?.value === category.value ? 'true' : 'false'"
+          (click)="selectCategory(category, $event)"
+        >
           <span class="dropdown__name">{{ category.label }}</span>
         </button>
       }

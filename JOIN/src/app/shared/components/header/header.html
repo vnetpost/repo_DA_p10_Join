@@ -20,6 +20,8 @@
           (click)="toggleMenu()"
           aria-label="Open user menu"
           aria-controls="user-menu"
+          aria-haspopup="menu"
+          [attr.aria-expanded]="menuOpen ? 'true' : 'false'"
         >
           @if (user$ | async; as user) {
             @if (user.isAnonymous) {

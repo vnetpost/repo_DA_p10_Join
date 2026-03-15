@@ -21,9 +21,11 @@ import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/u
   styleUrl: './dropdown-assignee.scss',
 })
 export class DropdownAssignee {
+  private static nextDropdownId = 0;
   elementRef = inject(ElementRef);
   firebaseService = inject(FirebaseService);
   readonly assigneePreviewLimit = 5;
+  readonly dropdownId = `task-assignee-dropdown-${DropdownAssignee.nextDropdownId++}`;
 
   getTwoInitials = getTwoInitials;
   getContactAvatarSrc = getContactAvatarSrc;
