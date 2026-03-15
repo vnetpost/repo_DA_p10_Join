@@ -76,6 +76,18 @@
   border: 0;
 }
 
+.add-task__field-group--due-date {
+  margin-top: 1.5rem;
+}
+
+.add-task__field-group--category {
+  margin-top: 1.5rem;
+}
+
+.add-task__field-group--assignee {
+  margin-top: 1.5rem;
+}
+
 .add-task__column:first-child {
   padding-right: clamp(1rem, 1.8vw, 2rem);
 }

@@ -30,7 +30,7 @@
           ></app-task-form-field>
         </fieldset>
 
-        <fieldset class="add-task__field-group">
+        <fieldset class="add-task__field-group add-task__field-group--due-date">
           <app-task-form-field
             label="Due date"
             [isRequired]="true"
@@ -52,7 +52,7 @@
           <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
         </fieldset>
 
-        <fieldset class="add-task__field-group">
+        <fieldset class="add-task__field-group add-task__field-group--category">
           <app-dropdown-category
             [(selectedCategory)]="activeCategory"
             (fieldBlur)="isCategoryTouched = true"
@@ -83,7 +83,7 @@
           ></app-subtask-composer>
         </fieldset>
 
-        <fieldset class="add-task__field-group">
+        <fieldset class="add-task__field-group add-task__field-group--assignee">
           <app-dropdown-assignee
             [(selectedContacts)]="activeAssignees"
           ></app-dropdown-assignee>
