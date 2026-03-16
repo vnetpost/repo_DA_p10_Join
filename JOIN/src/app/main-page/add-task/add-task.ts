@@ -18,7 +18,7 @@ import { DropdownCategory } from './dropdown-category/dropdown-category';
 import { PrioritySelector } from './priority-selector/priority-selector';
 import { SubtaskComposer } from './subtask-composer/subtask-composer';
 import { TaskFormField } from './task-form-field/task-form-field';
-import { FileUpload } from './file-upload/file-upload';
+import { AttachmentUpload } from './attachment-upload/attachment-upload';
 import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { FirebaseService } from '../../shared/services/firebase-service';
@@ -35,7 +35,7 @@ import { FirebaseService } from '../../shared/services/firebase-service';
     DropdownAssignee,
     DropdownCategory,
     SubtaskComposer,
-    FileUpload,
+    AttachmentUpload,
   ],
   templateUrl: './add-task.html',
   styleUrl: './add-task.scss',

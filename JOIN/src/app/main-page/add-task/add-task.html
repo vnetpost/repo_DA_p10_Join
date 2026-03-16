@@ -67,10 +67,10 @@
 
       <section class="add-task__column add-task__column--divider" aria-label="Task extras">
         <fieldset class="add-task__field-group">
-          <app-file-upload
+          <app-attachment-upload
             [(existingAttachments)]="editableExistingAttachments"
             [(selectedFiles)]="selectedAttachments"
-          ></app-file-upload>
+          ></app-attachment-upload>
           <span class="add-task__field-error" [class.is-visible]="attachmentUploadError.length > 0">
             {{ attachmentUploadError }}
           </span>

@@ -18,12 +18,12 @@ import type Viewer from 'viewerjs';
  * Handles attachment selection, preview generation and removal inside the task form.
  */
 @Component({
-  selector: 'app-file-upload',
+  selector: 'app-attachment-upload',
   imports: [],
-  templateUrl: './file-upload.html',
-  styleUrl: './file-upload.scss',
+  templateUrl: './attachment-upload.html',
+  styleUrl: './attachment-upload.scss',
 })
-export class FileUpload implements OnChanges, OnDestroy {
+export class AttachmentUpload implements OnChanges, OnDestroy {
   @Input() selectedFiles: File[] = [];
   @Input() existingAttachments: TaskAttachment[] = [];
   @Output() selectedFilesChange = new EventEmitter<File[]>();
