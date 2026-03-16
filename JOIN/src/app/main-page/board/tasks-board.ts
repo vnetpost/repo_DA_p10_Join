@@ -8,20 +8,20 @@ import { Task } from '../../shared/interfaces/task';
 import { AddTask } from '../add-task/add-task';
 
 @Component({
-  selector: 'app-board',
+  selector: 'app-tasks-board',
   imports: [TaskList, FormsModule, TaskDialog, AddTask],
-  templateUrl: './board.html',
-  styleUrl: './board.scss',
+  templateUrl: './tasks-board.html',
+  styleUrl: './tasks-board.scss',
 })
 /**
- * Board component
+ * TasksBoard component
  *
  * Represents the main task board view.
  * Handles task searching, opening task details,
  * deleting tasks, and managing the add-task overlay
  * including edit and close confirmation behavior.
  */
-export class Board {
+export class TasksBoard {
   taskService = inject(TaskService);
   searchTerm: string = '';
   isAddTaskOverlayOpen: boolean = false;
