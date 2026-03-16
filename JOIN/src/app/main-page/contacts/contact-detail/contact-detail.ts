@@ -11,15 +11,15 @@ import { Contact } from '../../../shared/interfaces/contact';
 import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 
 @Component({
-  selector: 'app-contact-info',
+  selector: 'app-contact-detail',
   imports: [],
-  templateUrl: './contact-info.html',
-  styleUrl: './contact-info.scss',
+  templateUrl: './contact-detail.html',
+  styleUrl: './contact-detail.scss',
 })
 /**
  * Shows details for the active contact and provides action shortcuts.
  */
-export class ContactInfo implements OnChanges {
+export class ContactDetail implements OnChanges {
   @Input() activeContact: Contact | null = null;
   @Input() canDelete: boolean = true;
   @Output() back = new EventEmitter<void>();

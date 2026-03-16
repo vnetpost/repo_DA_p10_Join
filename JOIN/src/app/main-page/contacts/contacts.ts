@@ -1,6 +1,6 @@
 import { Component, DoCheck, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
-import { ContactInfo } from './contact-info/contact-info';
+import { ContactDetail } from './contact-detail/contact-detail';
 import { ContactDialog } from './contact-dialog/contact-dialog';
 import { ContactService } from '../../shared/services/contact.service';
 import { Contact } from '../../shared/interfaces/contact';
@@ -9,7 +9,7 @@ import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-contacts',
-  imports: [ContactList, ContactInfo, ContactDialog],
+  imports: [ContactList, ContactDetail, ContactDialog],
   templateUrl: './contacts.html',
   styleUrl: './contacts.scss',
 })
