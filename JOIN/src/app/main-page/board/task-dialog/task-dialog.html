@@ -46,59 +46,7 @@
         </p>
       </section>
 
-      @if (attachments.length > 0) {
-        <section class="attachments">
-          <p class="subtitle">Attachments:</p>
-
-          <section class="attachment-list scroll-shadows" aria-label="Task attachments">
-            @for (attachment of attachments; track $index) {
-              <article class="attachment-card">
-                <section class="attachment-preview">
-                  <button
-                    type="button"
-                    class="attachment-preview-open"
-                    (click)="openAttachment(attachment)"
-                    [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
-                  >
-                    <img
-                      class="attachment-thumbnail"
-                      [src]="getAttachmentPreviewSrc(attachment)"
-                      [alt]="getAttachmentFileName(attachment, $index)"
-                    />
-                  </button>
-                  <button
-                    type="button"
-                    class="attachment-preview-download"
-                    (click)="downloadAttachment(attachment, $index)"
-                    [attr.aria-label]="'Download ' + getAttachmentFileName(attachment, $index)"
-                  >
-                    <img
-                      class="icon"
-                      src="assets/img/icons/buttons/download.svg"
-                      alt="Download icon"
-                      aria-hidden="true"
-                    />
-                  </button>
-                </section>
-
-                <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
-              </article>
-            }
-          </section>
-
-          <section class="attachment-viewer-gallery" #attachmentViewerGallery aria-hidden="true">
-            @for (attachment of previewableAttachments; track $index) {
-              <img
-                [src]="getAttachmentPreviewSrc(attachment)"
-                [alt]="getAttachmentFileName(attachment, $index)"
-                [attr.data-file-name]="getAttachmentFileName(attachment, $index)"
-                [attr.data-file-type]="getAttachmentTypeLabel(attachment)"
-                [attr.data-file-size]="getAttachmentSizeLabel(attachment)"
-              />
-            }
-          </section>
-        </section>
-      }
+      <app-task-dialog-attachments [attachments]="task.attachments ?? []"></app-task-dialog-attachments>
 
       @if (task.assignees.length > 0){
         <section class="assignees">

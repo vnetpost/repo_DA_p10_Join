@@ -1,6 +1,6 @@
-import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
-import { Task, TaskAttachment } from '../../../shared/interfaces/task';
+import { Task } from '../../../shared/interfaces/task';
 import { ContactService } from '../../../shared/services/contact.service';
 import {
   getContactDisplayAvatarSrcById,
@@ -8,21 +8,13 @@ import {
   getContactDisplayInitialsById,
   getContactDisplayNameById,
 } from '../../../shared/utilities/contact-presenter.utils';
-import {
-  getTaskAttachmentFileName,
-  getTaskAttachmentPreviewSrc,
-  getTaskAttachmentSizeLabel,
-  getTaskAttachmentTypeLabel,
-  isTaskAttachmentImage,
-} from '../../../shared/utilities/task-attachment.utils';
-import type Viewer from 'viewerjs';
 import { TaskDialogUiState } from './task-dialog-ui-state';
 import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
-import { TaskDialogAttachmentService } from './task-dialog-attachment.service';
+import { TaskDialogAttachments } from './task-dialog-attachments/task-dialog-attachments';
 
 @Component({
   selector: 'app-task-dialog',
-  imports: [NgClass, DatePipe],
+  imports: [NgClass, DatePipe, TaskDialogAttachments],
   templateUrl: './task-dialog.html',
   styleUrl: './task-dialog.scss',
 })
@@ -33,17 +25,11 @@ import { TaskDialogAttachmentService } from './task-dialog-attachment.service';
  * about a task. Handles edit and delete actions, subtask updates,
  * and dialog interactions.
  */
-export class TaskDialog implements OnDestroy {
+export class TaskDialog {
+  private readonly noop = (): void => {};
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
-  @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
   contactService = inject(ContactService);
   subtaskService = inject(TaskDialogSubtaskService);
-  attachmentService = inject(TaskDialogAttachmentService);
-  readonly getAttachmentFileName = getTaskAttachmentFileName;
-  readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
-  readonly getAttachmentSizeLabel = getTaskAttachmentSizeLabel;
-  readonly getAttachmentTypeLabel = getTaskAttachmentTypeLabel;
-  readonly isImageAttachment = isTaskAttachmentImage;
   readonly getAssigneeInitials = (id: string): string =>
     getContactDisplayInitialsById(this.contactService.contacts, id);
   readonly getAssigneeName = (id: string): string =>
@@ -56,17 +42,6 @@ export class TaskDialog implements OnDestroy {
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
   private readonly uiState = new TaskDialogUiState();
-  private attachmentViewer: Viewer | null = null;
-
-  /** Returns all available attachments for the active task. */
-  get attachments(): TaskAttachment[] {
-    return this.task?.attachments ?? [];
-  }
-
-  /** Returns all attachments that can be displayed inside the image viewer. */
-  get previewableAttachments(): TaskAttachment[] {
-    return this.attachments.filter((attachment) => this.isImageAttachment(attachment));
-  }
 
   /** Exposes current delete-confirm visibility for the template. */
   get showDeleteConfirm(): boolean {
@@ -82,16 +57,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   openDialog(): void {
-    this.uiState.openDialog(this.dialog.nativeElement, () => this.initializeAttachmentViewer());
-  }
-
-  /**
-   * Destroys the image viewer instance on component teardown.
-   *
-   * @returns void
-   */
-  ngOnDestroy(): void {
-    this.destroyAttachmentViewer();
+    this.uiState.openDialog(this.dialog.nativeElement, this.noop);
   }
 
   /**
@@ -146,7 +112,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   closeDialog(): void {
-    this.uiState.closeDialog(this.dialog.nativeElement, () => this.destroyAttachmentViewer());
+    this.uiState.closeDialog(this.dialog.nativeElement, this.noop);
   }
 
   /**
@@ -186,55 +152,5 @@ export class TaskDialog implements OnDestroy {
    */
   toggleSubtask(index: number): void {
     this.subtaskService.toggleSubtask(this.task, index);
-  }
-
-  /**
-   * Opens an attachment in a new browser tab.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns void
-   */
-  openAttachment(attachment: TaskAttachment): void {
-    this.attachmentViewer = this.attachmentService.openAttachment(
-      attachment,
-      this.previewableAttachments,
-      this.attachmentViewer,
-      this.attachmentViewerGallery?.nativeElement,
-      this.dialog?.nativeElement
-    );
-  }
-
-  /**
-   * Downloads an attachment file.
-   *
-   * @param attachment Attachment metadata object.
-   * @param index Attachment index in the list.
-   * @returns void
-   */
-  downloadAttachment(attachment: TaskAttachment, index: number): void {
-    this.attachmentService.downloadAttachment(attachment, index);
-  }
-
-  /**
-   * Creates or recreates the Viewer.js instance for the current attachment gallery.
-   *
-   * @returns void
-   */
-  private initializeAttachmentViewer(): void {
-    this.attachmentViewer = this.attachmentService.initializeViewer(
-      this.attachmentViewer,
-      this.previewableAttachments,
-      this.attachmentViewerGallery?.nativeElement,
-      this.dialog?.nativeElement
-    );
-  }
-
-  /**
-   * Destroys the current Viewer.js instance when it is no longer needed.
-   *
-   * @returns void
-   */
-  private destroyAttachmentViewer(): void {
-    this.attachmentViewer = this.attachmentService.destroyViewer(this.attachmentViewer);
   }
 }
