@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { SingleContact } from './single-contact/single-contact';
+import { ContactListItem } from './contact-list-item/contact-list-item';
 import { Contact } from '../../../shared/interfaces/contact';
 
 @Component({
   selector: 'app-contact-list',
-  imports: [SingleContact],
+  imports: [ContactListItem],
   templateUrl: './contact-list.html',
   styleUrl: './contact-list.scss',
 })

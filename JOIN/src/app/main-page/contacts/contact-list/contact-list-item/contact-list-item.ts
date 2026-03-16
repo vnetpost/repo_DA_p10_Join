@@ -3,15 +3,15 @@ import { Contact } from '../../../../shared/interfaces/contact';
 import { getContactAvatarSrc, getTwoInitials } from '../../../../shared/utilities/utils';
 
 @Component({
-  selector: 'app-single-contact',
+  selector: 'app-contact-list-item',
   imports: [],
-  templateUrl: './single-contact.html',
-  styleUrl: './single-contact.scss',
+  templateUrl: './contact-list-item.html',
+  styleUrl: './contact-list-item.scss',
 })
 /**
  * Displays a single contact row and emits selection when clicked.
  */
-export class SingleContact {
+export class ContactListItem {
   @Input() contact?: Contact;
   @Input() isActive = false;
   @Output() selected = new EventEmitter<Contact>();
