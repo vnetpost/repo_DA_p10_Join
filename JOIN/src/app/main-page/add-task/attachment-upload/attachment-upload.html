@@ -1,7 +1,10 @@
 <section class="file-upload">
-  <span class="file-upload__label">Attachments</span>
+  <section class="file-upload__header">
+    <span class="file-upload__label">Attachments</span>
+    <span class="file-upload__usage" aria-live="polite">{{ attachmentUsageLabel }}</span>
+  </section>
   <section class="file-upload__top-row">
-    <span class="file-upload__hint">Allowed file types are JPEG and PNG</span>
+    <span class="file-upload__hint">JPEG/PNG only. Max 1 MB.</span>
     @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
       <button type="button" class="file-upload__delete-all" (click)="deleteAllAttachments($event)">
         <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
@@ -106,10 +109,16 @@
     </section>
   }
 
-  @if (showTypeError) {
-    <span class="file-upload__error">
+  <span
+    class="file-upload__error"
+    [class.file-upload__error--visible]="showTypeError || errorMessage.length > 0"
+    aria-live="polite"
+  >
+    @if (errorMessage.length > 0) {
+      {{ errorMessage }}
+    } @else if (showTypeError) {
       Only JPEG and PNG files are allowed.
       Unsupported files were ignored.
-    </span>
-  }
+    }
+  </span>
 </section>

@@ -11,7 +11,12 @@ import {
   inject,
 } from '@angular/core';
 import { TaskAttachment } from '../../../shared/interfaces/task';
+import { TaskAttachmentProcessingService } from '../../../shared/services/task-attachment-processing.service';
 import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
+import {
+  MAX_TASK_ATTACHMENT_BYTES,
+  TASK_ATTACHMENT_LIMIT_MESSAGE,
+} from '../../../shared/utilities/task-attachment.constants';
 import type Viewer from 'viewerjs';
 
 /**
@@ -24,8 +29,10 @@ import type Viewer from 'viewerjs';
   styleUrl: './attachment-upload.scss',
 })
 export class AttachmentUpload implements OnChanges, OnDestroy {
+  @Input() errorMessage = '';
   @Input() selectedFiles: File[] = [];
   @Input() existingAttachments: TaskAttachment[] = [];
+  @Output() errorMessageChange = new EventEmitter<string>();
   @Output() selectedFilesChange = new EventEmitter<File[]>();
   @Output() existingAttachmentsChange = new EventEmitter<TaskAttachment[]>();
 
@@ -33,11 +40,26 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   @ViewChild('viewerGallery') private viewerGallery?: ElementRef<HTMLElement>;
 
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
+  readonly maxTaskAttachmentBytes = MAX_TASK_ATTACHMENT_BYTES;
+  currentAttachmentBytes = 0;
   isDragOver = false;
   showTypeError = false;
+  private readonly taskAttachmentProcessingService = inject(TaskAttachmentProcessingService);
   private attachmentViewerService = inject(TaskAttachmentViewerService);
   private previewUrlsByFileKey = new Map<string, string>();
   private attachmentViewer: Viewer | null = null;
+  private attachmentUsageRequestId = 0;
+
+  /**
+   * Human-readable usage label for the current task image payload.
+   *
+   * @returns Current used megabytes relative to the 1 MB limit.
+   */
+  get attachmentUsageLabel(): string {
+    const usedMegabytes = this.formatMegabytes(this.currentAttachmentBytes);
+    const maxMegabytes = this.formatMegabytes(this.maxTaskAttachmentBytes);
+    return `${usedMegabytes} / ${maxMegabytes} MB used`;
+  }
 
   /**
    * Keeps preview object URLs in sync when the parent updates selected files.
@@ -52,6 +74,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
 
     this.destroyAttachmentViewer();
     this.syncPreviewUrlsWithSelectedFiles();
+    void this.refreshAttachmentUsage();
     if (this.selectedFiles.length > 0) return;
 
     this.showTypeError = false;
@@ -83,10 +106,10 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @param event Native change event from the hidden file input.
    * @returns void
    */
-  onFileSelected(event: Event): void {
+  async onFileSelected(event: Event): Promise<void> {
     const target = event.target as HTMLInputElement;
     const files = Array.from(target.files ?? []);
-    this.addSelectedFiles(files);
+    await this.addSelectedFiles(files);
     if (this.fileInput) this.fileInput.nativeElement.value = '';
   }
 
@@ -118,11 +141,11 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @param event Native drop event.
    * @returns void
    */
-  onDrop(event: DragEvent): void {
+  async onDrop(event: DragEvent): Promise<void> {
     event.preventDefault();
     this.isDragOver = false;
     const droppedFiles = Array.from(event.dataTransfer?.files ?? []);
-    this.addSelectedFiles(droppedFiles);
+    await this.addSelectedFiles(droppedFiles);
   }
 
   /**
@@ -135,8 +158,10 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     event?.stopPropagation();
     this.selectedFiles = [];
     this.showTypeError = false;
+    this.updateErrorMessage('');
     this.clearPreviewUrls();
     this.selectedFilesChange.emit([]);
+    void this.refreshAttachmentUsage();
     if (this.fileInput) this.fileInput.nativeElement.value = '';
   }
 
@@ -150,7 +175,9 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     event?.stopPropagation();
     this.clearSelectedFiles();
     this.existingAttachments = [];
+    this.updateErrorMessage('');
     this.existingAttachmentsChange.emit([]);
+    void this.refreshAttachmentUsage();
   }
 
   /**
@@ -166,7 +193,9 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
       return attachmentIndex !== index;
     });
     this.existingAttachments = updatedAttachments;
+    this.updateErrorMessage('');
     this.existingAttachmentsChange.emit(updatedAttachments);
+    void this.refreshAttachmentUsage();
   }
 
   /**
@@ -182,7 +211,9 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     if (fileToRemove) this.revokePreviewUrl(fileToRemove);
     const updatedFiles = this.selectedFiles.filter((_, fileIndex) => fileIndex !== index);
     this.selectedFiles = updatedFiles;
+    this.updateErrorMessage('');
     this.selectedFilesChange.emit(updatedFiles);
+    void this.refreshAttachmentUsage();
     if (!updatedFiles.length) this.showTypeError = false;
   }
 
@@ -275,7 +306,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @param files Raw files from picker or dropzone.
    * @returns void
    */
-  private addSelectedFiles(files: File[]): void {
+  private async addSelectedFiles(files: File[]): Promise<void> {
     if (!files.length) return;
 
     const validFiles = files.filter((file) => this.allowedMimeTypes.includes(file.type));
@@ -295,9 +326,33 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
       if (!hasDuplicate) mergedFiles.push(newFile);
     });
 
+    const exceedsAttachmentLimit = await this.hasExceededAttachmentLimit(mergedFiles);
+    if (exceedsAttachmentLimit) {
+      this.updateErrorMessage(TASK_ATTACHMENT_LIMIT_MESSAGE);
+      return;
+    }
+
+    this.updateErrorMessage('');
     this.selectedFiles = mergedFiles;
     this.syncPreviewUrlsWithSelectedFiles();
     this.selectedFilesChange.emit(mergedFiles);
+    void this.refreshAttachmentUsage();
+  }
+
+  /**
+   * Checks whether the currently selected files would exceed the task upload limit.
+   *
+   * @param selectedFiles Candidate file selection after merging new files.
+   * @returns `true` when the persisted payload would exceed the allowed limit.
+   */
+  private async hasExceededAttachmentLimit(selectedFiles: File[]): Promise<boolean> {
+    const totalAttachmentBytes =
+      await this.taskAttachmentProcessingService.estimatePersistedAttachmentBytes(
+        this.existingAttachments,
+        selectedFiles
+      );
+
+    return totalAttachmentBytes > this.maxTaskAttachmentBytes;
   }
 
   /**
@@ -370,5 +425,42 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   private destroyAttachmentViewer(): void {
     this.attachmentViewer = this.attachmentViewerService.destroyViewer(this.attachmentViewer);
+  }
+
+  /**
+   * Recalculates the persisted payload currently occupied by this task's images.
+   *
+   * @returns Promise that resolves after the latest usage estimate has been applied.
+   */
+  private async refreshAttachmentUsage(): Promise<void> {
+    const requestId = ++this.attachmentUsageRequestId;
+    const estimatedBytes = await this.taskAttachmentProcessingService.estimatePersistedAttachmentBytes(
+      this.existingAttachments,
+      this.selectedFiles
+    );
+
+    if (requestId !== this.attachmentUsageRequestId) return;
+    this.currentAttachmentBytes = estimatedBytes;
+  }
+
+  /**
+   * Formats one byte count as a megabyte string for the upload limit display.
+   *
+   * @param bytes Persisted base64 payload size.
+   * @returns Formatted megabyte string with two decimals.
+   */
+  private formatMegabytes(bytes: number): string {
+    return (bytes / this.maxTaskAttachmentBytes).toFixed(2);
+  }
+
+  /**
+   * Updates the externally controlled upload error state.
+   *
+   * @param message Current upload validation message.
+   * @returns void
+   */
+  private updateErrorMessage(message: string): void {
+    this.errorMessage = message;
+    this.errorMessageChange.emit(message);
   }
 }

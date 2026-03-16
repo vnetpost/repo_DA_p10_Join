@@ -234,8 +234,11 @@ export class AddTask implements OnChanges, OnDestroy {
         selectedAttachments: this.selectedAttachments,
       });
 
-      this.attachmentUploadError = submissionResult.warningMessage;
+      this.attachmentUploadError = [submissionResult.errorMessage, submissionResult.warningMessage]
+        .filter(Boolean)
+        .join(' ');
       this.selectedAttachments = submissionResult.selectedAttachments;
+      if (!submissionResult.persistedTask) return;
       if (submissionResult.shouldResetForm) this.resetForm();
 
       this.taskSaved.emit(submissionResult.persistedTask);

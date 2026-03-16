@@ -142,6 +142,8 @@
 
 .add-task__field-error {
   @include styles.setFont($size: 1em, $weight: 400, $color: styles.$red-error);
+  display: block;
+  line-height: 1.3;
   visibility: hidden;
   min-height: 1.15em;
 }

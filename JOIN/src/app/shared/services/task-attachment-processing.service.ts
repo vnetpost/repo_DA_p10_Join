@@ -62,6 +62,33 @@ export class TaskAttachmentProcessingService {
   }
 
   /**
+   * Estimates the persisted base64 payload size for the provided task attachments.
+   *
+   * @param existingAttachments Attachments already stored on the task.
+   * @param selectedAttachments Newly selected files from the form.
+   * @returns Combined persisted payload size in bytes-like base64 characters.
+   */
+  async estimatePersistedAttachmentBytes(
+    existingAttachments: TaskAttachment[],
+    selectedAttachments: File[]
+  ): Promise<number> {
+    const existingAttachmentBytes = existingAttachments.reduce((total, attachment) => {
+      return total + attachment.base64Size;
+    }, 0);
+    if (!selectedAttachments.length) return existingAttachmentBytes;
+
+    let totalAttachmentBytes = existingAttachmentBytes;
+
+    for (const selectedFile of selectedAttachments) {
+      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
+      if (!createdAttachment) continue;
+      totalAttachmentBytes += createdAttachment.base64Size;
+    }
+
+    return totalAttachmentBytes;
+  }
+
+  /**
    * Converts a selected file into a serializable task attachment payload.
    *
    * @param file File selected by the user.

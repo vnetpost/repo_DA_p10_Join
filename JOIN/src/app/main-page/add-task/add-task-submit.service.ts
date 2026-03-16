@@ -4,6 +4,10 @@ import { Contact } from '../../shared/interfaces/contact';
 import { Subtask, Task, TaskAttachment } from '../../shared/interfaces/task';
 import { TaskAttachmentProcessingService } from '../../shared/services/task-attachment-processing.service';
 import { TaskService } from '../../shared/services/task.service';
+import {
+  MAX_TASK_ATTACHMENT_BYTES,
+  TASK_ATTACHMENT_LIMIT_MESSAGE,
+} from '../../shared/utilities/task-attachment.constants';
 import { buildAddTaskPayload } from './add-task-mapper.utils';
 
 /**
@@ -27,7 +31,8 @@ export type AddTaskSubmissionInput = {
  * Result returned after creating or updating a task.
  */
 export type AddTaskSubmissionResult = {
-  persistedTask: Task;
+  persistedTask: Task | null;
+  errorMessage: string;
   warningMessage: string;
   shouldResetForm: boolean;
   selectedAttachments: File[];
@@ -56,6 +61,17 @@ export class AddTaskSubmitService {
         input.editableExistingAttachments,
         input.selectedAttachments
       );
+    const exceedsAttachmentLimit = this.hasExceededAttachmentLimit(attachments);
+
+    if (exceedsAttachmentLimit) {
+      return {
+        persistedTask: null,
+        errorMessage: this.buildAttachmentLimitMessage(),
+        warningMessage,
+        shouldResetForm: false,
+        selectedAttachments: input.selectedAttachments,
+      };
+    }
 
     const assigneeIds = input.activeAssignees
       .map((contact) => contact.id)
@@ -82,6 +98,7 @@ export class AddTaskSubmitService {
 
       return {
         persistedTask: updatedTask,
+        errorMessage: '',
         warningMessage,
         shouldResetForm: false,
         selectedAttachments: [],
@@ -104,9 +121,33 @@ export class AddTaskSubmitService {
 
     return {
       persistedTask,
+      errorMessage: '',
       warningMessage,
       shouldResetForm: true,
       selectedAttachments: input.selectedAttachments,
     };
+  }
+
+  /**
+   * Checks whether the persisted attachment payload would exceed the database limit.
+   *
+   * @param attachments Attachments prepared for persistence.
+   * @returns `true` when the combined base64 payload is larger than 1 MB.
+   */
+  private hasExceededAttachmentLimit(attachments: TaskAttachment[]): boolean {
+    const totalAttachmentBytes = attachments.reduce((total, attachment) => {
+      return total + attachment.base64Size;
+    }, 0);
+
+    return totalAttachmentBytes > MAX_TASK_ATTACHMENT_BYTES;
+  }
+
+  /**
+   * Builds the user-facing upload limit error message.
+   *
+   * @returns Localized error message for oversized task image uploads.
+   */
+  private buildAttachmentLimitMessage(): string {
+    return TASK_ATTACHMENT_LIMIT_MESSAGE;
   }
 }
