@@ -1,12 +1,16 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, ViewChild } from '@angular/core';
-import { getTwoInitials } from '../../../shared/utilities/utils';
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { TaskService } from '../../../shared/services/task-service';
 import { FirebaseService } from '../../../shared/services/firebase-service';
-import { getContactAvatarSrc } from '../../../shared/utilities/utils';
 import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
 import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
+import {
+  getContactDisplayAvatarSrcById,
+  getContactDisplayColorById,
+  getContactDisplayInitialsById,
+  getContactDisplayNameById,
+} from '../../../shared/utilities/contact-presenter.utils';
 import {
   getTaskAttachmentFileName,
   getTaskAttachmentPreviewSrc,
@@ -34,11 +38,17 @@ export class TaskDialog implements OnDestroy {
   contactService = inject(FirebaseService);
   attachmentViewerService = inject(TaskAttachmentViewerService);
   attachmentFileService = inject(TaskAttachmentActionService);
-  readonly getTwoInitials = getTwoInitials;
   readonly getAttachmentFileName = getTaskAttachmentFileName;
   readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
   readonly isImageAttachment = isTaskAttachmentImage;
-  userColor: string | null = null;
+  readonly getAssigneeInitials = (id: string): string =>
+    getContactDisplayInitialsById(this.contactService.contacts, id);
+  readonly getAssigneeName = (id: string): string =>
+    getContactDisplayNameById(this.contactService.contacts, id);
+  readonly getUserColor = (id: string): string =>
+    getContactDisplayColorById(this.contactService.contacts, id);
+  readonly getAssigneeAvatarSrc = (id: string): string | null =>
+    getContactDisplayAvatarSrcById(this.contactService.contacts, id);
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
@@ -166,59 +176,6 @@ export class TaskDialog implements OnDestroy {
   onEsc(event: Event): void {
     event.preventDefault();
     this.closeDialog();
-  }
-
-  /**
-   * Retrieves the initials of an assignee by contact ID.
-   *
-   * @param id The contact identifier
-   * @returns The initials of the assignee
-   */
-  getAssigneeInitials(id: string): string {
-    const contact = this.contactService.contacts.find((c) => {
-      return c.id === id;
-    });
-
-    return getTwoInitials(contact?.name || 'Unknown');
-  }
-
-  /**
-   * Retrieves the full name of an assignee by contact ID.
-   *
-   * @param id The contact identifier
-   * @returns The name of the assignee
-   */
-  getAssigneeName(id: string): string {
-    const contact = this.contactService.contacts.find((c) => {
-      return c.id === id;
-    });
-
-    return contact?.name || 'Unknown';
-  }
-
-  /**
-   * Retrieves the display color of an assignee by contact ID.
-   *
-   * @param id The contact identifier
-   * @returns The color assigned to the contact
-   */
-  getUserColor(id: string): string {
-    const contact = this.contactService.contacts.find((c) => {
-      return c.id === id;
-    });
-
-    return contact?.userColor || '#9327ff';
-  }
-
-  /**
-   * Resolves the avatar image source for an assignee.
-   *
-   * @param id The contact identifier.
-   * @returns Data URL or `null` when unavailable.
-   */
-  getAssigneeAvatarSrc(id: string): string | null {
-    const contact = this.contactService.contacts.find((c) => c.id === id);
-    return getContactAvatarSrc(contact);
   }
 
   /**

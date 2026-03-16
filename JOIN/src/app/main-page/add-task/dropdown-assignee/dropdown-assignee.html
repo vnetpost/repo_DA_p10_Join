@@ -37,13 +37,13 @@
       @for (contact of visibleSelectedContacts; track getContactId(contact, $index)) {
         <span
           class="assignees-preview__avatar"
-          [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact.userColor ?? '#cccccc'"
+          [style.backgroundColor]="getContactDisplayAvatarSrc(contact) ? null : getContactDisplayColor(contact, '#cccccc')"
           aria-hidden="true"
         >
-          @if (getContactAvatarSrc(contact); as avatarSrc) {
+          @if (getContactDisplayAvatarSrc(contact); as avatarSrc) {
             <img class="assignees-preview__avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
           } @else {
-            {{ getTwoInitials(contact.name) }}
+            {{ getContactDisplayInitials(contact) }}
           }
         </span>
       }
@@ -84,13 +84,13 @@
           >
             <span
               class="dropdown__avatar"
-              [style.backgroundColor]="getContactAvatarSrc(contact) ? null : contact.userColor ?? '#cccccc'"
+              [style.backgroundColor]="getContactDisplayAvatarSrc(contact) ? null : getContactDisplayColor(contact, '#cccccc')"
               aria-hidden="true"
             >
-              @if (getContactAvatarSrc(contact); as avatarSrc) {
+              @if (getContactDisplayAvatarSrc(contact); as avatarSrc) {
                 <img class="dropdown__avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
               } @else {
-                {{ getTwoInitials(contact.name) }}
+                {{ getContactDisplayInitials(contact) }}
               }
             </span>
             <span class="dropdown__name">{{ contact.name }}</span>

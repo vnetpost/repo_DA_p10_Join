@@ -9,7 +9,11 @@ import {
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
 import { FirebaseService } from '../../../shared/services/firebase-service';
-import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
+import {
+  getContactDisplayAvatarSrc,
+  getContactDisplayColor,
+  getContactDisplayInitials,
+} from '../../../shared/utilities/contact-presenter.utils';
 
 /**
  * Searchable multi-select dropdown for choosing task assignees.
@@ -27,8 +31,9 @@ export class DropdownAssignee {
   readonly assigneePreviewLimit = 5;
   readonly dropdownId = `task-assignee-dropdown-${DropdownAssignee.nextDropdownId++}`;
 
-  getTwoInitials = getTwoInitials;
-  getContactAvatarSrc = getContactAvatarSrc;
+  readonly getContactDisplayInitials = getContactDisplayInitials;
+  readonly getContactDisplayAvatarSrc = getContactDisplayAvatarSrc;
+  readonly getContactDisplayColor = getContactDisplayColor;
 
   /** Currently selected contacts. */
   @Input() selectedContacts: Contact[] = [];
