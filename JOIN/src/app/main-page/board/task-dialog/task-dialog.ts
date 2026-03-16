@@ -17,6 +17,7 @@ import {
   isTaskAttachmentImage,
 } from '../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
+import { TaskDialogUiState } from './task-dialog-ui-state';
 
 @Component({
   selector: 'app-task-dialog',
@@ -52,7 +53,7 @@ export class TaskDialog implements OnDestroy {
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
-  showDeleteConfirm: boolean = false;
+  private readonly uiState = new TaskDialogUiState();
   private attachmentViewer: Viewer | null = null;
 
   /** Returns all available attachments for the active task. */
@@ -65,6 +66,11 @@ export class TaskDialog implements OnDestroy {
     return this.attachments.filter((attachment) => this.isImageAttachment(attachment));
   }
 
+  /** Exposes current delete-confirm visibility for the template. */
+  get showDeleteConfirm(): boolean {
+    return this.uiState.showDeleteConfirm;
+  }
+
   /**
    * Opens the task dialog.
    *
@@ -74,10 +80,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   openDialog(): void {
-    const el = this.dialog.nativeElement;
-    el.showModal();
-    el.classList.add('opened');
-    queueMicrotask(() => this.initializeAttachmentViewer());
+    this.uiState.openDialog(this.dialog.nativeElement, () => this.initializeAttachmentViewer());
   }
 
   /**
@@ -95,7 +98,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   onDeleteClick(): void {
-    this.showDeleteConfirm = true;
+    this.uiState.requestDeleteConfirm();
   }
 
   /**
@@ -120,9 +123,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   confirmDelete(): void {
-    this.deleteTask.emit(this.task.id);
-    this.showDeleteConfirm = false;
-    this.closeDialog();
+    this.uiState.confirmDelete(() => this.deleteTask.emit(this.task.id), () => this.closeDialog());
   }
 
   /**
@@ -131,7 +132,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   cancelDelete(): void {
-    this.showDeleteConfirm = false;
+    this.uiState.clearDeleteConfirm();
   }
 
   /**
@@ -143,10 +144,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   closeDialog(): void {
-    this.destroyAttachmentViewer();
-    const el = this.dialog.nativeElement;
-    el.classList.remove('opened');
-    el.close();
+    this.uiState.closeDialog(this.dialog.nativeElement, () => this.destroyAttachmentViewer());
   }
 
   /**
@@ -159,9 +157,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   onBackdropClick(event: MouseEvent): void {
-    if (event.target === this.dialog.nativeElement) {
-      this.closeDialog();
-    }
+    this.uiState.handleBackdropClick(event, this.dialog.nativeElement, () => this.closeDialog());
   }
 
   /**
@@ -174,8 +170,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   onEsc(event: Event): void {
-    event.preventDefault();
-    this.closeDialog();
+    this.uiState.handleEscape(event, () => this.closeDialog());
   }
 
   /**
