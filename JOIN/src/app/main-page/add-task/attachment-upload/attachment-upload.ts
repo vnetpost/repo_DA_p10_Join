@@ -18,11 +18,17 @@ import {
   TASK_ATTACHMENT_LIMIT_MESSAGE,
 } from '../../../shared/utilities/task-attachment.constants';
 import {
-  formatAttachmentSize,
+  getTaskAttachmentFileName,
+  getTaskAttachmentPreviewSrc,
   getTaskAttachmentSizeLabel,
   getTaskAttachmentTypeLabel,
 } from '../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
+import { AttachmentUploadPreviewStore } from './attachment-upload-preview-store';
+import {
+  getSelectedAttachmentSizeLabel,
+  getSelectedAttachmentTypeLabel,
+} from './attachment-upload.utils';
 
 /**
  * Handles attachment selection, preview generation and removal inside the task form.
@@ -46,12 +52,20 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
 
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
   readonly maxTaskAttachmentBytes = MAX_TASK_ATTACHMENT_BYTES;
+  readonly getAttachmentName = getTaskAttachmentFileName;
+  readonly getExistingAttachmentPreview = getTaskAttachmentPreviewSrc;
+  readonly getExistingAttachmentTypeLabel = getTaskAttachmentTypeLabel;
+  readonly getExistingAttachmentSizeLabel = getTaskAttachmentSizeLabel;
+  readonly getSelectedFilePreview = (file: File) => this.previewStore.getPreviewUrl(file);
+  readonly trackSelectedFile = (_index: number, file: File) => this.previewStore.getFileKey(file);
+  readonly getSelectedFileTypeLabel = getSelectedAttachmentTypeLabel;
+  readonly getSelectedFileSizeLabel = getSelectedAttachmentSizeLabel;
   currentAttachmentBytes = 0;
   isDragOver = false;
   showTypeError = false;
   private readonly taskAttachmentProcessingService = inject(TaskAttachmentProcessingService);
   private attachmentViewerService = inject(TaskAttachmentViewerService);
-  private previewUrlsByFileKey = new Map<string, string>();
+  private previewStore = new AttachmentUploadPreviewStore();
   private attachmentViewer: Viewer | null = null;
   private attachmentUsageRequestId = 0;
 
@@ -93,7 +107,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   ngOnDestroy(): void {
     this.destroyAttachmentViewer();
-    this.clearPreviewUrls();
+    this.previewStore.clear();
   }
 
   /**
@@ -164,7 +178,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     this.selectedFiles = [];
     this.showTypeError = false;
     this.updateErrorMessage('');
-    this.clearPreviewUrls();
+    this.previewStore.clear();
     this.selectedFilesChange.emit([]);
     void this.refreshAttachmentUsage();
     if (this.fileInput) this.fileInput.nativeElement.value = '';
@@ -213,7 +227,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   removeSelectedFile(index: number, event: Event): void {
     event.stopPropagation();
     const fileToRemove = this.selectedFiles[index];
-    if (fileToRemove) this.revokePreviewUrl(fileToRemove);
+    if (fileToRemove) this.previewStore.revokePreviewUrl(fileToRemove);
     const updatedFiles = this.selectedFiles.filter((_, fileIndex) => fileIndex !== index);
     this.selectedFiles = updatedFiles;
     this.updateErrorMessage('');
@@ -245,111 +259,6 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   }
 
   /**
-   * Resolves a stable attachment name for display.
-   * Supports both current and legacy task attachment shapes.
-   *
-   * @param attachment Persisted attachment payload.
-   * @param index Fallback index when no filename exists.
-   * @returns Safe attachment name for the UI.
-   */
-  getAttachmentName(attachment: TaskAttachment, index: number): string {
-    const fileName = attachment.fileName?.trim();
-    if (fileName) return fileName;
-    const withLegacyName = attachment as TaskAttachment & { name?: string };
-    const legacyName = withLegacyName.name?.trim();
-    if (legacyName) return legacyName;
-    return `attachment-${index + 1}`;
-  }
-
-  /**
-   * Resolves a short type label for one persisted attachment.
-   *
-   * @param attachment Persisted attachment payload.
-   * @returns Attachment type label.
-   */
-  getExistingAttachmentTypeLabel(attachment: TaskAttachment): string {
-    return getTaskAttachmentTypeLabel(attachment);
-  }
-
-  /**
-   * Resolves a short size label for one persisted attachment.
-   *
-   * @param attachment Persisted attachment payload.
-   * @returns Human-readable attachment size label.
-   */
-  getExistingAttachmentSizeLabel(attachment: TaskAttachment): string {
-    return getTaskAttachmentSizeLabel(attachment);
-  }
-
-  /**
-   * Resolves a short type label for one newly selected file.
-   *
-   * @param file Browser file from the current selection.
-   * @returns File type label.
-   */
-  getSelectedFileTypeLabel(file: File): string {
-    if (file.type === 'image/jpeg') return 'JPEG';
-    if (file.type === 'image/png') return 'PNG';
-    const mimeSubtype = file.type.split('/')[1]?.trim();
-    if (mimeSubtype) return mimeSubtype.toUpperCase();
-    return file.type.toUpperCase();
-  }
-
-  /**
-   * Resolves a short size label for one newly selected file.
-   *
-   * @param file Browser file from the current selection.
-   * @returns Human-readable file size label.
-   */
-  getSelectedFileSizeLabel(file: File): string {
-    return formatAttachmentSize(file.size);
-  }
-
-  /**
-   * Builds a preview source for already persisted attachments.
-   *
-   * @param attachment Persisted attachment payload.
-   * @returns Previewable image source string.
-   */
-  getExistingAttachmentPreview(attachment: TaskAttachment): string {
-    const withLegacyUrl = attachment as TaskAttachment & { url?: string };
-    if (withLegacyUrl.url) return withLegacyUrl.url;
-
-    const base64 = attachment.base64?.trim();
-    if (!base64) return '';
-    if (base64.startsWith('data:')) return base64;
-    const mimeType = attachment.fileType || 'image/jpeg';
-    return `data:${mimeType};base64,${base64}`;
-  }
-
-  /**
-   * Builds and caches object URLs for selected image files.
-   *
-   * @param file Newly selected browser file.
-   * @returns Object URL used in the thumbnail preview.
-   */
-  getSelectedFilePreview(file: File): string {
-    const fileKey = this.getFileKey(file);
-    const cachedUrl = this.previewUrlsByFileKey.get(fileKey);
-    if (cachedUrl) return cachedUrl;
-
-    const generatedUrl = URL.createObjectURL(file);
-    this.previewUrlsByFileKey.set(fileKey, generatedUrl);
-    return generatedUrl;
-  }
-
-  /**
-   * Returns a stable track-by key for selected file thumbnails.
-   *
-   * @param _index Unused Angular index parameter.
-   * @param file Selected browser file.
-   * @returns Stable file identity string.
-   */
-  trackSelectedFile(_index: number, file: File): string {
-    return this.getFileKey(file);
-  }
-
-  /**
    * Validates and merges new files into the current selection.
    *
    * @param files Raw files from picker or dropzone.
@@ -378,16 +287,6 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
       );
 
     return totalAttachmentBytes > this.maxTaskAttachmentBytes;
-  }
-
-  /**
-   * Builds a unique key for one browser file.
-   *
-   * @param file Browser file reference.
-   * @returns Unique key derived from file metadata.
-   */
-  private getFileKey(file: File): string {
-    return `${file.name}|${file.size}|${file.lastModified}`;
   }
 
   /**
@@ -434,7 +333,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns `true` when the file already exists.
    */
   private hasMatchingFile(files: File[], candidateFile: File): boolean {
-    return files.some((existingFile) => this.getFileKey(existingFile) === this.getFileKey(candidateFile));
+    return files.some((existingFile) => this.previewStore.getFileKey(existingFile) === this.previewStore.getFileKey(candidateFile));
   }
 
   /**
@@ -458,46 +357,6 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   private handleAttachmentLimitExceeded(): void {
     this.updateErrorMessage(TASK_ATTACHMENT_LIMIT_MESSAGE);
-  }
-
-  /**
-   * Revokes the generated preview URL of one file.
-   *
-   * @param file Browser file whose preview should be released.
-   * @returns void
-   */
-  private revokePreviewUrl(file: File): void {
-    const fileKey = this.getFileKey(file);
-    const previewUrl = this.previewUrlsByFileKey.get(fileKey);
-    if (!previewUrl) return;
-    URL.revokeObjectURL(previewUrl);
-    this.previewUrlsByFileKey.delete(fileKey);
-  }
-
-  /**
-   * Removes cached preview URLs for files that are no longer selected.
-   *
-   * @returns void
-   */
-  private syncPreviewUrlsWithSelectedFiles(): void {
-    const activeKeys = new Set(this.selectedFiles.map((file) => this.getFileKey(file)));
-    for (const [previewKey, previewUrl] of this.previewUrlsByFileKey.entries()) {
-      if (activeKeys.has(previewKey)) continue;
-      URL.revokeObjectURL(previewUrl);
-      this.previewUrlsByFileKey.delete(previewKey);
-    }
-  }
-
-  /**
-   * Releases all cached preview URLs.
-   *
-   * @returns void
-   */
-  private clearPreviewUrls(): void {
-    for (const previewUrl of this.previewUrlsByFileKey.values()) {
-      URL.revokeObjectURL(previewUrl);
-    }
-    this.previewUrlsByFileKey.clear();
   }
 
   /**
@@ -557,5 +416,14 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   private updateErrorMessage(message: string): void {
     this.errorMessage = message;
     this.errorMessageChange.emit(message);
+  }
+
+  /**
+   * Synchronizes cached preview URLs with the current file selection.
+   *
+   * @returns void
+   */
+  private syncPreviewUrlsWithSelectedFiles(): void {
+    this.previewStore.syncWithSelectedFiles(this.selectedFiles);
   }
 }
