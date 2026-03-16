@@ -10,6 +10,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { TaskAttachment } from '../../../shared/interfaces/task';
+import Viewer from 'viewerjs/dist/viewer.esm.js';
 
 /**
  * Handles attachment selection, preview generation and removal inside the task form.
@@ -27,11 +28,13 @@ export class FileUpload implements OnChanges, OnDestroy {
   @Output() existingAttachmentsChange = new EventEmitter<TaskAttachment[]>();
 
   @ViewChild('fileInput') private fileInput?: ElementRef<HTMLInputElement>;
+  @ViewChild('viewerGallery') private viewerGallery?: ElementRef<HTMLElement>;
 
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
   isDragOver = false;
   showTypeError = false;
   private previewUrlsByFileKey = new Map<string, string>();
+  private attachmentViewer: Viewer | null = null;
 
   /**
    * Keeps preview object URLs in sync when the parent updates selected files.
@@ -41,7 +44,10 @@ export class FileUpload implements OnChanges, OnDestroy {
    */
   ngOnChanges(changes: SimpleChanges): void {
     const selectedFilesChange = changes['selectedFiles'];
-    if (!selectedFilesChange) return;
+    const existingAttachmentsChange = changes['existingAttachments'];
+    if (!selectedFilesChange && !existingAttachmentsChange) return;
+
+    this.destroyAttachmentViewer();
     this.syncPreviewUrlsWithSelectedFiles();
     if (this.selectedFiles.length > 0) return;
 
@@ -55,6 +61,7 @@ export class FileUpload implements OnChanges, OnDestroy {
    * @returns void
    */
   ngOnDestroy(): void {
+    this.destroyAttachmentViewer();
     this.clearPreviewUrls();
   }
 
@@ -174,6 +181,28 @@ export class FileUpload implements OnChanges, OnDestroy {
     this.selectedFiles = updatedFiles;
     this.selectedFilesChange.emit(updatedFiles);
     if (!updatedFiles.length) this.showTypeError = false;
+  }
+
+  /**
+   * Opens one existing attachment inside the shared image viewer.
+   *
+   * @param index Index of the existing attachment in the current list.
+   * @returns void
+   */
+  openExistingAttachment(index: number): void {
+    this.initializeAttachmentViewer();
+    this.attachmentViewer?.view(index);
+  }
+
+  /**
+   * Opens one newly selected file inside the shared image viewer.
+   *
+   * @param index Index of the selected file in the pending upload list.
+   * @returns void
+   */
+  openSelectedAttachment(index: number): void {
+    this.initializeAttachmentViewer();
+    this.attachmentViewer?.view(this.existingAttachments.length + index);
   }
 
   /**
@@ -316,5 +345,43 @@ export class FileUpload implements OnChanges, OnDestroy {
       URL.revokeObjectURL(previewUrl);
     }
     this.previewUrlsByFileKey.clear();
+  }
+
+  /**
+   * Creates or recreates the Viewer.js instance for the current attachment gallery.
+   *
+   * @returns void
+   */
+  private initializeAttachmentViewer(): void {
+    const galleryElement = this.viewerGallery?.nativeElement;
+    if (!galleryElement) return;
+    const viewerContainer = galleryElement.closest('dialog') ?? galleryElement.ownerDocument.body;
+
+    this.destroyAttachmentViewer();
+    this.attachmentViewer = new Viewer(galleryElement, {
+      button: true,
+      container: viewerContainer,
+      fullscreen: true,
+      keyboard: true,
+      loop: true,
+      movable: true,
+      navbar: true,
+      title: true,
+      toolbar: true,
+      tooltip: true,
+      transition: true,
+      zIndex: 4000,
+      zoomable: true,
+    });
+  }
+
+  /**
+   * Destroys the current Viewer.js instance when thumbnails change or the component closes.
+   *
+   * @returns void
+   */
+  private destroyAttachmentViewer(): void {
+    this.attachmentViewer?.destroy();
+    this.attachmentViewer = null;
   }
 }

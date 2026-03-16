@@ -108,6 +108,15 @@
   overflow: hidden;
 }
 
+.file-upload__thumb-open {
+  display: block;
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+
 .file-upload__thumb-image {
   display: block;
   width: 100%;
@@ -166,6 +175,17 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.file-upload__viewer-gallery {
+  position: fixed;
+  top: -9999px;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .file-upload__error {

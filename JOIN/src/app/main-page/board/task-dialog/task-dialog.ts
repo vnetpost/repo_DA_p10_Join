@@ -1,10 +1,11 @@
-import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, ViewChild } from '@angular/core';
 import { getTwoInitials } from '../../../shared/utilities/utils';
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { TaskService } from '../../../shared/services/task-service';
 import { FirebaseService } from '../../../shared/services/firebase-service';
 import { getContactAvatarSrc } from '../../../shared/utilities/utils';
+import Viewer from 'viewerjs/dist/viewer.esm.js';
 
 @Component({
   selector: 'app-task-dialog',
@@ -19,8 +20,9 @@ import { getContactAvatarSrc } from '../../../shared/utilities/utils';
  * about a task. Handles edit and delete actions, subtask updates,
  * and dialog interactions.
  */
-export class TaskDialog {
+export class TaskDialog implements OnDestroy {
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
+  @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
   taskService = inject(TaskService);
   contactService = inject(FirebaseService);
   readonly getTwoInitials = getTwoInitials;
@@ -29,10 +31,16 @@ export class TaskDialog {
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();
   showDeleteConfirm: boolean = false;
+  private attachmentViewer: Viewer | null = null;
 
   /** Returns all available attachments for the active task. */
   get attachments(): TaskAttachment[] {
     return this.task?.attachments ?? [];
+  }
+
+  /** Returns all attachments that can be displayed inside the image viewer. */
+  get previewableAttachments(): TaskAttachment[] {
+    return this.attachments.filter((attachment) => this.isImageAttachment(attachment));
   }
 
   /**
@@ -47,6 +55,16 @@ export class TaskDialog {
     const el = this.dialog.nativeElement;
     el.showModal();
     el.classList.add('opened');
+    queueMicrotask(() => this.initializeAttachmentViewer());
+  }
+
+  /**
+   * Destroys the image viewer instance on component teardown.
+   *
+   * @returns void
+   */
+  ngOnDestroy(): void {
+    this.destroyAttachmentViewer();
   }
 
   /**
@@ -103,6 +121,7 @@ export class TaskDialog {
    * @returns void
    */
   closeDialog(): void {
+    this.destroyAttachmentViewer();
     const el = this.dialog.nativeElement;
     el.classList.remove('opened');
     el.close();
@@ -211,6 +230,13 @@ export class TaskDialog {
    * @returns void
    */
   openAttachment(attachment: TaskAttachment): void {
+    const viewerIndex = this.previewableAttachments.indexOf(attachment);
+    if (viewerIndex !== -1) {
+      this.initializeAttachmentViewer();
+      this.attachmentViewer?.view(viewerIndex);
+      return;
+    }
+
     const legacyUrl = this.getLegacyAttachmentUrl(attachment);
     if (legacyUrl) {
       window.open(legacyUrl, '_blank', 'noopener,noreferrer');
@@ -369,5 +395,46 @@ export class TaskDialog {
     const separatorIndex = dataUrl.indexOf(',');
     if (separatorIndex === -1) return dataUrl;
     return dataUrl.slice(separatorIndex + 1);
+  }
+
+  /**
+   * Creates or recreates the Viewer.js instance for the current attachment gallery.
+   *
+   * @returns void
+   */
+  private initializeAttachmentViewer(): void {
+    const galleryElement = this.attachmentViewerGallery?.nativeElement;
+    const dialogElement = this.dialog?.nativeElement;
+    if (!galleryElement || !this.previewableAttachments.length) {
+      this.destroyAttachmentViewer();
+      return;
+    }
+
+    this.destroyAttachmentViewer();
+    this.attachmentViewer = new Viewer(galleryElement, {
+      button: true,
+      container: dialogElement,
+      fullscreen: true,
+      keyboard: true,
+      loop: true,
+      movable: true,
+      navbar: true,
+      title: true,
+      toolbar: true,
+      tooltip: true,
+      transition: true,
+      zIndex: 4000,
+      zoomable: true,
+    });
+  }
+
+  /**
+   * Destroys the current Viewer.js instance when it is no longer needed.
+   *
+   * @returns void
+   */
+  private destroyAttachmentViewer(): void {
+    this.attachmentViewer?.destroy();
+    this.attachmentViewer = null;
   }
 }

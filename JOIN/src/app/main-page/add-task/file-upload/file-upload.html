@@ -38,11 +38,18 @@
       @for (attachment of existingAttachments; track $index) {
         <article class="file-upload__thumb-card">
           <section class="file-upload__thumb-media">
-            <img
-              class="file-upload__thumb-image"
-              [src]="getExistingAttachmentPreview(attachment)"
-              [alt]="getAttachmentName(attachment, $index)"
-            />
+            <button
+              type="button"
+              class="file-upload__thumb-open"
+              [attr.aria-label]="'Open preview for ' + getAttachmentName(attachment, $index)"
+              (click)="openExistingAttachment($index)"
+            >
+              <img
+                class="file-upload__thumb-image"
+                [src]="getExistingAttachmentPreview(attachment)"
+                [alt]="getAttachmentName(attachment, $index)"
+              />
+            </button>
             <button
               type="button"
               class="file-upload__thumb-delete"
@@ -59,11 +66,18 @@
       @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
         <article class="file-upload__thumb-card">
           <section class="file-upload__thumb-media">
-            <img
-              class="file-upload__thumb-image"
-              [src]="getSelectedFilePreview(selectedFile)"
-              [alt]="selectedFile.name"
-            />
+            <button
+              type="button"
+              class="file-upload__thumb-open"
+              [attr.aria-label]="'Open preview for ' + selectedFile.name"
+              (click)="openSelectedAttachment($index)"
+            >
+              <img
+                class="file-upload__thumb-image"
+                [src]="getSelectedFilePreview(selectedFile)"
+                [alt]="selectedFile.name"
+              />
+            </button>
             <button
               type="button"
               class="file-upload__thumb-delete"
@@ -75,6 +89,19 @@
           </section>
           <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
         </article>
+      }
+    </section>
+
+    <section class="file-upload__viewer-gallery" #viewerGallery aria-hidden="true">
+      @for (attachment of existingAttachments; track $index) {
+        <img
+          [src]="getExistingAttachmentPreview(attachment)"
+          [alt]="getAttachmentName(attachment, $index)"
+        />
+      }
+
+      @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
+        <img [src]="getSelectedFilePreview(selectedFile)" [alt]="selectedFile.name" />
       }
     </section>
   }

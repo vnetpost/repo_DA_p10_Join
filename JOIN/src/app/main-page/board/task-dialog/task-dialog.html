@@ -79,6 +79,15 @@
             </article>
           }
         </section>
+
+        <section class="attachment-viewer-gallery" #attachmentViewerGallery aria-hidden="true">
+          @for (attachment of previewableAttachments; track $index) {
+            <img
+              [src]="getAttachmentPreviewSrc(attachment)"
+              [alt]="getAttachmentFileName(attachment, $index)"
+            />
+          }
+        </section>
       </section>
     }
     

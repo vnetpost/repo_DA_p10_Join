@@ -269,6 +269,17 @@ dialog {
     width: 100%;
     padding: 0.35rem 0.4rem 0.4rem;
   }
+
+  .attachment-viewer-gallery {
+    position: fixed;
+    top: -9999px;
+    left: -9999px;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .assignees {

@@ -31,7 +31,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/flatpickr/dist/flatpickr.min.css"
+              "node_modules/flatpickr/dist/flatpickr.min.css",
+              "node_modules/viewerjs/dist/viewer.css"
             ]
           },
           "configurations": {
@@ -90,7 +91,8 @@
             ],
             "styles": [
               "src/styles.scss",
-              "node_modules/flatpickr/dist/flatpickr.min.css"
+              "node_modules/flatpickr/dist/flatpickr.min.css",
+              "node_modules/viewerjs/dist/viewer.css"
             ]
           }
         }
