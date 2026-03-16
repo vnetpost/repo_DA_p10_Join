@@ -8,19 +8,19 @@ import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
-  selector: 'app-contacts',
+  selector: 'app-contacts-page',
   imports: [ContactList, ContactDetail, ContactDialog],
-  templateUrl: './contacts.html',
-  styleUrl: './contacts.scss',
+  templateUrl: './contacts-page.html',
+  styleUrl: './contacts-page.scss',
 })
 /**
- * Contacts component
+ * ContactsPage component
  *
  * Acts as the main container for the contacts page.
  * Coordinates list, detail, dialog, and deletion flows
  * and manages responsive behavior.
  */
-export class Contacts implements DoCheck {
+export class ContactsPage implements DoCheck {
   contactService = inject(ContactService);
   authService = inject(AuthService);
   private readonly mobileMaxWidth = 768;
