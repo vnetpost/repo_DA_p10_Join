@@ -1,10 +1,11 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
 import { AuthService } from '../shared/services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { getGreeting } from '../shared/utilities/utils';
+import { MainPageUiState } from './main-page-ui-state';
 
 @Component({
   selector: 'app-main-page',
@@ -20,22 +21,18 @@ import { getGreeting } from '../shared/utilities/utils';
  * guest login, and sign-up, as well as responsive behavior
  * and introductory animations.
  */
-export class MainPage implements OnInit {
+export class MainPage implements OnInit, OnDestroy {
   authService = inject(AuthService);
   router = inject(Router);
   user$ = this.authService.user$;
 
-  isMobile: boolean = false;
   showSignUp: boolean = false;
   isLoggingIn: boolean = false;
   loginError: boolean = false;
   isSigningUp: boolean = false;
   signUpError: boolean = false;
-  toastVisible: boolean = false;
-  showMobileGreeting: boolean = false;
-
-  introActive: boolean = true;
-  logoMoving: boolean = false;
+  private readonly uiState = new MainPageUiState();
+  private readonly resizeHandler = () => this.checkScreen();
 
   confirmPassword = '';
   showLogInPassword: boolean = false;
@@ -53,6 +50,26 @@ export class MainPage implements OnInit {
     password: '',
   };
 
+  get isMobile(): boolean {
+    return this.uiState.isMobile;
+  }
+
+  get toastVisible(): boolean {
+    return this.uiState.toastVisible;
+  }
+
+  get showMobileGreeting(): boolean {
+    return this.uiState.showMobileGreeting;
+  }
+
+  get introActive(): boolean {
+    return this.uiState.introActive;
+  }
+
+  get logoMoving(): boolean {
+    return this.uiState.logoMoving;
+  }
+
   /**
    * Initializes the component.
    *
@@ -69,14 +86,18 @@ export class MainPage implements OnInit {
       this.showSignUp = true;
     }
 
-    if (!state?.skipIntro) {
-      this.showIntro();
-    } else {
-      this.introActive = false;
-      this.logoMoving = true;
-    }
+    this.uiState.applyIntroState(Boolean(state?.skipIntro));
+    window.addEventListener('resize', this.resizeHandler);
+  }
 
-    window.addEventListener('resize', () => this.checkScreen());
+  /**
+   * Clears listeners and timers on component teardown.
+   *
+   * @returns void
+   */
+  ngOnDestroy(): void {
+    window.removeEventListener('resize', this.resizeHandler);
+    this.uiState.destroy();
   }
 
   /**
@@ -88,7 +109,7 @@ export class MainPage implements OnInit {
    * @returns void
    */
   checkScreen(): void {
-    this.isMobile = window.innerWidth < 1120;
+    this.uiState.updateScreen(window.innerWidth);
   }
 
   /**
@@ -97,13 +118,7 @@ export class MainPage implements OnInit {
    * @returns void
    */
   showIntro(): void {
-    setTimeout(() => {
-      this.logoMoving = true;
-    }, 300);
-
-    setTimeout(() => {
-      this.introActive = false;
-    }, 1400);
+    this.uiState.startIntro();
   }
 
   /**
@@ -210,16 +225,9 @@ export class MainPage implements OnInit {
    * @returns void
    */
   handleLoginNavigation(): void {
-    if (this.isMobile) {
-      this.showMobileGreeting = true;
-
-      setTimeout(() => {
-        this.showMobileGreeting = false;
-        this.router.navigateByUrl('/summary', { replaceUrl: true });
-      }, 2000);
-    } else {
+    this.uiState.handlePostLoginNavigation(() => {
       this.router.navigateByUrl('/summary', { replaceUrl: true });
-    }
+    });
   }
 
   /**
@@ -306,11 +314,7 @@ export class MainPage implements OnInit {
    * @returns void
    */
   showToast(): void {
-    this.toastVisible = true;
-
-    setTimeout(() => {
-      this.toastVisible = false;
-    }, 2500);
+    this.uiState.showToast();
   }
 
   /**
