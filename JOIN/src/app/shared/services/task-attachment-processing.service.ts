@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { TaskAttachment } from '../interfaces/task';
+import { ImageProcessingService } from './image-processing.service';
 
 /**
  * Converts selected files into persisted task attachment payloads.
@@ -9,9 +10,7 @@ import { TaskAttachment } from '../interfaces/task';
   providedIn: 'root',
 })
 export class TaskAttachmentProcessingService {
-  private readonly defaultMaxWidth = 800;
-  private readonly defaultMaxHeight = 800;
-  private readonly defaultQuality = 0.8;
+  constructor(private imageProcessingService: ImageProcessingService) {}
 
   /**
    * Combines existing attachments with newly selected files.
@@ -31,34 +30,9 @@ export class TaskAttachmentProcessingService {
     warningMessage: string;
   }> {
     const persistedExistingAttachments = [...existingAttachments];
-    if (!selectedAttachments.length) {
-      return {
-        attachments: persistedExistingAttachments,
-        warningMessage: '',
-      };
-    }
-
-    const newAttachments: TaskAttachment[] = [];
-    let failedAttachments = 0;
-
-    for (const selectedFile of selectedAttachments) {
-      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
-      if (createdAttachment) newAttachments.push(createdAttachment);
-      else failedAttachments += 1;
-    }
-
-    if (failedAttachments > 0) {
-      const pluralSuffix = failedAttachments > 1 ? 's were' : ' was';
-      return {
-        attachments: [...persistedExistingAttachments, ...newAttachments],
-        warningMessage: `${failedAttachments} attachment${pluralSuffix} skipped because processing failed.`,
-      };
-    }
-
-    return {
-      attachments: [...persistedExistingAttachments, ...newAttachments],
-      warningMessage: '',
-    };
+    if (!selectedAttachments.length) return this.buildResolveResult(persistedExistingAttachments, [], 0);
+    const processedFiles = await this.processSelectedFiles(selectedAttachments);
+    return this.buildResolveResult(persistedExistingAttachments, processedFiles.attachments, processedFiles.failedCount);
   }
 
   /**
@@ -72,20 +46,10 @@ export class TaskAttachmentProcessingService {
     existingAttachments: TaskAttachment[],
     selectedAttachments: File[]
   ): Promise<number> {
-    const existingAttachmentBytes = existingAttachments.reduce((total, attachment) => {
-      return total + attachment.base64Size;
-    }, 0);
+    const existingAttachmentBytes = this.sumAttachmentBytes(existingAttachments);
     if (!selectedAttachments.length) return existingAttachmentBytes;
-
-    let totalAttachmentBytes = existingAttachmentBytes;
-
-    for (const selectedFile of selectedAttachments) {
-      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
-      if (!createdAttachment) continue;
-      totalAttachmentBytes += createdAttachment.base64Size;
-    }
-
-    return totalAttachmentBytes;
+    const newAttachmentBytes = await this.estimateNewAttachmentBytes(selectedAttachments);
+    return existingAttachmentBytes + newAttachmentBytes;
   }
 
   /**
@@ -96,24 +60,9 @@ export class TaskAttachmentProcessingService {
    */
   private async createAttachmentFromFile(file: File): Promise<TaskAttachment | null> {
     try {
-      const outputMimeType = this.resolveOutputMimeType(file.type);
-      const compressedDataUrl = await this.compressImage(file, outputMimeType);
-      const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
-      const base64DataUrl = compressedDataUrl ?? fallbackDataUrl;
+      const base64DataUrl = await this.readProcessedImage(file);
       if (!base64DataUrl) return null;
-
-      const fileType =
-        this.extractMimeTypeFromDataUrl(base64DataUrl) || file.type || 'image/jpeg';
-      const base64 = this.extractBase64Value(base64DataUrl);
-      const fileName = this.buildFileNameForMimeType(file.name, fileType);
-
-      return {
-        fileName,
-        fileType,
-        base64Size: base64.length,
-        base64,
-        uploadedAt: Timestamp.now(),
-      };
+      return this.buildAttachmentPayload(file, base64DataUrl);
     } catch (error) {
       console.error('Attachment processing failed:', error);
       return null;
@@ -121,87 +70,115 @@ export class TaskAttachmentProcessingService {
   }
 
   /**
-   * Reads a file as a data URL.
+   * Processes all newly selected files into persisted attachments.
    *
-   * @param file Source file from file input.
-   * @returns Data URL or `null` when reading fails.
+   * @param selectedAttachments Newly selected files from the form.
+   * @returns Created attachments and processing error count.
    */
-  private readFileAsDataUrl(file: File): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        const result = reader.result;
-        resolve(typeof result === 'string' ? result : null);
-      };
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
+  private async processSelectedFiles(selectedAttachments: File[]) {
+    const attachments: TaskAttachment[] = [];
+    let failedCount = 0;
+
+    for (const selectedFile of selectedAttachments) {
+      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
+      if (createdAttachment) attachments.push(createdAttachment);
+      else failedCount += 1;
+    }
+
+    return { attachments, failedCount };
   }
 
   /**
-   * Compresses an image file while keeping aspect ratio.
+   * Builds the final attachment result returned to the caller.
    *
-   * @param file Source image file.
-   * @param outputMimeType Mime type used for the exported canvas image.
-   * @returns Data URL or `null` when compression fails.
+   * @param existingAttachments Attachments already stored on the task.
+   * @param newAttachments Newly processed attachments.
+   * @param failedAttachments Number of files that could not be processed.
+   * @returns Combined attachments plus warning message.
    */
-  private compressImage(file: File, outputMimeType: string): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const result = event.target?.result;
-        if (typeof result !== 'string') {
-          resolve(null);
-          return;
-        }
-
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            resolve(null);
-            return;
-          }
-
-          let width = img.width;
-          let height = img.height;
-
-          if (width > this.defaultMaxWidth || height > this.defaultMaxHeight) {
-            if (width > height) {
-              height = (height * this.defaultMaxWidth) / width;
-              width = this.defaultMaxWidth;
-            } else {
-              width = (width * this.defaultMaxHeight) / height;
-              height = this.defaultMaxHeight;
-            }
-          }
-
-          canvas.width = Math.round(width);
-          canvas.height = Math.round(height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          resolve(canvas.toDataURL(outputMimeType, this.defaultQuality));
-        };
-
-        img.onerror = () => resolve(null);
-        img.src = result;
-      };
-
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
+  private buildResolveResult(
+    existingAttachments: TaskAttachment[],
+    newAttachments: TaskAttachment[],
+    failedAttachments: number
+  ) {
+    return {
+      attachments: [...existingAttachments, ...newAttachments],
+      warningMessage: this.buildProcessingWarningMessage(failedAttachments),
+    };
   }
 
   /**
-   * Resolves the exported mime type so supported image formats keep their original type.
+   * Builds the warning text for skipped attachments.
    *
-   * @param mimeType Original file mime type.
-   * @returns Output mime type used for processing.
+   * @param failedAttachments Number of failed file conversions.
+   * @returns Warning message or an empty string.
    */
-  private resolveOutputMimeType(mimeType: string): string {
-    return mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+  private buildProcessingWarningMessage(failedAttachments: number): string {
+    if (!failedAttachments) return '';
+    const pluralSuffix = failedAttachments > 1 ? 's were' : ' was';
+    return `${failedAttachments} attachment${pluralSuffix} skipped because processing failed.`;
+  }
+
+  /**
+   * Sums the stored size metadata of persisted attachments.
+   *
+   * @param attachments Persisted task attachments.
+   * @returns Total stored payload size.
+   */
+  private sumAttachmentBytes(attachments: TaskAttachment[]): number {
+    return attachments.reduce((total, attachment) => total + attachment.base64Size, 0);
+  }
+
+  /**
+   * Estimates the stored payload size of newly selected files.
+   *
+   * @param selectedAttachments Newly selected files.
+   * @returns Total stored payload size for the new files.
+   */
+  private async estimateNewAttachmentBytes(selectedAttachments: File[]): Promise<number> {
+    let totalAttachmentBytes = 0;
+
+    for (const selectedFile of selectedAttachments) {
+      const createdAttachment = await this.createAttachmentFromFile(selectedFile);
+      totalAttachmentBytes += createdAttachment?.base64Size ?? 0;
+    }
+
+    return totalAttachmentBytes;
+  }
+
+  /**
+   * Reads the processed image data URL, preferring the compressed variant.
+   *
+   * @param file Selected browser file.
+   * @returns Processed data URL or `null`.
+   */
+  private async readProcessedImage(file: File): Promise<string | null> {
+    return this.imageProcessingService.readProcessedImage(file);
+  }
+
+  /**
+   * Builds the final persisted attachment payload from one processed image.
+   *
+   * @param file Original browser file.
+   * @param base64DataUrl Processed image data URL.
+   * @returns Serialized task attachment.
+   */
+  private buildAttachmentPayload(file: File, base64DataUrl: string): TaskAttachment {
+    const fileType = this.resolveAttachmentMimeType(file, base64DataUrl);
+    const base64 = this.extractBase64Value(base64DataUrl);
+    const fileName = this.buildFileNameForMimeType(file.name, fileType);
+    return { fileName, fileType, base64Size: base64.length, base64, uploadedAt: Timestamp.now() };
+  }
+
+  /**
+   * Resolves the persisted MIME type of one processed image.
+   *
+   * @param file Original browser file.
+   * @param base64DataUrl Processed image data URL.
+   * @returns Persisted MIME type string.
+   */
+  private resolveAttachmentMimeType(file: File, base64DataUrl: string): string {
+    return this.extractMimeTypeFromDataUrl(base64DataUrl) || file.type || 'image/jpeg';
   }
 
   /**

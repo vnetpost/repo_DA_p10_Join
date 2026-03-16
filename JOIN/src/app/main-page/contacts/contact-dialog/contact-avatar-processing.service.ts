@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { ContactAvatar } from '../../../shared/interfaces/contact';
+import { ImageProcessingService } from '../../../shared/services/image-processing.service';
 
 export type ProcessedContactAvatar = {
   avatar: ContactAvatar;
@@ -15,9 +16,8 @@ export type ProcessedContactAvatar = {
 })
 export class ContactAvatarProcessingService {
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
-  private readonly maxWidth = 800;
-  private readonly maxHeight = 800;
-  private readonly quality = 0.8;
+
+  constructor(private imageProcessingService: ImageProcessingService) {}
 
   /**
    * Checks whether the selected avatar file type is supported.
@@ -36,109 +36,67 @@ export class ContactAvatarProcessingService {
    * @returns Processed avatar payload and preview source or `null` when processing fails.
    */
   async processAvatar(file: File): Promise<ProcessedContactAvatar | null> {
-    const outputMimeType = this.resolveOutputMimeType(file.type);
-    const compressedDataUrl = await this.compressImage(file, outputMimeType);
-    const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
-    const dataUrl = compressedDataUrl ?? fallbackDataUrl;
+    const dataUrl = await this.imageProcessingService.readProcessedImage(file);
     if (!dataUrl) return null;
+    return this.buildProcessedAvatar(file, dataUrl);
+  }
 
+  /**
+   * Builds the processed avatar payload from one data URL.
+   *
+   * @param file Original browser file.
+   * @param dataUrl Processed image data URL.
+   * @returns Processed avatar payload or `null`.
+   */
+  private buildProcessedAvatar(file: File, dataUrl: string): ProcessedContactAvatar | null {
     const base64 = this.extractBase64FromDataUrl(dataUrl);
     if (!base64) return null;
-
-    const fileType = this.extractMimeTypeFromDataUrl(dataUrl) || file.type || 'image/jpeg';
-    const fileName = this.buildFileNameForMimeType(file.name || 'avatar.jpg', fileType);
-
+    const fileType = this.resolveAvatarMimeType(file, dataUrl);
+    const fileName = this.buildAvatarFileName(file, fileType);
     return {
-      avatar: {
-        fileName,
-        fileType,
-        base64Size: base64.length,
-        base64,
-        uploadedAt: Timestamp.now(),
-      },
+      avatar: this.buildAvatarPayload(fileName, fileType, base64),
       previewSrc: `data:${fileType};base64,${base64}`,
     };
   }
 
   /**
-   * Reads a file and returns a Base64 data URL.
+   * Resolves the persisted MIME type for one processed avatar.
    *
-   * @param file Selected file.
-   * @returns Promise resolving to data URL or `null`.
+   * @param file Original browser file.
+   * @param dataUrl Processed image data URL.
+   * @returns Persisted MIME type.
    */
-  private readFileAsDataUrl(file: File): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null);
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
+  private resolveAvatarMimeType(file: File, dataUrl: string): string {
+    return this.extractMimeTypeFromDataUrl(dataUrl) || file.type || 'image/jpeg';
   }
 
   /**
-   * Compresses an image file while keeping aspect ratio.
+   * Builds the persisted file name for one processed avatar.
    *
-   * @param file Selected image file.
-   * @param outputMimeType Mime type used for the exported canvas image.
-   * @returns Data URL or `null` when compression fails.
+   * @param file Original browser file.
+   * @param fileType Persisted avatar MIME type.
+   * @returns File name with matching extension.
    */
-  private compressImage(file: File, outputMimeType: string): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const result = event.target?.result;
-        if (typeof result !== 'string') {
-          resolve(null);
-          return;
-        }
-
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            resolve(null);
-            return;
-          }
-
-          let width = img.width;
-          let height = img.height;
-
-          if (width > this.maxWidth || height > this.maxHeight) {
-            if (width > height) {
-              height = (height * this.maxWidth) / width;
-              width = this.maxWidth;
-            } else {
-              width = (width * this.maxHeight) / height;
-              height = this.maxHeight;
-            }
-          }
-
-          canvas.width = Math.round(width);
-          canvas.height = Math.round(height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          resolve(canvas.toDataURL(outputMimeType, this.quality));
-        };
-
-        img.onerror = () => resolve(null);
-        img.src = result;
-      };
-
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
+  private buildAvatarFileName(file: File, fileType: string): string {
+    return this.buildFileNameForMimeType(file.name || 'avatar.jpg', fileType);
   }
 
   /**
-   * Resolves the exported mime type so supported image formats keep their original type.
+   * Builds the final persisted avatar payload.
    *
-   * @param mimeType Original file mime type.
-   * @returns Output mime type used for processing.
+   * @param fileName Persisted file name.
+   * @param fileType Persisted avatar MIME type.
+   * @param base64 Raw avatar data.
+   * @returns Serialized avatar payload.
    */
-  private resolveOutputMimeType(mimeType: string): string {
-    return mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+  private buildAvatarPayload(fileName: string, fileType: string, base64: string): ContactAvatar {
+    return {
+      fileName,
+      fileType,
+      base64Size: base64.length,
+      base64,
+      uploadedAt: Timestamp.now(),
+    };
   }
 
   /**

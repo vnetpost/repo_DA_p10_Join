@@ -55,77 +55,16 @@ export class AddTaskSubmitService {
    * @returns Persistence result for the hosting component.
    */
   async submitTask(input: AddTaskSubmissionInput): Promise<AddTaskSubmissionResult> {
-    const dueDate = Timestamp.fromDate(input.dueDate);
-    const { attachments, warningMessage } =
-      await this.taskAttachmentProcessingService.resolveAttachmentsForSave(
-        input.editableExistingAttachments,
-        input.selectedAttachments
-      );
-    const exceedsAttachmentLimit = this.hasExceededAttachmentLimit(attachments);
-
-    if (exceedsAttachmentLimit) {
-      return {
-        persistedTask: null,
-        errorMessage: this.buildAttachmentLimitMessage(),
-        warningMessage,
-        shouldResetForm: false,
-        selectedAttachments: input.selectedAttachments,
-      };
+    const resolvedSubmission = await this.resolveSubmission(input);
+    if ('limitExceeded' in resolvedSubmission) {
+      return this.buildLimitExceededResult(input.selectedAttachments, resolvedSubmission.warningMessage);
     }
-
-    const assigneeIds = input.activeAssignees
-      .map((contact) => contact.id)
-      .filter((id): id is string => Boolean(id));
-
-    const taskPayload = buildAddTaskPayload(
-      input.title,
-      input.description,
-      dueDate,
-      input.priority,
-      assigneeIds,
-      input.category,
-      input.activeSubtasks,
-      attachments
-    );
 
     if (input.taskToEdit?.id) {
-      const updatedTask: Task = {
-        ...input.taskToEdit,
-        ...taskPayload,
-      };
-
-      await this.taskService.updateDocument(updatedTask, 'tasks');
-
-      return {
-        persistedTask: updatedTask,
-        errorMessage: '',
-        warningMessage,
-        shouldResetForm: false,
-        selectedAttachments: [],
-      };
+      return this.updateExistingTask(input, resolvedSubmission.payload, resolvedSubmission.warningMessage);
     }
 
-    const tasksInTargetColumn = this.taskService.tasks.filter(
-      (task) => task.status === input.initialStatus
-    );
-    const newOrder = tasksInTargetColumn.length;
-
-    const task: Task = {
-      status: input.initialStatus,
-      order: newOrder,
-      ...taskPayload,
-    };
-
-    const createdTaskId = await this.taskService.addDocument(task);
-    const persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
-
-    return {
-      persistedTask,
-      errorMessage: '',
-      warningMessage,
-      shouldResetForm: true,
-      selectedAttachments: input.selectedAttachments,
-    };
+    return this.createNewTask(input, resolvedSubmission.payload, resolvedSubmission.warningMessage);
   }
 
   /**
@@ -149,5 +88,161 @@ export class AddTaskSubmitService {
    */
   private buildAttachmentLimitMessage(): string {
     return TASK_ATTACHMENT_LIMIT_MESSAGE;
+  }
+
+  /**
+   * Resolves the payload and warnings required for one submission.
+   *
+   * @param input Add-task submission input.
+   * @returns Resolved payload or limit-exceeded state.
+   */
+  private async resolveSubmission(input: AddTaskSubmissionInput) {
+    const resolvedAttachments = await this.resolveAttachments(input);
+    if (this.hasExceededAttachmentLimit(resolvedAttachments.attachments)) {
+      return { limitExceeded: true, warningMessage: resolvedAttachments.warningMessage };
+    }
+
+    return {
+      payload: this.buildTaskPayload(input, resolvedAttachments.attachments),
+      warningMessage: resolvedAttachments.warningMessage,
+    };
+  }
+
+  /**
+   * Resolves the final attachments for one add-task submission.
+   *
+   * @param input Add-task submission input.
+   * @returns Persisted attachments plus a warning message.
+   */
+  private resolveAttachments(input: AddTaskSubmissionInput) {
+    return this.taskAttachmentProcessingService.resolveAttachmentsForSave(
+      input.editableExistingAttachments,
+      input.selectedAttachments
+    );
+  }
+
+  /**
+   * Builds the normalized task payload shared by create and update flows.
+   *
+   * @param input Add-task submission input.
+   * @param attachments Persisted attachment payloads.
+   * @returns Shared task payload.
+   */
+  private buildTaskPayload(input: AddTaskSubmissionInput, attachments: TaskAttachment[]) {
+    const assigneeIds = this.mapAssigneeIds(input.activeAssignees);
+    const dueDate = Timestamp.fromDate(input.dueDate);
+    return buildAddTaskPayload(
+      input.title,
+      input.description,
+      dueDate,
+      input.priority,
+      assigneeIds,
+      input.category,
+      input.activeSubtasks,
+      attachments
+    );
+  }
+
+  /**
+   * Maps selected contacts to persisted assignee ids.
+   *
+   * @param activeAssignees Selected contacts from the form.
+   * @returns Persisted contact ids.
+   */
+  private mapAssigneeIds(activeAssignees: Contact[]): string[] {
+    return activeAssignees.map((contact) => contact.id).filter((id): id is string => Boolean(id));
+  }
+
+  /**
+   * Builds the submission result for an exceeded upload limit.
+   *
+   * @param selectedAttachments Currently selected files.
+   * @param warningMessage Warning message returned by attachment processing.
+   * @returns Failed submission result.
+   */
+  private buildLimitExceededResult(
+    selectedAttachments: File[],
+    warningMessage: string
+  ): AddTaskSubmissionResult {
+    return {
+      persistedTask: null,
+      errorMessage: this.buildAttachmentLimitMessage(),
+      warningMessage,
+      shouldResetForm: false,
+      selectedAttachments,
+    };
+  }
+
+  /**
+   * Persists an update for an existing task.
+   *
+   * @param input Add-task submission input.
+   * @param payload Shared task payload.
+   * @param warningMessage Warning message returned by attachment processing.
+   * @returns Successful update result.
+   */
+  private async updateExistingTask(
+    input: AddTaskSubmissionInput,
+    payload: Omit<Task, 'status' | 'order'>,
+    warningMessage: string
+  ): Promise<AddTaskSubmissionResult> {
+    const updatedTask: Task = { ...input.taskToEdit!, ...payload };
+    await this.taskService.updateDocument(updatedTask, 'tasks');
+    return this.buildSuccessResult(updatedTask, warningMessage, false, []);
+  }
+
+  /**
+   * Persists a newly created task.
+   *
+   * @param input Add-task submission input.
+   * @param payload Shared task payload.
+   * @param warningMessage Warning message returned by attachment processing.
+   * @returns Successful create result.
+   */
+  private async createNewTask(
+    input: AddTaskSubmissionInput,
+    payload: Omit<Task, 'status' | 'order'>,
+    warningMessage: string
+  ): Promise<AddTaskSubmissionResult> {
+    const task = this.buildNewTask(input.initialStatus, payload);
+    const createdTaskId = await this.taskService.addDocument(task);
+    const persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
+    return this.buildSuccessResult(persistedTask, warningMessage, true, input.selectedAttachments);
+  }
+
+  /**
+   * Builds a new task with the next order value in the target column.
+   *
+   * @param status Target task status.
+   * @param payload Shared task payload.
+   * @returns New task entity ready for persistence.
+   */
+  private buildNewTask(status: Task['status'], payload: Omit<Task, 'status' | 'order'>): Task {
+    const tasksInTargetColumn = this.taskService.tasks.filter((task) => task.status === status);
+    return { status, order: tasksInTargetColumn.length, ...payload };
+  }
+
+  /**
+   * Builds a successful add-task submission result.
+   *
+   * @param persistedTask Persisted task entity.
+   * @param warningMessage Warning message returned by attachment processing.
+   * @param shouldResetForm Whether the form should be reset afterwards.
+   * @param selectedAttachments Remaining selected files.
+   * @returns Successful submission result.
+   */
+  private buildSuccessResult(
+    persistedTask: Task,
+    warningMessage: string,
+    shouldResetForm: boolean,
+    selectedAttachments: File[]
+  ): AddTaskSubmissionResult {
+    return {
+      persistedTask,
+      errorMessage: '',
+      warningMessage,
+      shouldResetForm,
+      selectedAttachments,
+    };
   }
 }

@@ -357,35 +357,11 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   private async addSelectedFiles(files: File[]): Promise<void> {
     if (!files.length) return;
-
-    const validFiles = files.filter((file) => this.allowedMimeTypes.includes(file.type));
-    const invalidFilesCount = files.length - validFiles.length;
-    this.showTypeError = invalidFilesCount > 0;
+    const validFiles = this.extractValidFiles(files);
     if (!validFiles.length) return;
-
-    const mergedFiles = [...this.selectedFiles];
-    validFiles.forEach((newFile) => {
-      const hasDuplicate = mergedFiles.some((existingFile) => {
-        return (
-          existingFile.name === newFile.name &&
-          existingFile.size === newFile.size &&
-          existingFile.lastModified === newFile.lastModified
-        );
-      });
-      if (!hasDuplicate) mergedFiles.push(newFile);
-    });
-
-    const exceedsAttachmentLimit = await this.hasExceededAttachmentLimit(mergedFiles);
-    if (exceedsAttachmentLimit) {
-      this.updateErrorMessage(TASK_ATTACHMENT_LIMIT_MESSAGE);
-      return;
-    }
-
-    this.updateErrorMessage('');
-    this.selectedFiles = mergedFiles;
-    this.syncPreviewUrlsWithSelectedFiles();
-    this.selectedFilesChange.emit(mergedFiles);
-    void this.refreshAttachmentUsage();
+    const mergedFiles = this.mergeSelectedFiles(validFiles);
+    if (await this.hasExceededAttachmentLimit(mergedFiles)) return this.handleAttachmentLimitExceeded();
+    this.applySelectedFiles(mergedFiles);
   }
 
   /**
@@ -412,6 +388,76 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   private getFileKey(file: File): string {
     return `${file.name}|${file.size}|${file.lastModified}`;
+  }
+
+  /**
+   * Filters raw files down to supported image types and updates the type error state.
+   *
+   * @param files Raw files from picker or dropzone.
+   * @returns Supported files only.
+   */
+  private extractValidFiles(files: File[]): File[] {
+    const validFiles = files.filter((file) => this.allowedMimeTypes.includes(file.type));
+    this.showTypeError = validFiles.length !== files.length;
+    return validFiles;
+  }
+
+  /**
+   * Merges newly selected files into the current selection without duplicates.
+   *
+   * @param validFiles Supported files from the current interaction.
+   * @returns Updated unique file list.
+   */
+  private mergeSelectedFiles(validFiles: File[]): File[] {
+    const mergedFiles = [...this.selectedFiles];
+    validFiles.forEach((newFile) => this.appendUniqueFile(mergedFiles, newFile));
+    return mergedFiles;
+  }
+
+  /**
+   * Appends a file only when no matching file is already selected.
+   *
+   * @param files Current merged file list.
+   * @param candidateFile Candidate file to append.
+   * @returns void
+   */
+  private appendUniqueFile(files: File[], candidateFile: File): void {
+    if (this.hasMatchingFile(files, candidateFile)) return;
+    files.push(candidateFile);
+  }
+
+  /**
+   * Checks whether one file already exists in the current selection.
+   *
+   * @param files Current merged file list.
+   * @param candidateFile Candidate file to compare.
+   * @returns `true` when the file already exists.
+   */
+  private hasMatchingFile(files: File[], candidateFile: File): boolean {
+    return files.some((existingFile) => this.getFileKey(existingFile) === this.getFileKey(candidateFile));
+  }
+
+  /**
+   * Applies the accepted file list to the component state.
+   *
+   * @param selectedFiles Updated file list.
+   * @returns void
+   */
+  private applySelectedFiles(selectedFiles: File[]): void {
+    this.updateErrorMessage('');
+    this.selectedFiles = selectedFiles;
+    this.syncPreviewUrlsWithSelectedFiles();
+    this.selectedFilesChange.emit(selectedFiles);
+    void this.refreshAttachmentUsage();
+  }
+
+  /**
+   * Applies the upload-limit error without changing the current selection.
+   *
+   * @returns void
+   */
+  private handleAttachmentLimitExceeded(): void {
+    this.updateErrorMessage(TASK_ATTACHMENT_LIMIT_MESSAGE);
   }
 
   /**
