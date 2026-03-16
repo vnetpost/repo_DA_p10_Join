@@ -23,6 +23,12 @@ import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { ContactService } from '../../shared/services/contact.service';
 import { TaskAttachmentProcessingService } from '../../shared/services/task-attachment-processing.service';
+import {
+  ADD_TASK_TITLE_MAX_LENGTH,
+  ADD_TASK_TITLE_MIN_LETTERS,
+  isAddTaskTitleValid,
+  validateAddTaskForm,
+} from './add-task-validation.utils';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -64,9 +70,8 @@ export class AddTask implements OnChanges, OnDestroy {
 
   // #region Constants
   minDueDate = getTodayDateString();
-  readonly taskTitleMinLength = 3;
-  readonly taskTitleMaxLength = 100;
-  readonly taskTitleMinLetters = 3;
+  readonly taskTitleMaxLength = ADD_TASK_TITLE_MAX_LENGTH;
+  readonly taskTitleMinLetters = ADD_TASK_TITLE_MIN_LETTERS;
   showCloseConfirm: boolean = false;
   hasUserEdited: boolean = false;
   // #endregion
@@ -138,7 +143,7 @@ export class AddTask implements OnChanges, OnDestroy {
   get showTitlePatternError(): boolean {
     if (!this.isTitleTouched) return false;
     const title = this.taskTitle.trim();
-    return title.length > 0 && !this.isTitleValid(title);
+    return title.length > 0 && !isAddTaskTitleValid(title);
   }
 
   /** Human-readable title validation message for the UI. */
@@ -160,7 +165,7 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Aggregate validity of all required form sections. */
   get isFormValid(): boolean {
     return (
-      this.isTitleValid(this.taskTitle) &&
+      isAddTaskTitleValid(this.taskTitle) &&
       this.taskDueDate.trim().length > 0 &&
       Boolean(this.activeCategory)
     );
@@ -178,13 +183,18 @@ export class AddTask implements OnChanges, OnDestroy {
     const title = this.taskTitle.trim();
     const description = this.taskDescription.trim();
     const dueDateValue = this.taskDueDate.trim();
-    const validatedCategory = this.validateForm(
+    const validatedCategory = validateAddTaskForm(
       title,
       dueDateValue,
       this.activeCategory?.value ?? null,
     );
 
-    if (!validatedCategory) return;
+    if (!validatedCategory) {
+      if (!isAddTaskTitleValid(title)) this.isTitleTouched = true;
+      if (!dueDateValue) this.isDueDateTouched = true;
+      if (!this.activeCategory?.value) this.isCategoryTouched = true;
+      return;
+    }
 
     const dueDateDate = this.parseDueDate(dueDateValue);
     if (!dueDateDate) return;
@@ -308,30 +318,6 @@ export class AddTask implements OnChanges, OnDestroy {
   }
 
   /**
-   * Validates required form fields and updates touch state when invalid.
-   * @param title Trimmed task title.
-   * @param dueDateValue Raw due date input value.
-   * @param category Selected category value.
-   * @returns The validated category or `null` if validation failed.
-   */
-  private validateForm(
-    title: Task['title'],
-    dueDateValue: string,
-    category: Task['category'] | null,
-  ): Task['category'] | null {
-    const isTitleValid = this.isTitleValid(title);
-
-    if (!isTitleValid || !dueDateValue || !category) {
-      if (!isTitleValid) this.isTitleTouched = true;
-      if (!dueDateValue) this.isDueDateTouched = true;
-      if (!category) this.isCategoryTouched = true;
-      return null;
-    }
-
-    return category;
-  }
-
-  /**
    * Creates the shared task payload for create and update workflows.
    * @param title Normalized task title.
    * @param description Normalized task description.
@@ -380,31 +366,6 @@ export class AddTask implements OnChanges, OnDestroy {
       return null;
 
     return date;
-  }
-
-  /**
-   * Validates the title against length and minimum-letter rules.
-   * @param value Title candidate from the form.
-   * @returns `true` if title is valid.
-   */
-  private isTitleValid(value: string): boolean {
-    const title = value.trim();
-    return (
-      title.length >= this.taskTitleMinLength &&
-      title.length <= this.taskTitleMaxLength &&
-      this.hasMinimumLetters(title, this.taskTitleMinLetters)
-    );
-  }
-
-  /**
-   * Checks whether a value contains a minimum amount of latin letters.
-   * @param value Candidate input string.
-   * @param minLetters Minimum amount of letters required.
-   * @returns `true` when the minimum is met.
-   */
-  private hasMinimumLetters(value: string, minLetters: number): boolean {
-    const letterMatches = value.match(/[a-z]/gi);
-    return (letterMatches?.length ?? 0) >= minLetters;
   }
 
   /** Shows a short toast and then exits add-task flow. */
