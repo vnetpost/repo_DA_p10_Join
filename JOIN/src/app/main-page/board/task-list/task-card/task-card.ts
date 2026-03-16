@@ -11,20 +11,20 @@ import { TaskService } from '../../../../shared/services/task.service';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'app-single-task',
+  selector: 'app-task-card',
   imports: [NgClass, DragDropModule, CdkDrag],
-  templateUrl: './single-task.html',
-  styleUrl: './single-task.scss',
+  templateUrl: './task-card.html',
+  styleUrl: './task-card.scss',
 })
 /**
- * SingleTask component
+ * TaskCard component
  *
  * Represents an individual task card within a task list.
  * Handles mobile detection, task movement between statuses,
  * and displays task-related information such as assignees
  * and subtask progress.
  */
-export class SingleTask implements OnInit {
+export class TaskCard implements OnInit {
   @Input() task!: Task;
   taskService = inject(TaskService);
   contactService = inject(ContactService);
