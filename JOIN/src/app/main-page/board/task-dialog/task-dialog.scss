@@ -49,23 +49,25 @@ dialog {
   }
 }
 
-.dialog-top {
-  // border: 1px solid red;
+.dialog-top,
+.dialog-body {
   @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 8px);
-  position: sticky;
-  top: 0;
-  z-index: 2;
-  flex-shrink: 0;
-  padding-bottom: 0.25rem;
-  background-color: styles.$white;
 
   @include styles.up-xxl {
     gap: 21px;
   }
 }
 
+.dialog-top {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  flex-shrink: 0;
+  padding-bottom: 0.25rem;
+  background-color: styles.$white;
+}
+
 .dialog-body {
-  @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 8px);
   min-height: 0;
   overflow-y: auto;
   position: relative;
@@ -76,10 +78,6 @@ dialog {
 
   &::-webkit-scrollbar {
     width: 0px;
-  }
-
-  @include styles.up-xxl {
-    gap: 21px;
   }
 }
 
@@ -186,17 +184,19 @@ dialog {
   }
 }
 
-.attachments {
+.attachments,
+.subtasks {
   @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);
   width: 100%;
 
   @include styles.up-xxl {
     gap: 10px;
   }
+}
 
+.attachments {
   .attachment-list {
     @include styles.setFlex($d: row, $ai: stretch, $jc: flex-start, $gap: 0.6rem);
-    width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
     padding-bottom: 0.2rem;
@@ -255,7 +255,6 @@ dialog {
     border: none;
     border-radius: 50%;
     background-color: transparent;
-    // transform: translate(-50%, -50%) scale(0.92);
     transform: translate(-50%, -50%);
     opacity: 0;
     pointer-events: none;
@@ -293,7 +292,6 @@ dialog {
   .attachment-preview:hover .attachment-thumbnail,
   .attachment-preview:focus-within .attachment-thumbnail {
     filter: brightness(0.6);
-    // transform: scale(1.03);
   }
 
   .attachment-preview:hover .attachment-preview-download,
@@ -333,29 +331,10 @@ dialog {
   }
 
   .assignee-list {
-    @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
     max-height: 135px;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
 
     @include styles.up-xxl {
       max-height: 150px;
-    }
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: white;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: styles.$gray-light;
     }
 
     .assignee-item {
@@ -388,34 +367,42 @@ dialog {
   }
 }
 
-.subtasks {
-  @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);
+.assignee-list,
+.subtask-list {
   width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
 
-  @include styles.up-xxl {
-    gap: 10px;
+  &::-webkit-scrollbar {
+    width: 4px;
   }
 
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: styles.$gray-light;
+  }
+}
+
+.attachment-list,
+.assignee-list,
+.subtask-list {
+  width: 100%;
+}
+
+.assignee-list,
+.subtask-list {
+  @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
+}
+
+.subtasks {
   .subtask-list {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    list-style: none;
     max-height: 110px;
-    overflow-y: auto;
-    scrollbar-gutter: stable;
-
-    &::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    &::-webkit-scrollbar-track {
-      background: white;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background: styles.$gray-light;
-    }
 
     .checkbox-wrapper {
       @include styles.setFlex($jc: flex-start, $gap: 10px);
@@ -479,7 +466,6 @@ footer {
   flex-shrink: 0;
   padding-top: 0.75rem;
   background-color: styles.$white;
-  // box-shadow: 0 -10px 24px rgba(0, 0, 0, 0.08);
 
   @include styles.up-xxl {
     margin-top: 0;
