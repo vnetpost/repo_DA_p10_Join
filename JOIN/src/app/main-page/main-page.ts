@@ -1,7 +1,7 @@
 import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
-import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
+import { LoginFormData, SignupFormData } from '../shared/interfaces/auth-form-data';
 import { MainPageUiState } from './main-page-ui-state';
 import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
 import { LoginFormCard } from './login-form-card/login-form-card';
@@ -47,12 +47,12 @@ export class MainPage implements OnInit, OnDestroy {
   showSignUpPassword: boolean = false;
   showConfirmPassword: boolean = false;
 
-  logInData: LogInFormData = {
+  logInData: LoginFormData = {
     email: '',
     password: '',
   };
 
-  signUpData: SignUpFormData = {
+  signUpData: SignupFormData = {
     name: '',
     email: '',
     password: '',

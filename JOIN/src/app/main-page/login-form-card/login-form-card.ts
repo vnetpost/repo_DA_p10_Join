@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { LogInFormData } from '../../shared/interfaces/login-form-data';
+import { LoginFormData } from '../../shared/interfaces/auth-form-data';
 
 /**
  * Renders the log-in form card on the auth page.
@@ -12,7 +12,7 @@ import { LogInFormData } from '../../shared/interfaces/login-form-data';
   styleUrl: './login-form-card.scss',
 })
 export class LoginFormCard {
-  @Input({ required: true }) logInData!: LogInFormData;
+  @Input({ required: true }) logInData!: LoginFormData;
   @Input() showPassword = false;
   @Input() isLoggingIn = false;
   @Input() loginError = false;

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { SignUpFormData } from '../../shared/interfaces/login-form-data';
+import { SignupFormData } from '../../shared/interfaces/auth-form-data';
 
 /**
  * Renders the sign-up form card on the auth page.
@@ -13,7 +13,7 @@ import { SignUpFormData } from '../../shared/interfaces/login-form-data';
   styleUrl: './signup-form-card.scss',
 })
 export class SignupFormCard {
-  @Input({ required: true }) signUpData!: SignUpFormData;
+  @Input({ required: true }) signUpData!: SignupFormData;
   @Input() confirmPassword = '';
   @Input() showSignUpPassword = false;
   @Input() showConfirmPassword = false;

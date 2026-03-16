@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../shared/services/auth.service';
-import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
+import { LoginFormData, SignupFormData } from '../shared/interfaces/auth-form-data';
 
 /**
  * Coordinates auth form submissions for the main page.
@@ -18,7 +18,7 @@ export class MainPageAuthSubmitService {
    * @param logInData Current login form values.
    * @returns Login observable.
    */
-  submitLogin(logInData: LogInFormData): Observable<unknown> {
+  submitLogin(logInData: LoginFormData): Observable<unknown> {
     return this.authService.logIn(logInData.email, logInData.password);
   }
 
@@ -37,7 +37,7 @@ export class MainPageAuthSubmitService {
    * @param signUpData Current sign-up form values.
    * @returns Sign-up observable.
    */
-  submitSignUp(signUpData: SignUpFormData): Observable<unknown> {
+  submitSignUp(signUpData: SignupFormData): Observable<unknown> {
     return this.authService.signUp(signUpData.name, signUpData.email, signUpData.password);
   }
 }

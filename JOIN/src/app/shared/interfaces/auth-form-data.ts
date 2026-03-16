@@ -1,7 +1,7 @@
 /**
  * Form model used for the log-in screen.
  */
-export interface LogInFormData {
+export interface LoginFormData {
   email: string;
   password: string;
 }
@@ -9,7 +9,7 @@ export interface LogInFormData {
 /**
  * Form model used for the sign-up screen.
  */
-export interface SignUpFormData {
+export interface SignupFormData {
   name: string;
   email: string;
   password: string;
