@@ -5,7 +5,14 @@ import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { TaskService } from '../../../shared/services/task-service';
 import { FirebaseService } from '../../../shared/services/firebase-service';
 import { getContactAvatarSrc } from '../../../shared/utilities/utils';
-import Viewer from 'viewerjs/dist/viewer.esm.js';
+import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
+import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
+import {
+  getTaskAttachmentFileName,
+  getTaskAttachmentPreviewSrc,
+  isTaskAttachmentImage,
+} from '../../../shared/utilities/task-attachment.utils';
+import type Viewer from 'viewerjs';
 
 @Component({
   selector: 'app-task-dialog',
@@ -25,7 +32,12 @@ export class TaskDialog implements OnDestroy {
   @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
   taskService = inject(TaskService);
   contactService = inject(FirebaseService);
+  attachmentViewerService = inject(TaskAttachmentViewerService);
+  attachmentFileService = inject(TaskAttachmentActionService);
   readonly getTwoInitials = getTwoInitials;
+  readonly getAttachmentFileName = getTaskAttachmentFileName;
+  readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
+  readonly isImageAttachment = isTaskAttachmentImage;
   userColor: string | null = null;
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
@@ -236,18 +248,7 @@ export class TaskDialog implements OnDestroy {
       this.attachmentViewer?.view(viewerIndex);
       return;
     }
-
-    const legacyUrl = this.getLegacyAttachmentUrl(attachment);
-    if (legacyUrl) {
-      window.open(legacyUrl, '_blank', 'noopener,noreferrer');
-      return;
-    }
-
-    const blob = this.getAttachmentBlob(attachment);
-    if (!blob) return;
-    const objectUrl = URL.createObjectURL(blob);
-    window.open(objectUrl, '_blank', 'noopener,noreferrer');
-    setTimeout(() => URL.revokeObjectURL(objectUrl), 60_000);
+    this.attachmentFileService.openAttachment(attachment);
   }
 
   /**
@@ -258,143 +259,8 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   downloadAttachment(attachment: TaskAttachment, index: number): void {
-    const legacyUrl = this.getLegacyAttachmentUrl(attachment);
     const fileName = this.getAttachmentFileName(attachment, index);
-
-    if (legacyUrl) {
-      const link = document.createElement('a');
-      link.href = legacyUrl;
-      link.download = fileName;
-      link.target = '_blank';
-      link.rel = 'noopener noreferrer';
-      link.click();
-      return;
-    }
-
-    const blob = this.getAttachmentBlob(attachment);
-    if (!blob) return;
-
-    const objectUrl = URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = objectUrl;
-    link.download = fileName;
-    link.click();
-    URL.revokeObjectURL(objectUrl);
-  }
-
-  /**
-   * Resolves a safe display name for an attachment.
-   *
-   * @param attachment Attachment metadata object.
-   * @param index Attachment index in the list.
-   * @returns A displayable file name.
-   */
-  getAttachmentFileName(attachment: TaskAttachment, index: number): string {
-    const customName = attachment.fileName?.trim();
-    if (customName) return customName;
-    const withLegacyName = attachment as TaskAttachment & { name?: string };
-    const legacyName = withLegacyName.name?.trim();
-    if (legacyName) return legacyName;
-    return `attachment-${index + 1}`;
-  }
-
-  /**
-   * Indicates whether an attachment can be rendered as image thumbnail.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns `true` for image attachments.
-   */
-  isImageAttachment(attachment: TaskAttachment): boolean {
-    const mimeType = this.getAttachmentMimeType(attachment);
-    if (mimeType.startsWith('image/')) return true;
-
-    const fileName = this.getAttachmentFileName(attachment, 0).toLowerCase();
-    if (/\.(jpg|jpeg|png|gif|webp|bmp|svg)$/.test(fileName)) return true;
-
-    const legacyUrl = this.getLegacyAttachmentUrl(attachment)?.toLowerCase() ?? '';
-    return /\.(jpg|jpeg|png|gif|webp|bmp|svg)(\?|#|$)/.test(legacyUrl);
-  }
-
-  /**
-   * Returns a previewable image source for thumbnails.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns Image source URL or empty string when unavailable.
-   */
-  getAttachmentPreviewSrc(attachment: TaskAttachment): string {
-    const legacyUrl = this.getLegacyAttachmentUrl(attachment);
-    if (legacyUrl && this.isImageAttachment(attachment)) return legacyUrl;
-
-    const rawBase64 = attachment.base64?.trim();
-    if (!rawBase64) return '';
-    if (rawBase64.startsWith('data:')) return rawBase64;
-
-    const mimeType = this.getAttachmentMimeType(attachment);
-    return `data:${mimeType};base64,${rawBase64}`;
-  }
-
-  /**
-   * Converts base64 attachment data to a Blob.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns Blob instance or `null` if conversion fails.
-   */
-  private getAttachmentBlob(attachment: TaskAttachment): Blob | null {
-    try {
-      const rawBase64 = attachment.base64?.trim();
-      if (!rawBase64) return null;
-      const base64 = rawBase64.startsWith('data:')
-        ? this.extractBase64FromDataUrl(rawBase64)
-        : rawBase64;
-      const byteString = atob(base64);
-      const byteArray = new Uint8Array(byteString.length);
-
-      for (let i = 0; i < byteString.length; i += 1) {
-        byteArray[i] = byteString.charCodeAt(i);
-      }
-
-      const mimeType = this.getAttachmentMimeType(attachment);
-      return new Blob([byteArray], { type: mimeType });
-    } catch {
-      return null;
-    }
-  }
-
-  /**
-   * Resolves MIME type from current and legacy attachment fields.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns MIME type string.
-   */
-  private getAttachmentMimeType(attachment: TaskAttachment): string {
-    if (attachment.fileType?.trim()) return attachment.fileType.trim();
-    const withLegacyType = attachment as TaskAttachment & { type?: string };
-    if (withLegacyType.type?.trim()) return withLegacyType.type.trim();
-    return 'application/octet-stream';
-  }
-
-  /**
-   * Supports older attachment documents that stored external URLs.
-   *
-   * @param attachment Attachment metadata object.
-   * @returns A URL if available; otherwise `null`.
-   */
-  private getLegacyAttachmentUrl(attachment: TaskAttachment): string | null {
-    const withLegacyUrl = attachment as TaskAttachment & { url?: string };
-    if (!withLegacyUrl.url) return null;
-    return withLegacyUrl.url;
-  }
-
-  /**
-   * Extracts the base64 payload from a full data URL.
-   *
-   * @param dataUrl Source data URL.
-   * @returns Pure base64 data.
-   */
-  private extractBase64FromDataUrl(dataUrl: string): string {
-    const separatorIndex = dataUrl.indexOf(',');
-    if (separatorIndex === -1) return dataUrl;
-    return dataUrl.slice(separatorIndex + 1);
+    this.attachmentFileService.downloadAttachment(attachment, fileName);
   }
 
   /**
@@ -411,21 +277,7 @@ export class TaskDialog implements OnDestroy {
     }
 
     this.destroyAttachmentViewer();
-    this.attachmentViewer = new Viewer(galleryElement, {
-      button: true,
-      container: dialogElement,
-      fullscreen: true,
-      keyboard: true,
-      loop: true,
-      movable: true,
-      navbar: true,
-      title: true,
-      toolbar: true,
-      tooltip: true,
-      transition: true,
-      zIndex: 4000,
-      zoomable: true,
-    });
+    this.attachmentViewer = this.attachmentViewerService.createViewer(galleryElement, dialogElement);
   }
 
   /**
@@ -434,7 +286,6 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   private destroyAttachmentViewer(): void {
-    this.attachmentViewer?.destroy();
-    this.attachmentViewer = null;
+    this.attachmentViewer = this.attachmentViewerService.destroyViewer(this.attachmentViewer);
   }
 }

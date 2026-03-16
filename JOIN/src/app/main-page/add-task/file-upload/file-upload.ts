@@ -8,9 +8,11 @@ import {
   Output,
   SimpleChanges,
   ViewChild,
+  inject,
 } from '@angular/core';
 import { TaskAttachment } from '../../../shared/interfaces/task';
-import Viewer from 'viewerjs/dist/viewer.esm.js';
+import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
+import type Viewer from 'viewerjs';
 
 /**
  * Handles attachment selection, preview generation and removal inside the task form.
@@ -33,6 +35,7 @@ export class FileUpload implements OnChanges, OnDestroy {
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
   isDragOver = false;
   showTypeError = false;
+  private attachmentViewerService = inject(TaskAttachmentViewerService);
   private previewUrlsByFileKey = new Map<string, string>();
   private attachmentViewer: Viewer | null = null;
 
@@ -355,24 +358,9 @@ export class FileUpload implements OnChanges, OnDestroy {
   private initializeAttachmentViewer(): void {
     const galleryElement = this.viewerGallery?.nativeElement;
     if (!galleryElement) return;
-    const viewerContainer = galleryElement.closest('dialog') ?? galleryElement.ownerDocument.body;
 
     this.destroyAttachmentViewer();
-    this.attachmentViewer = new Viewer(galleryElement, {
-      button: true,
-      container: viewerContainer,
-      fullscreen: true,
-      keyboard: true,
-      loop: true,
-      movable: true,
-      navbar: true,
-      title: true,
-      toolbar: true,
-      tooltip: true,
-      transition: true,
-      zIndex: 4000,
-      zoomable: true,
-    });
+    this.attachmentViewer = this.attachmentViewerService.createViewer(galleryElement);
   }
 
   /**
@@ -381,7 +369,6 @@ export class FileUpload implements OnChanges, OnDestroy {
    * @returns void
    */
   private destroyAttachmentViewer(): void {
-    this.attachmentViewer?.destroy();
-    this.attachmentViewer = null;
+    this.attachmentViewer = this.attachmentViewerService.destroyViewer(this.attachmentViewer);
   }
 }
