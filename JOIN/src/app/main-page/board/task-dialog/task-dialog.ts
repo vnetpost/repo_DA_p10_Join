@@ -11,6 +11,8 @@ import {
 import {
   getTaskAttachmentFileName,
   getTaskAttachmentPreviewSrc,
+  getTaskAttachmentSizeLabel,
+  getTaskAttachmentTypeLabel,
   isTaskAttachmentImage,
 } from '../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
@@ -39,6 +41,8 @@ export class TaskDialog implements OnDestroy {
   attachmentService = inject(TaskDialogAttachmentService);
   readonly getAttachmentFileName = getTaskAttachmentFileName;
   readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
+  readonly getAttachmentSizeLabel = getTaskAttachmentSizeLabel;
+  readonly getAttachmentTypeLabel = getTaskAttachmentTypeLabel;
   readonly isImageAttachment = isTaskAttachmentImage;
   readonly getAssigneeInitials = (id: string): string =>
     getContactDisplayInitialsById(this.contactService.contacts, id);

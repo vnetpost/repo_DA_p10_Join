@@ -91,6 +91,9 @@
               <img
                 [src]="getAttachmentPreviewSrc(attachment)"
                 [alt]="getAttachmentFileName(attachment, $index)"
+                [attr.data-file-name]="getAttachmentFileName(attachment, $index)"
+                [attr.data-file-type]="getAttachmentTypeLabel(attachment)"
+                [attr.data-file-size]="getAttachmentSizeLabel(attachment)"
               />
             }
           </section>

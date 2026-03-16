@@ -16,6 +16,8 @@ export class TaskAttachmentViewerService {
    * @returns Configured Viewer.js instance.
    */
   createViewer(galleryElement: HTMLElement, preferredContainer?: HTMLElement | null): Viewer {
+    const viewerService = this;
+
     return new Viewer(galleryElement, {
       button: true,
       container: this.resolveContainer(galleryElement, preferredContainer),
@@ -24,7 +26,12 @@ export class TaskAttachmentViewerService {
       loop: true,
       movable: true,
       navbar: true,
-      title: true,
+      title: [
+        1,
+        function (this: Viewer & { images?: HTMLImageElement[]; index?: number }) {
+          return viewerService.buildViewerTitle(this);
+        },
+      ],
       toolbar: true,
       tooltip: true,
       transition: true,
@@ -59,5 +66,21 @@ export class TaskAttachmentViewerService {
     const dialogContainer = galleryElement.closest('dialog');
     if (dialogContainer instanceof HTMLElement) return dialogContainer;
     return galleryElement.ownerDocument.body;
+  }
+
+  /**
+   * Builds the title shown by Viewer.js from image metadata stored on the gallery node.
+   *
+   * @param viewer Current Viewer.js instance.
+   * @returns Compact metadata string for the viewer header.
+   */
+  private buildViewerTitle(viewer: Viewer & { images?: HTMLImageElement[]; index?: number }): string {
+    const sourceImage = viewer.images?.[viewer.index ?? 0];
+    const fileName = sourceImage?.dataset['fileName']?.trim() || sourceImage?.alt?.trim() || 'Attachment';
+    const fileType = sourceImage?.dataset['fileType']?.trim();
+    const fileSize = sourceImage?.dataset['fileSize']?.trim();
+    const metadataParts = [fileType, fileSize].filter(Boolean);
+    if (!metadataParts.length) return fileName;
+    return `${fileName} • ${metadataParts.join(' • ')}`;
   }
 }

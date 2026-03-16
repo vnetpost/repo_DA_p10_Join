@@ -100,11 +100,20 @@
         <img
           [src]="getExistingAttachmentPreview(attachment)"
           [alt]="getAttachmentName(attachment, $index)"
+          [attr.data-file-name]="getAttachmentName(attachment, $index)"
+          [attr.data-file-type]="getExistingAttachmentTypeLabel(attachment)"
+          [attr.data-file-size]="getExistingAttachmentSizeLabel(attachment)"
         />
       }
 
       @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
-        <img [src]="getSelectedFilePreview(selectedFile)" [alt]="selectedFile.name" />
+        <img
+          [src]="getSelectedFilePreview(selectedFile)"
+          [alt]="selectedFile.name"
+          [attr.data-file-name]="selectedFile.name"
+          [attr.data-file-type]="getSelectedFileTypeLabel(selectedFile)"
+          [attr.data-file-size]="getSelectedFileSizeLabel(selectedFile)"
+        />
       }
     </section>
   }

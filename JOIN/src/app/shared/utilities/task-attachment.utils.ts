@@ -54,6 +54,47 @@ export function getTaskAttachmentPreviewSrc(attachment: TaskAttachment): string 
 }
 
 /**
+ * Builds a compact human-readable type label for one task attachment.
+ *
+ * @param attachment Attachment metadata object.
+ * @returns Attachment type label such as `JPEG` or `PNG`.
+ */
+export function getTaskAttachmentTypeLabel(attachment: TaskAttachment): string {
+  const mimeType = getTaskAttachmentMimeType(attachment).toLowerCase();
+  if (mimeType === 'image/jpeg') return 'JPEG';
+  if (mimeType === 'image/png') return 'PNG';
+
+  const mimeSubtype = mimeType.split('/')[1]?.trim();
+  if (mimeSubtype) return mimeSubtype.toUpperCase();
+  return mimeType.toUpperCase();
+}
+
+/**
+ * Formats the stored attachment size for metadata displays.
+ *
+ * @param attachment Attachment metadata object.
+ * @returns Human-readable size label.
+ */
+export function getTaskAttachmentSizeLabel(attachment: TaskAttachment): string {
+  return formatAttachmentSize(attachment.base64Size);
+}
+
+/**
+ * Formats one raw attachment size for display.
+ *
+ * @param size Raw size value in bytes-like units.
+ * @returns Human-readable size label in KB or MB.
+ */
+export function formatAttachmentSize(size: number): string {
+  const safeSize = Math.max(0, size);
+  const oneKilobyte = 1024;
+  const oneMegabyte = oneKilobyte * oneKilobyte;
+
+  if (safeSize >= oneMegabyte) return `${(safeSize / oneMegabyte).toFixed(2)} MB`;
+  return `${Math.max(1, Math.round(safeSize / oneKilobyte))} KB`;
+}
+
+/**
  * Converts base64 task attachment data into a Blob.
  *
  * @param attachment Attachment metadata object.

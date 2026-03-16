@@ -17,6 +17,11 @@ import {
   MAX_TASK_ATTACHMENT_BYTES,
   TASK_ATTACHMENT_LIMIT_MESSAGE,
 } from '../../../shared/utilities/task-attachment.constants';
+import {
+  formatAttachmentSize,
+  getTaskAttachmentSizeLabel,
+  getTaskAttachmentTypeLabel,
+} from '../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
 
 /**
@@ -254,6 +259,50 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     const legacyName = withLegacyName.name?.trim();
     if (legacyName) return legacyName;
     return `attachment-${index + 1}`;
+  }
+
+  /**
+   * Resolves a short type label for one persisted attachment.
+   *
+   * @param attachment Persisted attachment payload.
+   * @returns Attachment type label.
+   */
+  getExistingAttachmentTypeLabel(attachment: TaskAttachment): string {
+    return getTaskAttachmentTypeLabel(attachment);
+  }
+
+  /**
+   * Resolves a short size label for one persisted attachment.
+   *
+   * @param attachment Persisted attachment payload.
+   * @returns Human-readable attachment size label.
+   */
+  getExistingAttachmentSizeLabel(attachment: TaskAttachment): string {
+    return getTaskAttachmentSizeLabel(attachment);
+  }
+
+  /**
+   * Resolves a short type label for one newly selected file.
+   *
+   * @param file Browser file from the current selection.
+   * @returns File type label.
+   */
+  getSelectedFileTypeLabel(file: File): string {
+    if (file.type === 'image/jpeg') return 'JPEG';
+    if (file.type === 'image/png') return 'PNG';
+    const mimeSubtype = file.type.split('/')[1]?.trim();
+    if (mimeSubtype) return mimeSubtype.toUpperCase();
+    return file.type.toUpperCase();
+  }
+
+  /**
+   * Resolves a short size label for one newly selected file.
+   *
+   * @param file Browser file from the current selection.
+   * @returns Human-readable file size label.
+   */
+  getSelectedFileSizeLabel(file: File): string {
+    return formatAttachmentSize(file.size);
   }
 
   /**
