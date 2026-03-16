@@ -6,6 +6,7 @@ import { AuthService } from '../shared/services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { getGreeting } from '../shared/utilities/utils';
 import { MainPageUiState } from './main-page-ui-state';
+import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
 
 @Component({
   selector: 'app-main-page',
@@ -24,6 +25,7 @@ import { MainPageUiState } from './main-page-ui-state';
 export class MainPage implements OnInit, OnDestroy {
   authService = inject(AuthService);
   router = inject(Router);
+  private readonly mainPageAuthSubmitService = inject(MainPageAuthSubmitService);
   user$ = this.authService.user$;
 
   showSignUp: boolean = false;
@@ -186,18 +188,17 @@ export class MainPage implements OnInit, OnDestroy {
     this.isLoggingIn = true;
     this.loginError = false;
 
-    this.authService.logIn(this.logInData.email, this.logInData.password)
-      .subscribe({
-        next: () => {
-          this.isLoggingIn = false;
-          this.handleLoginNavigation();
-        },
-        error: (err) => {
-          console.error('Login failed', err);
-          this.isLoggingIn = false;
-          this.loginError = true;
-        },
-      });
+    this.mainPageAuthSubmitService.submitLogin(this.logInData).subscribe({
+      next: () => {
+        this.isLoggingIn = false;
+        this.handleLoginNavigation();
+      },
+      error: (err) => {
+        console.error('Login failed', err);
+        this.isLoggingIn = false;
+        this.loginError = true;
+      },
+    });
   }
 
   /**
@@ -206,7 +207,7 @@ export class MainPage implements OnInit, OnDestroy {
    * @returns void
    */
   guestLogin(): void {
-    this.authService.guestLogIn().subscribe({
+    this.mainPageAuthSubmitService.submitGuestLogin().subscribe({
       next: () => {
         this.handleLoginNavigation();
       },
@@ -246,8 +247,7 @@ export class MainPage implements OnInit, OnDestroy {
     this.isSigningUp = true;
     this.signUpError = false;
 
-    this.authService.signUp(this.signUpData.name, this.signUpData.email, this.signUpData.password
-    ).subscribe({
+    this.mainPageAuthSubmitService.submitSignUp(this.signUpData).subscribe({
       next: () => {
         this.onSignUpSuccess();
       },
