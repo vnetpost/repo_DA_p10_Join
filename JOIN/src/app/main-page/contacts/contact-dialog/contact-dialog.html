@@ -51,38 +51,14 @@
     </button>
 
     <section class="form-section">
-      @if (dialogMode === 'add') {
-        <figure class="avatar" aria-hidden="true">
-          <img class="avatar__placeholder-icon" src="assets/img/icons/forms/contact-white.svg" alt="Contact placeholder icon" aria-hidden="true" />
-        </figure>
-      } @else {
-        <figure class="avatar" [style.backgroundColor]="avatarPreviewSrc ? null : userColor">
-          @if (avatarPreviewSrc) {
-            <img class="avatar__image" [src]="avatarPreviewSrc" alt="Contact avatar image" aria-hidden="true" />
-          } @else {
-            <span class="initials">
-              {{ getTwoInitials(contactData.name) }}
-            </span>
-          }
-          @if (canUploadAvatar) {
-            <button
-              type="button"
-              class="avatar__upload-button"
-              aria-label="Upload avatar image"
-              (click)="openAvatarPicker($event)"
-            >
-              <img src="assets/img/icons/buttons/camera.svg" alt="Camera icon" aria-hidden="true" />
-            </button>
-            <input
-              #avatarInput
-              class="avatar__upload-input"
-              type="file"
-              accept="image/jpeg,image/png"
-              (change)="onAvatarSelected($event)"
-            />
-          }
-        </figure>
-      }
+      <app-contact-dialog-avatar
+        [dialogMode]="dialogMode"
+        [canUploadAvatar]="canUploadAvatar"
+        [userColor]="userColor"
+        [avatarPreviewSrc]="avatarPreviewSrc"
+        [contactName]="contactData.name"
+        (avatarUpdated)="applyAvatarChange($event)"
+      />
 
       <form
         class="form"

@@ -1,0 +1,118 @@
+@use './index' as styles;
+
+.legal-content-wrapper {
+  @include styles.setFlex($ai: flex-start);
+  height: 100%;
+  height: calc(100dvh - styles.$header-height);
+  overflow: hidden;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+
+  .legal-page-article {
+    width: 90%;
+    padding: 2rem 0 12rem;
+
+    @include styles.up-xxl {
+      padding: 4rem 0 12rem;
+    }
+
+    .heading {
+      @include styles.setFlex($jc: space-between);
+      padding-bottom: 16px;
+
+      h1 {
+        font-size: 32px;
+
+        @include styles.up-xxl {
+          font-size: 50px;
+        }
+      }
+
+      button {
+        @include styles.setFlex();
+        width: 32px;
+        padding: 0;
+        background-color: transparent;
+      }
+    }
+
+    h2 {
+      margin: 24px 0 16px;
+      font-size: 24px;
+
+      @include styles.up-xxl {
+        font-size: 30px;
+      }
+    }
+
+    h3 {
+      margin-top: 16px;
+      font-size: 20px;
+
+      @include styles.up-xxl {
+        font-size: 24px;
+      }
+    }
+
+    h4 {
+      margin-top: 16px;
+      font-size: 18px;
+
+      @include styles.up-xxl {
+        font-size: 20px;
+      }
+    }
+
+    h5,
+    h6 {
+      margin-top: 16px;
+      font-size: 16px;
+
+      @include styles.up-xxl {
+        font-size: 18px;
+      }
+    }
+
+    ul {
+      padding-left: 24px;
+    }
+
+    li {
+      margin: 16px 0;
+    }
+
+    ol {
+      list-style: none;
+      counter-reset: number-counter;
+    }
+
+    ol > li {
+      counter-increment: number-counter;
+      list-style-position: outside;
+      @include styles.setGrid($columns: 20px 1fr);
+
+      &::before {
+        content: counter(number-counter) '. ';
+        font-weight: bold;
+        font-size: 20px;
+      }
+    }
+
+    .li-content {
+      margin-left: 15px;
+
+      > span {
+        font-weight: bold;
+        font-size: 18px;
+      }
+    }
+
+    a {
+      color: styles.$blue-sky;
+    }
+
+    p {
+      margin-top: 8px;
+    }
+  }
+}

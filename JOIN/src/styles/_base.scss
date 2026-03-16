@@ -1,0 +1,39 @@
+@use './index' as styles;
+
+*,
+*::before,
+*::after {
+  position: relative;
+  padding: 0;
+  margin: 0;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+  cursor: pointer;
+}
+
+html {
+  @include styles.setFont($size: 10px);
+  scrollbar-gutter: stable;
+
+  > body {
+    @include styles.setFont($size: 16px, $weight: 400);
+    min-height: 100dvh;
+    background-color: #f6f7f8;
+  }
+}
+
+app-root {
+  display: block;
+  min-height: 100dvh;
+  background-color: #f6f7f8;
+}
+
+body:has(dialog[open]),
+body:has(.add-task-overlay),
+body:has(.toast-wrapper--blocking.toast-wrapper--active) {
+  overflow: hidden;
+}

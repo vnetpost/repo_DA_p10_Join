@@ -1,0 +1,28 @@
+@use './index' as styles;
+
+.viewer-download::before {
+  content: 'Download';
+  display: block;
+  width: 20px;
+  height: 20px;
+  font-size: 0;
+  line-height: 0;
+  background-color: #fff;
+  -webkit-mask: url('/assets/img/icons/buttons/download.svg') center / 18px 18px no-repeat;
+  mask: url('/assets/img/icons/buttons/download.svg') center / 18px 18px no-repeat;
+}
+
+.viewer-container .viewer-title {
+  font-size: 16px !important;
+  line-height: 1.35 !important;
+  min-height: 22px;
+}
+
+.viewer-container .viewer-tooltip {
+  font-size: 16px !important;
+  height: 28px;
+  line-height: 28px;
+  margin-left: -32px;
+  margin-top: -14px;
+  width: 64px;
+}

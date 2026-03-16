@@ -1,19 +1,22 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
-import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
-import { ContactAvatarProcessingService } from './contact-avatar-processing.service';
+import { getContactAvatarSrc } from '../../../shared/utilities/utils';
 import { ContactDialogUiState } from './contact-dialog-ui-state';
 import {
   captureContactDialogSnapshot,
   ContactDialogSnapshot,
   hasContactDialogChanges,
 } from './contact-dialog-snapshot.utils';
+import {
+  ContactDialogAvatar,
+  ContactDialogAvatarChange,
+} from './contact-dialog-avatar/contact-dialog-avatar';
 
 @Component({
   selector: 'app-contact-dialog',
-  imports: [FormsModule],
+  imports: [FormsModule, ContactDialogAvatar],
   templateUrl: './contact-dialog.html',
   styleUrl: './contact-dialog.scss',
 })
@@ -27,12 +30,9 @@ import {
 export class ContactDialog {
   @ViewChild('contactDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('contactForm') contactForm!: NgForm;
-  @ViewChild('avatarInput') avatarInput?: ElementRef<HTMLInputElement>;
   @Input() canDelete = true;
   @Input() canUploadAvatar = false;
   dialogMode: 'add' | 'edit' = 'add';
-  readonly getTwoInitials = getTwoInitials;
-  private readonly contactAvatarProcessingService = inject(ContactAvatarProcessingService);
   private readonly uiState = new ContactDialogUiState();
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
@@ -207,7 +207,6 @@ export class ContactDialog {
         phone: '',
       });
     });
-    if (this.avatarInput) this.avatarInput.nativeElement.value = '';
   }
 
   /**
@@ -278,39 +277,14 @@ export class ContactDialog {
   }
 
   /**
-   * Opens the avatar file picker for editable own-contact profiles.
+   * Applies an updated avatar payload emitted by the avatar child component.
    *
-   * @param event Triggering click event.
+   * @param avatarChange The newly processed avatar payload and preview source.
    * @returns void
    */
-  openAvatarPicker(event?: Event): void {
-    event?.stopPropagation();
-    if (!this.canUploadAvatar || this.dialogMode !== 'edit') return;
-    this.avatarInput?.nativeElement.click();
-  }
-
-  /**
-   * Handles avatar image selection and stores it as contact avatar payload.
-   *
-   * @param event Native input change event.
-   * @returns Promise<void>
-   */
-  async onAvatarSelected(event: Event): Promise<void> {
-    const target = event.target as HTMLInputElement;
-    const file = target.files?.[0];
-    if (!file) return;
-
-    if (!this.contactAvatarProcessingService.isAllowedMimeType(file.type)) {
-      if (this.avatarInput) this.avatarInput.nativeElement.value = '';
-      return;
-    }
-
-    const processedAvatar = await this.contactAvatarProcessingService.processAvatar(file);
-    if (!processedAvatar) return;
-
-    this.avatar = processedAvatar.avatar;
-    this.avatarPreviewSrc = processedAvatar.previewSrc;
-    if (this.avatarInput) this.avatarInput.nativeElement.value = '';
+  applyAvatarChange(avatarChange: ContactDialogAvatarChange): void {
+    this.avatar = avatarChange.avatar;
+    this.avatarPreviewSrc = avatarChange.previewSrc;
   }
 
   /**

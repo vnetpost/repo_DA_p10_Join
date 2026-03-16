@@ -23,12 +23,17 @@ import {
   getTaskAttachmentSizeLabel,
   getTaskAttachmentTypeLabel,
 } from '../../../shared/utilities/task-attachment.utils';
-import type Viewer from 'viewerjs';
 import { AttachmentUploadPreviewStore } from './attachment-upload-preview-store';
 import {
   getSelectedAttachmentSizeLabel,
   getSelectedAttachmentTypeLabel,
 } from './attachment-upload.utils';
+import {
+  filterAttachmentFiles,
+  mergeAttachmentFiles,
+} from './attachment-upload-selection.utils';
+import { AttachmentUploadViewer } from './attachment-upload-viewer';
+import { AttachmentUploadUsage } from './attachment-upload-usage';
 
 /**
  * Handles attachment selection, preview generation and removal inside the task form.
@@ -60,14 +65,16 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   readonly trackSelectedFile = (_index: number, file: File) => this.previewStore.getFileKey(file);
   readonly getSelectedFileTypeLabel = getSelectedAttachmentTypeLabel;
   readonly getSelectedFileSizeLabel = getSelectedAttachmentSizeLabel;
-  currentAttachmentBytes = 0;
   isDragOver = false;
   showTypeError = false;
   private readonly taskAttachmentProcessingService = inject(TaskAttachmentProcessingService);
-  private attachmentViewerService = inject(TaskAttachmentViewerService);
-  private previewStore = new AttachmentUploadPreviewStore();
-  private attachmentViewer: Viewer | null = null;
-  private attachmentUsageRequestId = 0;
+  private readonly attachmentViewerService = inject(TaskAttachmentViewerService);
+  private readonly previewStore = new AttachmentUploadPreviewStore();
+  private readonly attachmentUsage = new AttachmentUploadUsage(
+    this.taskAttachmentProcessingService,
+    this.maxTaskAttachmentBytes,
+  );
+  private readonly attachmentViewer = new AttachmentUploadViewer(this.attachmentViewerService);
 
   /**
    * Human-readable usage label for the current task image payload.
@@ -75,9 +82,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns Current used megabytes relative to the 1 MB limit.
    */
   get attachmentUsageLabel(): string {
-    const usedMegabytes = this.formatMegabytes(this.currentAttachmentBytes);
-    const maxMegabytes = this.formatMegabytes(this.maxTaskAttachmentBytes);
-    return `${usedMegabytes} / ${maxMegabytes} MB used`;
+    return this.attachmentUsage.usageLabel;
   }
 
   /**
@@ -91,7 +96,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
     const existingAttachmentsChange = changes['existingAttachments'];
     if (!selectedFilesChange && !existingAttachmentsChange) return;
 
-    this.destroyAttachmentViewer();
+    this.attachmentViewer.destroy();
     this.syncPreviewUrlsWithSelectedFiles();
     void this.refreshAttachmentUsage();
     if (this.selectedFiles.length > 0) return;
@@ -106,7 +111,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns void
    */
   ngOnDestroy(): void {
-    this.destroyAttachmentViewer();
+    this.attachmentViewer.destroy();
     this.previewStore.clear();
   }
 
@@ -243,8 +248,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns void
    */
   openExistingAttachment(index: number): void {
-    this.initializeAttachmentViewer();
-    this.attachmentViewer?.view(index);
+    this.attachmentViewer.open(this.viewerGallery?.nativeElement, index);
   }
 
   /**
@@ -254,8 +258,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns void
    */
   openSelectedAttachment(index: number): void {
-    this.initializeAttachmentViewer();
-    this.attachmentViewer?.view(this.existingAttachments.length + index);
+    this.attachmentViewer.open(this.viewerGallery?.nativeElement, this.existingAttachments.length + index);
   }
 
   /**
@@ -266,9 +269,9 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    */
   private async addSelectedFiles(files: File[]): Promise<void> {
     if (!files.length) return;
-    const validFiles = this.extractValidFiles(files);
+    const validFiles = this.getValidFiles(files);
     if (!validFiles.length) return;
-    const mergedFiles = this.mergeSelectedFiles(validFiles);
+    const mergedFiles = this.getMergedFiles(validFiles);
     if (await this.hasExceededAttachmentLimit(mergedFiles)) return this.handleAttachmentLimitExceeded();
     this.applySelectedFiles(mergedFiles);
   }
@@ -280,13 +283,7 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @returns `true` when the persisted payload would exceed the allowed limit.
    */
   private async hasExceededAttachmentLimit(selectedFiles: File[]): Promise<boolean> {
-    const totalAttachmentBytes =
-      await this.taskAttachmentProcessingService.estimatePersistedAttachmentBytes(
-        this.existingAttachments,
-        selectedFiles
-      );
-
-    return totalAttachmentBytes > this.maxTaskAttachmentBytes;
+    return this.attachmentUsage.exceedsLimit(this.existingAttachments, selectedFiles);
   }
 
   /**
@@ -295,10 +292,10 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @param files Raw files from picker or dropzone.
    * @returns Supported files only.
    */
-  private extractValidFiles(files: File[]): File[] {
-    const validFiles = files.filter((file) => this.allowedMimeTypes.includes(file.type));
-    this.showTypeError = validFiles.length !== files.length;
-    return validFiles;
+  private getValidFiles(files: File[]): File[] {
+    const filterResult = filterAttachmentFiles(files, this.allowedMimeTypes);
+    this.showTypeError = filterResult.hasTypeError;
+    return filterResult.validFiles;
   }
 
   /**
@@ -307,33 +304,10 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
    * @param validFiles Supported files from the current interaction.
    * @returns Updated unique file list.
    */
-  private mergeSelectedFiles(validFiles: File[]): File[] {
-    const mergedFiles = [...this.selectedFiles];
-    validFiles.forEach((newFile) => this.appendUniqueFile(mergedFiles, newFile));
-    return mergedFiles;
-  }
-
-  /**
-   * Appends a file only when no matching file is already selected.
-   *
-   * @param files Current merged file list.
-   * @param candidateFile Candidate file to append.
-   * @returns void
-   */
-  private appendUniqueFile(files: File[], candidateFile: File): void {
-    if (this.hasMatchingFile(files, candidateFile)) return;
-    files.push(candidateFile);
-  }
-
-  /**
-   * Checks whether one file already exists in the current selection.
-   *
-   * @param files Current merged file list.
-   * @param candidateFile Candidate file to compare.
-   * @returns `true` when the file already exists.
-   */
-  private hasMatchingFile(files: File[], candidateFile: File): boolean {
-    return files.some((existingFile) => this.previewStore.getFileKey(existingFile) === this.previewStore.getFileKey(candidateFile));
+  private getMergedFiles(validFiles: File[]): File[] {
+    return mergeAttachmentFiles(this.selectedFiles, validFiles, (file) =>
+      this.previewStore.getFileKey(file)
+    );
   }
 
   /**
@@ -360,51 +334,12 @@ export class AttachmentUpload implements OnChanges, OnDestroy {
   }
 
   /**
-   * Creates or recreates the Viewer.js instance for the current attachment gallery.
-   *
-   * @returns void
-   */
-  private initializeAttachmentViewer(): void {
-    const galleryElement = this.viewerGallery?.nativeElement;
-    if (!galleryElement) return;
-
-    this.destroyAttachmentViewer();
-    this.attachmentViewer = this.attachmentViewerService.createViewer(galleryElement);
-  }
-
-  /**
-   * Destroys the current Viewer.js instance when thumbnails change or the component closes.
-   *
-   * @returns void
-   */
-  private destroyAttachmentViewer(): void {
-    this.attachmentViewer = this.attachmentViewerService.destroyViewer(this.attachmentViewer);
-  }
-
-  /**
    * Recalculates the persisted payload currently occupied by this task's images.
    *
    * @returns Promise that resolves after the latest usage estimate has been applied.
    */
   private async refreshAttachmentUsage(): Promise<void> {
-    const requestId = ++this.attachmentUsageRequestId;
-    const estimatedBytes = await this.taskAttachmentProcessingService.estimatePersistedAttachmentBytes(
-      this.existingAttachments,
-      this.selectedFiles
-    );
-
-    if (requestId !== this.attachmentUsageRequestId) return;
-    this.currentAttachmentBytes = estimatedBytes;
-  }
-
-  /**
-   * Formats one byte count as a megabyte string for the upload limit display.
-   *
-   * @param bytes Persisted base64 payload size.
-   * @returns Formatted megabyte string with two decimals.
-   */
-  private formatMegabytes(bytes: number): string {
-    return (bytes / this.maxTaskAttachmentBytes).toFixed(2);
+    await this.attachmentUsage.refresh(this.existingAttachments, this.selectedFiles);
   }
 
   /**
