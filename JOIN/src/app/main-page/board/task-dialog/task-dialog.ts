@@ -1,7 +1,6 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, ViewChild } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
-import { TaskService } from '../../../shared/services/task.service';
 import { ContactService } from '../../../shared/services/contact.service';
 import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
 import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
@@ -18,6 +17,7 @@ import {
 } from '../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
 import { TaskDialogUiState } from './task-dialog-ui-state';
+import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
 
 @Component({
   selector: 'app-task-dialog',
@@ -35,10 +35,10 @@ import { TaskDialogUiState } from './task-dialog-ui-state';
 export class TaskDialog implements OnDestroy {
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
-  taskService = inject(TaskService);
   contactService = inject(ContactService);
   attachmentViewerService = inject(TaskAttachmentViewerService);
   attachmentFileService = inject(TaskAttachmentActionService);
+  subtaskService = inject(TaskDialogSubtaskService);
   readonly getAttachmentFileName = getTaskAttachmentFileName;
   readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
   readonly isImageAttachment = isTaskAttachmentImage;
@@ -183,8 +183,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   toggleSubtask(index: number): void {
-    this.task.subtasks[index].done = !this.task.subtasks[index].done;
-    this.taskService.updateSubtasks(this.task);
+    this.subtaskService.toggleSubtask(this.task, index);
   }
 
   /**
