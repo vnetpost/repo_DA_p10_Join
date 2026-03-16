@@ -304,7 +304,7 @@ dialog {
   }
 
   .attachment-name {
-    @include styles.setFont($size: 0.8em, $weight: 400, $color: styles.$gray-dark);
+    @include styles.setFont($size: 1rem, $weight: 400, $color: styles.$gray-dark);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;

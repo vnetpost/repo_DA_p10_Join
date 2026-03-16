@@ -15,7 +15,7 @@
 }
 
 .file-upload__usage {
-  @include styles.setFont($size: 0.9em, $weight: 500, $color: styles.$blue-sky);
+  @include styles.setFont($size: 1rem, $weight: 500, $color: styles.$blue-sky);
   flex-shrink: 0;
 }
 
@@ -31,7 +31,7 @@
 
 .file-upload__delete-all {
   @include styles.setFlex($d: row, $ai: center, $jc: center, $gap: 0.4rem);
-  @include styles.setFont($size: 0.95em, $weight: 500, $color: styles.$gray-dark);
+  @include styles.setFont($size: 1rem, $weight: 500, $color: styles.$gray-dark);
   border: none;
   background-color: transparent;
   cursor: pointer;
@@ -180,7 +180,7 @@
 }
 
 .file-upload__thumb-name {
-  @include styles.setFont($size: 0.8em, $weight: 400, $color: styles.$gray-dark);
+  @include styles.setFont($size: 1rem, $weight: 400, $color: styles.$gray-dark);
   padding: 0.35rem 0.4rem 0.4rem;
   overflow: hidden;
   text-overflow: ellipsis;
