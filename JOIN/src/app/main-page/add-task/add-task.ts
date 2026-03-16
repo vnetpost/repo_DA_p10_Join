@@ -29,6 +29,10 @@ import {
   isAddTaskTitleValid,
   validateAddTaskForm,
 } from './add-task-validation.utils';
+import {
+  buildAddTaskPayload,
+  mapTaskToAddTaskFormState,
+} from './add-task-mapper.utils';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -214,12 +218,14 @@ export class AddTask implements OnChanges, OnDestroy {
       const assigneeIds = this.activeAssignees
         .map((contact) => contact.id)
         .filter((id): id is string => Boolean(id));
-      const taskPayload = this.buildTaskPayload(
+      const taskPayload = buildAddTaskPayload(
         title,
         description,
         dueDate,
+        this.activePriority,
         assigneeIds,
         validatedCategory,
+        this.activeSubtasks,
         attachments,
       );
 
@@ -284,67 +290,26 @@ export class AddTask implements OnChanges, OnDestroy {
    * @param task Task entity that should be edited.
    */
   private populateFormForEdit(task: Task): void {
-    this.taskTitle = task.title;
-    this.taskDescription = task.description;
-    this.taskDueDate = this.formatDateForInput(task.dueDate.toDate());
-    this.activePriority = task.priority;
-    this.activeAssignees = task.assignees
-      .map((id) => this.contactService.findContactById(id))
-      .filter((contact): contact is Contact => Boolean(contact));
-    this.activeCategory =
-      this.taskService.taskCategories.find((category) => category.value === task.category) ?? null;
-    this.activeSubtasks = task.subtasks.map((subtask) => ({ ...subtask }));
-    this.editableExistingAttachments = (task.attachments ?? []).map((attachment) => ({
-      ...attachment,
-    }));
+    const formState = mapTaskToAddTaskFormState(
+      task,
+      this.contactService.contacts,
+      this.taskService.taskCategories
+    );
+
+    this.taskTitle = formState.taskTitle;
+    this.taskDescription = formState.taskDescription;
+    this.taskDueDate = formState.taskDueDate;
+    this.activePriority = formState.activePriority;
+    this.activeAssignees = formState.activeAssignees;
+    this.activeCategory = formState.activeCategory;
+    this.activeSubtasks = formState.activeSubtasks;
+    this.editableExistingAttachments = formState.editableExistingAttachments;
     this.selectedAttachments = [];
     this.attachmentUploadError = '';
     this.isTitleTouched = false;
     this.isDueDateTouched = false;
     this.isCategoryTouched = false;
     this.resetDirtyState();
-  }
-
-  /**
-   * Converts a `Date` to the form input format `YYYY/MM/DD`.
-   * @param date Source date object.
-   * @returns Date string formatted for form controls.
-   */
-  private formatDateForInput(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}/${month}/${day}`;
-  }
-
-  /**
-   * Creates the shared task payload for create and update workflows.
-   * @param title Normalized task title.
-   * @param description Normalized task description.
-   * @param dueDate Due date timestamp.
-   * @param assignees Contact IDs assigned to the task.
-   * @param category Validated task category.
-   * @param attachments Uploaded attachments for the task.
-   * @returns Base payload used for both create and update operations.
-   */
-  private buildTaskPayload(
-    title: Task['title'],
-    description: Task['description'],
-    dueDate: Timestamp,
-    assignees: Array<string>,
-    category: Task['category'],
-    attachments: TaskAttachment[],
-  ): Omit<Task, 'id' | 'status' | 'order'> {
-    return {
-      title,
-      description,
-      dueDate,
-      priority: this.activePriority,
-      assignees,
-      category,
-      subtasks: [...this.activeSubtasks],
-      attachments,
-    };
   }
 
   /**
