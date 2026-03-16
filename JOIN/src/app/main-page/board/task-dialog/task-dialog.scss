@@ -81,6 +81,25 @@ dialog {
   }
 }
 
+.header .close-btn,
+footer button {
+  background-color: transparent;
+
+  .icon--hover {
+    display: none;
+  }
+
+  &:hover {
+    .icon--default {
+      display: none;
+    }
+
+    .icon--hover {
+      display: block;
+    }
+  }
+}
+
 .header {
   @include styles.setFlex($jc: space-between);
 
@@ -107,27 +126,12 @@ dialog {
 
   .close-btn {
     @include styles.setFlex();
-    background-color: transparent;
     width: 32px;
     height: 32px;
 
     .icon {
       width: 24px;
       height: 24px;
-    }
-
-    .icon--hover {
-      display: none;
-    }
-
-    &:hover {
-      .icon--default {
-        display: none;
-      }
-
-      .icon--hover {
-        display: block;
-      }
     }
   }
 }
@@ -473,7 +477,6 @@ footer {
 
   button {
     @include styles.setFlex($gap: 4px);
-    background-color: transparent;
     color: #2a3647;
 
     @include styles.up-xxl {
@@ -485,20 +488,8 @@ footer {
       height: 22px;
     }
 
-    .icon--hover {
-      display: none;
-    }
-
     &:hover {
       color: styles.$blue-sky;
-
-      .icon--default {
-        display: none;
-      }
-
-      .icon--hover {
-        display: block;
-      }
     }
   }
 
