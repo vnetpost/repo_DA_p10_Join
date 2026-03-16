@@ -1,9 +1,9 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Timestamp } from '@angular/fire/firestore';
 import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
 import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
+import { ContactAvatarProcessingService } from './contact-avatar-processing.service';
 
 interface ContactDialogSnapshot {
   name: string;
@@ -33,16 +33,13 @@ export class ContactDialog {
   @Input() canUploadAvatar = false;
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
+  private readonly contactAvatarProcessingService = inject(ContactAvatarProcessingService);
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
   showCloseConfirm: boolean = false;
   isSubmitting: boolean = false;
   avatar: ContactAvatar | null = null;
   avatarPreviewSrc: string | null = null;
-  readonly avatarAllowedMimeTypes = ['image/jpeg', 'image/png'];
-  readonly avatarMaxWidth = 800;
-  readonly avatarMaxHeight = 800;
-  readonly avatarQuality = 0.8;
 
   @Output() saveContact = new EventEmitter<ContactFormData>();
   // @Output() deleteContact = new EventEmitter<string>();
@@ -310,144 +307,17 @@ export class ContactDialog {
     const file = target.files?.[0];
     if (!file) return;
 
-    if (!this.avatarAllowedMimeTypes.includes(file.type)) {
+    if (!this.contactAvatarProcessingService.isAllowedMimeType(file.type)) {
       if (this.avatarInput) this.avatarInput.nativeElement.value = '';
       return;
     }
 
-    const compressedDataUrl = await this.compressImage(
-      file,
-      this.avatarMaxWidth,
-      this.avatarMaxHeight,
-      this.avatarQuality,
-    );
-    const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
-    const dataUrl = compressedDataUrl ?? fallbackDataUrl;
-    if (!dataUrl) return;
+    const processedAvatar = await this.contactAvatarProcessingService.processAvatar(file);
+    if (!processedAvatar) return;
 
-    const base64 = this.extractBase64FromDataUrl(dataUrl);
-    if (!base64) return;
-
-    const fileType = this.extractMimeTypeFromDataUrl(dataUrl) || file.type || 'image/jpeg';
-    const fileName = this.buildFileNameForMimeType(file.name || 'avatar.jpg', fileType);
-
-    this.avatar = {
-      fileName,
-      fileType,
-      base64Size: base64.length,
-      base64,
-      uploadedAt: Timestamp.now(),
-    };
-    this.avatarPreviewSrc = `data:${fileType};base64,${base64}`;
+    this.avatar = processedAvatar.avatar;
+    this.avatarPreviewSrc = processedAvatar.previewSrc;
     if (this.avatarInput) this.avatarInput.nativeElement.value = '';
-  }
-
-  /**
-   * Reads a file and returns a Base64 data URL.
-   *
-   * @param file Selected file.
-   * @returns Promise resolving to data URL or `null`.
-   */
-  private readFileAsDataUrl(file: File): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(typeof reader.result === 'string' ? reader.result : null);
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
-  }
-
-  /**
-   * Compresses an image file while keeping aspect ratio.
-   * Returns a JPEG data URL.
-   */
-  private compressImage(
-    file: File,
-    maxWidth = 800,
-    maxHeight = 800,
-    quality = 0.8,
-  ): Promise<string | null> {
-    return new Promise((resolve) => {
-      const reader = new FileReader();
-
-      reader.onload = (event) => {
-        const result = event.target?.result;
-        if (typeof result !== 'string') {
-          resolve(null);
-          return;
-        }
-
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          if (!ctx) {
-            resolve(null);
-            return;
-          }
-
-          let width = img.width;
-          let height = img.height;
-
-          if (width > maxWidth || height > maxHeight) {
-            if (width > height) {
-              height = (height * maxWidth) / width;
-              width = maxWidth;
-            } else {
-              width = (width * maxHeight) / height;
-              height = maxHeight;
-            }
-          }
-
-          canvas.width = Math.round(width);
-          canvas.height = Math.round(height);
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          resolve(canvas.toDataURL('image/jpeg', quality));
-        };
-
-        img.onerror = () => resolve(null);
-        img.src = result;
-      };
-
-      reader.onerror = () => resolve(null);
-      reader.readAsDataURL(file);
-    });
-  }
-
-  /**
-   * Extracts MIME type from a data URL header.
-   *
-   * @param dataUrl Data URL string.
-   * @returns MIME type or empty string.
-   */
-  private extractMimeTypeFromDataUrl(dataUrl: string): string {
-    const mimeMatch = dataUrl.match(/^data:([^;]+);base64,/i);
-    return mimeMatch?.[1]?.trim() || '';
-  }
-
-  /**
-   * Extracts pure base64 payload from a data URL.
-   *
-   * @param dataUrl Data URL string.
-   * @returns Raw base64 value.
-   */
-  private extractBase64FromDataUrl(dataUrl: string): string {
-    const separatorIndex = dataUrl.indexOf(',');
-    if (separatorIndex === -1) return dataUrl;
-    return dataUrl.slice(separatorIndex + 1);
-  }
-
-  /**
-   * Adapts filename extension to the resulting mime type.
-   */
-  private buildFileNameForMimeType(fileName: string, mimeType: string): string {
-    const lastDotIndex = fileName.lastIndexOf('.');
-    const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
-
-    if (mimeType === 'image/jpeg') return `${baseName}.jpg`;
-    if (mimeType === 'image/png') return `${baseName}.png`;
-    return fileName;
   }
 
   /**
