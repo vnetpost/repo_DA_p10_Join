@@ -1,0 +1,17 @@
+@use "../../../styles/index.scss" as styles;
+
+.mobile-greeting-overlay {
+  position: fixed;
+  inset: 0;
+  @include styles.setFlex();
+  background-color: #f6f7f8;
+  z-index: 8;
+  animation-name: fadeInOut;
+  animation-duration: 2s;
+  animation-timing-function: ease;
+  animation-fill-mode: forwards;
+
+  @include styles.up-xxl {
+    display: none;
+  }
+}

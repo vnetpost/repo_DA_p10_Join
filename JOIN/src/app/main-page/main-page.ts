@@ -2,17 +2,23 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
-import { AuthService } from '../shared/services/auth.service';
-import { AsyncPipe } from '@angular/common';
-import { getGreeting } from '../shared/utilities/utils';
 import { MainPageUiState } from './main-page-ui-state';
 import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
 import { LoginFormCard } from './login-form-card/login-form-card';
 import { SignupFormCard } from './signup-form-card/signup-form-card';
+import { MainPageBranding } from './main-page-branding/main-page-branding';
+import { MainPageMobileGreeting } from './main-page-mobile-greeting/main-page-mobile-greeting';
 
 @Component({
   selector: 'app-main-page',
-  imports: [RouterLink, FormsModule, AsyncPipe, LoginFormCard, SignupFormCard],
+  imports: [
+    RouterLink,
+    FormsModule,
+    LoginFormCard,
+    SignupFormCard,
+    MainPageBranding,
+    MainPageMobileGreeting,
+  ],
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss',
 })
@@ -25,10 +31,8 @@ import { SignupFormCard } from './signup-form-card/signup-form-card';
  * and introductory animations.
  */
 export class MainPage implements OnInit, OnDestroy {
-  authService = inject(AuthService);
   router = inject(Router);
   private readonly mainPageAuthSubmitService = inject(MainPageAuthSubmitService);
-  user$ = this.authService.user$;
 
   showSignUp: boolean = false;
   isLoggingIn: boolean = false;
@@ -344,26 +348,4 @@ export class MainPage implements OnInit, OnDestroy {
     this.uiState.showToast();
   }
 
-  /**
-   * Returns a contextual greeting message.
-   *
-   * @returns The greeting string
-   */
-  get greeting(): string {
-    return getGreeting();
-  }
-
-  /**
-   * Resolves the display name that belongs to the authenticated email address.
-   *
-   * @param userEmail The email address of the active user.
-   * @returns The matching contact name or an empty string when none is found.
-   */
-  getGreetingName(userEmail: string | null | undefined): string {
-    const email = userEmail?.trim().toLowerCase();
-    const contact = this.authService.contactService.contacts.find(
-      (item) => item.email?.trim().toLowerCase() === email,
-    );
-    return contact?.name ?? '';
-  }
 }

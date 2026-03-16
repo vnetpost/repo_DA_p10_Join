@@ -1,0 +1,12 @@
+<aside class="mobile-greeting-overlay">
+  @if (user$ | async; as user) {
+    <section class="good-day-message">
+      @if (user.isAnonymous) {
+        <p>{{ greeting }}!</p>
+      } @else {
+        <p>{{ greeting }},</p>
+        <p class="user-name">{{ getGreetingName(user.email) }}</p>
+      }
+    </section>
+  }
+</aside>

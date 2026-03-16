@@ -1,0 +1,8 @@
+<header class="logo" [class.logo--move]="logoMoving">
+  <img class="logo-dark" src="assets/img/icons/logo-dark.svg" alt="Join logo" />
+  <img class="logo-light" src="assets/img/icons/logo-light.svg" alt="Join logo" aria-hidden="true" />
+</header>
+
+@if (introActive) {
+  <aside class="intro-overlay" aria-hidden="true"></aside>
+}

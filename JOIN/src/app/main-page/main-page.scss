@@ -27,82 +27,6 @@
   }
 }
 
-.logo{
-  grid-area: 1/1/2/2;
-  @include styles.setGrid();
-  padding-left: 16px;
-  z-index: 11;
-  
-  @include styles.up-xxl{
-    grid-area: 1/1/4/2;
-    padding-left: 0;
-    padding-top: 2rem;
-  }
-
-  img{
-    grid-area: 1/1/2/2;
-    width: 64px;
-    transition-property: transform, opacity;
-    transition-duration: 1.2s, 0.4s;
-    transition-timing-function: ease, ease;
-    transition-delay: 0s, 0s;
-    transform: translate(34dvw, 40dvh) scale(1.6);
-
-    @include styles.up-xxl{
-      width: 100px;
-      transform: translate(40dvw, 33dvh) scale(1.6);
-    }
-
-    @media(max-width: 400px){
-      width: 45px;
-    }
-  }
-}
-
-.logo-dark{
-  display: block;
-}
-
-.logo-light{
-  display: block;
-
-  @include styles.up-xxl{
-    display: none;
-  }
-}
-
-.logo--move {
-  img {
-    transform: none;
-  }
-
-  .logo-light{
-    opacity: 0;
-    transition-delay: 0.6s;
-  }
-
-  .logo-dark{
-    opacity: 1;
-    transition-delay: 0.6s;
-  }
-}
-
-.intro-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: styles.$gray-dark;
-  animation-name: overlayFade;
-  animation-delay: 1s;
-  animation-duration: 0.6s;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease;
-  z-index: 10;
-
-  @include styles.up-xxl{
-    background-color: white;
-  }
-}
-
 .sign-up-option{
   grid-area: 3/1/4/2;
   @include styles.setFlex($gap: 28px);
@@ -150,21 +74,5 @@ footer{
       color: styles.$blue-sky;
       font-weight: 600;
     }
-  }
-}
-
-.mobile-greeting-overlay{
-  position: fixed;
-  inset: 0;
-  @include styles.setFlex();
-  background-color: #f6f7f8;
-  z-index: 8;
-  animation-name: fadeInOut;
-  animation-duration: 2s;
-  animation-timing-function: ease;
-  animation-fill-mode: forwards;
-
-  @include styles.up-xxl{
-    display: none;
   }
 }
