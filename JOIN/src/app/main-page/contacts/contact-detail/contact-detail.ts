@@ -8,11 +8,11 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
-import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
+import { ContactDetailProfile } from './contact-detail-profile/contact-detail-profile';
 
 @Component({
   selector: 'app-contact-detail',
-  imports: [],
+  imports: [ContactDetailProfile],
   templateUrl: './contact-detail.html',
   styleUrl: './contact-detail.scss',
 })
@@ -32,9 +32,6 @@ export class ContactDetail implements OnChanges {
   fabMenuOpen: boolean = false;
   profileAnimating: boolean = false;
   showDeleteConfirm: boolean = false;
-
-  readonly getTwoInitials = getTwoInitials;
-  readonly getContactAvatarSrc = getContactAvatarSrc;
 
   hasPhoneNumber(phone: Contact['phone'] | null | undefined): boolean {
     return String(phone ?? '').trim().length > 0;

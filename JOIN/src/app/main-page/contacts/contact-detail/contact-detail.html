@@ -13,43 +13,13 @@
     <article
       class="contact-info__profile"
       [class.contact-info__profile--animating]="profileAnimating"
-      >
-      <section class="contact-info__main">
-        <figure
-          class="contact-info__avatar"
-          [style.backgroundColor]="getContactAvatarSrc(activeContact) ? null : activeContact.userColor"
-          aria-hidden="true"
-        >
-          @if (getContactAvatarSrc(activeContact); as avatarSrc) {
-            <img class="contact-info__avatar-image" [src]="avatarSrc" alt="Contact avatar image" aria-hidden="true" />
-          } @else {
-            <span class="contact-info__initials">{{ getTwoInitials(activeContact.name) }}</span>
-          }
-        </figure>
-        <section class="contact-info__identity">
-          <h2 class="contact-info__name">{{ activeContact.name }}</h2>
-          <nav class="contact-info__actions" aria-label="Contact actions">
-            <button class="contact-info__action" type="button" (click)="editContact.emit()">
-              <img
-                class="contact-info__action-icon"
-                src="assets/img/icons/buttons/edit.svg" alt="Edit icon"
-                aria-hidden="true"
-              />
-              <span>Edit</span>
-            </button>
-            @if (canDelete) {
-              <button class="contact-info__action" type="button" (click)="requestDelete.emit()">
-                <img
-                  class="contact-info__action-icon"
-                  src="assets/img/icons/buttons/delete.svg" alt="Delete icon"
-                  aria-hidden="true"
-                />
-                <span>Delete</span>
-              </button>
-            }
-          </nav>
-        </section>
-      </section>
+    >
+      <app-contact-detail-profile
+        [contact]="activeContact"
+        [canDelete]="canDelete"
+        (editContact)="editContact.emit()"
+        (requestDelete)="requestDelete.emit()"
+      ></app-contact-detail-profile>
       <section class="contact-info__details">
         <h3 class="contact-info__section-title">Contact Information</h3>
         <article class="contact-info__detail">
