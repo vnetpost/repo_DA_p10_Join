@@ -38,6 +38,18 @@ body:has(.toast-wrapper--blocking.toast-wrapper--active) {
   overflow: hidden;
 }
 
+.viewer-download::before {
+  content: 'Download';
+  display: block;
+  width: 20px;
+  height: 20px;
+  font-size: 0;
+  line-height: 0;
+  background-color: #fff;
+  -webkit-mask: url('/assets/img/icons/buttons/download.svg') center / 18px 18px no-repeat;
+  mask: url('/assets/img/icons/buttons/download.svg') center / 18px 18px no-repeat;
+}
+
 // #region Button styles
 button {
   padding: 8px;

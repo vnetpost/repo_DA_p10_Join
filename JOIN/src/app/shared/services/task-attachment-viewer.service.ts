@@ -17,8 +17,9 @@ export class TaskAttachmentViewerService {
    */
   createViewer(galleryElement: HTMLElement, preferredContainer?: HTMLElement | null): Viewer {
     const viewerService = this;
+    let viewerInstance: Viewer;
 
-    return new Viewer(galleryElement, {
+    viewerInstance = new Viewer(galleryElement, {
       button: true,
       container: this.resolveContainer(galleryElement, preferredContainer),
       fullscreen: true,
@@ -32,12 +33,31 @@ export class TaskAttachmentViewerService {
           return viewerService.buildViewerTitle(this);
         },
       ],
-      toolbar: true,
+      toolbar: {
+        'zoom-in': true,
+        'zoom-out': true,
+        'one-to-one': true,
+        reset: true,
+        prev: true,
+        play: true,
+        next: true,
+        download: {
+          show: true,
+          size: 'small',
+          click: () => viewerService.downloadCurrentImage(viewerInstance),
+        },
+        'rotate-left': true,
+        'rotate-right': true,
+        'flip-horizontal': true,
+        'flip-vertical': true,
+      },
       tooltip: true,
       transition: true,
       zIndex: 4000,
       zoomable: true,
     });
+
+    return viewerInstance;
   }
 
   /**
@@ -82,5 +102,27 @@ export class TaskAttachmentViewerService {
     const metadataParts = [fileType, fileSize].filter(Boolean);
     if (!metadataParts.length) return fileName;
     return `${fileName} • ${metadataParts.join(' • ')}`;
+  }
+
+  /**
+   * Downloads the attachment currently shown inside Viewer.js.
+   *
+   * @param viewer Current Viewer.js instance.
+   * @returns void
+   */
+  private downloadCurrentImage(viewer: Viewer & { images?: HTMLImageElement[]; index?: number }): void {
+    const sourceImage = viewer.images?.[viewer.index ?? 0];
+    const downloadUrl = sourceImage?.currentSrc || sourceImage?.src;
+    if (!downloadUrl) return;
+
+    const fileName = sourceImage?.dataset['fileName']?.trim() || sourceImage?.alt?.trim() || 'attachment';
+    const documentRef = sourceImage?.ownerDocument || document;
+    const link = documentRef.createElement('a');
+
+    link.href = downloadUrl;
+    link.download = fileName;
+    link.target = '_blank';
+    link.rel = 'noopener noreferrer';
+    link.click();
   }
 }
