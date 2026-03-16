@@ -1,140 +1,147 @@
 @if(task){
   <dialog #taskDialog (cancel)="onEsc($event)" (mousedown)="onBackdropClick($event)" role="dialog" aria-labelledby="task-dialog-title">
   <article class="dialog-content">
-    <header class="header">
-      <p class="category" [ngClass]="task.category">
-        {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
-      </p>
-      <button class="close-btn" (click)="closeDialog()" aria-label="Close dialog">
-        <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="Close icon" aria-hidden="true">
-        <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="Close icon" aria-hidden="true">
-      </button>
-    </header>
+    <section class="dialog-top">
+      <header class="header">
+        <p class="category" [ngClass]="task.category">
+          {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
+        </p>
+        <button class="close-btn" (click)="closeDialog()" aria-label="Close dialog">
+          <img class="icon icon--default" src="assets/img/icons/buttons/close.svg" alt="Close icon" aria-hidden="true">
+          <img class="icon icon--hover" src="assets/img/icons/buttons/close-hover.svg" alt="Close icon" aria-hidden="true">
+        </button>
+      </header>
 
-    <section class="topic">
-      <h2 class="title" id="task-dialog-title">{{ task.title }}</h2>
-      <p class="description">
-        {{ task.description }}
-      </p>
+      <section class="topic">
+        <h2 class="title" id="task-dialog-title">{{ task.title }}</h2>
+      </section>
     </section>
 
-    <section class="due-date">
-      <p class="subtitle">Due date:</p>
-      <p>{{ task.dueDate.toDate() | date:'dd/MM/yyyy' }}</p>
-    </section>
+    <section class="dialog-body">
+      <section class="topic topic--body">
+        <p class="description">
+          {{ task.description }}
+        </p>
+      </section>
 
-    <section class="priority">
-      <p class="subtitle">Priority:</p>
+      <section class="due-date">
+        <p class="subtitle">Due date:</p>
+        <p>{{ task.dueDate.toDate() | date:'dd/MM/yyyy' }}</p>
+      </section>
 
-      <p>
-        @if (task.priority === "low") {
-          <span>Low</span>
-          <img class="priority-icon" src="assets/img/icons/priority/priority-low.svg" alt="Low priority">
-        } @else if (task.priority === "medium") {
-          <span>Medium</span>
-          <img class="priority-icon" src="assets/img/icons/priority/priority-medium.svg" alt="Medium priority">
-        } @else if (task.priority === "high") {
-          <span>High</span>
-          <img class="priority-icon" src="assets/img/icons/priority/priority-high.svg" alt="High priority">
-        }
-      </p>
-    </section>
+      <section class="priority">
+        <p class="subtitle">Priority:</p>
 
-    @if (attachments.length > 0) {
-      <section class="attachments">
-        <p class="subtitle">Attachments:</p>
-
-        <section class="attachment-list scroll-shadows" aria-label="Task attachments">
-          @for (attachment of attachments; track $index) {
-            <article class="attachment-card">
-              <section class="attachment-preview">
-                <button
-                  type="button"
-                  class="attachment-preview-open"
-                  (click)="openAttachment(attachment)"
-                  [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
-                >
-                  <img
-                    class="attachment-thumbnail"
-                    [src]="getAttachmentPreviewSrc(attachment)"
-                    [alt]="getAttachmentFileName(attachment, $index)"
-                  />
-                </button>
-                <button
-                  type="button"
-                  class="attachment-preview-download"
-                  (click)="downloadAttachment(attachment, $index)"
-                  [attr.aria-label]="'Download ' + getAttachmentFileName(attachment, $index)"
-                >
-                  <img
-                    class="icon"
-                    src="assets/img/icons/buttons/download.svg"
-                    alt="Download icon"
-                    aria-hidden="true"
-                  />
-                </button>
-              </section>
-
-              <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
-            </article>
+        <p>
+          @if (task.priority === "low") {
+            <span>Low</span>
+            <img class="priority-icon" src="assets/img/icons/priority/priority-low.svg" alt="Low priority">
+          } @else if (task.priority === "medium") {
+            <span>Medium</span>
+            <img class="priority-icon" src="assets/img/icons/priority/priority-medium.svg" alt="Medium priority">
+          } @else if (task.priority === "high") {
+            <span>High</span>
+            <img class="priority-icon" src="assets/img/icons/priority/priority-high.svg" alt="High priority">
           }
+        </p>
+      </section>
+
+      @if (attachments.length > 0) {
+        <section class="attachments">
+          <p class="subtitle">Attachments:</p>
+
+          <section class="attachment-list scroll-shadows" aria-label="Task attachments">
+            @for (attachment of attachments; track $index) {
+              <article class="attachment-card">
+                <section class="attachment-preview">
+                  <button
+                    type="button"
+                    class="attachment-preview-open"
+                    (click)="openAttachment(attachment)"
+                    [attr.aria-label]="'Open preview for ' + getAttachmentFileName(attachment, $index)"
+                  >
+                    <img
+                      class="attachment-thumbnail"
+                      [src]="getAttachmentPreviewSrc(attachment)"
+                      [alt]="getAttachmentFileName(attachment, $index)"
+                    />
+                  </button>
+                  <button
+                    type="button"
+                    class="attachment-preview-download"
+                    (click)="downloadAttachment(attachment, $index)"
+                    [attr.aria-label]="'Download ' + getAttachmentFileName(attachment, $index)"
+                  >
+                    <img
+                      class="icon"
+                      src="assets/img/icons/buttons/download.svg"
+                      alt="Download icon"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </section>
+
+                <p class="attachment-name">{{ getAttachmentFileName(attachment, $index) }}</p>
+              </article>
+            }
+          </section>
+
+          <section class="attachment-viewer-gallery" #attachmentViewerGallery aria-hidden="true">
+            @for (attachment of previewableAttachments; track $index) {
+              <img
+                [src]="getAttachmentPreviewSrc(attachment)"
+                [alt]="getAttachmentFileName(attachment, $index)"
+              />
+            }
+          </section>
         </section>
+      }
 
-        <section class="attachment-viewer-gallery" #attachmentViewerGallery aria-hidden="true">
-          @for (attachment of previewableAttachments; track $index) {
-            <img
-              [src]="getAttachmentPreviewSrc(attachment)"
-              [alt]="getAttachmentFileName(attachment, $index)"
-            />
-          }
+      @if (task.assignees.length > 0){
+        <section class="assignees">
+          <p class="subtitle">Assigned To:</p>
+
+          <ul class="assignee-list scroll-shadows" aria-label="Assignees">
+            @for (assignee of task.assignees; track $index) {
+              <li class="assignee-item">
+                <span
+                  class="initials"
+                  [style.backgroundColor]="getAssigneeAvatarSrc(assignee) ? null : getUserColor(assignee)"
+                  aria-label="Assigned to {{ getAssigneeName(assignee) }}"
+                >
+                  @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
+                    <img class="assignee-avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
+                  } @else {
+                    {{ getAssigneeInitials(assignee) }}
+                  }
+                </span>
+                <p class="name">
+                  {{ getAssigneeName(assignee) }}
+                </p>
+              </li>
+            }
+          </ul>
         </section>
-      </section>
-    }
-    
-    @if (task.assignees.length > 0){
-      <section class="assignees">
-        <p class="subtitle">Assigned To:</p>
-  
-        <ul class="assignee-list scroll-shadows" aria-label="Assignees">
-          @for (assignee of task.assignees; track $index) {
-            <li class="assignee-item">
-              <span
-                class="initials"
-                [style.backgroundColor]="getAssigneeAvatarSrc(assignee) ? null : getUserColor(assignee)"
-                aria-label="Assigned to {{ getAssigneeName(assignee) }}"
-              >
-                @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
-                  <img class="assignee-avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
-                } @else {
-                  {{ getAssigneeInitials(assignee) }}
-                }
-              </span>
-              <p class="name">
-                {{ getAssigneeName(assignee) }}
-              </p>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+      }
 
-    @if (task.subtasks.length > 0) {
-      <section class="subtasks">
-        <p class="subtitle">Subtasks:</p>
-  
-        <ul class="subtask-list scroll-shadows">
-          @for (subtask of task.subtasks; track $index) {
-            <li>
-              <label class="checkbox-wrapper">
-                <input class="checkbox" type="checkbox" [checked]="subtask.done" (change)="toggleSubtask($index)">
-                <span class="checkbox-ui"></span>
-                <span class="subtask-title" id="subtask-{{$index}}">{{ subtask.title }}</span>
-              </label>
-            </li>
-          }
-        </ul>
-      </section>
-    }
+      @if (task.subtasks.length > 0) {
+        <section class="subtasks">
+          <p class="subtitle">Subtasks:</p>
+
+          <ul class="subtask-list scroll-shadows">
+            @for (subtask of task.subtasks; track $index) {
+              <li>
+                <label class="checkbox-wrapper">
+                  <input class="checkbox" type="checkbox" [checked]="subtask.done" (change)="toggleSubtask($index)">
+                  <span class="checkbox-ui"></span>
+                  <span class="subtask-title" id="subtask-{{$index}}">{{ subtask.title }}</span>
+                </label>
+              </li>
+            }
+          </ul>
+        </section>
+      }
+    </section>
 
     <footer>
       <button type="button" (click)="onDeleteClick()">
