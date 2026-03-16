@@ -2,8 +2,6 @@ import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, 
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { ContactService } from '../../../shared/services/contact.service';
-import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
-import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
 import {
   getContactDisplayAvatarSrcById,
   getContactDisplayColorById,
@@ -18,6 +16,7 @@ import {
 import type Viewer from 'viewerjs';
 import { TaskDialogUiState } from './task-dialog-ui-state';
 import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
+import { TaskDialogAttachmentService } from './task-dialog-attachment.service';
 
 @Component({
   selector: 'app-task-dialog',
@@ -36,9 +35,8 @@ export class TaskDialog implements OnDestroy {
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
   contactService = inject(ContactService);
-  attachmentViewerService = inject(TaskAttachmentViewerService);
-  attachmentFileService = inject(TaskAttachmentActionService);
   subtaskService = inject(TaskDialogSubtaskService);
+  attachmentService = inject(TaskDialogAttachmentService);
   readonly getAttachmentFileName = getTaskAttachmentFileName;
   readonly getAttachmentPreviewSrc = getTaskAttachmentPreviewSrc;
   readonly isImageAttachment = isTaskAttachmentImage;
@@ -193,13 +191,13 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   openAttachment(attachment: TaskAttachment): void {
-    const viewerIndex = this.previewableAttachments.indexOf(attachment);
-    if (viewerIndex !== -1) {
-      this.initializeAttachmentViewer();
-      this.attachmentViewer?.view(viewerIndex);
-      return;
-    }
-    this.attachmentFileService.openAttachment(attachment);
+    this.attachmentViewer = this.attachmentService.openAttachment(
+      attachment,
+      this.previewableAttachments,
+      this.attachmentViewer,
+      this.attachmentViewerGallery?.nativeElement,
+      this.dialog?.nativeElement
+    );
   }
 
   /**
@@ -210,8 +208,7 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   downloadAttachment(attachment: TaskAttachment, index: number): void {
-    const fileName = this.getAttachmentFileName(attachment, index);
-    this.attachmentFileService.downloadAttachment(attachment, fileName);
+    this.attachmentService.downloadAttachment(attachment, index);
   }
 
   /**
@@ -220,15 +217,12 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   private initializeAttachmentViewer(): void {
-    const galleryElement = this.attachmentViewerGallery?.nativeElement;
-    const dialogElement = this.dialog?.nativeElement;
-    if (!galleryElement || !this.previewableAttachments.length) {
-      this.destroyAttachmentViewer();
-      return;
-    }
-
-    this.destroyAttachmentViewer();
-    this.attachmentViewer = this.attachmentViewerService.createViewer(galleryElement, dialogElement);
+    this.attachmentViewer = this.attachmentService.initializeViewer(
+      this.attachmentViewer,
+      this.previewableAttachments,
+      this.attachmentViewerGallery?.nativeElement,
+      this.dialog?.nativeElement
+    );
   }
 
   /**
@@ -237,6 +231,6 @@ export class TaskDialog implements OnDestroy {
    * @returns void
    */
   private destroyAttachmentViewer(): void {
-    this.attachmentViewer = this.attachmentViewerService.destroyViewer(this.attachmentViewer);
+    this.attachmentViewer = this.attachmentService.destroyViewer(this.attachmentViewer);
   }
 }
