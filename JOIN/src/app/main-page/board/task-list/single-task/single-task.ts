@@ -1,9 +1,9 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Task } from '../../../../shared/interfaces/task';
-import { FirebaseService } from '../../../../shared/services/firebase-service';
+import { FirebaseService } from '../../../../shared/services/firebase.service';
 import { getContactAvatarSrc, getTwoInitials } from '../../../../shared/utilities/utils';
 import { NgClass } from '@angular/common';
-import { TaskService } from '../../../../shared/services/task-service';
+import { TaskService } from '../../../../shared/services/task.service';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({

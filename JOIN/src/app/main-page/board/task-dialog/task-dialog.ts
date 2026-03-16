@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, ViewChild } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
-import { TaskService } from '../../../shared/services/task-service';
-import { FirebaseService } from '../../../shared/services/firebase-service';
+import { TaskService } from '../../../shared/services/task.service';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
 import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
 import {

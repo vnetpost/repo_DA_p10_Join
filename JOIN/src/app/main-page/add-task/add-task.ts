@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
 import { Subtask, Task, TaskAttachment } from '../../shared/interfaces/task';
-import { TaskCategoryOption, TaskService } from '../../shared/services/task-service';
+import { TaskCategoryOption, TaskService } from '../../shared/services/task.service';
 import { DropdownAssignee } from './dropdown-assignee/dropdown-assignee';
 import { DropdownCategory } from './dropdown-category/dropdown-category';
 import { PrioritySelector } from './priority-selector/priority-selector';
@@ -21,7 +21,7 @@ import { TaskFormField } from './task-form-field/task-form-field';
 import { AttachmentUpload } from './attachment-upload/attachment-upload';
 import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
-import { FirebaseService } from '../../shared/services/firebase-service';
+import { FirebaseService } from '../../shared/services/firebase.service';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.

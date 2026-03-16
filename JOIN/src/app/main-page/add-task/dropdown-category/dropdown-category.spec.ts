@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { DropdownCategory } from './dropdown-category';
-import { TaskService } from '../../../shared/services/task-service';
+import { TaskService } from '../../../shared/services/task.service';
 
 describe('DropdownCategory', () => {
   let component: DropdownCategory;

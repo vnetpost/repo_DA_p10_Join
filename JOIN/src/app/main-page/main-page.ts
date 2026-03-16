@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FirebaseService } from '../shared/services/firebase-service';
+import { FirebaseService } from '../shared/services/firebase.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';

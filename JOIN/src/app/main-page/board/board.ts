@@ -1,6 +1,6 @@
 import { Component, HostListener, inject, ViewChild } from '@angular/core';
 import { TaskList } from './task-list/task-list';
-import { TaskService } from '../../shared/services/task-service';
+import { TaskService } from '../../shared/services/task.service';
 import { Timestamp } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
 import { TaskDialog } from './task-dialog/task-dialog';

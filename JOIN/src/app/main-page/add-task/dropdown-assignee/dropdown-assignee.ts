@@ -8,7 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
-import { FirebaseService } from '../../../shared/services/firebase-service';
+import { FirebaseService } from '../../../shared/services/firebase.service';
 import {
   getContactDisplayAvatarSrc,
   getContactDisplayColor,

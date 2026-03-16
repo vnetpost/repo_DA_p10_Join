@@ -10,7 +10,7 @@ import {
   UserCredential
 } from '@angular/fire/auth';
 import { BehaviorSubject, from, Observable, tap } from 'rxjs';
-import { FirebaseService } from './firebase-service';
+import { FirebaseService } from './firebase.service';
 import { capitalizeFullname, setUserColor } from '../utilities/utils';
 
 @Injectable({

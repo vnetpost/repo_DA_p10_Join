@@ -9,7 +9,7 @@ import {
   SimpleChanges,
   inject,
 } from '@angular/core';
-import { TaskCategoryOption, TaskService } from '../../../shared/services/task-service';
+import { TaskCategoryOption, TaskService } from '../../../shared/services/task.service';
 
 /**
  * Single-select dropdown used for choosing a task category.

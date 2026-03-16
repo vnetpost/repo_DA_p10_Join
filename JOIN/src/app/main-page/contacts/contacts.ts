@@ -2,7 +2,7 @@ import { Component, DoCheck, ElementRef, HostListener, inject, ViewChild } from 
 import { ContactList } from './contact-list/contact-list';
 import { ContactInfo } from './contact-info/contact-info';
 import { ContactDialog } from './contact-dialog/contact-dialog';
-import { FirebaseService } from '../../shared/services/firebase-service';
+import { FirebaseService } from '../../shared/services/firebase.service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
