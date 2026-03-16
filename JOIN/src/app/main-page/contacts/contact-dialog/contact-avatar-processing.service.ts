@@ -36,7 +36,8 @@ export class ContactAvatarProcessingService {
    * @returns Processed avatar payload and preview source or `null` when processing fails.
    */
   async processAvatar(file: File): Promise<ProcessedContactAvatar | null> {
-    const compressedDataUrl = await this.compressImage(file);
+    const outputMimeType = this.resolveOutputMimeType(file.type);
+    const compressedDataUrl = await this.compressImage(file, outputMimeType);
     const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
     const dataUrl = compressedDataUrl ?? fallbackDataUrl;
     if (!dataUrl) return null;
@@ -78,9 +79,10 @@ export class ContactAvatarProcessingService {
    * Compresses an image file while keeping aspect ratio.
    *
    * @param file Selected image file.
-   * @returns JPEG data URL or `null` when compression fails.
+   * @param outputMimeType Mime type used for the exported canvas image.
+   * @returns Data URL or `null` when compression fails.
    */
-  private compressImage(file: File): Promise<string | null> {
+  private compressImage(file: File, outputMimeType: string): Promise<string | null> {
     return new Promise((resolve) => {
       const reader = new FileReader();
 
@@ -117,7 +119,7 @@ export class ContactAvatarProcessingService {
           canvas.height = Math.round(height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          resolve(canvas.toDataURL('image/jpeg', this.quality));
+          resolve(canvas.toDataURL(outputMimeType, this.quality));
         };
 
         img.onerror = () => resolve(null);
@@ -127,6 +129,16 @@ export class ContactAvatarProcessingService {
       reader.onerror = () => resolve(null);
       reader.readAsDataURL(file);
     });
+  }
+
+  /**
+   * Resolves the exported mime type so supported image formats keep their original type.
+   *
+   * @param mimeType Original file mime type.
+   * @returns Output mime type used for processing.
+   */
+  private resolveOutputMimeType(mimeType: string): string {
+    return mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
   }
 
   /**

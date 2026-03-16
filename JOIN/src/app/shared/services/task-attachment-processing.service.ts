@@ -69,7 +69,8 @@ export class TaskAttachmentProcessingService {
    */
   private async createAttachmentFromFile(file: File): Promise<TaskAttachment | null> {
     try {
-      const compressedDataUrl = await this.compressImage(file);
+      const outputMimeType = this.resolveOutputMimeType(file.type);
+      const compressedDataUrl = await this.compressImage(file, outputMimeType);
       const fallbackDataUrl = compressedDataUrl ? null : await this.readFileAsDataUrl(file);
       const base64DataUrl = compressedDataUrl ?? fallbackDataUrl;
       if (!base64DataUrl) return null;
@@ -114,9 +115,10 @@ export class TaskAttachmentProcessingService {
    * Compresses an image file while keeping aspect ratio.
    *
    * @param file Source image file.
-   * @returns JPEG data URL or `null` when compression fails.
+   * @param outputMimeType Mime type used for the exported canvas image.
+   * @returns Data URL or `null` when compression fails.
    */
-  private compressImage(file: File): Promise<string | null> {
+  private compressImage(file: File, outputMimeType: string): Promise<string | null> {
     return new Promise((resolve) => {
       const reader = new FileReader();
 
@@ -153,7 +155,7 @@ export class TaskAttachmentProcessingService {
           canvas.height = Math.round(height);
           ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-          resolve(canvas.toDataURL('image/jpeg', this.defaultQuality));
+          resolve(canvas.toDataURL(outputMimeType, this.defaultQuality));
         };
 
         img.onerror = () => resolve(null);
@@ -163,6 +165,16 @@ export class TaskAttachmentProcessingService {
       reader.onerror = () => resolve(null);
       reader.readAsDataURL(file);
     });
+  }
+
+  /**
+   * Resolves the exported mime type so supported image formats keep their original type.
+   *
+   * @param mimeType Original file mime type.
+   * @returns Output mime type used for processing.
+   */
+  private resolveOutputMimeType(mimeType: string): string {
+    return mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
   }
 
   /**
