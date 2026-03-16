@@ -5,13 +5,11 @@ import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
 import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 import { ContactAvatarProcessingService } from './contact-avatar-processing.service';
 import { ContactDialogUiState } from './contact-dialog-ui-state';
-
-interface ContactDialogSnapshot {
-  name: string;
-  email: string;
-  phone: string;
-  avatarSignature: string;
-}
+import {
+  captureContactDialogSnapshot,
+  ContactDialogSnapshot,
+  hasContactDialogChanges,
+} from './contact-dialog-snapshot.utils';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -85,7 +83,7 @@ export class ContactDialog {
     this.userColor = null;
     this.avatar = null;
     this.avatarPreviewSrc = null;
-    this.initialDialogSnapshot = this.captureDialogSnapshot();
+    this.initialDialogSnapshot = captureContactDialogSnapshot(this.contactData, this.avatar);
 
     this.openDialog();
   }
@@ -109,7 +107,7 @@ export class ContactDialog {
     this.userColor = contact.userColor ?? null;
     this.avatar = contact.avatar ?? null;
     this.avatarPreviewSrc = getContactAvatarSrc(contact);
-    this.initialDialogSnapshot = this.captureDialogSnapshot();
+    this.initialDialogSnapshot = captureContactDialogSnapshot(this.contactData, this.avatar);
 
     this.openDialog();
   }
@@ -313,44 +311,7 @@ export class ContactDialog {
    * @returns `true` if closing should require confirmation.
    */
   private shouldConfirmClose(): boolean {
-    const currentSnapshot = this.captureDialogSnapshot();
-    return (
-      currentSnapshot.name !== this.initialDialogSnapshot.name ||
-      currentSnapshot.email !== this.initialDialogSnapshot.email ||
-      currentSnapshot.phone !== this.initialDialogSnapshot.phone ||
-      currentSnapshot.avatarSignature !== this.initialDialogSnapshot.avatarSignature
-    );
-  }
-
-  /**
-   * Captures the current dialog values for change comparison.
-   *
-   * @returns Normalized snapshot of the current dialog state.
-   */
-  private captureDialogSnapshot(): ContactDialogSnapshot {
-    return {
-      name: this.contactData.name.trim(),
-      email: this.contactData.email.trim(),
-      phone: this.contactData.phone.trim(),
-      avatarSignature: this.buildAvatarSignature(this.avatar),
-    };
-  }
-
-  /**
-   * Creates a stable avatar comparison signature from the relevant payload fields.
-   *
-   * @param avatar Avatar payload to compare.
-   * @returns String signature that can be used for change detection.
-   */
-  private buildAvatarSignature(avatar: ContactAvatar | null): string {
-    if (!avatar) return '';
-
-    return [
-      avatar.fileName?.trim() ?? '',
-      avatar.fileType?.trim() ?? '',
-      String(avatar.base64Size ?? ''),
-      avatar.base64?.trim() ?? '',
-    ].join('|');
+    return hasContactDialogChanges(this.initialDialogSnapshot, this.contactData, this.avatar);
   }
   // #endregion
 }
