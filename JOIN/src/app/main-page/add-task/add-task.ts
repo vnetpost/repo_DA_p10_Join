@@ -33,6 +33,7 @@ import {
   buildAddTaskPayload,
   mapTaskToAddTaskFormState,
 } from './add-task-mapper.utils';
+import { AddTaskUiState } from './add-task-ui-state';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -70,14 +71,13 @@ export class AddTask implements OnChanges, OnDestroy {
   @Output() closeDialogRequested = new EventEmitter<void>();
   @Output() dirtyChange = new EventEmitter<boolean>();
   @Output() taskSaved = new EventEmitter<Task>();
+  private readonly uiState: AddTaskUiState;
   // #endregion
 
   // #region Constants
   minDueDate = getTodayDateString();
   readonly taskTitleMaxLength = ADD_TASK_TITLE_MAX_LENGTH;
   readonly taskTitleMinLetters = ADD_TASK_TITLE_MIN_LETTERS;
-  showCloseConfirm: boolean = false;
-  hasUserEdited: boolean = false;
   // #endregion
 
   // #region Form State
@@ -96,12 +96,18 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region UI State
-  toastVisible = false;
   isSubmitting = false;
   attachmentUploadError = '';
   formResetVersion = 0;
-  private toastTimer?: number;
   // #endregion
+
+  constructor() {
+    this.uiState = new AddTaskUiState(
+      (isDirty) => this.dirtyChange.emit(isDirty),
+      () => this.closeDialogRequested.emit(),
+      () => this.router.navigateByUrl('/board')
+    );
+  }
 
   // #region Lifecycle
   /** Applies incoming task data to the form whenever edit input changes. */
@@ -113,7 +119,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   /** Clears running timers to avoid side effects after component teardown. */
   ngOnDestroy(): void {
-    if (this.toastTimer) clearTimeout(this.toastTimer);
+    this.uiState.destroy();
   }
   // #endregion
 
@@ -173,6 +179,16 @@ export class AddTask implements OnChanges, OnDestroy {
       this.taskDueDate.trim().length > 0 &&
       Boolean(this.activeCategory)
     );
+  }
+
+  /** Exposes current toast visibility for the template. */
+  get toastVisible(): boolean {
+    return this.uiState.toastVisible;
+  }
+
+  /** Exposes current close-confirm state for the template. */
+  get showCloseConfirm(): boolean {
+    return this.uiState.showCloseConfirm;
   }
   // #endregion
 
@@ -257,7 +273,7 @@ export class AddTask implements OnChanges, OnDestroy {
       }
 
       if (persistedTask) this.taskSaved.emit(persistedTask);
-      this.showToast();
+      this.uiState.showSuccessToast(this.isOverlay);
       this.resetDirtyState();
     } finally {
       this.isSubmitting = false;
@@ -333,41 +349,23 @@ export class AddTask implements OnChanges, OnDestroy {
     return date;
   }
 
-  /** Shows a short toast and then exits add-task flow. */
-  private showToast(): void {
-    this.toastVisible = true;
-    if (this.toastTimer) clearTimeout(this.toastTimer);
-    this.toastTimer = setTimeout(() => {
-      this.toastVisible = false;
-      if (this.isOverlay) {
-        this.closeDialogRequested.emit();
-        return;
-      }
-      this.router.navigateByUrl('/board');
-    }, 2000);
-  }
-  // #endregion
-
   markAsEdited(): void {
-    if (this.hasUserEdited) return;
-    this.hasUserEdited = true;
-    this.dirtyChange.emit(true);
+    this.uiState.markAsEdited();
   }
 
   resetDirtyState(): void {
-    this.hasUserEdited = false;
-    this.dirtyChange.emit(false);
+    this.uiState.resetDirtyState();
   }
 
   onCloseAddTaskClick(): void {
-    this.showCloseConfirm = true;
+    this.uiState.requestCloseConfirm();
   }
 
-  confirmClose() {
-    this.showCloseConfirm = false;
+  confirmClose(): void {
+    this.uiState.clearCloseConfirm();
   }
 
   cancelClose(): void {
-    this.showCloseConfirm = false;
+    this.uiState.clearCloseConfirm();
   }
 }
