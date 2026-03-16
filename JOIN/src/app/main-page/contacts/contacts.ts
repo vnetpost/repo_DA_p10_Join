@@ -6,7 +6,7 @@ import { FirebaseService } from '../../shared/services/firebase-service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
-import { AuthService } from '../../shared/services/auth-service';
+import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
   selector: 'app-contacts',

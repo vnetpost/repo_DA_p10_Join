@@ -3,7 +3,7 @@ import { FirebaseService } from '../shared/services/firebase-service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
-import { AuthService } from '../shared/services/auth-service';
+import { AuthService } from '../shared/services/auth.service';
 import { AsyncPipe } from '@angular/common';
 import { getGreeting } from '../shared/utilities/utils';
 

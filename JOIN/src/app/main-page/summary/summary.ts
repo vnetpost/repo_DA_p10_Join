@@ -2,7 +2,7 @@ import { Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TaskService } from '../../shared/services/task-service';
 import { AsyncPipe, DatePipe } from '@angular/common';
-import { AuthService } from '../../shared/services/auth-service';
+import { AuthService } from '../../shared/services/auth.service';
 import { getGreeting } from '../../shared/utilities/utils';
 
 @Component({
