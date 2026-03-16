@@ -1,0 +1,94 @@
+<section class="form-section log-in-form-section" aria-labelledby="login-title">
+  <article class="form-wrapper log-in-form-wrapper">
+    <header class="title">
+      <h1 id="login-title">Log in</h1>
+      <section class="divider" aria-hidden="true"></section>
+    </header>
+
+    <form class="log-in-form log-in-sign-up-form" #logInForm="ngForm" (ngSubmit)="onSubmit(logInForm)" novalidate autocomplete="off">
+      <section class="input-box">
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          [(ngModel)]="logInData.email"
+          #email="ngModel"
+          required
+          minlength="5"
+          pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}"
+          aria-label="Email address"
+        />
+        <img src="assets/img/icons/forms/email.svg" alt="Email icon" aria-hidden="true" />
+        <section class="input-error-wrapper">
+          @if (email.invalid && email.touched) {
+            <span class="form-error" aria-live="polite">
+              @if (email.errors?.['required']) {
+                Email is required.
+              } @else if (email.errors?.['minlength']) {
+                At least 5 characters.
+              } @else if (email.errors?.['pattern']) {
+                Please enter a valid email address.
+              }
+            </span>
+          }
+        </section>
+      </section>
+
+      <section class="input-box">
+        <input
+          [(ngModel)]="logInData.password"
+          name="logInPassword"
+          #logInPass="ngModel"
+          required
+          minlength="8"
+          [type]="showPassword ? 'text' : 'password'"
+          placeholder="Password"
+          aria-label="Password"
+        />
+        <section class="icon-slot">
+          @if (logInData.password.length > 0) {
+            <button type="button" class="visibility-btn" (click)="togglePassword.emit()" aria-label="Toggle password visibility">
+              <img
+                [src]="showPassword ? 'assets/img/icons/forms/visibility.svg' : 'assets/img/icons/forms/visibility-off.svg'"
+                alt="Password visibility icon"
+                aria-hidden="true"
+              />
+            </button>
+          } @else {
+            <img class="lock-icon" src="assets/img/icons/forms/password.svg" alt="Password icon" aria-hidden="true" />
+          }
+        </section>
+        <section class="input-error-wrapper">
+          @if (logInPass.invalid && logInPass.touched) {
+            <span class="form-error" aria-live="polite">
+              @if (logInPass.errors?.['required']) {
+                Password is required.
+              } @else if (logInPass.errors?.['minlength']) {
+                At least 8 characters.
+              }
+            </span>
+          }
+        </section>
+      </section>
+
+      @if (loginError) {
+        <p class="login-error" role="alert" aria-live="assertive">
+          Email or password is wrong. Please try again.
+        </p>
+      }
+
+      <nav class="form-actions" aria-label="Log in actions">
+        <button type="submit" [class.button--disabled]="isLoggingIn || logInForm.invalid" class="button button--primary">
+          @if (isLoggingIn) {
+            Logging in…
+          } @else {
+            Log in
+          }
+        </button>
+        <button type="button" (click)="guestLogin.emit()" class="button button--secondary">
+          Guest Log in
+        </button>
+      </nav>
+    </form>
+  </article>
+</section>

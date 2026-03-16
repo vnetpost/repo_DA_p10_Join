@@ -7,10 +7,12 @@ import { AsyncPipe } from '@angular/common';
 import { getGreeting } from '../shared/utilities/utils';
 import { MainPageUiState } from './main-page-ui-state';
 import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
+import { LoginFormCard } from './login-form-card/login-form-card';
+import { SignupFormCard } from './signup-form-card/signup-form-card';
 
 @Component({
   selector: 'app-main-page',
-  imports: [RouterLink, FormsModule, AsyncPipe],
+  imports: [RouterLink, FormsModule, AsyncPipe, LoginFormCard, SignupFormCard],
   templateUrl: './main-page.html',
   styleUrl: './main-page.scss',
 })

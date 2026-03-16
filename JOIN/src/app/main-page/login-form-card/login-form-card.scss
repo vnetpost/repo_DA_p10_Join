@@ -1,0 +1,174 @@
+@use "../../../styles/index.scss" as styles;
+
+:host {
+  grid-area: 2/1/3/2;
+  @include styles.setFlex();
+  width: 100%;
+  margin: 16px 0;
+
+  @include styles.up-xxl {
+    grid-area: 2/1/3/3;
+  }
+}
+
+.form-section {
+  @include styles.setFlex();
+  width: 100%;
+}
+
+.form-wrapper {
+  @include styles.setFlex($d: column, $jc: flex-start, $gap: 20px);
+  width: 90dvw;
+  max-width: 500px;
+  padding: 16px 16px 26px;
+  border-radius: 20px;
+  background-color: white;
+  box-shadow: 0px 0px 14px 3px #0000000A;
+
+  @include styles.up-xxl {
+    gap: 30px;
+    width: 650px;
+    max-width: unset;
+    padding: 36px 16px;
+  }
+}
+
+.title {
+  @include styles.setFlex($d: column, $gap: 12px);
+
+  @include styles.up-xxl {
+    gap: 16px;
+  }
+
+  h1 {
+    font-size: 32px;
+
+    @include styles.up-xxl {
+      font-size: 50px;
+    }
+  }
+}
+
+.divider {
+  width: 80px;
+  height: 3px;
+  background-color: styles.$blue-sky;
+
+  @include styles.up-xxl {
+    width: 150px;
+  }
+}
+
+.log-in-sign-up-form {
+  width: 100%;
+
+  @include styles.up-xxl {
+    width: 70%;
+  }
+}
+
+.input-box {
+  @include styles.setGrid($rows: auto auto, $columns: 1fr 40px, $jc: center, $ai: center);
+
+  @include styles.up-xxl {
+    margin-bottom: 8px;
+  }
+
+  input {
+    grid-area: 1/1/2/3;
+    width: 100%;
+    height: 40px;
+    border: 1px solid styles.$gray-light;
+    border-radius: 8px;
+    @include styles.setFont();
+    padding: 0 50px 0 16px;
+
+    @media (max-width: 400px) {
+      height: 36px;
+    }
+
+    @include styles.up-xxl {
+      height: 50px;
+      font-size: 20px;
+    }
+
+    &::placeholder {
+      color: styles.$gray-light;
+    }
+
+    &:focus {
+      outline: none;
+      border-color: styles.$gray-dark;
+    }
+
+    &.ng-invalid.ng-touched {
+      border-color: styles.$red-error;
+    }
+  }
+
+  img {
+    grid-area: 1/2/2/3;
+  }
+}
+
+.icon-slot {
+  grid-area: 1/2/2/3;
+  @include styles.setGrid();
+
+  .lock-icon,
+  .visibility-btn {
+    grid-area: 1/1/2/2;
+  }
+
+  .visibility-btn {
+    @include styles.setFlex($jc: flex-start);
+    background-color: transparent;
+    padding: 0;
+    padding-left: 0;
+  }
+}
+
+.input-error-wrapper {
+  grid-area: 2/1/3/3;
+  min-height: 20px;
+  margin-bottom: 4px;
+}
+
+.form-error {
+  display: block;
+  color: styles.$red-error;
+}
+
+.login-error {
+  color: styles.$red-error;
+  text-align: center;
+}
+
+.form-actions {
+  @include styles.setFlex($d: column, $gap: 12px);
+  min-height: 112px;
+  align-items: center;
+
+  @include styles.up-xxl {
+    @include styles.setFlex($gap: 28px);
+    margin-top: 16px;
+    font-size: 20px;
+    min-height: 78px;
+  }
+
+  button {
+    @include styles.setFlex();
+    width: 50%;
+    padding: 12px 0;
+
+    @media (max-width: 400px) {
+      width: 100%;
+      height: 36px;
+    }
+
+    @include styles.up-xxl {
+      width: fit-content;
+      padding: 12px 30px;
+    }
+  }
+}
