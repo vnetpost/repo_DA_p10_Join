@@ -4,6 +4,7 @@ import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
 import { getContactAvatarSrc, getTwoInitials } from '../../../shared/utilities/utils';
 import { ContactAvatarProcessingService } from './contact-avatar-processing.service';
+import { ContactDialogUiState } from './contact-dialog-ui-state';
 
 interface ContactDialogSnapshot {
   name: string;
@@ -34,9 +35,9 @@ export class ContactDialog {
   dialogMode: 'add' | 'edit' = 'add';
   readonly getTwoInitials = getTwoInitials;
   private readonly contactAvatarProcessingService = inject(ContactAvatarProcessingService);
+  private readonly uiState = new ContactDialogUiState();
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
-  showCloseConfirm: boolean = false;
   isSubmitting: boolean = false;
   avatar: ContactAvatar | null = null;
   avatarPreviewSrc: string | null = null;
@@ -57,6 +58,10 @@ export class ContactDialog {
     avatarSignature: '',
   };
 
+  get showCloseConfirm(): boolean {
+    return this.uiState.showCloseConfirm;
+  }
+
   // #region Methods
   // #region Opening dialog
 
@@ -70,7 +75,6 @@ export class ContactDialog {
    */
   openAddDialog(): void {
     this.dialogMode = 'add';
-    this.showCloseConfirm = false;
     this.isSubmitting = false;
 
     this.contactData = {
@@ -97,7 +101,6 @@ export class ContactDialog {
    */
   openEditDialog(contact: Contact): void {
     this.dialogMode = 'edit';
-    this.showCloseConfirm = false;
     this.isSubmitting = false;
 
     this.contactData.name = contact.name;
@@ -119,11 +122,8 @@ export class ContactDialog {
    * @returns void
    */
   openDialog(): void {
-    const el = this.dialog.nativeElement;
-    this.showCloseConfirm = false;
     this.isSubmitting = false;
-    el.showModal();
-    el.classList.add('opened');
+    this.uiState.openDialog(this.dialog.nativeElement);
   }
   // #endregion
 
@@ -193,11 +193,9 @@ export class ContactDialog {
    * @returns void
    */
   closeDialog(): void {
-    this.showCloseConfirm = false;
-    this.isSubmitting = false;
-    const el = this.dialog.nativeElement;
-    el.classList.remove('opened');
-    el.close();
+    this.uiState.closeDialog(this.dialog.nativeElement, () => {
+      this.isSubmitting = false;
+    });
 
     queueMicrotask(() => {
       this.contactForm?.resetForm({
@@ -219,9 +217,9 @@ export class ContactDialog {
    * @returns void
    */
   onBackdropClick(event: MouseEvent): void {
-    if (event.target === this.dialog.nativeElement) {
-      this.requestCloseDialog();
-    }
+    this.uiState.handleBackdropClick(event, this.dialog.nativeElement, () =>
+      this.requestCloseDialog()
+    );
   }
 
   /**
@@ -234,13 +232,7 @@ export class ContactDialog {
    * @returns void
    */
   onEsc(event: Event): void {
-    event.preventDefault();
-    if (this.showCloseConfirm) {
-      this.cancelCloseDialog();
-      return;
-    }
-
-    this.requestCloseDialog();
+    this.uiState.handleEscape(event, () => this.requestCloseDialog());
   }
   // #endregion
 
@@ -250,12 +242,7 @@ export class ContactDialog {
    * @returns void
    */
   requestCloseDialog(): void {
-    if (this.shouldConfirmClose()) {
-      this.showCloseConfirm = true;
-      return;
-    }
-
-    this.closeDialog();
+    this.uiState.requestCloseDialog(() => this.shouldConfirmClose(), () => this.closeDialog());
   }
 
   /**
@@ -264,7 +251,7 @@ export class ContactDialog {
    * @returns void
    */
   confirmCloseDialog(): void {
-    this.closeDialog();
+    this.uiState.confirmCloseDialog(() => this.closeDialog());
   }
 
   /**
@@ -273,7 +260,7 @@ export class ContactDialog {
    * @returns void
    */
   cancelCloseDialog(): void {
-    this.showCloseConfirm = false;
+    this.uiState.cancelCloseDialog();
   }
 
   @HostListener('contextmenu', ['$event'])
