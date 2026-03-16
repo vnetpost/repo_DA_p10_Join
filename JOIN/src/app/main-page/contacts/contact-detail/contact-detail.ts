@@ -33,6 +33,12 @@ export class ContactDetail implements OnChanges {
   profileAnimating: boolean = false;
   showDeleteConfirm: boolean = false;
 
+  /**
+   * Indicates whether the contact has a usable phone number.
+   *
+   * @param phone The phone value to inspect.
+   * @returns `true` when the phone field contains non-whitespace content.
+   */
   hasPhoneNumber(phone: Contact['phone'] | null | undefined): boolean {
     return String(phone ?? '').trim().length > 0;
   }
@@ -131,6 +137,11 @@ export class ContactDetail implements OnChanges {
     }, 0);
   }
 
+  /**
+   * Checks whether the viewport is currently at or below the mobile breakpoint.
+   *
+   * @returns `true` when the viewport width is within the small-screen range.
+   */
   private isDownLgViewport(): boolean {
     return window.innerWidth <= this.downLgBreakpoint;
   }

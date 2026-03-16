@@ -3,7 +3,12 @@ import { CanActivateFn, Router } from '@angular/router';
 import { map, take } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 
-export const authGuard: CanActivateFn = () => {
+/**
+ * Prevents navigation to authenticated routes when no user session exists.
+ *
+ * @returns A boolean or redirect tree wrapped in an observable.
+ */
+export function authGuard(): ReturnType<CanActivateFn> {
   const authService = inject(AuthService);
   const router = inject(Router);
 
@@ -11,4 +16,4 @@ export const authGuard: CanActivateFn = () => {
     take(1),
     map((user) => (user ? true : router.createUrlTree(['/']))),
   );
-};
+}

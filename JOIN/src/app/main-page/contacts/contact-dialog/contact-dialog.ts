@@ -56,6 +56,11 @@ export class ContactDialog {
     avatarSignature: '',
   };
 
+  /**
+   * Exposes the close-confirmation visibility managed by the local dialog UI state.
+   *
+   * @returns `true` when the close confirmation is visible.
+   */
   get showCloseConfirm(): boolean {
     return this.uiState.showCloseConfirm;
   }
@@ -261,10 +266,13 @@ export class ContactDialog {
     this.uiState.cancelCloseDialog();
   }
 
-  @HostListener('contextmenu', ['$event'])
   /**
    * Prevents the default context menu on the contacts page.
+   *
+   * @param event The triggering context-menu event.
+   * @returns void
    */
+  @HostListener('contextmenu', ['$event'])
   onContextMenu(event: Event): void {
     event.preventDefault();
   }

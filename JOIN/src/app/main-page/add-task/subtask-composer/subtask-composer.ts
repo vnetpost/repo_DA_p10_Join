@@ -46,6 +46,12 @@ export class SubtaskComposer {
     return title.length > 0 && !this.isSubtaskTitleValid(title);
   }
 
+  /**
+   * Clears the local editing state when the parent form requests a reset.
+   *
+   * @param changes The latest Angular input changes.
+   * @returns void
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['resetTrigger']) return;
     this.clearSubtaskTitle();

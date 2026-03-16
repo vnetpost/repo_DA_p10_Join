@@ -318,22 +318,47 @@ export class AddTask implements OnChanges, OnDestroy {
     return date;
   }
 
+  /**
+   * Marks the add-task form as modified.
+   *
+   * @returns void
+   */
   markAsEdited(): void {
     this.uiState.markAsEdited();
   }
 
+  /**
+   * Clears the dirty-state tracking for the add-task dialog.
+   *
+   * @returns void
+   */
   resetDirtyState(): void {
     this.uiState.resetDirtyState();
   }
 
+  /**
+   * Requests the close confirmation for the add-task dialog.
+   *
+   * @returns void
+   */
   onCloseAddTaskClick(): void {
     this.uiState.requestCloseConfirm();
   }
 
+  /**
+   * Confirms closing the add-task dialog and clears the confirmation state.
+   *
+   * @returns void
+   */
   confirmClose(): void {
     this.uiState.clearCloseConfirm();
   }
 
+  /**
+   * Cancels the pending close action for the add-task dialog.
+   *
+   * @returns void
+   */
   cancelClose(): void {
     this.uiState.clearCloseConfirm();
   }

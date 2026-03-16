@@ -43,6 +43,12 @@ export class DropdownCategory {
     return this.selectedCategory?.label ?? '';
   }
 
+  /**
+   * Resets the open state when the parent form triggers a full reset.
+   *
+   * @param changes The latest Angular input changes.
+   * @returns void
+   */
   ngOnChanges(changes: SimpleChanges): void {
     if (!changes['resetTrigger']) return;
     this.isDropdownOpen = false;

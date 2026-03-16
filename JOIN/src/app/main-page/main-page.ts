@@ -54,22 +54,47 @@ export class MainPage implements OnInit, OnDestroy {
     password: '',
   };
 
+  /**
+   * Indicates whether the current viewport matches the mobile layout.
+   *
+   * @returns `true` when the page is rendered in mobile mode.
+   */
   get isMobile(): boolean {
     return this.uiState.isMobile;
   }
 
+  /**
+   * Exposes the temporary toast visibility state for the template.
+   *
+   * @returns `true` when the success toast is visible.
+   */
   get toastVisible(): boolean {
     return this.uiState.toastVisible;
   }
 
+  /**
+   * Indicates whether the mobile greeting overlay should be shown.
+   *
+   * @returns `true` when the post-login greeting overlay is active.
+   */
   get showMobileGreeting(): boolean {
     return this.uiState.showMobileGreeting;
   }
 
+  /**
+   * Indicates whether the intro animation overlay is currently active.
+   *
+   * @returns `true` while the intro sequence is running.
+   */
   get introActive(): boolean {
     return this.uiState.introActive;
   }
 
+  /**
+   * Indicates whether the animated logo is currently in its moving state.
+   *
+   * @returns `true` when the intro logo transition is active.
+   */
   get logoMoving(): boolean {
     return this.uiState.logoMoving;
   }
@@ -328,6 +353,12 @@ export class MainPage implements OnInit, OnDestroy {
     return getGreeting();
   }
 
+  /**
+   * Resolves the display name that belongs to the authenticated email address.
+   *
+   * @param userEmail The email address of the active user.
+   * @returns The matching contact name or an empty string when none is found.
+   */
   getGreetingName(userEmail: string | null | undefined): string {
     const email = userEmail?.trim().toLowerCase();
     const contact = this.authService.contactService.contacts.find(

@@ -32,6 +32,12 @@ export class Summary {
     return getGreeting();
   }
 
+  /**
+   * Resolves the greeting name for the currently authenticated contact.
+   *
+   * @param userEmail The email address of the active user.
+   * @returns The matching contact name or an empty string.
+   */
   getGreetingName(userEmail: string | null | undefined): string {
     const email = userEmail?.trim().toLowerCase();
     const contact = this.authService.contactService.contacts.find(
