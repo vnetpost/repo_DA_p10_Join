@@ -32,6 +32,7 @@ import {
 } from './add-task-mapper.utils';
 import { AddTaskUiState } from './add-task-ui-state';
 import { AddTaskSubmitService } from './add-task-submit.service';
+import { AddTaskFormState } from './add-task-form-state';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -88,15 +89,13 @@ export class AddTask implements OnChanges, OnDestroy {
   activeSubtasks: Subtask[] = [];
   editableExistingAttachments: TaskAttachment[] = [];
   selectedAttachments: File[] = [];
-  isTitleTouched = false;
-  isDueDateTouched = false;
-  isCategoryTouched = false;
   // #endregion
 
   // #region UI State
   isSubmitting = false;
   attachmentUploadError = '';
   formResetVersion = 0;
+  readonly formState = new AddTaskFormState();
   // #endregion
 
   constructor() {
@@ -139,44 +138,37 @@ export class AddTask implements OnChanges, OnDestroy {
 
   /** Aggregates all title-related validation states. */
   get showTitleError(): boolean {
-    return this.showTitleRequiredError || this.showTitlePatternError;
+    return this.formState.showTitleError(this.taskTitle);
   }
 
   /** True after title touch when the required value is empty. */
   get showTitleRequiredError(): boolean {
-    return this.isTitleTouched && !this.taskTitle.trim();
+    return this.formState.showTitleRequiredError(this.taskTitle);
   }
 
   /** True when title violates length or minimum-letter constraints. */
   get showTitlePatternError(): boolean {
-    if (!this.isTitleTouched) return false;
-    const title = this.taskTitle.trim();
-    return title.length > 0 && !isAddTaskTitleValid(title);
+    return this.formState.showTitlePatternError(this.taskTitle);
   }
 
   /** Human-readable title validation message for the UI. */
   get titleErrorMessage(): string {
-    if (this.showTitleRequiredError) return 'This field is required';
-    return `Use up to ${this.taskTitleMaxLength} chars with at least ${this.taskTitleMinLetters} letters (a-z)`;
+    return this.formState.titleErrorMessage(this.taskTitle);
   }
 
   /** True after due date touch when no date has been provided. */
   get showDueDateError(): boolean {
-    return this.isDueDateTouched && !this.taskDueDate.trim();
+    return this.formState.showDueDateError(this.taskDueDate);
   }
 
   /** True after category touch when no category is selected. */
   get showCategoryError(): boolean {
-    return this.isCategoryTouched && !this.activeCategory;
+    return this.formState.showCategoryError(this.activeCategory);
   }
 
   /** Aggregate validity of all required form sections. */
   get isFormValid(): boolean {
-    return (
-      isAddTaskTitleValid(this.taskTitle) &&
-      this.taskDueDate.trim().length > 0 &&
-      Boolean(this.activeCategory)
-    );
+    return this.formState.isFormValid(this.taskTitle, this.taskDueDate, this.activeCategory);
   }
 
   /** Exposes current toast visibility for the template. */
@@ -208,9 +200,7 @@ export class AddTask implements OnChanges, OnDestroy {
     );
 
     if (!validatedCategory) {
-      if (!isAddTaskTitleValid(title)) this.isTitleTouched = true;
-      if (!dueDateValue) this.isDueDateTouched = true;
-      if (!this.activeCategory?.value) this.isCategoryTouched = true;
+      this.formState.markInvalidSections(title, dueDateValue, this.activeCategory);
       return;
     }
 
@@ -261,9 +251,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.editableExistingAttachments = [];
     this.selectedAttachments = [];
     this.attachmentUploadError = '';
-    this.isTitleTouched = false;
-    this.isDueDateTouched = false;
-    this.isCategoryTouched = false;
+    this.formState.resetTouched();
     this.formResetVersion += 1;
     this.resetDirtyState();
   }
@@ -291,9 +279,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.editableExistingAttachments = formState.editableExistingAttachments;
     this.selectedAttachments = [];
     this.attachmentUploadError = '';
-    this.isTitleTouched = false;
-    this.isDueDateTouched = false;
-    this.isCategoryTouched = false;
+    this.formState.resetTouched();
     this.resetDirtyState();
   }
 

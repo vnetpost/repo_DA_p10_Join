@@ -11,7 +11,7 @@
             label="Title"
             [isRequired]="true"
             placeholder="Enter a title"
-            (fieldBlur)="isTitleTouched = true"
+            (fieldBlur)="formState.isTitleTouched = true"
             [hasError]="showTitleError"
             [(value)]="taskTitle"
           ></app-task-form-field>
@@ -38,7 +38,7 @@
             type="text"
             [useFlatpickr]="true"
             [min]="minDueDate"
-            (fieldBlur)="isDueDateTouched = true"
+            (fieldBlur)="formState.isDueDateTouched = true"
             [hasError]="showDueDateError"
             [(value)]="taskDueDate"
             iconSrc="assets/img/icons/board/date.svg"
@@ -55,7 +55,7 @@
         <fieldset class="add-task__field-group add-task__field-group--category">
           <app-dropdown-category
             [(selectedCategory)]="activeCategory"
-            (fieldBlur)="isCategoryTouched = true"
+            (fieldBlur)="formState.isCategoryTouched = true"
             [hasError]="showCategoryError"
             [resetTrigger]="formResetVersion"
           ></app-dropdown-category>
