@@ -1,4 +1,4 @@
-import { Component, DoCheck, ElementRef, HostListener, inject, ViewChild } from '@angular/core';
+import { Component, DoCheck, ElementRef, HostListener, OnDestroy, inject, ViewChild } from '@angular/core';
 import { ContactList } from './contact-list/contact-list';
 import { ContactDetail } from './contact-detail/contact-detail';
 import { ContactDialog } from './contact-dialog/contact-dialog';
@@ -6,6 +6,8 @@ import { ContactService } from '../../shared/services/contact.service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { AuthService } from '../../shared/services/auth.service';
+import { ContactsPageUiState } from './contacts-page-ui-state';
+import { ContactsPageDeleteDialog } from './contacts-page-delete-dialog';
 
 @Component({
   selector: 'app-contacts-page',
@@ -20,25 +22,57 @@ import { AuthService } from '../../shared/services/auth.service';
  * Coordinates list, detail, dialog, and deletion flows
  * and manages responsive behavior.
  */
-export class ContactsPage implements DoCheck {
+export class ContactsPage implements DoCheck, OnDestroy {
   contactService = inject(ContactService);
   authService = inject(AuthService);
-  private readonly mobileMaxWidth = 768;
   private lastContactsVersion = 0;
+  private readonly uiState = new ContactsPageUiState(768);
+  private readonly deleteDialogState = new ContactsPageDeleteDialog();
 
-  isMobile: boolean = false;
-  isDetailOpen: boolean = false;
   activeContactID: string | null = null;
   activeContact: Contact | null = null;
-  toastVisible: boolean = false;
-  showDeleteConfirm: boolean = false;
-  contactToDelete: Contact | null = null;
 
   @ViewChild(ContactDialog) dialog!: ContactDialog;
   @ViewChild('confirmDialog') confirmDialog!: ElementRef<HTMLDialogElement>;
 
   constructor() {
     this.updateIsMobile();
+  }
+
+  /**
+   * Indicates whether the contacts page is currently rendered in mobile mode.
+   *
+   * @returns `true` when the viewport is at or below the mobile breakpoint.
+   */
+  get isMobile(): boolean {
+    return this.uiState.isMobile;
+  }
+
+  /**
+   * Indicates whether the mobile detail panel is currently open.
+   *
+   * @returns `true` when the contact detail view is open on mobile.
+   */
+  get isDetailOpen(): boolean {
+    return this.uiState.isDetailOpen;
+  }
+
+  /**
+   * Indicates whether the "contact created" toast is visible.
+   *
+   * @returns `true` when the toast is visible.
+   */
+  get toastVisible(): boolean {
+    return this.uiState.toastVisible;
+  }
+
+  /**
+   * Exposes the contact currently queued for deletion.
+   *
+   * @returns The contact waiting for delete confirmation, or `null`.
+   */
+  get contactToDelete(): Contact | null {
+    return this.deleteDialogState.contactToDelete;
   }
 
   /**
@@ -61,6 +95,15 @@ export class ContactsPage implements DoCheck {
   }
 
   /**
+   * Clears timers owned by the contacts page helper state.
+   *
+   * @returns void
+   */
+  ngOnDestroy(): void {
+    this.uiState.destroy();
+  }
+
+  /**
    * Updates the responsive state on viewport resize.
    *
    * @returns void
@@ -76,7 +119,7 @@ export class ContactsPage implements DoCheck {
    * @returns void
    */
   private updateIsMobile(): void {
-    this.isMobile = window.innerWidth <= this.mobileMaxWidth;
+    this.uiState.updateViewport(window.innerWidth);
   }
 
   /**
@@ -88,7 +131,7 @@ export class ContactsPage implements DoCheck {
   setActiveContact(selection: { id: string; contact: Contact }): void {
     this.activeContactID = selection.id;
     this.activeContact = selection.contact;
-    this.isDetailOpen = true;
+    this.uiState.openDetail();
   }
 
   /**
@@ -97,7 +140,7 @@ export class ContactsPage implements DoCheck {
    * @returns void
    */
   closeContactInfo(): void {
-    this.isDetailOpen = false;
+    this.uiState.closeDetail();
   }
 
   /**
@@ -167,7 +210,7 @@ export class ContactsPage implements DoCheck {
     this.activeContact = createdContact;
 
     if (this.isMobile) {
-      this.isDetailOpen = true;
+      this.uiState.openDetail();
     }
   }
 
@@ -194,10 +237,7 @@ export class ContactsPage implements DoCheck {
    */
   requestDelete(contact: Contact): void {
     if (!this.canDeleteContact(contact)) return;
-
-    this.contactToDelete = contact;
-    this.confirmDialog.nativeElement.showModal();
-    this.confirmDialog.nativeElement.classList.add('opened');
+    this.deleteDialogState.open(this.confirmDialog.nativeElement, contact);
   }
 
   /**
@@ -214,11 +254,8 @@ export class ContactsPage implements DoCheck {
 
     this.activeContact = null;
     this.activeContactID = null;
-    this.isDetailOpen = false;
-    this.contactToDelete = null;
-
-    this.confirmDialog.nativeElement.close();
-    this.confirmDialog.nativeElement.classList.remove('opened');
+    this.uiState.resetAfterDelete();
+    this.deleteDialogState.close(this.confirmDialog.nativeElement);
   }
 
   /**
@@ -227,9 +264,7 @@ export class ContactsPage implements DoCheck {
    * @returns void
    */
   cancelDelete(): void {
-    this.contactToDelete = null;
-    this.confirmDialog.nativeElement.close();
-    this.confirmDialog.nativeElement.classList.remove('opened');
+    this.deleteDialogState.close(this.confirmDialog.nativeElement);
   }
 
   /**
@@ -268,10 +303,6 @@ export class ContactsPage implements DoCheck {
    * @returns void
    */
   showToast(): void {
-    this.toastVisible = true;
-
-    setTimeout(() => {
-      this.toastVisible = false;
-    }, 2000);
+    this.uiState.showToast();
   }
 }
