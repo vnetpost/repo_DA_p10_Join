@@ -1,7 +1,11 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { Task } from '../../../../shared/interfaces/task';
-import { FirebaseService } from '../../../../shared/services/firebase.service';
-import { getContactAvatarSrc, getTwoInitials } from '../../../../shared/utilities/utils';
+import { ContactService } from '../../../../shared/services/contact.service';
+import {
+  getContactDisplayAvatarSrcById,
+  getContactDisplayColorById,
+  getContactDisplayInitialsById,
+} from '../../../../shared/utilities/contact-presenter.utils';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../shared/services/task.service';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
@@ -23,8 +27,13 @@ import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 export class SingleTask implements OnInit {
   @Input() task!: Task;
   taskService = inject(TaskService);
-  contactService = inject(FirebaseService);
-  userColor: string | null = null;
+  contactService = inject(ContactService);
+  readonly getAssigneeInitials = (id: string): string =>
+    getContactDisplayInitialsById(this.contactService.contacts, id);
+  readonly getUserColor = (id: string): string =>
+    getContactDisplayColorById(this.contactService.contacts, id);
+  readonly getAssigneeAvatarSrc = (id: string): string | null =>
+    getContactDisplayAvatarSrcById(this.contactService.contacts, id);
   moveMenuOpen: boolean = false;
   isMobile = false;
   @Output() openTask = new EventEmitter<Task>();
@@ -133,42 +142,4 @@ export class SingleTask implements OnInit {
     return this.task.subtasks.length;
   }
 
-  /**
-   * Retrieves the initials of an assignee by contact ID.
-   *
-   * @param id The contact identifier
-   * @returns The initials of the assignee
-   */
-  getAssigneeInitials(id: string): string {
-    const contact = this.contactService.contacts.find((c) => {
-      return c.id === id;
-    });
-
-    return getTwoInitials(contact?.name || "Unknown");
-  }
-
-  /**
-   * Retrieves the display color of an assignee by contact ID.
-   *
-   * @param id The contact identifier
-   * @returns The color assigned to the contact
-   */
-  getUserColor(id: string): string {
-    const contact = this.contactService.contacts.find((c) => {
-      return c.id === id;
-    });
-
-    return contact?.userColor || '#9327ff';
-  }
-
-  /**
-   * Resolves the avatar image source for an assignee.
-   *
-   * @param id Contact identifier.
-   * @returns Data URL or `null`.
-   */
-  getAssigneeAvatarSrc(id: string): string | null {
-    const contact = this.contactService.contacts.find((c) => c.id === id);
-    return getContactAvatarSrc(contact);
-  }
 }

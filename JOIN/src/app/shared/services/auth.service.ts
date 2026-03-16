@@ -10,7 +10,7 @@ import {
   UserCredential
 } from '@angular/fire/auth';
 import { BehaviorSubject, from, Observable, tap } from 'rxjs';
-import { FirebaseService } from './firebase.service';
+import { ContactService } from './contact.service';
 import { capitalizeFullname, setUserColor } from '../utilities/utils';
 
 @Injectable({
@@ -25,7 +25,7 @@ import { capitalizeFullname, setUserColor } from '../utilities/utils';
  */
 export class AuthService {
   firebaseAuth = inject(Auth);
-  contactService = inject(FirebaseService);
+  contactService = inject(ContactService);
 
   private authLoadingSubject = new BehaviorSubject<boolean>(true);
   authLoading$ = this.authLoadingSubject.asObservable();
@@ -75,7 +75,7 @@ export class AuthService {
     ).then(async (response) => {
       await updateProfile(response.user, { displayName: name });
 
-      await this.contactService.addDocument({
+      await this.contactService.addContact({
         name: capitalizeFullname(name),
         email: email,
         phone: '',

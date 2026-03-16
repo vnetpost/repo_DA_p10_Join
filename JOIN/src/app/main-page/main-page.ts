@@ -1,5 +1,4 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FirebaseService } from '../shared/services/firebase.service';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LogInFormData, SignUpFormData } from '../shared/interfaces/login-form-data';
@@ -22,7 +21,6 @@ import { getGreeting } from '../shared/utilities/utils';
  * and introductory animations.
  */
 export class MainPage implements OnInit {
-  firebaseService = inject(FirebaseService);
   authService = inject(AuthService);
   router = inject(Router);
   user$ = this.authService.user$;

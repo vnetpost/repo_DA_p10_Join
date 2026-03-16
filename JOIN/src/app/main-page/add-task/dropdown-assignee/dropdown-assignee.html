@@ -66,9 +66,9 @@
       aria-label="Assignee options"
       aria-multiselectable="true"
     >
-      @if (firebaseService.loading && !filteredContacts.length) {
+      @if (contactService.loading && !filteredContacts.length) {
         <p class="dropdown__empty">Loading contacts...</p>
-      } @else if (!firebaseService.loading && !filteredContacts.length) {
+      } @else if (!contactService.loading && !filteredContacts.length) {
         <p class="dropdown__empty">
           {{ assigneeQuery ? 'No matches found' : 'No contacts yet' }}
         </p>

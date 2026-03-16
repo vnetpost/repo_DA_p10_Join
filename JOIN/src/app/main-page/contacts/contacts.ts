@@ -2,10 +2,9 @@ import { Component, DoCheck, ElementRef, HostListener, inject, ViewChild } from 
 import { ContactList } from './contact-list/contact-list';
 import { ContactInfo } from './contact-info/contact-info';
 import { ContactDialog } from './contact-dialog/contact-dialog';
-import { FirebaseService } from '../../shared/services/firebase.service';
+import { ContactService } from '../../shared/services/contact.service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
-import { capitalizeFullname, setUserColor } from '../../shared/utilities/utils';
 import { AuthService } from '../../shared/services/auth.service';
 
 @Component({
@@ -22,7 +21,7 @@ import { AuthService } from '../../shared/services/auth.service';
  * and manages responsive behavior.
  */
 export class Contacts implements DoCheck {
-  firebaseService = inject(FirebaseService);
+  contactService = inject(ContactService);
   authService = inject(AuthService);
   private readonly mobileMaxWidth = 768;
   private lastContactsVersion = 0;
@@ -51,13 +50,11 @@ export class Contacts implements DoCheck {
    * @returns void
    */
   ngDoCheck(): void {
-    if (this.lastContactsVersion === this.firebaseService.contactsVersion) return;
-    this.lastContactsVersion = this.firebaseService.contactsVersion;
+    if (this.lastContactsVersion === this.contactService.contactsVersion) return;
+    this.lastContactsVersion = this.contactService.contactsVersion;
     if (!this.activeContactID) return;
 
-    const updatedContact = this.firebaseService.contacts.find(
-      (contact) => contact.id === this.activeContactID,
-    );
+    const updatedContact = this.contactService.findContactById(this.activeContactID);
 
     if (!updatedContact) return;
     this.activeContact = updatedContact;
@@ -147,7 +144,7 @@ export class Contacts implements DoCheck {
     if (this.dialog.dialogMode === 'add') {
       await this.createContactFromForm(formData);
     } else {
-      this.updateContactFromForm(formData);
+      await this.updateContactFromForm(formData);
     }
   }
 
@@ -161,26 +158,12 @@ export class Contacts implements DoCheck {
    * @returns Promise<void>
    */
   async createContactFromForm(data: ContactFormData): Promise<void> {
-    const contact: Contact = {
-      name: capitalizeFullname(data.name),
-      email: data.email,
-      phone: data.phone,
-      isAvailable: true,
-      userColor: setUserColor(),
-      avatar: null,
-    };
-
-    const newContactId = await this.firebaseService.addDocument(contact);
+    const createdContact = await this.contactService.createContactFromForm(data);
     this.showToast();
 
-    if (!newContactId) return;
+    if (!createdContact?.id) return;
 
-    const createdContact: Contact = {
-      ...contact,
-      id: newContactId,
-    };
-
-    this.activeContactID = newContactId;
+    this.activeContactID = createdContact.id;
     this.activeContact = createdContact;
 
     if (this.isMobile) {
@@ -194,20 +177,9 @@ export class Contacts implements DoCheck {
    * @param data The updated contact form data
    * @returns void
    */
-  updateContactFromForm(data: ContactFormData): void {
+  async updateContactFromForm(data: ContactFormData): Promise<void> {
     if (!this.activeContact) return;
-
-    const contact: Contact = {
-      id: this.activeContact.id,
-      name: capitalizeFullname(data.name),
-      email: data.email,
-      phone: data.phone,
-      isAvailable: this.activeContact.isAvailable,
-      userColor: this.activeContact.userColor,
-      avatar: data.avatar ?? this.activeContact.avatar ?? null,
-    };
-
-    this.firebaseService.updateDocument(contact, 'contacts');
+    const contact = await this.contactService.updateContactFromForm(this.activeContact, data);
     this.activeContact = contact;
     this.activeContactID = contact.id ?? null;
   }
@@ -235,10 +207,10 @@ export class Contacts implements DoCheck {
    *
    * @returns void
    */
-  confirmDelete(): void {
+  async confirmDelete(): Promise<void> {
     if (!this.contactToDelete?.id) return;
 
-    this.firebaseService.deleteDocument('contacts', this.contactToDelete.id);
+    await this.contactService.deleteContact(this.contactToDelete.id);
 
     this.activeContact = null;
     this.activeContactID = null;
@@ -269,15 +241,10 @@ export class Contacts implements DoCheck {
    * @returns True if the contact can be deleted
    */
   canDeleteContact(contact: Contact | null): boolean {
-    if (!contact) return false;
-
-    const currentUserEmail = this.normalizeEmail(
+    return this.contactService.canDeleteContact(
+      contact,
       this.authService.firebaseAuth.currentUser?.email,
     );
-    const contactEmail = this.normalizeEmail(contact.email);
-
-    if (!currentUserEmail) return true;
-    return currentUserEmail !== contactEmail;
   }
 
   /**
@@ -289,18 +256,10 @@ export class Contacts implements DoCheck {
    * @returns True if avatar upload should be enabled.
    */
   canEditAvatar(contact: Contact | null): boolean {
-    if (!contact) return false;
-    return Boolean(this.authService.firebaseAuth.currentUser);
-  }
-
-  /**
-   * Normalizes email values for comparison.
-   *
-   * @param email The email value to normalize
-   * @returns A normalized email string
-   */
-  private normalizeEmail(email: string | null | undefined): string {
-    return String(email ?? '').trim().toLowerCase();
+    return this.contactService.canEditAvatar(
+      contact,
+      Boolean(this.authService.firebaseAuth.currentUser),
+    );
   }
 
   /**

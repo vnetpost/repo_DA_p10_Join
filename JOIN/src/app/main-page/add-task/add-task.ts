@@ -21,7 +21,7 @@ import { TaskFormField } from './task-form-field/task-form-field';
 import { AttachmentUpload } from './attachment-upload/attachment-upload';
 import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
-import { FirebaseService } from '../../shared/services/firebase.service';
+import { ContactService } from '../../shared/services/contact.service';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -43,7 +43,7 @@ import { FirebaseService } from '../../shared/services/firebase.service';
 export class AddTask implements OnChanges, OnDestroy {
   // #region Dependencies
   taskService = inject(TaskService);
-  private firebaseService = inject(FirebaseService);
+  private contactService = inject(ContactService);
   private router = inject(Router);
   // #endregion
 
@@ -276,7 +276,7 @@ export class AddTask implements OnChanges, OnDestroy {
     this.taskDueDate = this.formatDateForInput(task.dueDate.toDate());
     this.activePriority = task.priority;
     this.activeAssignees = task.assignees
-      .map((id) => this.firebaseService.contacts.find((contact) => contact.id === id))
+      .map((id) => this.contactService.findContactById(id))
       .filter((contact): contact is Contact => Boolean(contact));
     this.activeCategory =
       this.taskService.taskCategories.find((category) => category.value === task.category) ?? null;

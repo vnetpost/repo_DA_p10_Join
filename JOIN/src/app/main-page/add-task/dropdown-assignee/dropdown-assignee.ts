@@ -8,7 +8,7 @@ import {
   ElementRef,
 } from '@angular/core';
 import { Contact } from '../../../shared/interfaces/contact';
-import { FirebaseService } from '../../../shared/services/firebase.service';
+import { ContactService } from '../../../shared/services/contact.service';
 import {
   getContactDisplayAvatarSrc,
   getContactDisplayColor,
@@ -27,7 +27,7 @@ import {
 export class DropdownAssignee {
   private static nextDropdownId = 0;
   elementRef = inject(ElementRef);
-  firebaseService = inject(FirebaseService);
+  contactService = inject(ContactService);
   readonly assigneePreviewLimit = 5;
   readonly dropdownId = `task-assignee-dropdown-${DropdownAssignee.nextDropdownId++}`;
 
@@ -46,8 +46,8 @@ export class DropdownAssignee {
   /** Contacts filtered by the current search query. */
   get filteredContacts(): Contact[] {
     const query = this.assigneeQuery.trim().toLowerCase();
-    if (!query) return this.firebaseService.contacts;
-    return this.firebaseService.contacts.filter((contact) =>
+    if (!query) return this.contactService.contacts;
+    return this.contactService.contacts.filter((contact) =>
       contact.name.toLowerCase().includes(query),
     );
   }

@@ -2,7 +2,7 @@ import { Component, ElementRef, EventEmitter, OnDestroy, inject, Input, Output, 
 import { DatePipe, NgClass } from '@angular/common';
 import { Task, TaskAttachment } from '../../../shared/interfaces/task';
 import { TaskService } from '../../../shared/services/task.service';
-import { FirebaseService } from '../../../shared/services/firebase.service';
+import { ContactService } from '../../../shared/services/contact.service';
 import { TaskAttachmentViewerService } from '../../../shared/services/task-attachment-viewer.service';
 import { TaskAttachmentActionService } from '../../../shared/services/task-attachment-action.service';
 import {
@@ -35,7 +35,7 @@ export class TaskDialog implements OnDestroy {
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
   @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;
   taskService = inject(TaskService);
-  contactService = inject(FirebaseService);
+  contactService = inject(ContactService);
   attachmentViewerService = inject(TaskAttachmentViewerService);
   attachmentFileService = inject(TaskAttachmentActionService);
   readonly getAttachmentFileName = getTaskAttachmentFileName;

@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TaskService } from '../../../shared/services/task.service';
 import { SingleTask } from './single-task/single-task';
-import { FirebaseService } from '../../../shared/services/firebase.service';
+import { ContactService } from '../../../shared/services/contact.service';
 import { Task } from '../../../shared/interfaces/task';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
@@ -20,7 +20,7 @@ import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
  */
 export class TaskList {
   taskService = inject(TaskService);
-  contactService = inject(FirebaseService);
+  contactService = inject(ContactService);
   @Input() status: Task['status'] = 'to-do';
   @Input() listTitle: string = '';
   @Output() openTask = new EventEmitter<Task>();
