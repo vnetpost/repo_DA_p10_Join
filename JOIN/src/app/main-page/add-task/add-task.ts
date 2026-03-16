@@ -19,10 +19,8 @@ import { PrioritySelector } from './priority-selector/priority-selector';
 import { SubtaskComposer } from './subtask-composer/subtask-composer';
 import { TaskFormField } from './task-form-field/task-form-field';
 import { AttachmentUpload } from './attachment-upload/attachment-upload';
-import { Timestamp } from '@angular/fire/firestore';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { ContactService } from '../../shared/services/contact.service';
-import { TaskAttachmentProcessingService } from '../../shared/services/task-attachment-processing.service';
 import {
   ADD_TASK_TITLE_MAX_LENGTH,
   ADD_TASK_TITLE_MIN_LETTERS,
@@ -30,10 +28,10 @@ import {
   validateAddTaskForm,
 } from './add-task-validation.utils';
 import {
-  buildAddTaskPayload,
   mapTaskToAddTaskFormState,
 } from './add-task-mapper.utils';
 import { AddTaskUiState } from './add-task-ui-state';
+import { AddTaskSubmitService } from './add-task-submit.service';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -56,7 +54,7 @@ export class AddTask implements OnChanges, OnDestroy {
   // #region Dependencies
   taskService = inject(TaskService);
   private contactService = inject(ContactService);
-  private taskAttachmentProcessingService = inject(TaskAttachmentProcessingService);
+  private addTaskSubmitService = inject(AddTaskSubmitService);
   private router = inject(Router);
   // #endregion
 
@@ -221,58 +219,26 @@ export class AddTask implements OnChanges, OnDestroy {
     this.isSubmitting = true;
 
     try {
-      const dueDate = Timestamp.fromDate(dueDateDate);
       this.attachmentUploadError = '';
-
-      const { attachments, warningMessage } =
-        await this.taskAttachmentProcessingService.resolveAttachmentsForSave(
-          this.editableExistingAttachments,
-          this.selectedAttachments
-        );
-      this.attachmentUploadError = warningMessage;
-
-      const assigneeIds = this.activeAssignees
-        .map((contact) => contact.id)
-        .filter((id): id is string => Boolean(id));
-      const taskPayload = buildAddTaskPayload(
+      const submissionResult = await this.addTaskSubmitService.submitTask({
+        taskToEdit: this.taskToEdit,
+        initialStatus: this.initialStatus,
         title,
         description,
-        dueDate,
-        this.activePriority,
-        assigneeIds,
-        validatedCategory,
-        this.activeSubtasks,
-        attachments,
-      );
+        dueDate: dueDateDate,
+        priority: this.activePriority,
+        activeAssignees: this.activeAssignees,
+        category: validatedCategory,
+        activeSubtasks: this.activeSubtasks,
+        editableExistingAttachments: this.editableExistingAttachments,
+        selectedAttachments: this.selectedAttachments,
+      });
 
-      let persistedTask: Task | null = null;
+      this.attachmentUploadError = submissionResult.warningMessage;
+      this.selectedAttachments = submissionResult.selectedAttachments;
+      if (submissionResult.shouldResetForm) this.resetForm();
 
-      if (this.isEditMode && this.taskToEdit?.id) {
-        const updatedTask: Task = {
-          ...this.taskToEdit,
-          ...taskPayload,
-        };
-        await this.taskService.updateDocument(updatedTask, 'tasks');
-        persistedTask = updatedTask;
-        this.selectedAttachments = [];
-      } else {
-        const tasksInTargetColumn = this.taskService.tasks.filter(
-          (task) => task.status === this.initialStatus,
-        );
-        const newOrder = tasksInTargetColumn.length;
-
-        const task: Task = {
-          status: this.initialStatus,
-          order: newOrder,
-          ...taskPayload,
-        };
-
-        const createdTaskId = await this.taskService.addDocument(task);
-        persistedTask = createdTaskId ? { ...task, id: createdTaskId } : task;
-        this.resetForm();
-      }
-
-      if (persistedTask) this.taskSaved.emit(persistedTask);
+      this.taskSaved.emit(submissionResult.persistedTask);
       this.uiState.showSuccessToast(this.isOverlay);
       this.resetDirtyState();
     } finally {
