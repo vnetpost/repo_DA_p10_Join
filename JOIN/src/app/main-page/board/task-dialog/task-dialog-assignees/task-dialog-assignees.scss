@@ -1,0 +1,68 @@
+@use '../../../../../styles/index.scss' as styles;
+
+.assignees {
+  @include styles.setFlex($d: column, $ai: flex-start, $gap: 9px);
+
+  @include styles.up-xxl {
+    gap: 16px;
+  }
+}
+
+.subtitle {
+  color: #42526e;
+}
+
+.assignee-list {
+  @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 135px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+
+  @include styles.up-xxl {
+    max-height: 150px;
+  }
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: styles.$gray-light;
+  }
+}
+
+.assignee-item {
+  @include styles.setFlex($ai: center, $gap: 10px);
+  margin-left: 16px;
+  padding-right: 8px;
+
+  @include styles.up-xxl {
+    gap: 16px;
+  }
+}
+
+.initials {
+  @include styles.setFlex();
+  overflow: hidden;
+  width: 32px;
+  height: 32px;
+  border: 1px solid white;
+  border-radius: 50%;
+  color: white;
+  word-break: normal;
+}
+
+.assignee-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}

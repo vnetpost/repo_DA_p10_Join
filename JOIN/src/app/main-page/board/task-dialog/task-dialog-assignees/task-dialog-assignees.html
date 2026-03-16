@@ -1,0 +1,24 @@
+@if (assignees.length > 0) {
+  <section class="assignees">
+    <p class="subtitle">Assigned To:</p>
+
+    <ul class="assignee-list scroll-shadows" aria-label="Assignees">
+      @for (assignee of assignees; track $index) {
+        <li class="assignee-item">
+          <span
+            class="initials"
+            [style.backgroundColor]="getAssigneeAvatarSrc(assignee) ? null : getUserColor(assignee)"
+            aria-label="Assigned to {{ getAssigneeName(assignee) }}"
+          >
+            @if (getAssigneeAvatarSrc(assignee); as avatarSrc) {
+              <img class="assignee-avatar-image" [src]="avatarSrc" alt="Assignee avatar image" aria-hidden="true" />
+            } @else {
+              {{ getAssigneeInitials(assignee) }}
+            }
+          </span>
+          <p class="name">{{ getAssigneeName(assignee) }}</p>
+        </li>
+      }
+    </ul>
+  </section>
+}

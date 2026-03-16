@@ -1,0 +1,17 @@
+@if (subtasks.length > 0) {
+  <section class="subtasks">
+    <p class="subtitle">Subtasks:</p>
+
+    <ul class="subtask-list scroll-shadows">
+      @for (subtask of subtasks; track $index) {
+        <li>
+          <label class="checkbox-wrapper">
+            <input class="checkbox" type="checkbox" [checked]="subtask.done" (change)="onToggle($index)" />
+            <span class="checkbox-ui"></span>
+            <span class="subtask-title" id="subtask-{{$index}}">{{ subtask.title }}</span>
+          </label>
+        </li>
+      }
+    </ul>
+  </section>
+}

@@ -2,19 +2,15 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild }
 import { DatePipe, NgClass } from '@angular/common';
 import { Task } from '../../../shared/interfaces/task';
 import { ContactService } from '../../../shared/services/contact.service';
-import {
-  getContactDisplayAvatarSrcById,
-  getContactDisplayColorById,
-  getContactDisplayInitialsById,
-  getContactDisplayNameById,
-} from '../../../shared/utilities/contact-presenter.utils';
 import { TaskDialogUiState } from './task-dialog-ui-state';
 import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
+import { TaskDialogAssignees } from './task-dialog-assignees/task-dialog-assignees';
 import { TaskDialogAttachments } from './task-dialog-attachments/task-dialog-attachments';
+import { TaskDialogSubtasks } from './task-dialog-subtasks/task-dialog-subtasks';
 
 @Component({
   selector: 'app-task-dialog',
-  imports: [NgClass, DatePipe, TaskDialogAttachments],
+  imports: [NgClass, DatePipe, TaskDialogAttachments, TaskDialogAssignees, TaskDialogSubtasks],
   templateUrl: './task-dialog.html',
   styleUrl: './task-dialog.scss',
 })
@@ -30,14 +26,6 @@ export class TaskDialog {
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
   contactService = inject(ContactService);
   subtaskService = inject(TaskDialogSubtaskService);
-  readonly getAssigneeInitials = (id: string): string =>
-    getContactDisplayInitialsById(this.contactService.contacts, id);
-  readonly getAssigneeName = (id: string): string =>
-    getContactDisplayNameById(this.contactService.contacts, id);
-  readonly getUserColor = (id: string): string =>
-    getContactDisplayColorById(this.contactService.contacts, id);
-  readonly getAssigneeAvatarSrc = (id: string): string | null =>
-    getContactDisplayAvatarSrcById(this.contactService.contacts, id);
   @Input() task!: Task;
   @Output() deleteTask = new EventEmitter<string>();
   @Output() editTask = new EventEmitter<Task>();

@@ -1,0 +1,89 @@
+@use '../../../../../styles/index.scss' as styles;
+
+.subtasks {
+  @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);
+  width: 100%;
+
+  @include styles.up-xxl {
+    gap: 10px;
+  }
+}
+
+.subtitle {
+  color: #42526e;
+}
+
+.subtask-list {
+  @include styles.setFlex($d: column, $ai: flex-start, $jc: flex-start, $gap: 6px);
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  max-height: 110px;
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: white;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: styles.$gray-light;
+  }
+}
+
+.checkbox-wrapper {
+  @include styles.setFlex($jc: flex-start, $gap: 10px);
+  width: fit-content;
+  padding-left: 16px;
+  padding-right: 16px;
+  margin-bottom: 6px;
+  cursor: pointer;
+
+  @include styles.up-xxl {
+    font-size: 16px;
+    gap: 14px;
+    margin-bottom: 6px;
+  }
+
+  &:hover {
+    padding-right: 16px;
+    border-radius: 8px;
+    background-color: styles.$white-light;
+  }
+
+  .checkbox {
+    display: none;
+
+    &:checked + .checkbox-ui {
+      background: url(/assets/img/icons/checkboxes/checkbox-checked.svg)
+        center / contain no-repeat;
+    }
+  }
+
+  .checkbox-ui {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    background: url(/assets/img/icons/checkboxes/checkbox.svg) center /
+      contain no-repeat;
+  }
+
+  &:hover .checkbox-ui {
+    background: url(/assets/img/icons/checkboxes/checkbox-hover.svg)
+      center / contain no-repeat;
+  }
+
+  &:hover .checkbox:checked + .checkbox-ui {
+    background: url(/assets/img/icons/checkboxes/checkbox-checked-hover.svg)
+      center / contain no-repeat;
+  }
+}
+
+.subtask-title {
+  word-break: break-word;
+}
