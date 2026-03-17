@@ -6,28 +6,28 @@ import { ContactService } from '../../shared/services/contact.service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { AuthService } from '../../shared/services/auth.service';
-import { ContactsPageUiState } from './state/contacts-page-ui-state';
-import { ContactsPageDeleteDialog } from './state/contacts-page-delete-dialog';
+import { ContactsUiState } from './state/contacts-ui-state';
+import { ContactsDeleteDialog } from './state/contacts-delete-dialog';
 
 @Component({
-  selector: 'app-contacts-page',
+  selector: 'app-contacts',
   imports: [ContactList, ContactDetail, ContactDialog],
-  templateUrl: './contacts-page.html',
-  styleUrl: './contacts-page.scss',
+  templateUrl: './contacts.html',
+  styleUrl: './contacts.scss',
 })
 /**
- * ContactsPage component
+ * Contacts component
  *
  * Acts as the main container for the contacts page.
  * Coordinates list, detail, dialog, and deletion flows
  * and manages responsive behavior.
  */
-export class ContactsPage implements DoCheck, OnDestroy {
+export class Contacts implements DoCheck, OnDestroy {
   contactService = inject(ContactService);
   authService = inject(AuthService);
   private lastContactsVersion = 0;
-  private readonly uiState = new ContactsPageUiState(768);
-  private readonly deleteDialogState = new ContactsPageDeleteDialog();
+  private readonly uiState = new ContactsUiState(768);
+  private readonly deleteDialogState = new ContactsDeleteDialog();
 
   activeContactID: string | null = null;
   activeContact: Contact | null = null;

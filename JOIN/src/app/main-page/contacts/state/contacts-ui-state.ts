@@ -1,7 +1,7 @@
 /**
  * Manages responsive detail-panel and toast state for the contacts page.
  */
-export class ContactsPageUiState {
+export class ContactsUiState {
   private readonly mobileMaxWidth: number;
   private toastTimerId: number | null = null;
 

@@ -3,7 +3,7 @@ import { Contact } from '../../../shared/interfaces/contact';
 /**
  * Manages the delete-confirmation dialog state for the contacts page.
  */
-export class ContactsPageDeleteDialog {
+export class ContactsDeleteDialog {
   contactToDelete: Contact | null = null;
 
   /**
