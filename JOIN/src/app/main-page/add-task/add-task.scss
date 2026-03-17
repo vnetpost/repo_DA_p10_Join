@@ -88,6 +88,10 @@
   margin-top: 1.5rem;
 }
 
+.add-task__field-group--subtasks {
+  margin-top: -1.7rem;
+}
+
 .add-task__column:first-child {
   padding-right: clamp(1rem, 1.8vw, 2rem);
 }
@@ -216,6 +220,10 @@
   .add-task__column--divider {
     border-left: none;
     padding-left: clamp(0rem, 0vw, 0rem);
+  }
+
+  .add-task__field-group--subtasks {
+    margin-top: 0;
   }
 
   .add-task__footer {
