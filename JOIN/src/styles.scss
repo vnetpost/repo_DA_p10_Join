@@ -7,3 +7,9 @@
 @use './styles/good-day-message';
 @use './styles/dialogs';
 @use './styles/toasts';
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: ease;
+}
