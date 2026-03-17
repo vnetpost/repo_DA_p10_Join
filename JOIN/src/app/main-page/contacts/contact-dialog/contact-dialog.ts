@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
@@ -14,6 +14,7 @@ import {
   ContactDialogAvatarChange,
 } from './contact-dialog-avatar/contact-dialog-avatar';
 import { ContactDialogFormFields } from './contact-dialog-form-fields/contact-dialog-form-fields';
+import { ContactDialogSubmitService } from './contact-dialog-submit.service';
 
 @Component({
   selector: 'app-contact-dialog',
@@ -35,6 +36,7 @@ export class ContactDialog {
   @Input() canUploadAvatar = false;
   dialogMode: 'add' | 'edit' = 'add';
   private readonly uiState = new ContactDialogUiState();
+  private readonly contactDialogSubmitService = inject(ContactDialogSubmitService);
   userColor: string | null = null;
   showDeleteConfirm: boolean = false;
   isSubmitting: boolean = false;
@@ -143,32 +145,19 @@ export class ContactDialog {
    */
   onSubmit(form: NgForm): void {
     if (this.isSubmitting) return;
-
-    if (form.invalid) {
-      form.control.markAllAsTouched();
-      return;
-    }
+    const submitResult = this.contactDialogSubmitService.submit(
+      form,
+      this.dialogMode,
+      this.contactData,
+      this.avatar,
+    );
+    if (!submitResult) return;
 
     this.isSubmitting = true;
 
     try {
-      const formData: ContactFormData = {
-        name: this.contactData.name,
-        email: this.contactData.email,
-        phone: this.contactData.phone,
-      };
-      if (this.dialogMode === 'edit') formData.avatar = this.avatar ?? null;
-      this.saveContact.emit(formData);
-
+      this.saveContact.emit(submitResult.formData);
       this.closeDialog();
-
-      if (this.dialogMode === 'add') {
-        form.resetForm({
-          name: '',
-          email: '',
-          phone: '',
-        });
-      }
     } catch (error) {
       this.isSubmitting = false;
       throw error;
