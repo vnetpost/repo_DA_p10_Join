@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskDialogAttachmentService } from './services/task-dialog-attachment.service';
+import { TaskDialogAttachmentService } from './task-dialog-attachment.service';
 
 describe('TaskDialogAttachmentService', () => {
   let service: TaskDialogAttachmentService;

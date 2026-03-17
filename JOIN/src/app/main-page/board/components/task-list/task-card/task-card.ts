@@ -1,13 +1,13 @@
 import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { Task } from '../../../../shared/interfaces/task';
-import { ContactService } from '../../../../shared/services/contact.service';
+import { Task } from '../../../../../shared/interfaces/task';
+import { ContactService } from '../../../../../shared/services/contact.service';
 import {
   getContactDisplayAvatarSrcById,
   getContactDisplayColorById,
   getContactDisplayInitialsById,
-} from '../../../../shared/utilities/contact-presenter.utils';
+} from '../../../../../shared/utilities/contact-presenter.utils';
 import { NgClass } from '@angular/common';
-import { TaskService } from '../../../../shared/services/task.service';
+import { TaskService } from '../../../../../shared/services/task.service';
 import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({

@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Subtask } from '../../../../../shared/interfaces/task';
+import { Subtask } from '../../../../../../shared/interfaces/task';
 
 /**
  * Renders subtasks inside the task dialog.

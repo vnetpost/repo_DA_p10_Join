@@ -1,12 +1,12 @@
 import { Component, ElementRef, Input, OnDestroy, ViewChild, inject } from '@angular/core';
-import { TaskAttachment } from '../../../../../shared/interfaces/task';
+import { TaskAttachment } from '../../../../../../shared/interfaces/task';
 import {
   getTaskAttachmentFileName,
   getTaskAttachmentPreviewSrc,
   getTaskAttachmentSizeLabel,
   getTaskAttachmentTypeLabel,
   isTaskAttachmentImage,
-} from '../../../../../shared/utilities/task-attachment.utils';
+} from '../../../../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
 import { TaskDialogAttachmentService } from '../../services/task-dialog-attachment.service';
 

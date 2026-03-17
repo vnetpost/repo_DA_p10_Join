@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskDialogSubtaskService } from './services/task-dialog-subtask.service';
+import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
 
 describe('TaskDialogSubtaskService', () => {
   let service: TaskDialogSubtaskService;

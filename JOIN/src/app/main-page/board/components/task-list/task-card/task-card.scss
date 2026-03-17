@@ -1,4 +1,4 @@
-@use "../../../../../styles/index.scss" as styles;
+@use '../../../../../../styles/index.scss' as styles;
 
 article{
   @include styles.setFlex($d: column, $ai: stretch, $jc: flex-start, $gap: 23px);

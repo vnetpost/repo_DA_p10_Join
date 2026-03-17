@@ -1,6 +1,6 @@
 import { Injectable, inject } from '@angular/core';
-import { Task } from '../../../../shared/interfaces/task';
-import { TaskService } from '../../../../shared/services/task.service';
+import { Task } from '../../../../../shared/interfaces/task';
+import { TaskService } from '../../../../../shared/services/task.service';
 
 /**
  * Handles subtask state changes inside the task dialog.

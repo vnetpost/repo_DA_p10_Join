@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
-import { TaskAttachment } from '../../../../shared/interfaces/task';
-import { TaskAttachmentActionService } from '../../../../shared/services/task-attachment-action.service';
-import { TaskAttachmentViewerService } from '../../../../shared/services/task-attachment-viewer.service';
-import { getTaskAttachmentFileName } from '../../../../shared/utilities/task-attachment.utils';
+import { TaskAttachment } from '../../../../../shared/interfaces/task';
+import { TaskAttachmentActionService } from '../../../../../shared/services/task-attachment-action.service';
+import { TaskAttachmentViewerService } from '../../../../../shared/services/task-attachment-viewer.service';
+import { getTaskAttachmentFileName } from '../../../../../shared/utilities/task-attachment.utils';
 import type Viewer from 'viewerjs';
 
 /**

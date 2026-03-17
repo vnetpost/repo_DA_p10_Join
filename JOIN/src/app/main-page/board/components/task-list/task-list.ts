@@ -1,8 +1,8 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
-import { TaskService } from '../../../shared/services/task.service';
+import { TaskService } from '../../../../shared/services/task.service';
 import { TaskCard } from './task-card/task-card';
-import { ContactService } from '../../../shared/services/contact.service';
-import { Task } from '../../../shared/interfaces/task';
+import { ContactService } from '../../../../shared/services/contact.service';
+import { Task } from '../../../../shared/interfaces/task';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({

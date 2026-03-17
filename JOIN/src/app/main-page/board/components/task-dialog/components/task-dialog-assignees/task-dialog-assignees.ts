@@ -1,11 +1,11 @@
 import { Component, Input } from '@angular/core';
-import { Contact } from '../../../../../shared/interfaces/contact';
+import { Contact } from '../../../../../../shared/interfaces/contact';
 import {
   getContactDisplayAvatarSrcById,
   getContactDisplayColorById,
   getContactDisplayInitialsById,
   getContactDisplayNameById,
-} from '../../../../../shared/utilities/contact-presenter.utils';
+} from '../../../../../../shared/utilities/contact-presenter.utils';
 
 /**
  * Renders the assignee list inside the task dialog.

@@ -1,11 +1,11 @@
 import { Component, HostListener, inject, ViewChild } from '@angular/core';
-import { TaskList } from './task-list/task-list';
+import { TaskList } from './components/task-list/task-list';
 import { TaskService } from '../../shared/services/task.service';
-import { Timestamp } from '@angular/fire/firestore';
 import { FormsModule } from '@angular/forms';
-import { TaskDialog } from './task-dialog/task-dialog';
+import { TaskDialog } from './components/task-dialog/task-dialog';
 import { Task } from '../../shared/interfaces/task';
 import { AddTask } from '../add-task/add-task';
+import { TasksBoardUiState } from './state/tasks-board-ui-state';
 
 @Component({
   selector: 'app-tasks-board',
@@ -24,14 +24,45 @@ import { AddTask } from '../add-task/add-task';
 export class TasksBoard {
   taskService = inject(TaskService);
   searchTerm: string = '';
-  isAddTaskOverlayOpen: boolean = false;
-  taskToEdit: Task | null = null;
-  addTaskStatus: Task['status'] = 'to-do';
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
-  showCloseConfirm: boolean = false;
-  isAddTaskDirty: boolean = false;
-  latestSavedTask: Task | null = null;
+  private readonly uiState = new TasksBoardUiState();
+
+  /**
+   * Indicates whether the add-task overlay is currently open.
+   *
+   * @returns `true` when the overlay is visible.
+   */
+  get isAddTaskOverlayOpen(): boolean {
+    return this.uiState.isAddTaskOverlayOpen;
+  }
+
+  /**
+   * Exposes the task currently being edited inside the overlay.
+   *
+   * @returns Task being edited or `null`.
+   */
+  get taskToEdit(): Task | null {
+    return this.uiState.taskToEdit;
+  }
+
+  /**
+   * Exposes the target status for newly created tasks.
+   *
+   * @returns Initial task status for the overlay form.
+   */
+  get addTaskStatus(): Task['status'] {
+    return this.uiState.addTaskStatus;
+  }
+
+  /**
+   * Indicates whether the close-confirmation prompt is visible.
+   *
+   * @returns `true` when the close confirmation is shown.
+   */
+  get showCloseConfirm(): boolean {
+    return this.uiState.showCloseConfirm;
+  }
 
   /**
    * Performs a search based on the current search term.
@@ -87,10 +118,7 @@ export class TasksBoard {
    * @returns void
    */
   openAddTaskOverlay(status: Task['status'] = 'to-do'): void {
-    this.taskToEdit = null;
-    this.latestSavedTask = null;
-    this.addTaskStatus = status;
-    this.isAddTaskOverlayOpen = true;
+    this.uiState.openCreateOverlay(status);
   }
 
   /**
@@ -103,10 +131,7 @@ export class TasksBoard {
    * @returns void
    */
   openEditTaskOverlay(task: Task): void {
-    this.taskToEdit = task;
-    this.latestSavedTask = null;
-    this.addTaskStatus = task.status;
-    this.isAddTaskOverlayOpen = true;
+    this.uiState.openEditOverlay(task);
   }
 
   /**
@@ -116,7 +141,7 @@ export class TasksBoard {
    * @returns void
    */
   onTaskSaved(task: Task): void {
-    this.latestSavedTask = task;
+    this.uiState.setLatestSavedTask(task);
   }
 
   /**
@@ -126,7 +151,7 @@ export class TasksBoard {
    * @returns void
    */
   onAddTaskDirtyChange(isDirty: boolean): void {
-    this.isAddTaskDirty = isDirty;
+    this.uiState.setDirty(isDirty);
   }
 
   /**
@@ -137,7 +162,6 @@ export class TasksBoard {
    * @returns void
    */
   confirmClose(): void {
-    this.showCloseConfirm = false;
     this.closeAddTaskOverlay();
   }
 
@@ -147,7 +171,7 @@ export class TasksBoard {
    * @returns void
    */
   cancelClose(): void {
-    this.showCloseConfirm = false;
+    this.uiState.cancelCloseConfirm();
   }
 
   /**
@@ -158,12 +182,7 @@ export class TasksBoard {
    * @returns void
    */
   onCloseAddTaskClick(): void {
-    if (!this.isAddTaskDirty) {
-      this.closeAddTaskOverlay();
-      return;
-    }
-
-    this.showCloseConfirm = true;
+    if (this.uiState.requestClose()) this.closeAddTaskOverlay();
   }
 
   /**
@@ -177,13 +196,7 @@ export class TasksBoard {
    */
   onAddTaskOverlayMouseDown(event: MouseEvent): void {
     if (event.target !== event.currentTarget) return;
-
-    if (!this.isAddTaskDirty) {
-      this.closeAddTaskOverlay();
-      return;
-    }
-
-    this.showCloseConfirm = true;
+    if (this.uiState.requestClose()) this.closeAddTaskOverlay();
   }
 
   /**
@@ -196,15 +209,8 @@ export class TasksBoard {
    */
   @HostListener('document:keydown.escape')
   onEscape(): void {
-    if (!this.isAddTaskOverlayOpen) return;
-    if (this.showCloseConfirm) return;
-
-    if (!this.isAddTaskDirty) {
-      this.closeAddTaskOverlay();
-      return;
-    }
-
-    this.showCloseConfirm = true;
+    if (!this.isAddTaskOverlayOpen || this.showCloseConfirm) return;
+    if (this.uiState.requestClose()) this.closeAddTaskOverlay();
   }
 
   /**
@@ -216,13 +222,7 @@ export class TasksBoard {
    * @returns void
    */
   closeAddTaskOverlay(): void {
-    const editedTask = this.taskToEdit;
-    const latestSavedTask = this.latestSavedTask;
-    this.isAddTaskOverlayOpen = false;
-    this.taskToEdit = null;
-    this.latestSavedTask = null;
-    this.addTaskStatus = 'to-do';
-    this.isAddTaskDirty = false;
+    const { editedTask, latestSavedTask } = this.uiState.closeOverlay();
 
     const taskIdToReopen = latestSavedTask?.id ?? editedTask?.id;
     if (taskIdToReopen) {

@@ -1,4 +1,4 @@
-@use '../../../../../../styles/index.scss' as styles;
+@use '../../../../../../../styles/index.scss' as styles;
 
 .attachments {
   @include styles.setFlex($d: column, $ai: flex-start, $gap: 8px);

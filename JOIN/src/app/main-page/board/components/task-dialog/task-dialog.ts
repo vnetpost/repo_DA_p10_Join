@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild } from '@angular/core';
 import { DatePipe, NgClass } from '@angular/common';
-import { Task } from '../../../shared/interfaces/task';
-import { ContactService } from '../../../shared/services/contact.service';
+import { Task } from '../../../../shared/interfaces/task';
+import { ContactService } from '../../../../shared/services/contact.service';
 import { TaskDialogUiState } from './state/task-dialog-ui-state';
 import { TaskDialogSubtaskService } from './services/task-dialog-subtask.service';
 import { TaskDialogAssignees } from './components/task-dialog-assignees/task-dialog-assignees';
