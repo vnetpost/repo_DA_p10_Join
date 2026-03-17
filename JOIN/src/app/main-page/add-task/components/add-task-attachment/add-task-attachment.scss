@@ -231,34 +231,6 @@
 }
 
 @include styles.down-md {
-  .file-upload__header,
-  .file-upload__top-row {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
-  .file-upload__header,
-  .file-upload__top-row,
-  .file-upload__delete-all-slot {
-    min-height: unset;
-    height: auto;
-  }
-
-  .file-upload__delete-all-slot {
-    min-width: 100%;
-    justify-content: flex-start;
-  }
-
-  .file-upload__preview-slot {
-    min-height: 9.2rem;
-  }
-
-  .file-upload__usage {
-    min-width: 100%;
-    flex-shrink: 1;
-    text-align: left;
-  }
-
   .file-upload__error {
     min-height: 3.9em;
   }
