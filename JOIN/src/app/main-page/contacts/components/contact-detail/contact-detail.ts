@@ -7,7 +7,7 @@ import {
   OnChanges,
   SimpleChanges,
 } from '@angular/core';
-import { Contact } from '../../../shared/interfaces/contact';
+import { Contact } from '../../../../shared/interfaces/contact';
 import { ContactDetailProfile } from './contact-detail-profile/contact-detail-profile';
 
 @Component({

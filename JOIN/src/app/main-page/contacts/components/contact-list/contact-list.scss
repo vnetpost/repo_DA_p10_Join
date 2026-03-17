@@ -1,4 +1,4 @@
-@use '../../../../styles/index.scss' as styles;
+@use '../../../../../styles/index.scss' as styles;
 
 .contact-list {
   @include styles.setFlex($d: column, $jc: flex-start, $ai: stretch, $gap: 1.4rem);

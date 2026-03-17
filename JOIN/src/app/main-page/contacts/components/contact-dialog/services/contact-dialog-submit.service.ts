@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { ContactAvatar } from '../../../../shared/interfaces/contact';
-import { ContactFormData } from '../../../../shared/interfaces/contact-form-data';
+import { ContactAvatar } from '../../../../../shared/interfaces/contact';
+import { ContactFormData } from '../../../../../shared/interfaces/contact-form-data';
 
 export type ContactDialogMode = 'add' | 'edit';
 

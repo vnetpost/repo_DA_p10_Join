@@ -1,8 +1,8 @@
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output, ViewChild, inject } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
-import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
-import { getContactAvatarSrc } from '../../../shared/utilities/utils';
+import { Contact, ContactAvatar } from '../../../../shared/interfaces/contact';
+import { ContactFormData } from '../../../../shared/interfaces/contact-form-data';
+import { getContactAvatarSrc } from '../../../../shared/utilities/utils';
 import { ContactDialogUiState } from './state/contact-dialog-ui-state';
 import {
   captureContactDialogSnapshot,

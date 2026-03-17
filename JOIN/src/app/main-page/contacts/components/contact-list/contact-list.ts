@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ContactListItem } from './contact-list-item/contact-list-item';
-import { Contact } from '../../../shared/interfaces/contact';
+import { Contact } from '../../../../shared/interfaces/contact';
 
 @Component({
   selector: 'app-contact-list',

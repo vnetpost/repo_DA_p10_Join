@@ -1,4 +1,4 @@
-import { Contact } from '../../shared/interfaces/contact';
+import { Contact } from '../../../shared/interfaces/contact';
 
 /**
  * Manages the delete-confirmation dialog state for the contacts page.

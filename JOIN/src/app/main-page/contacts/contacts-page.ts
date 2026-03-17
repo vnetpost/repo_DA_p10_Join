@@ -1,13 +1,13 @@
 import { Component, DoCheck, ElementRef, HostListener, OnDestroy, inject, ViewChild } from '@angular/core';
-import { ContactList } from './contact-list/contact-list';
-import { ContactDetail } from './contact-detail/contact-detail';
-import { ContactDialog } from './contact-dialog/contact-dialog';
+import { ContactList } from './components/contact-list/contact-list';
+import { ContactDetail } from './components/contact-detail/contact-detail';
+import { ContactDialog } from './components/contact-dialog/contact-dialog';
 import { ContactService } from '../../shared/services/contact.service';
 import { Contact } from '../../shared/interfaces/contact';
 import { ContactFormData } from '../../shared/interfaces/contact-form-data';
 import { AuthService } from '../../shared/services/auth.service';
-import { ContactsPageUiState } from './contacts-page-ui-state';
-import { ContactsPageDeleteDialog } from './contacts-page-delete-dialog';
+import { ContactsPageUiState } from './state/contacts-page-ui-state';
+import { ContactsPageDeleteDialog } from './state/contacts-page-delete-dialog';
 
 @Component({
   selector: 'app-contacts-page',
