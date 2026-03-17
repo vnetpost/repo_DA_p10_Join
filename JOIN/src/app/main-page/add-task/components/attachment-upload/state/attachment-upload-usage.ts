@@ -1,5 +1,5 @@
-import { TaskAttachment } from '../../../../shared/interfaces/task';
-import { TaskAttachmentProcessingService } from '../../../../shared/services/task-attachment-processing.service';
+import { TaskAttachment } from '../../../../../shared/interfaces/task';
+import { TaskAttachmentProcessingService } from '../../../../../shared/services/task-attachment-processing.service';
 
 /**
  * Tracks persisted attachment payload usage for the current task form.

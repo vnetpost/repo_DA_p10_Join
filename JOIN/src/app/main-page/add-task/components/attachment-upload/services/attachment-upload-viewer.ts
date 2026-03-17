@@ -1,5 +1,5 @@
 import type Viewer from 'viewerjs';
-import { TaskAttachmentViewerService } from '../../../../shared/services/task-attachment-viewer.service';
+import { TaskAttachmentViewerService } from '../../../../../shared/services/task-attachment-viewer.service';
 
 /**
  * Encapsulates Viewer.js lifecycle management for the attachment upload gallery.

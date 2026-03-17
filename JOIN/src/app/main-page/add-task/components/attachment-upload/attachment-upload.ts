@@ -23,17 +23,17 @@ import {
   getTaskAttachmentSizeLabel,
   getTaskAttachmentTypeLabel,
 } from '../../../../shared/utilities/task-attachment.utils';
-import { AttachmentUploadPreviewStore } from './attachment-upload-preview-store';
+import { AttachmentUploadPreviewStore } from './state/attachment-upload-preview-store';
 import {
   getSelectedAttachmentSizeLabel,
   getSelectedAttachmentTypeLabel,
-} from './attachment-upload.utils';
+} from './utils/attachment-upload.utils';
 import {
   filterAttachmentFiles,
   mergeAttachmentFiles,
-} from './attachment-upload-selection.utils';
-import { AttachmentUploadViewer } from './attachment-upload-viewer';
-import { AttachmentUploadUsage } from './attachment-upload-usage';
+} from './utils/attachment-upload-selection.utils';
+import { AttachmentUploadViewer } from './services/attachment-upload-viewer';
+import { AttachmentUploadUsage } from './state/attachment-upload-usage';
 
 /**
  * Handles attachment selection, preview generation and removal inside the task form.

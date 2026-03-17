@@ -1,4 +1,4 @@
-import { formatAttachmentSize } from '../../../../shared/utilities/task-attachment.utils';
+import { formatAttachmentSize } from '../../../../../shared/utilities/task-attachment.utils';
 
 /**
  * Builds a short type label for one selected browser file.
