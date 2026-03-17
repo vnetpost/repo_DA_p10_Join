@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MainPageBranding } from './main-page-branding';
+import { MainPageBranding } from './components/main-page-branding/main-page-branding';
 
 describe('MainPageBranding', () => {
   let component: MainPageBranding;

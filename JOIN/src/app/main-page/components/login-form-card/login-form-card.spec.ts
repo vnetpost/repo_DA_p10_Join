@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { LoginFormCard } from './login-form-card';
+import { LoginFormCard } from './components/login-form-card/login-form-card';
 
 describe('LoginFormCard', () => {
   beforeEach(async () => {

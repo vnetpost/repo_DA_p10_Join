@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
+import { MainPageAuthSubmitService } from './services/main-page-auth-submit.service';
 
 describe('MainPageAuthSubmitService', () => {
   let service: MainPageAuthSubmitService;

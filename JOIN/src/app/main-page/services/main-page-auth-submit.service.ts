@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AuthService } from '../shared/services/auth.service';
-import { LoginFormData, SignupFormData } from '../shared/interfaces/auth-form-data';
+import { AuthService } from '../../shared/services/auth.service';
+import { LoginFormData, SignupFormData } from '../../shared/interfaces/auth-form-data';
 
 /**
  * Coordinates auth form submissions for the main page.

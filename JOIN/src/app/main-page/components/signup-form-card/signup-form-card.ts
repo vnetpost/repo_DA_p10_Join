@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { SignupFormData } from '../../shared/interfaces/auth-form-data';
+import { SignupFormData } from '../../../shared/interfaces/auth-form-data';
 
 /**
  * Renders the sign-up form card on the auth page.

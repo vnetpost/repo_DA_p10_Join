@@ -1,7 +1,7 @@
 import { AsyncPipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
-import { AuthService } from '../../shared/services/auth.service';
-import { getGreeting } from '../../shared/utilities/utils';
+import { AuthService } from '../../../shared/services/auth.service';
+import { getGreeting } from '../../../shared/utilities/utils';
 
 /**
  * Renders the temporary mobile greeting overlay shown after login.

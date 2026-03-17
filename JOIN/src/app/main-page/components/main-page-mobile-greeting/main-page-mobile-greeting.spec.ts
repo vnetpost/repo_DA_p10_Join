@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MainPageMobileGreeting } from './main-page-mobile-greeting';
+import { MainPageMobileGreeting } from './components/main-page-mobile-greeting/main-page-mobile-greeting';
 
 describe('MainPageMobileGreeting', () => {
   let component: MainPageMobileGreeting;

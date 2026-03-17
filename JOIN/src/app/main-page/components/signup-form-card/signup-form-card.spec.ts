@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { SignupFormCard } from './signup-form-card';
+import { SignupFormCard } from './components/signup-form-card/signup-form-card';
 
 describe('SignupFormCard', () => {
   beforeEach(async () => {

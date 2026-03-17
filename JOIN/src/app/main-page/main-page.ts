@@ -2,12 +2,12 @@ import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule, NgForm } from '@angular/forms';
 import { LoginFormData, SignupFormData } from '../shared/interfaces/auth-form-data';
-import { MainPageUiState } from './main-page-ui-state';
-import { MainPageAuthSubmitService } from './main-page-auth-submit.service';
-import { LoginFormCard } from './login-form-card/login-form-card';
-import { SignupFormCard } from './signup-form-card/signup-form-card';
-import { MainPageBranding } from './main-page-branding/main-page-branding';
-import { MainPageMobileGreeting } from './main-page-mobile-greeting/main-page-mobile-greeting';
+import { MainPageUiState } from './state/main-page-ui-state';
+import { MainPageAuthSubmitService } from './services/main-page-auth-submit.service';
+import { LoginFormCard } from './components/login-form-card/login-form-card';
+import { SignupFormCard } from './components/signup-form-card/signup-form-card';
+import { MainPageBranding } from './components/main-page-branding/main-page-branding';
+import { MainPageMobileGreeting } from './components/main-page-mobile-greeting/main-page-mobile-greeting';
 
 @Component({
   selector: 'app-main-page',

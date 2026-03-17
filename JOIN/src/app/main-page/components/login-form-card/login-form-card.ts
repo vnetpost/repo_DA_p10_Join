@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
-import { LoginFormData } from '../../shared/interfaces/auth-form-data';
+import { LoginFormData } from '../../../shared/interfaces/auth-form-data';
 
 /**
  * Renders the log-in form card on the auth page.
