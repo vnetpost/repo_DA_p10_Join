@@ -137,7 +137,15 @@
 
 .add-task__submit-button--disabled {
   border: 1px solid styles.$gray-dark;
+  background-color: styles.$gray-dark;
+  box-shadow: none;
   filter: opacity(0.5);
+
+  &:hover,
+  &:active {
+    background-color: styles.$gray-dark;
+    box-shadow: none;
+  }
 }
 
 .add-task__field-error {
