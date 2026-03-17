@@ -3,7 +3,7 @@ import { Task } from '../../../shared/interfaces/task';
 /**
  * Encapsulates transient overlay and confirmation state for the task board.
  */
-export class TasksBoardUiState {
+export class BoardUiState {
   isAddTaskOverlayOpen = false;
   taskToEdit: Task | null = null;
   addTaskStatus: Task['status'] = 'to-do';

@@ -5,28 +5,28 @@ import { FormsModule } from '@angular/forms';
 import { TaskDialog } from './components/task-dialog/task-dialog';
 import { Task } from '../../shared/interfaces/task';
 import { AddTask } from '../add-task/add-task';
-import { TasksBoardUiState } from './state/tasks-board-ui-state';
+import { BoardUiState } from './state/board-ui-state';
 
 @Component({
-  selector: 'app-tasks-board',
+  selector: 'app-board',
   imports: [TaskList, FormsModule, TaskDialog, AddTask],
-  templateUrl: './tasks-board.html',
-  styleUrl: './tasks-board.scss',
+  templateUrl: './board.html',
+  styleUrl: './board.scss',
 })
 /**
- * TasksBoard component
+ * Board component
  *
  * Represents the main task board view.
  * Handles task searching, opening task details,
  * deleting tasks, and managing the add-task overlay
  * including edit and close confirmation behavior.
  */
-export class TasksBoard {
+export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
   @ViewChild('taskDialog') taskDialog!: TaskDialog;
   selectedTask!: Task;
-  private readonly uiState = new TasksBoardUiState();
+  private readonly uiState = new BoardUiState();
 
   /**
    * Indicates whether the add-task overlay is currently open.
