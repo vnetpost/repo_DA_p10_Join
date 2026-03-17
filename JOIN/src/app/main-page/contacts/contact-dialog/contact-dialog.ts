@@ -3,18 +3,18 @@ import { FormsModule, NgForm } from '@angular/forms';
 import { Contact, ContactAvatar } from '../../../shared/interfaces/contact';
 import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
 import { getContactAvatarSrc } from '../../../shared/utilities/utils';
-import { ContactDialogUiState } from './contact-dialog-ui-state';
+import { ContactDialogUiState } from './state/contact-dialog-ui-state';
 import {
   captureContactDialogSnapshot,
   ContactDialogSnapshot,
   hasContactDialogChanges,
-} from './contact-dialog-snapshot.utils';
+} from './utils/contact-dialog-snapshot.utils';
 import {
   ContactDialogAvatar,
   ContactDialogAvatarChange,
-} from './contact-dialog-avatar/contact-dialog-avatar';
-import { ContactDialogFormFields } from './contact-dialog-form-fields/contact-dialog-form-fields';
-import { ContactDialogSubmitService } from './contact-dialog-submit.service';
+} from './components/contact-dialog-avatar/contact-dialog-avatar';
+import { ContactDialogFormFields } from './components/contact-dialog-form-fields/contact-dialog-form-fields';
+import { ContactDialogSubmitService } from './services/contact-dialog-submit.service';
 
 @Component({
   selector: 'app-contact-dialog',

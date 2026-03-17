@@ -1,5 +1,5 @@
-import { ContactAvatar } from '../../../shared/interfaces/contact';
-import { ContactFormData } from '../../../shared/interfaces/contact-form-data';
+import { ContactAvatar } from '../../../../shared/interfaces/contact';
+import { ContactFormData } from '../../../../shared/interfaces/contact-form-data';
 
 /**
  * Normalized snapshot used to compare contact dialog changes.

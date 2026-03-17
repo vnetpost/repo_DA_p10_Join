@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
-import { ContactAvatar } from '../../../shared/interfaces/contact';
-import { ImageProcessingService } from '../../../shared/services/image-processing.service';
+import { ContactAvatar } from '../../../../shared/interfaces/contact';
+import { ImageProcessingService } from '../../../../shared/services/image-processing.service';
 
 export type ProcessedContactAvatar = {
   avatar: ContactAvatar;

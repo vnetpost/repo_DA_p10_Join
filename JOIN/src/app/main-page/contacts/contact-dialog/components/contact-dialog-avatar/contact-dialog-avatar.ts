@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, inject } from '@angular/core';
-import { ContactAvatar } from '../../../../shared/interfaces/contact';
-import { getTwoInitials } from '../../../../shared/utilities/utils';
-import { ContactAvatarProcessingService } from '../contact-avatar-processing.service';
+import { ContactAvatar } from '../../../../../shared/interfaces/contact';
+import { getTwoInitials } from '../../../../../shared/utilities/utils';
+import { ContactAvatarProcessingService } from '../../services/contact-avatar-processing.service';
 
 export type ContactDialogAvatarChange = {
   avatar: ContactAvatar;
