@@ -20,7 +20,7 @@
       </article>
     } @else if (tasksByStatus.length > 0) { 
         @for (singleTask of tasksByStatus; track singleTask.id) {
-          <app-task-card [task]="singleTask" (openTask)="openTask.emit($event)"></app-task-card>
+          <app-board-task-card [task]="singleTask" (openTask)="openTask.emit($event)"></app-board-task-card>
         }
       } @else{
         <article class="no-tasks-box">

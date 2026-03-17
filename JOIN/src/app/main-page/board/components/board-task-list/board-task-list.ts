@@ -1,24 +1,24 @@
 import { Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { TaskService } from '../../../../shared/services/task.service';
-import { TaskCard } from './task-card/task-card';
+import { BoardTaskCard } from './board-task-card/board-task-card';
 import { ContactService } from '../../../../shared/services/contact.service';
 import { Task } from '../../../../shared/interfaces/task';
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
-  selector: 'app-task-list',
-  imports: [TaskCard, DragDropModule],
-  templateUrl: './task-list.html',
-  styleUrl: './task-list.scss',
+  selector: 'app-board-task-list',
+  imports: [BoardTaskCard, DragDropModule],
+  templateUrl: './board-task-list.html',
+  styleUrl: './board-task-list.scss',
 })
 /**
- * TaskList component
+ * BoardTaskList component
  *
  * Represents a column of tasks filtered by a specific status.
  * Handles task rendering, drag-and-drop interactions,
  * and updates task ordering and status changes.
  */
-export class TaskList {
+export class BoardTaskList {
   taskService = inject(TaskService);
   contactService = inject(ContactService);
   @Input() status: Task['status'] = 'to-do';

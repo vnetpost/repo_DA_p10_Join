@@ -1,5 +1,5 @@
 @if(task){
-  <dialog #taskDialog (cancel)="onEsc($event)" (mousedown)="onBackdropClick($event)" role="dialog" aria-labelledby="task-dialog-title">
+  <dialog #taskDialog (cancel)="onEsc($event)" (mousedown)="onBackdropClick($event)" role="dialog" aria-labelledby="board-task-dialog-title">
   <article class="dialog-content">
     <section class="dialog-top">
       <header class="header">
@@ -13,7 +13,7 @@
       </header>
 
       <section class="topic">
-        <h2 class="title" id="task-dialog-title">{{ task.title }}</h2>
+        <h2 class="title" id="board-task-dialog-title">{{ task.title }}</h2>
       </section>
     </section>
 
@@ -46,17 +46,17 @@
         </p>
       </section>
 
-      <app-task-dialog-attachments [attachments]="task.attachments ?? []"></app-task-dialog-attachments>
+      <app-board-task-dialog-attachments [attachments]="task.attachments ?? []"></app-board-task-dialog-attachments>
 
-      <app-task-dialog-assignees
+      <app-board-task-dialog-assignees
         [assignees]="task.assignees"
         [contacts]="contactService.contacts"
-      ></app-task-dialog-assignees>
+      ></app-board-task-dialog-assignees>
 
-      <app-task-dialog-subtasks
+      <app-board-task-dialog-subtasks
         [subtasks]="task.subtasks"
         (toggleSubtask)="toggleSubtask($event)"
-      ></app-task-dialog-subtasks>
+      ></app-board-task-dialog-subtasks>
     </section>
 
     <footer>

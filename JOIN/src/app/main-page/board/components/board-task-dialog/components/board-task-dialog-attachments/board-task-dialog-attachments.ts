@@ -14,12 +14,12 @@ import { TaskDialogAttachmentService } from '../../services/task-dialog-attachme
  * Renders task attachments including preview, download and Viewer.js support.
  */
 @Component({
-  selector: 'app-task-dialog-attachments',
+  selector: 'app-board-task-dialog-attachments',
   imports: [],
-  templateUrl: './task-dialog-attachments.html',
-  styleUrl: './task-dialog-attachments.scss',
+  templateUrl: './board-task-dialog-attachments.html',
+  styleUrl: './board-task-dialog-attachments.scss',
 })
-export class TaskDialogAttachments implements OnDestroy {
+export class BoardTaskDialogAttachments implements OnDestroy {
   @Input() attachments: TaskAttachment[] = [];
 
   @ViewChild('attachmentViewerGallery') attachmentViewerGallery?: ElementRef<HTMLElement>;

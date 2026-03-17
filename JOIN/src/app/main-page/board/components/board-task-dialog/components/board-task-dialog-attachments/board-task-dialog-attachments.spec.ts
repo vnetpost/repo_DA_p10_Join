@@ -1,16 +1,16 @@
 import { TestBed } from '@angular/core/testing';
 
-import { TaskDialogAssignees } from './task-dialog-assignees';
+import { BoardTaskDialogAttachments } from './board-task-dialog-attachments';
 
-describe('TaskDialogAssignees', () => {
+describe('BoardTaskDialogAttachments', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskDialogAssignees],
+      imports: [BoardTaskDialogAttachments],
     }).compileComponents();
   });
 
   it('should create', () => {
-    const fixture = TestBed.createComponent(TaskDialogAssignees);
+    const fixture = TestBed.createComponent(BoardTaskDialogAttachments);
     const component = fixture.componentInstance;
     expect(component).toBeTruthy();
   });

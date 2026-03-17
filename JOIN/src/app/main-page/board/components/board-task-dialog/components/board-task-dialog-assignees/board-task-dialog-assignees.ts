@@ -11,12 +11,12 @@ import {
  * Renders the assignee list inside the task dialog.
  */
 @Component({
-  selector: 'app-task-dialog-assignees',
+  selector: 'app-board-task-dialog-assignees',
   imports: [],
-  templateUrl: './task-dialog-assignees.html',
-  styleUrl: './task-dialog-assignees.scss',
+  templateUrl: './board-task-dialog-assignees.html',
+  styleUrl: './board-task-dialog-assignees.scss',
 })
-export class TaskDialogAssignees {
+export class BoardTaskDialogAssignees {
   @Input() assignees: string[] = [];
   @Input() contacts: Contact[] = [];
 

@@ -4,24 +4,24 @@ import { Task } from '../../../../shared/interfaces/task';
 import { ContactService } from '../../../../shared/services/contact.service';
 import { TaskDialogUiState } from './state/task-dialog-ui-state';
 import { TaskDialogSubtaskService } from './services/task-dialog-subtask.service';
-import { TaskDialogAssignees } from './components/task-dialog-assignees/task-dialog-assignees';
-import { TaskDialogAttachments } from './components/task-dialog-attachments/task-dialog-attachments';
-import { TaskDialogSubtasks } from './components/task-dialog-subtasks/task-dialog-subtasks';
+import { BoardTaskDialogAssignees } from './components/board-task-dialog-assignees/board-task-dialog-assignees';
+import { BoardTaskDialogAttachments } from './components/board-task-dialog-attachments/board-task-dialog-attachments';
+import { BoardTaskDialogSubtasks } from './components/board-task-dialog-subtasks/board-task-dialog-subtasks';
 
 @Component({
-  selector: 'app-task-dialog',
-  imports: [NgClass, DatePipe, TaskDialogAttachments, TaskDialogAssignees, TaskDialogSubtasks],
-  templateUrl: './task-dialog.html',
-  styleUrl: './task-dialog.scss',
+  selector: 'app-board-task-dialog',
+  imports: [NgClass, DatePipe, BoardTaskDialogAttachments, BoardTaskDialogAssignees, BoardTaskDialogSubtasks],
+  templateUrl: './board-task-dialog.html',
+  styleUrl: './board-task-dialog.scss',
 })
 /**
- * TaskDialog component
+ * BoardTaskDialog component
  *
  * Represents a modal dialog displaying detailed information
  * about a task. Handles edit and delete actions, subtask updates,
  * and dialog interactions.
  */
-export class TaskDialog {
+export class BoardTaskDialog {
   private readonly noop = (): void => {};
   @ViewChild('taskDialog') dialog!: ElementRef<HTMLDialogElement>;
   contactService = inject(ContactService);

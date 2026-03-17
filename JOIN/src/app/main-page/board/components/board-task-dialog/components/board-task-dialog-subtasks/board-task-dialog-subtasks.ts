@@ -5,12 +5,12 @@ import { Subtask } from '../../../../../../shared/interfaces/task';
  * Renders subtasks inside the task dialog.
  */
 @Component({
-  selector: 'app-task-dialog-subtasks',
+  selector: 'app-board-task-dialog-subtasks',
   imports: [],
-  templateUrl: './task-dialog-subtasks.html',
-  styleUrl: './task-dialog-subtasks.scss',
+  templateUrl: './board-task-dialog-subtasks.html',
+  styleUrl: './board-task-dialog-subtasks.scss',
 })
-export class TaskDialogSubtasks {
+export class BoardTaskDialogSubtasks {
   @Input() subtasks: Subtask[] = [];
   @Output() toggleSubtask = new EventEmitter<number>();
 

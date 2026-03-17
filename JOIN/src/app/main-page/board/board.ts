@@ -1,15 +1,15 @@
 import { Component, HostListener, inject, ViewChild } from '@angular/core';
-import { TaskList } from './components/task-list/task-list';
+import { BoardTaskList } from './components/board-task-list/board-task-list';
 import { TaskService } from '../../shared/services/task.service';
 import { FormsModule } from '@angular/forms';
-import { TaskDialog } from './components/task-dialog/task-dialog';
+import { BoardTaskDialog } from './components/board-task-dialog/board-task-dialog';
 import { Task } from '../../shared/interfaces/task';
 import { AddTask } from '../add-task/add-task';
 import { BoardUiState } from './state/board-ui-state';
 
 @Component({
   selector: 'app-board',
-  imports: [TaskList, FormsModule, TaskDialog, AddTask],
+  imports: [BoardTaskList, FormsModule, BoardTaskDialog, AddTask],
   templateUrl: './board.html',
   styleUrl: './board.scss',
 })
@@ -24,7 +24,7 @@ import { BoardUiState } from './state/board-ui-state';
 export class Board {
   taskService = inject(TaskService);
   searchTerm: string = '';
-  @ViewChild('taskDialog') taskDialog!: TaskDialog;
+  @ViewChild('taskDialog') taskDialog!: BoardTaskDialog;
   selectedTask!: Task;
   private readonly uiState = new BoardUiState();
 
