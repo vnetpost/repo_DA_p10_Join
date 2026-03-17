@@ -2,11 +2,11 @@ import { Component, ElementRef, EventEmitter, inject, Input, Output, ViewChild }
 import { DatePipe, NgClass } from '@angular/common';
 import { Task } from '../../../shared/interfaces/task';
 import { ContactService } from '../../../shared/services/contact.service';
-import { TaskDialogUiState } from './task-dialog-ui-state';
-import { TaskDialogSubtaskService } from './task-dialog-subtask.service';
-import { TaskDialogAssignees } from './task-dialog-assignees/task-dialog-assignees';
-import { TaskDialogAttachments } from './task-dialog-attachments/task-dialog-attachments';
-import { TaskDialogSubtasks } from './task-dialog-subtasks/task-dialog-subtasks';
+import { TaskDialogUiState } from './state/task-dialog-ui-state';
+import { TaskDialogSubtaskService } from './services/task-dialog-subtask.service';
+import { TaskDialogAssignees } from './components/task-dialog-assignees/task-dialog-assignees';
+import { TaskDialogAttachments } from './components/task-dialog-attachments/task-dialog-attachments';
+import { TaskDialogSubtasks } from './components/task-dialog-subtasks/task-dialog-subtasks';
 
 @Component({
   selector: 'app-task-dialog',

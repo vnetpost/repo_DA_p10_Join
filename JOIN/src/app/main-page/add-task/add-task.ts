@@ -13,12 +13,12 @@ import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
 import { Subtask, Task, TaskAttachment } from '../../shared/interfaces/task';
 import { TaskCategoryOption, TaskService } from '../../shared/services/task.service';
-import { DropdownAssignee } from './dropdown-assignee/dropdown-assignee';
-import { DropdownCategory } from './dropdown-category/dropdown-category';
-import { PrioritySelector } from './priority-selector/priority-selector';
-import { SubtaskComposer } from './subtask-composer/subtask-composer';
-import { TaskFormField } from './task-form-field/task-form-field';
-import { AttachmentUpload } from './attachment-upload/attachment-upload';
+import { DropdownAssignee } from './components/dropdown-assignee/dropdown-assignee';
+import { DropdownCategory } from './components/dropdown-category/dropdown-category';
+import { PrioritySelector } from './components/priority-selector/priority-selector';
+import { SubtaskComposer } from './components/subtask-composer/subtask-composer';
+import { TaskFormField } from './components/task-form-field/task-form-field';
+import { AttachmentUpload } from './components/attachment-upload/attachment-upload';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { ContactService } from '../../shared/services/contact.service';
 import {
@@ -26,13 +26,13 @@ import {
   ADD_TASK_TITLE_MIN_LETTERS,
   isAddTaskTitleValid,
   validateAddTaskForm,
-} from './add-task-validation.utils';
+} from './utils/add-task-validation.utils';
 import {
   mapTaskToAddTaskFormState,
-} from './add-task-mapper.utils';
-import { AddTaskUiState } from './add-task-ui-state';
-import { AddTaskSubmitService } from './add-task-submit.service';
-import { AddTaskFormState } from './add-task-form-state';
+} from './utils/add-task-mapper.utils';
+import { AddTaskUiState } from './state/add-task-ui-state';
+import { AddTaskSubmitService } from './services/add-task-submit.service';
+import { AddTaskFormState } from './state/add-task-form-state';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
