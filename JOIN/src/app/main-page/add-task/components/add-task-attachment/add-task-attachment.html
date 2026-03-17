@@ -5,12 +5,14 @@
   </section>
   <section class="file-upload__top-row">
     <span class="file-upload__hint">JPEG/PNG only. Max 1 MB.</span>
-    @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
-      <button type="button" class="file-upload__delete-all" (click)="deleteAllAttachments($event)">
-        <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
-        <span>Delete all</span>
-      </button>
-    }
+    <section class="file-upload__delete-all-slot">
+      @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
+        <button type="button" class="file-upload__delete-all" (click)="deleteAllAttachments($event)">
+          <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
+          <span>Delete all</span>
+        </button>
+      }
+    </section>
   </section>
 
   <button
@@ -36,87 +38,89 @@
     (change)="onFileSelected($event)"
   />
 
-  @if (existingAttachments.length > 0 || selectedFiles.length > 0) {
-    <section class="file-upload__gallery scroll-shadows" aria-label="Uploaded attachments">
-      @for (attachment of existingAttachments; track $index) {
-        <article class="file-upload__thumb-card">
-          <section class="file-upload__thumb-media">
-            <button
-              type="button"
-              class="file-upload__thumb-open"
-              [attr.aria-label]="'Open preview for ' + getAttachmentName(attachment, $index)"
-              (click)="openExistingAttachment($index)"
-            >
-              <img
-                class="file-upload__thumb-image"
-                [src]="getExistingAttachmentPreview(attachment)"
-                [alt]="getAttachmentName(attachment, $index)"
-              />
-            </button>
-            <button
-              type="button"
-              class="file-upload__thumb-delete"
-              [attr.aria-label]="'Delete ' + getAttachmentName(attachment, $index)"
-              (click)="removeExistingAttachment($index, $event)"
-            >
-              <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
-            </button>
-          </section>
-          <span class="file-upload__thumb-name">{{ getAttachmentName(attachment, $index) }}</span>
-        </article>
-      }
+  <section class="file-upload__preview-slot">
+    @if (hasPreviewAttachments) {
+      <section class="file-upload__gallery scroll-shadows" aria-label="Uploaded attachments">
+        @for (attachment of existingAttachments; track $index) {
+          <article class="file-upload__thumb-card">
+            <section class="file-upload__thumb-media">
+              <button
+                type="button"
+                class="file-upload__thumb-open"
+                [attr.aria-label]="'Open preview for ' + getAttachmentName(attachment, $index)"
+                (click)="openExistingAttachment($index)"
+              >
+                <img
+                  class="file-upload__thumb-image"
+                  [src]="getExistingAttachmentPreview(attachment)"
+                  [alt]="getAttachmentName(attachment, $index)"
+                />
+              </button>
+              <button
+                type="button"
+                class="file-upload__thumb-delete"
+                [attr.aria-label]="'Delete ' + getAttachmentName(attachment, $index)"
+                (click)="removeExistingAttachment($index, $event)"
+              >
+                <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
+              </button>
+            </section>
+            <span class="file-upload__thumb-name">{{ getAttachmentName(attachment, $index) }}</span>
+          </article>
+        }
 
-      @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
-        <article class="file-upload__thumb-card">
-          <section class="file-upload__thumb-media">
-            <button
-              type="button"
-              class="file-upload__thumb-open"
-              [attr.aria-label]="'Open preview for ' + selectedFile.name"
-              (click)="openSelectedAttachment($index)"
-            >
-              <img
-                class="file-upload__thumb-image"
-                [src]="getSelectedFilePreview(selectedFile)"
-                [alt]="selectedFile.name"
-              />
-            </button>
-            <button
-              type="button"
-              class="file-upload__thumb-delete"
-              [attr.aria-label]="'Delete ' + selectedFile.name"
-              (click)="removeSelectedFile($index, $event)"
-            >
-              <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
-            </button>
-          </section>
-          <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
-        </article>
-      }
-    </section>
+        @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
+          <article class="file-upload__thumb-card">
+            <section class="file-upload__thumb-media">
+              <button
+                type="button"
+                class="file-upload__thumb-open"
+                [attr.aria-label]="'Open preview for ' + selectedFile.name"
+                (click)="openSelectedAttachment($index)"
+              >
+                <img
+                  class="file-upload__thumb-image"
+                  [src]="getSelectedFilePreview(selectedFile)"
+                  [alt]="selectedFile.name"
+                />
+              </button>
+              <button
+                type="button"
+                class="file-upload__thumb-delete"
+                [attr.aria-label]="'Delete ' + selectedFile.name"
+                (click)="removeSelectedFile($index, $event)"
+              >
+                <img src="assets/img/icons/add-task/delete.svg" alt="Delete icon" aria-hidden="true" />
+              </button>
+            </section>
+            <span class="file-upload__thumb-name">{{ selectedFile.name }}</span>
+          </article>
+        }
+      </section>
 
-    <section class="file-upload__viewer-gallery" #viewerGallery aria-hidden="true">
-      @for (attachment of existingAttachments; track $index) {
-        <img
-          [src]="getExistingAttachmentPreview(attachment)"
-          [alt]="getAttachmentName(attachment, $index)"
-          [attr.data-file-name]="getAttachmentName(attachment, $index)"
-          [attr.data-file-type]="getExistingAttachmentTypeLabel(attachment)"
-          [attr.data-file-size]="getExistingAttachmentSizeLabel(attachment)"
-        />
-      }
+      <section class="file-upload__viewer-gallery" #viewerGallery aria-hidden="true">
+        @for (attachment of existingAttachments; track $index) {
+          <img
+            [src]="getExistingAttachmentPreview(attachment)"
+            [alt]="getAttachmentName(attachment, $index)"
+            [attr.data-file-name]="getAttachmentName(attachment, $index)"
+            [attr.data-file-type]="getExistingAttachmentTypeLabel(attachment)"
+            [attr.data-file-size]="getExistingAttachmentSizeLabel(attachment)"
+          />
+        }
 
-      @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
-        <img
-          [src]="getSelectedFilePreview(selectedFile)"
-          [alt]="selectedFile.name"
-          [attr.data-file-name]="selectedFile.name"
-          [attr.data-file-type]="getSelectedFileTypeLabel(selectedFile)"
-          [attr.data-file-size]="getSelectedFileSizeLabel(selectedFile)"
-        />
-      }
-    </section>
-  }
+        @for (selectedFile of selectedFiles; track trackSelectedFile($index, selectedFile)) {
+          <img
+            [src]="getSelectedFilePreview(selectedFile)"
+            [alt]="selectedFile.name"
+            [attr.data-file-name]="selectedFile.name"
+            [attr.data-file-type]="getSelectedFileTypeLabel(selectedFile)"
+            [attr.data-file-size]="getSelectedFileSizeLabel(selectedFile)"
+          />
+        }
+      </section>
+    }
+  </section>
 
   <span
     class="file-upload__error"

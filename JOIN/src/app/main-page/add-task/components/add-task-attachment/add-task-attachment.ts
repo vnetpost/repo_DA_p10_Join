@@ -86,6 +86,15 @@ export class AddTaskAttachment implements OnChanges, OnDestroy {
   }
 
   /**
+   * Indicates whether the upload field currently has previewable attachments.
+   *
+   * @returns `true` when either existing or newly selected attachments are present.
+   */
+  get hasPreviewAttachments(): boolean {
+    return this.existingAttachments.length > 0 || this.selectedFiles.length > 0;
+  }
+
+  /**
    * Keeps preview object URLs in sync when the parent updates selected files.
    *
    * @param changes Angular change map for current inputs.
