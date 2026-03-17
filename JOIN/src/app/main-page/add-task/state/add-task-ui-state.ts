@@ -63,6 +63,15 @@ export class AddTaskUiState {
   }
 
   /**
+   * Indicates whether unsaved form edits are currently present.
+   *
+   * @returns `true` when leaving the form should require confirmation.
+   */
+  shouldConfirmClose(): boolean {
+    return this.hasUserEdited;
+  }
+
+  /**
    * Shows the success toast and performs the matching follow-up action.
    *
    * @param isOverlay Whether the add-task form is rendered inside an overlay.

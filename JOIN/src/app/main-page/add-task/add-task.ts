@@ -96,6 +96,7 @@ export class AddTask implements OnChanges, OnDestroy {
   attachmentUploadError = '';
   formResetVersion = 0;
   readonly formState = new AddTaskFormState();
+  private pendingNavigationResolver: ((shouldLeave: boolean) => void) | null = null;
   // #endregion
 
   constructor() {
@@ -116,6 +117,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   /** Clears running timers to avoid side effects after component teardown. */
   ngOnDestroy(): void {
+    this.resolvePendingNavigation(false);
     this.uiState.destroy();
   }
   // #endregion
@@ -337,6 +339,11 @@ export class AddTask implements OnChanges, OnDestroy {
    * @returns void
    */
   confirmClose(): void {
+    if (this.pendingNavigationResolver) {
+      this.resolvePendingNavigation(true);
+      return;
+    }
+
     this.uiState.clearCloseConfirm();
   }
 
@@ -346,6 +353,38 @@ export class AddTask implements OnChanges, OnDestroy {
    * @returns void
    */
   cancelClose(): void {
+    if (this.pendingNavigationResolver) {
+      this.resolvePendingNavigation(false);
+      return;
+    }
+
     this.uiState.clearCloseConfirm();
+  }
+
+  /**
+   * Requests confirmation before leaving the routed add-task page with unsaved changes.
+   *
+   * @returns `true` when navigation may continue immediately, otherwise a promise
+   *   resolved by the shared confirm box buttons.
+   */
+  confirmNavigationAway(): boolean | Promise<boolean> {
+    if (!this.uiState.shouldConfirmClose()) return true;
+    this.uiState.requestCloseConfirm();
+    return new Promise<boolean>((resolve) => {
+      this.pendingNavigationResolver = resolve;
+    });
+  }
+
+  /**
+   * Resolves an active routed-navigation confirmation and hides the confirm box.
+   *
+   * @param shouldLeave Whether the blocked navigation should continue.
+   * @returns void
+   */
+  private resolvePendingNavigation(shouldLeave: boolean): void {
+    const pendingResolver = this.pendingNavigationResolver;
+    this.pendingNavigationResolver = null;
+    this.uiState.clearCloseConfirm();
+    pendingResolver?.(shouldLeave);
   }
 }
