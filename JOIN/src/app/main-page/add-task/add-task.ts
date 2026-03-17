@@ -24,7 +24,6 @@ import { ContactService } from '../../shared/services/contact.service';
 import {
   ADD_TASK_TITLE_MAX_LENGTH,
   ADD_TASK_TITLE_MIN_LETTERS,
-  isAddTaskTitleValid,
   validateAddTaskForm,
 } from './utils/add-task-validation.utils';
 import {
@@ -33,6 +32,12 @@ import {
 import { AddTaskUiState } from './state/add-task-ui-state';
 import { AddTaskSubmitService } from './services/add-task-submit.service';
 import { AddTaskFormState } from './state/add-task-form-state';
+import { parseAddTaskDueDate } from './utils/add-task-date.utils';
+import {
+  applyHydratedAddTaskFormValues,
+  resetAddTaskFormValues,
+} from './utils/add-task-form-values.utils';
+import { AddTaskCloseFlow } from './state/add-task-close-flow';
 
 /**
  * Manages task creation and editing, including form state, validation and persistence.
@@ -71,6 +76,7 @@ export class AddTask implements OnChanges, OnDestroy {
   @Output() dirtyChange = new EventEmitter<boolean>();
   @Output() taskSaved = new EventEmitter<Task>();
   private readonly uiState: AddTaskUiState;
+  private readonly closeFlow: AddTaskCloseFlow;
   // #endregion
 
   // #region Constants
@@ -96,7 +102,6 @@ export class AddTask implements OnChanges, OnDestroy {
   attachmentUploadError = '';
   formResetVersion = 0;
   readonly formState = new AddTaskFormState();
-  private pendingNavigationResolver: ((shouldLeave: boolean) => void) | null = null;
   // #endregion
 
   constructor() {
@@ -105,6 +110,7 @@ export class AddTask implements OnChanges, OnDestroy {
       () => this.closeDialogRequested.emit(),
       () => this.router.navigateByUrl('/board')
     );
+    this.closeFlow = new AddTaskCloseFlow(this.uiState);
   }
 
   // #region Lifecycle
@@ -117,7 +123,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   /** Clears running timers to avoid side effects after component teardown. */
   ngOnDestroy(): void {
-    this.resolvePendingNavigation(false);
+    this.closeFlow.destroy();
     this.uiState.destroy();
   }
   // #endregion
@@ -141,16 +147,6 @@ export class AddTask implements OnChanges, OnDestroy {
   /** Aggregates all title-related validation states. */
   get showTitleError(): boolean {
     return this.formState.showTitleError(this.taskTitle);
-  }
-
-  /** True after title touch when the required value is empty. */
-  get showTitleRequiredError(): boolean {
-    return this.formState.showTitleRequiredError(this.taskTitle);
-  }
-
-  /** True when title violates length or minimum-letter constraints. */
-  get showTitlePatternError(): boolean {
-    return this.formState.showTitlePatternError(this.taskTitle);
   }
 
   /** Human-readable title validation message for the UI. */
@@ -206,7 +202,7 @@ export class AddTask implements OnChanges, OnDestroy {
       return;
     }
 
-    const dueDateDate = this.parseDueDate(dueDateValue);
+    const dueDateDate = parseAddTaskDueDate(dueDateValue);
     if (!dueDateDate) return;
     this.isSubmitting = true;
 
@@ -243,16 +239,7 @@ export class AddTask implements OnChanges, OnDestroy {
 
   /** Resets all form fields and touch states to their defaults. */
   resetForm(): void {
-    this.taskTitle = '';
-    this.taskDescription = '';
-    this.taskDueDate = '';
-    this.activePriority = 'medium';
-    this.activeAssignees = [];
-    this.activeCategory = null;
-    this.activeSubtasks = [];
-    this.editableExistingAttachments = [];
-    this.selectedAttachments = [];
-    this.attachmentUploadError = '';
+    resetAddTaskFormValues(this);
     this.formState.resetTouched();
     this.formResetVersion += 1;
     this.resetDirtyState();
@@ -270,40 +257,9 @@ export class AddTask implements OnChanges, OnDestroy {
       this.contactService.contacts,
       this.taskService.taskCategories
     );
-
-    this.taskTitle = formState.taskTitle;
-    this.taskDescription = formState.taskDescription;
-    this.taskDueDate = formState.taskDueDate;
-    this.activePriority = formState.activePriority;
-    this.activeAssignees = formState.activeAssignees;
-    this.activeCategory = formState.activeCategory;
-    this.activeSubtasks = formState.activeSubtasks;
-    this.editableExistingAttachments = formState.editableExistingAttachments;
-    this.selectedAttachments = [];
-    this.attachmentUploadError = '';
+    applyHydratedAddTaskFormValues(this, formState);
     this.formState.resetTouched();
     this.resetDirtyState();
-  }
-
-  /**
-   * Parses a due date string from either `YYYY/MM/DD` or `YYYY-MM-DD`.
-   * @param value Date string entered in the form.
-   * @returns Parsed date or `null` when the value is invalid.
-   */
-  private parseDueDate(value: string): Date | null {
-    const parts = value.split(/[\/-]/);
-    if (parts.length !== 3) return null;
-    const [yearStr, monthStr, dayStr] = parts;
-    const year = Number(yearStr);
-    const month = Number(monthStr);
-    const day = Number(dayStr);
-    if (!Number.isInteger(year) || !Number.isInteger(month) || !Number.isInteger(day)) return null;
-
-    const date = new Date(year, month - 1, day);
-    if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day)
-      return null;
-
-    return date;
   }
 
   /**
@@ -325,26 +281,12 @@ export class AddTask implements OnChanges, OnDestroy {
   }
 
   /**
-   * Requests the close confirmation for the add-task dialog.
-   *
-   * @returns void
-   */
-  onCloseAddTaskClick(): void {
-    this.uiState.requestCloseConfirm();
-  }
-
-  /**
    * Confirms closing the add-task dialog and clears the confirmation state.
    *
    * @returns void
    */
   confirmClose(): void {
-    if (this.pendingNavigationResolver) {
-      this.resolvePendingNavigation(true);
-      return;
-    }
-
-    this.uiState.clearCloseConfirm();
+    this.closeFlow.confirmClose();
   }
 
   /**
@@ -353,12 +295,7 @@ export class AddTask implements OnChanges, OnDestroy {
    * @returns void
    */
   cancelClose(): void {
-    if (this.pendingNavigationResolver) {
-      this.resolvePendingNavigation(false);
-      return;
-    }
-
-    this.uiState.clearCloseConfirm();
+    this.closeFlow.cancelClose();
   }
 
   /**
@@ -368,23 +305,6 @@ export class AddTask implements OnChanges, OnDestroy {
    *   resolved by the shared confirm box buttons.
    */
   confirmNavigationAway(): boolean | Promise<boolean> {
-    if (!this.uiState.shouldConfirmClose()) return true;
-    this.uiState.requestCloseConfirm();
-    return new Promise<boolean>((resolve) => {
-      this.pendingNavigationResolver = resolve;
-    });
-  }
-
-  /**
-   * Resolves an active routed-navigation confirmation and hides the confirm box.
-   *
-   * @param shouldLeave Whether the blocked navigation should continue.
-   * @returns void
-   */
-  private resolvePendingNavigation(shouldLeave: boolean): void {
-    const pendingResolver = this.pendingNavigationResolver;
-    this.pendingNavigationResolver = null;
-    this.uiState.clearCloseConfirm();
-    pendingResolver?.(shouldLeave);
+    return this.closeFlow.confirmNavigationAway();
   }
 }
