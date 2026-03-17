@@ -13,12 +13,12 @@ import { FormsModule } from '@angular/forms';
 import { Contact } from '../../shared/interfaces/contact';
 import { Subtask, Task, TaskAttachment } from '../../shared/interfaces/task';
 import { TaskCategoryOption, TaskService } from '../../shared/services/task.service';
-import { DropdownAssignee } from './components/dropdown-assignee/dropdown-assignee';
-import { DropdownCategory } from './components/dropdown-category/dropdown-category';
-import { PrioritySelector } from './components/priority-selector/priority-selector';
-import { SubtaskComposer } from './components/subtask-composer/subtask-composer';
-import { TaskFormField } from './components/task-form-field/task-form-field';
-import { AttachmentUpload } from './components/attachment-upload/attachment-upload';
+import { AddTaskAssignee } from './components/add-task-assignee/add-task-assignee';
+import { AddTaskCategory } from './components/add-task-category/add-task-category';
+import { AddTaskPriority } from './components/add-task-priority/add-task-priority';
+import { AddTaskSubtasks } from './components/add-task-subtasks/add-task-subtasks';
+import { AddTaskFormField } from './components/add-task-form-field/add-task-form-field';
+import { AddTaskAttachment } from './components/add-task-attachment/add-task-attachment';
 import { getTodayDateString } from '../../shared/utilities/utils';
 import { ContactService } from '../../shared/services/contact.service';
 import {
@@ -41,12 +41,12 @@ import { AddTaskFormState } from './state/add-task-form-state';
   selector: 'app-add-task',
   imports: [
     FormsModule,
-    TaskFormField,
-    PrioritySelector,
-    DropdownAssignee,
-    DropdownCategory,
-    SubtaskComposer,
-    AttachmentUpload,
+    AddTaskFormField,
+    AddTaskPriority,
+    AddTaskAssignee,
+    AddTaskCategory,
+    AddTaskSubtasks,
+    AddTaskAttachment,
   ],
   templateUrl: './add-task.html',
   styleUrl: './add-task.scss',

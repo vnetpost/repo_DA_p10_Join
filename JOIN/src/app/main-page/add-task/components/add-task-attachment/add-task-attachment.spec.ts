@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AttachmentUpload } from './attachment-upload';
+import { AddTaskAttachment } from './add-task-attachment';
 
-describe('AttachmentUpload', () => {
-  let component: AttachmentUpload;
-  let fixture: ComponentFixture<AttachmentUpload>;
+describe('AddTaskAttachment', () => {
+  let component: AddTaskAttachment;
+  let fixture: ComponentFixture<AddTaskAttachment>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AttachmentUpload]
+      imports: [AddTaskAttachment]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AttachmentUpload);
+    fixture = TestBed.createComponent(AddTaskAttachment);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

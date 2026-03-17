@@ -13,12 +13,12 @@ type PriorityOption = {
  * Segmented selector for choosing task priority.
  */
 @Component({
-  selector: 'app-priority-selector',
+  selector: 'app-add-task-priority',
   imports: [],
-  templateUrl: './priority-selector.html',
-  styleUrl: './priority-selector.scss',
+  templateUrl: './add-task-priority.html',
+  styleUrl: './add-task-priority.scss',
 })
-export class PrioritySelector {
+export class AddTaskPriority {
   /** Currently selected priority value. */
   @Input() selectedPriority: Task['priority'] = 'medium';
   /** Emits when the selected priority changes. */

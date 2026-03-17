@@ -39,12 +39,12 @@ import { AttachmentUploadUsage } from './state/attachment-upload-usage';
  * Handles attachment selection, preview generation and removal inside the task form.
  */
 @Component({
-  selector: 'app-attachment-upload',
+  selector: 'app-add-task-attachment',
   imports: [],
-  templateUrl: './attachment-upload.html',
-  styleUrl: './attachment-upload.scss',
+  templateUrl: './add-task-attachment.html',
+  styleUrl: './add-task-attachment.scss',
 })
-export class AttachmentUpload implements OnChanges, OnDestroy {
+export class AddTaskAttachment implements OnChanges, OnDestroy {
   @Input() errorMessage = '';
   @Input() selectedFiles: File[] = [];
   @Input() existingAttachments: TaskAttachment[] = [];

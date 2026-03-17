@@ -6,12 +6,12 @@ import { FlatpickrDirective } from '../../../../shared/flatpickr.directive';
  * Reusable input/textarea field wrapper used in the add-task form.
  */
 @Component({
-  selector: 'app-task-form-field',
+  selector: 'app-add-task-form-field',
   imports: [FormsModule, FlatpickrDirective],
-  templateUrl: './task-form-field.html',
-  styleUrl: './task-form-field.scss',
+  templateUrl: './add-task-form-field.html',
+  styleUrl: './add-task-form-field.scss',
 })
-export class TaskFormField {
+export class AddTaskFormField {
   /** Bound field value. */
   @Input() value = '';
   /** Emits value updates to the parent component. */

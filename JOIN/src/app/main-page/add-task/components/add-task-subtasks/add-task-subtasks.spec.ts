@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SubtaskComposer } from './subtask-composer';
+import { AddTaskSubtasks } from './add-task-subtasks';
 
-describe('SubtaskComposer', () => {
-  let component: SubtaskComposer;
-  let fixture: ComponentFixture<SubtaskComposer>;
+describe('AddTaskSubtasks', () => {
+  let component: AddTaskSubtasks;
+  let fixture: ComponentFixture<AddTaskSubtasks>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SubtaskComposer],
+      imports: [AddTaskSubtasks],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SubtaskComposer);
+    fixture = TestBed.createComponent(AddTaskSubtasks);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

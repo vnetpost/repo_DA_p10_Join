@@ -15,16 +15,16 @@ import { TaskCategoryOption, TaskService } from '../../../../shared/services/tas
  * Single-select dropdown used for choosing a task category.
  */
 @Component({
-  selector: 'app-dropdown-category',
+  selector: 'app-add-task-category',
   imports: [],
-  templateUrl: './dropdown-category.html',
-  styleUrl: './dropdown-category.scss',
+  templateUrl: './add-task-category.html',
+  styleUrl: './add-task-category.scss',
 })
-export class DropdownCategory {
+export class AddTaskCategory {
   private static nextDropdownId = 0;
   elementRef = inject(ElementRef);
   taskService = inject(TaskService);
-  readonly dropdownId = `task-category-dropdown-${DropdownCategory.nextDropdownId++}`;
+  readonly dropdownId = `task-category-dropdown-${AddTaskCategory.nextDropdownId++}`;
 
   /** Active category selection. */
   @Input() selectedCategory: TaskCategoryOption | null = null;

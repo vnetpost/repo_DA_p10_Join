@@ -19,17 +19,17 @@ import {
  * Searchable multi-select dropdown for choosing task assignees.
  */
 @Component({
-  selector: 'app-dropdown-assignee',
+  selector: 'app-add-task-assignee',
   imports: [],
-  templateUrl: './dropdown-assignee.html',
-  styleUrl: './dropdown-assignee.scss',
+  templateUrl: './add-task-assignee.html',
+  styleUrl: './add-task-assignee.scss',
 })
-export class DropdownAssignee {
+export class AddTaskAssignee {
   private static nextDropdownId = 0;
   elementRef = inject(ElementRef);
   contactService = inject(ContactService);
   readonly assigneePreviewLimit = 5;
-  readonly dropdownId = `task-assignee-dropdown-${DropdownAssignee.nextDropdownId++}`;
+  readonly dropdownId = `task-assignee-dropdown-${AddTaskAssignee.nextDropdownId++}`;
 
   readonly getContactDisplayInitials = getContactDisplayInitials;
   readonly getContactDisplayAvatarSrc = getContactDisplayAvatarSrc;

@@ -7,31 +7,31 @@
     <section class="add-task__content" aria-label="Task form fields">
       <section class="add-task__column" aria-label="Task basics">
         <fieldset class="add-task__field-group">
-          <app-task-form-field
+          <app-add-task-form-field
             label="Title"
             [isRequired]="true"
             placeholder="Enter a title"
             (fieldBlur)="formState.isTitleTouched = true"
             [hasError]="showTitleError"
             [(value)]="taskTitle"
-          ></app-task-form-field>
+          ></app-add-task-form-field>
           <span class="add-task__field-error" [class.is-visible]="showTitleError">
             {{ titleErrorMessage }}
           </span>
         </fieldset>
 
         <fieldset class="add-task__field-group">
-          <app-task-form-field
+          <app-add-task-form-field
             label="Description"
             [isTextarea]="true"
             [isRequired]="false"
             placeholder="Enter a Description"
             [(value)]="taskDescription"
-          ></app-task-form-field>
+          ></app-add-task-form-field>
         </fieldset>
 
         <fieldset class="add-task__field-group add-task__field-group--due-date">
-          <app-task-form-field
+          <app-add-task-form-field
             label="Due date"
             [isRequired]="true"
             placeholder="yyyy/mm/dd"
@@ -42,23 +42,23 @@
             [hasError]="showDueDateError"
             [(value)]="taskDueDate"
             iconSrc="assets/img/icons/board/date.svg"
-          ></app-task-form-field>
+          ></app-add-task-form-field>
           <span class="add-task__field-error" [class.is-visible]="showDueDateError">
             This field is required
           </span>
         </fieldset>
 
         <fieldset class="add-task__field-group">
-          <app-priority-selector [(selectedPriority)]="activePriority"></app-priority-selector>
+          <app-add-task-priority [(selectedPriority)]="activePriority"></app-add-task-priority>
         </fieldset>
 
         <fieldset class="add-task__field-group add-task__field-group--category">
-          <app-dropdown-category
+          <app-add-task-category
             [(selectedCategory)]="activeCategory"
             (fieldBlur)="formState.isCategoryTouched = true"
             [hasError]="showCategoryError"
             [resetTrigger]="formResetVersion"
-          ></app-dropdown-category>
+          ></app-add-task-category>
           <span class="add-task__field-error" [class.is-visible]="showCategoryError">
             This field is required
           </span>
@@ -67,24 +67,24 @@
 
       <section class="add-task__column add-task__column--divider" aria-label="Task extras">
         <fieldset class="add-task__field-group add-task__field-group--attachments">
-          <app-attachment-upload
+          <app-add-task-attachment
             [(errorMessage)]="attachmentUploadError"
             [(existingAttachments)]="editableExistingAttachments"
             [(selectedFiles)]="selectedAttachments"
-          ></app-attachment-upload>
+          ></app-add-task-attachment>
         </fieldset>
 
         <fieldset class="add-task__field-group">
-          <app-subtask-composer
+          <app-add-task-subtasks
             [(subtasks)]="activeSubtasks"
             [resetTrigger]="formResetVersion"
-          ></app-subtask-composer>
+          ></app-add-task-subtasks>
         </fieldset>
 
         <fieldset class="add-task__field-group add-task__field-group--assignee">
-          <app-dropdown-assignee
+          <app-add-task-assignee
             [(selectedContacts)]="activeAssignees"
-          ></app-dropdown-assignee>
+          ></app-add-task-assignee>
         </fieldset>
       </section>
     </section>

@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrioritySelector } from './priority-selector';
+import { AddTaskPriority } from './add-task-priority';
 
-describe('PrioritySelector', () => {
-  let component: PrioritySelector;
-  let fixture: ComponentFixture<PrioritySelector>;
+describe('AddTaskPriority', () => {
+  let component: AddTaskPriority;
+  let fixture: ComponentFixture<AddTaskPriority>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PrioritySelector],
+      imports: [AddTaskPriority],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(PrioritySelector);
+    fixture = TestBed.createComponent(AddTaskPriority);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropdownAssignee } from './dropdown-assignee';
+import { AddTaskAssignee } from './add-task-assignee';
 import { FirebaseService } from '../../../../shared/services/firebase.service';
 
-describe('DropdownAssignee', () => {
-  let component: DropdownAssignee;
-  let fixture: ComponentFixture<DropdownAssignee>;
+describe('AddTaskAssignee', () => {
+  let component: AddTaskAssignee;
+  let fixture: ComponentFixture<AddTaskAssignee>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownAssignee],
+      imports: [AddTaskAssignee],
       providers: [
         {
           provide: FirebaseService,
@@ -21,7 +21,7 @@ describe('DropdownAssignee', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DropdownAssignee);
+    fixture = TestBed.createComponent(AddTaskAssignee);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

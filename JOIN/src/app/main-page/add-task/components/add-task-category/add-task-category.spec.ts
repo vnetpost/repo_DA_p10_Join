@@ -1,15 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DropdownCategory } from './dropdown-category';
+import { AddTaskCategory } from './add-task-category';
 import { TaskService } from '../../../../shared/services/task.service';
 
-describe('DropdownCategory', () => {
-  let component: DropdownCategory;
-  let fixture: ComponentFixture<DropdownCategory>;
+describe('AddTaskCategory', () => {
+  let component: AddTaskCategory;
+  let fixture: ComponentFixture<AddTaskCategory>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DropdownCategory],
+      imports: [AddTaskCategory],
       providers: [
         {
           provide: TaskService,
@@ -20,7 +20,7 @@ describe('DropdownCategory', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(DropdownCategory);
+    fixture = TestBed.createComponent(AddTaskCategory);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

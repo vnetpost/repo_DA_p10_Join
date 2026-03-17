@@ -14,12 +14,12 @@ import { Subtask } from '../../../../shared/interfaces/task';
  * Handles subtask creation, inline editing and removal for the task form.
  */
 @Component({
-  selector: 'app-subtask-composer',
+  selector: 'app-add-task-subtasks',
   imports: [],
-  templateUrl: './subtask-composer.html',
-  styleUrl: './subtask-composer.scss',
+  templateUrl: './add-task-subtasks.html',
+  styleUrl: './add-task-subtasks.scss',
 })
-export class SubtaskComposer {
+export class AddTaskSubtasks {
   private hostElement = inject(ElementRef<HTMLElement>);
   readonly subtaskTitleMinLength = 3;
   readonly subtaskTitleMaxLength = 100;
