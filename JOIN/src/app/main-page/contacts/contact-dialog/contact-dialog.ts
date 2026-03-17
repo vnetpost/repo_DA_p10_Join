@@ -13,10 +13,11 @@ import {
   ContactDialogAvatar,
   ContactDialogAvatarChange,
 } from './contact-dialog-avatar/contact-dialog-avatar';
+import { ContactDialogFormFields } from './contact-dialog-form-fields/contact-dialog-form-fields';
 
 @Component({
   selector: 'app-contact-dialog',
-  imports: [FormsModule, ContactDialogAvatar],
+  imports: [FormsModule, ContactDialogAvatar, ContactDialogFormFields],
   templateUrl: './contact-dialog.html',
   styleUrl: './contact-dialog.scss',
 })

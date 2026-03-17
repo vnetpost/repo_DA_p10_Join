@@ -67,94 +67,10 @@
         novalidate
         autocomplete="off"
       >
-        <section class="form__input-box">
-          <input
-            class="form__input"
-            type="text"
-            placeholder="Name"
-            name="name"
-            aria-label="Name"
-            required
-            minlength="2"
-            pattern="^(?=(?:.*[a-zA-Z\xC0-\uFFFF]){2,})[a-zA-Z0-9\xC0-\uFFFF]+(?:[ .\-'][a-zA-Z0-9\xC0-\uFFFF]+\.?)*$"
-            [(ngModel)]="contactData.name"
-            #name="ngModel"
-          />
-          <img class="form__icon" src="assets/img/icons/forms/name.svg" alt="Name icon" aria-hidden="true" />
-          <section class="input-error-wrapper">
-            @if (name.invalid && name.touched) {
-              <span class="form__error">
-                @if (name.errors?.['required']) {
-                  Name is required.
-                } @else if (name.errors?.['pattern']) {
-                  Please enter a valid name.
-                } @else if (name.errors?.['minlength']) {
-                  At least 2 characters.
-                }
-              </span>
-            }
-          </section>
-        </section>
-
-        <section class="form__input-box">
-          <input
-            class="form__input"
-            type="email"
-            placeholder="Email"
-            name="email"
-            aria-label="Email"
-            required
-            minlength="5"
-            pattern="[a-zA-Z0-9](?:[a-zA-Z0-9._%+\-]*[a-zA-Z0-9])?@[a-zA-Z0-9\-]+(?:\.[a-zA-Z0-9\-]+)*\.[a-zA-Z]{2,}"
-            [(ngModel)]="contactData.email"
-            #email="ngModel"
-            [readonly]="dialogMode === 'edit'"
-            [attr.aria-readonly]="dialogMode === 'edit' ? 'true' : null"
-          />
-          <img class="form__icon" src="assets/img/icons/forms/email.svg" alt="Email icon" aria-hidden="true" />
-          <section class="input-error-wrapper">
-            @if (email.invalid && email.touched) {
-              <span class="form__error">
-                @if (email.errors?.['required']) {
-                  Email is required.
-                } @else if (email.errors?.['minlength']) {
-                  At least 5 characters.
-                } @else if (email.errors?.['pattern']) {
-                  Please enter a valid email address.
-                }
-              </span>
-            }
-          </section>
-        </section>
-
-        <section class="form__input-box">
-          <input
-            class="form__input"
-            type="tel"
-            placeholder="Phone"
-            name="phone"
-            aria-label="Phone"
-            required
-            minlength="5"
-            pattern="^\+?[0-9 ]+$"
-            [(ngModel)]="contactData.phone"
-            #phone="ngModel"
-          />
-          <img class="form__icon" src="assets/img/icons/forms/phone.svg" alt="Phone icon" aria-hidden="true" />
-          <section class="input-error-wrapper">
-            @if (phone.invalid && phone.touched) {
-              <span class="form__error">
-                @if (phone.errors?.['required']) {
-                  Phone number is required.
-                } @else if (phone.errors?.['pattern']) {
-                  Only numbers, spaces and + are allowed.
-                } @else if (phone.errors?.['minlength']) {
-                  At least 5 characters.
-                }
-              </span>
-            }
-          </section>
-        </section>
+        <app-contact-dialog-form-fields
+          [contactData]="contactData"
+          [dialogMode]="dialogMode"
+        />
 
         <nav class="form__actions" aria-label="Contact form actions">
           @if (dialogMode === 'add') {
