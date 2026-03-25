@@ -8,6 +8,12 @@
   overflow-y: auto;
   scrollbar-gutter: stable;
 
+  @include styles.up-xxl {
+    height: auto;
+    min-height: 100%;
+    overflow: visible;
+  }
+
   .legal-page-article {
     width: 90%;
     padding: 2rem 0 12rem;
