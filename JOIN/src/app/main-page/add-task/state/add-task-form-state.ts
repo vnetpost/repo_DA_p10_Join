@@ -56,6 +56,7 @@ export class AddTaskFormState {
    */
   titleErrorMessage(title: string): string {
     if (this.showTitleRequiredError(title)) return 'This field is required';
+    if (!this.showTitlePatternError(title)) return '';
     return `Use up to ${this.taskTitleMaxLength} chars with at least ${this.taskTitleMinLetters} letters (a-z)`;
   }
 

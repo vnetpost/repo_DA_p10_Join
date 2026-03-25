@@ -17,7 +17,7 @@
   @include styles.setFlex($d: row, $ai: center, $jc: space-between, $gap: 0.625rem);
   width: 100%;
   min-height: 3rem;
-  padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 1.6vw, 0.875rem);
+  padding: 0.625rem 0.875rem;
   border: 0.0625rem solid styles.$gray-light;
   border-radius: 1rem;
   background-color: styles.$white;
@@ -43,7 +43,7 @@
   flex: 1;
   min-width: 0;
   background: transparent;
-  padding: clamp(0.5rem, 1.2vw, 0.625rem) clamp(0rem, 0vw, 0rem);
+  padding: 0.625rem 0;
 
   &::placeholder {
     color: styles.$gray-light;
@@ -53,7 +53,7 @@
 .form-field__input--textarea {
   min-height: 6.875rem;
   resize: vertical;
-  padding: clamp(0.75rem, 1.4vw, 0.875rem) clamp(0rem, 0vw, 0rem);
+  padding: 0.875rem 0;
 }
 
 .form-field--textarea {

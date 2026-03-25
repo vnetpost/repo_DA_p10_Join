@@ -221,9 +221,10 @@
 .file-upload__error {
   @include styles.setFont($size: 1.6rem, $weight: 400, $color: styles.$red-error);
   display: block;
-  line-height: 1.3;
+  top: -0.9rem;
+  line-height: 1;
   visibility: hidden;
-  min-height: 2.6em;
+  min-height: 2em;
 }
 
 .file-upload__error--visible {
@@ -232,6 +233,6 @@
 
 @include styles.down-md {
   .file-upload__error {
-    min-height: 3.9em;
+    min-height: 3.3em;
   }
 }
