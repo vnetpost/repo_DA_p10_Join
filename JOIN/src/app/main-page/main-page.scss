@@ -4,10 +4,6 @@
   @include styles.setFlex();
   height: 100dvh;
 
-  @include styles.up-xxl{
-    height: 100%;
-  }
-
   .layout{
     @include styles.setGrid($rows: auto 1fr auto auto, $columns: 1fr);
     width: 93%;

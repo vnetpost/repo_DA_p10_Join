@@ -1,13 +1,17 @@
 @use '../../../../styles/index.scss' as styles;
 
 :host {
-  grid-area: 2/1/3/2;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
   @include styles.setFlex();
   width: 100%;
-  margin: 16px 0;
+  padding: 1rem;
+  z-index: 1;
 
   @include styles.up-xxl {
-    grid-area: 2/1/3/3;
+    padding: 1.5rem;
   }
 }
 
@@ -20,15 +24,18 @@
   @include styles.setFlex($d: column, $jc: flex-start, $gap: 20px);
   width: 90dvw;
   max-width: 500px;
+  max-height: calc(100dvh - 2rem);
   padding: 16px 16px 26px;
   border-radius: 20px;
   background-color: white;
   box-shadow: 0px 0px 14px 3px #0000000A;
+  overflow-y: auto;
 
   @include styles.up-xxl {
     gap: 30px;
     width: 650px;
     max-width: unset;
+    max-height: calc(100dvh - 3rem);
     padding: 36px 16px;
   }
 }
