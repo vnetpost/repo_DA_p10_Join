@@ -10,5 +10,10 @@ import { Cockpit } from './shared/components/cockpit/cockpit';
   styleUrl: './app.scss',
 })
 export class App {
+  /**
+   * Creates the root component with router access for layout route checks.
+   *
+   * @param router Angular router instance.
+   */
   constructor(public router: Router) {}
 }

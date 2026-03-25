@@ -8,6 +8,12 @@ export class AttachmentUploadUsage {
   currentAttachmentBytes = 0;
   private requestId = 0;
 
+  /**
+   * Creates the upload-usage helper for persisted payload estimates.
+   *
+   * @param taskAttachmentProcessingService Shared attachment processing service.
+   * @param maxTaskAttachmentBytes Maximum persisted payload allowed for one task.
+   */
   constructor(
     private readonly taskAttachmentProcessingService: TaskAttachmentProcessingService,
     private readonly maxTaskAttachmentBytes: number,

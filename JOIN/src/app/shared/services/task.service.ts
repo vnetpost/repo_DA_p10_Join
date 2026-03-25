@@ -26,6 +26,9 @@ export class TaskService {
   loading: boolean = true;
   searchTerm: string = '';
 
+  /**
+   * Creates the task Firestore service and starts the realtime listener.
+   */
   constructor() {
     this.unsubCollection = this.subCollection();
   }

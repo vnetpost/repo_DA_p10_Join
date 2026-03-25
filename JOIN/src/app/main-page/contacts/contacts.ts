@@ -35,6 +35,9 @@ export class Contacts implements DoCheck, OnDestroy {
   @ViewChild(ContactDialog) dialog!: ContactDialog;
   @ViewChild('confirmDialog') confirmDialog!: ElementRef<HTMLDialogElement>;
 
+  /**
+   * Creates the contacts page and initializes the first responsive state.
+   */
   constructor() {
     this.updateIsMobile();
   }

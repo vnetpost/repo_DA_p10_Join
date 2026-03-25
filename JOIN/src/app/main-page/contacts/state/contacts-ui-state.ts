@@ -9,6 +9,11 @@ export class ContactsUiState {
   isDetailOpen = false;
   toastVisible = false;
 
+  /**
+   * Creates the contacts page UI-state helper.
+   *
+   * @param mobileMaxWidth Maximum viewport width treated as mobile mode.
+   */
   constructor(mobileMaxWidth: number) {
     this.mobileMaxWidth = mobileMaxWidth;
   }

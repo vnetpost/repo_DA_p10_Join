@@ -10,6 +10,11 @@ import { ImageProcessingService } from './image-processing.service';
   providedIn: 'root',
 })
 export class TaskAttachmentProcessingService {
+  /**
+   * Creates the task-attachment processing service with the shared image pipeline.
+   *
+   * @param imageProcessingService Shared image processing service.
+   */
   constructor(private imageProcessingService: ImageProcessingService) {}
 
   /**

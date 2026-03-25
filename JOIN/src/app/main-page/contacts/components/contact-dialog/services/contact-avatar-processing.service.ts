@@ -17,6 +17,11 @@ export type ProcessedContactAvatar = {
 export class ContactAvatarProcessingService {
   readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
 
+  /**
+   * Creates the avatar-processing service with the shared image pipeline.
+   *
+   * @param imageProcessingService Shared image processing service.
+   */
   constructor(private imageProcessingService: ImageProcessingService) {}
 
   /**

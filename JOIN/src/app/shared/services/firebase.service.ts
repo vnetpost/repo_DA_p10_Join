@@ -33,6 +33,9 @@ export class FirebaseService {
   unsubCollection!: Unsubscribe;
   loading = true;
 
+  /**
+   * Creates the contacts Firestore service and starts the realtime listener.
+   */
   constructor() {
     this.unsubCollection = this.subCollection();
   }

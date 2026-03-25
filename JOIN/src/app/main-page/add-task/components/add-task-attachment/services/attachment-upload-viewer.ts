@@ -7,6 +7,11 @@ import { TaskAttachmentViewerService } from '../../../../../shared/services/task
 export class AttachmentUploadViewer {
   private attachmentViewer: Viewer | null = null;
 
+  /**
+   * Creates the attachment viewer helper around the shared Viewer.js service.
+   *
+   * @param attachmentViewerService Shared attachment viewer service.
+   */
   constructor(private readonly attachmentViewerService: TaskAttachmentViewerService) {}
 
   /**

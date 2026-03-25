@@ -6,6 +6,11 @@ import { AddTaskUiState } from './add-task-ui-state';
 export class AddTaskCloseFlow {
   private pendingNavigationResolver: ((shouldLeave: boolean) => void) | null = null;
 
+  /**
+   * Creates the close-flow helper around the shared add-task UI state.
+   *
+   * @param uiState Local state helper controlling close confirmation state.
+   */
   constructor(private readonly uiState: AddTaskUiState) {}
 
   /**

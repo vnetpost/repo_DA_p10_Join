@@ -7,6 +7,14 @@ export class AddTaskUiState {
   hasUserEdited = false;
   private toastTimer?: number;
 
+  /**
+   * Creates the transient UI-state helper for the add-task form.
+   *
+   * @param emitDirtyChange Callback that emits the dirty state upstream.
+   * @param closeOverlay Callback that closes the overlay variant.
+   * @param navigateToBoard Callback that returns to the board route.
+   * @param toastDurationMs Time in milliseconds that the success toast remains visible.
+   */
   constructor(
     private readonly emitDirtyChange: (isDirty: boolean) => void,
     private readonly closeOverlay: () => void,

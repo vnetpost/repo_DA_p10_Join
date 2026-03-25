@@ -104,6 +104,9 @@ export class AddTask implements OnChanges, OnDestroy {
   readonly formState = new AddTaskFormState();
   // #endregion
 
+  /**
+   * Creates the add-task helper state for overlay and routed page usage.
+   */
   constructor() {
     this.uiState = new AddTaskUiState(
       (isDirty) => this.dirtyChange.emit(isDirty),

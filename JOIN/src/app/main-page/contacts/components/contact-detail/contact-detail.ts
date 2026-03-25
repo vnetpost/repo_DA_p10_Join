@@ -119,6 +119,11 @@ export class ContactDetail implements OnChanges {
   //   this.closeFabMenu();
   // }
 
+  /**
+   * Updates the responsive contact-detail state when the viewport size changes.
+   *
+   * @returns void
+   */
   @HostListener('window:resize')
   onResize(): void {
     this.isDownLg = this.isDownLgViewport();
