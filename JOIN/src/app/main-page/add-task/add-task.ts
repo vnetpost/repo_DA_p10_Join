@@ -30,7 +30,7 @@ import {
   mapTaskToAddTaskFormState,
 } from './utils/add-task-mapper.utils';
 import { AddTaskUiState } from './state/add-task-ui-state';
-import { AddTaskSubmitService } from './services/add-task-submit.service';
+import { AddTaskSubmissionInput, AddTaskSubmissionResult, AddTaskSubmitService } from './services/add-task-submit.service';
 import { AddTaskFormState } from './state/add-task-form-state';
 import { parseAddTaskDueDate } from './utils/add-task-date.utils';
 import {
@@ -190,51 +190,11 @@ export class AddTask implements OnChanges, OnDestroy {
    */
   async createTask(): Promise<void> {
     if (this.isSubmitting) return;
-
-    const title = this.taskTitle.trim();
-    const description = this.taskDescription.trim();
-    const dueDateValue = this.taskDueDate.trim();
-    const validatedCategory = validateAddTaskForm(
-      title,
-      dueDateValue,
-      this.activeCategory?.value ?? null,
-    );
-
-    if (!validatedCategory) {
-      this.formState.markInvalidSections(title, dueDateValue, this.activeCategory);
-      return;
-    }
-
-    const dueDateDate = parseAddTaskDueDate(dueDateValue);
-    if (!dueDateDate) return;
+    const submissionInput = this.buildSubmissionInput();
+    if (!submissionInput) return;
     this.isSubmitting = true;
-
     try {
-      this.attachmentUploadError = '';
-      const submissionResult = await this.addTaskSubmitService.submitTask({
-        taskToEdit: this.taskToEdit,
-        initialStatus: this.initialStatus,
-        title,
-        description,
-        dueDate: dueDateDate,
-        priority: this.activePriority,
-        activeAssignees: this.activeAssignees,
-        category: validatedCategory,
-        activeSubtasks: this.activeSubtasks,
-        editableExistingAttachments: this.editableExistingAttachments,
-        selectedAttachments: this.selectedAttachments,
-      });
-
-      this.attachmentUploadError = [submissionResult.errorMessage, submissionResult.warningMessage]
-        .filter(Boolean)
-        .join(' ');
-      this.selectedAttachments = submissionResult.selectedAttachments;
-      if (!submissionResult.persistedTask) return;
-      if (submissionResult.shouldResetForm) this.resetForm();
-
-      this.taskSaved.emit(submissionResult.persistedTask);
-      this.uiState.showSuccessToast(this.isOverlay);
-      this.resetDirtyState();
+      await this.submitTask(submissionInput);
     } finally {
       this.isSubmitting = false;
     }
@@ -262,6 +222,93 @@ export class AddTask implements OnChanges, OnDestroy {
     );
     applyHydratedAddTaskFormValues(this, formState);
     this.formState.resetTouched();
+    this.resetDirtyState();
+  }
+
+  /**
+   * Validates the current form values and builds the submission input.
+   *
+   * @returns Normalized submission input or `null` when validation fails.
+   */
+  private buildSubmissionInput(): AddTaskSubmissionInput | null {
+    const title = this.taskTitle.trim();
+    const dueDateValue = this.taskDueDate.trim();
+    const category = validateAddTaskForm(title, dueDateValue, this.activeCategory?.value ?? null);
+    if (!category) return this.markInvalidForm(title, dueDateValue);
+
+    const dueDate = parseAddTaskDueDate(dueDateValue);
+    if (!dueDate) return null;
+
+    return this.createSubmissionInput(title, dueDate, category);
+  }
+
+  /**
+   * Marks the invalid form sections and aborts submission building.
+   *
+   * @param title Normalized task title.
+   * @param dueDateValue Normalized due date input.
+   * @returns Always `null`.
+   */
+  private markInvalidForm(title: string, dueDateValue: string): null {
+    this.formState.markInvalidSections(title, dueDateValue, this.activeCategory);
+    return null;
+  }
+
+  /**
+   * Creates the normalized submission payload for the add-task service.
+   *
+   * @param title Normalized task title.
+   * @param dueDate Parsed due date.
+   * @param category Validated task category.
+   * @returns Submission input object.
+   */
+  private createSubmissionInput(
+    title: string,
+    dueDate: Date,
+    category: Task['category']
+  ): AddTaskSubmissionInput {
+    return {
+      taskToEdit: this.taskToEdit,
+      initialStatus: this.initialStatus,
+      title,
+      description: this.taskDescription.trim(),
+      dueDate,
+      priority: this.activePriority,
+      activeAssignees: this.activeAssignees,
+      category,
+      activeSubtasks: this.activeSubtasks,
+      editableExistingAttachments: this.editableExistingAttachments,
+      selectedAttachments: this.selectedAttachments,
+    };
+  }
+
+  /**
+   * Persists the task form and applies the resulting UI state.
+   *
+   * @param submissionInput Validated submission payload.
+   * @returns void
+   */
+  private async submitTask(submissionInput: AddTaskSubmissionInput): Promise<void> {
+    this.attachmentUploadError = '';
+    const submissionResult = await this.addTaskSubmitService.submitTask(submissionInput);
+    this.applySubmissionResult(submissionResult);
+  }
+
+  /**
+   * Applies the outcome of one add-task submission to the component state.
+   *
+   * @param submissionResult Result returned by the add-task submit service.
+   * @returns void
+   */
+  private applySubmissionResult(submissionResult: AddTaskSubmissionResult): void {
+    this.attachmentUploadError = [submissionResult.errorMessage, submissionResult.warningMessage]
+      .filter(Boolean)
+      .join(' ');
+    this.selectedAttachments = submissionResult.selectedAttachments;
+    if (!submissionResult.persistedTask) return;
+    if (submissionResult.shouldResetForm) this.resetForm();
+    this.taskSaved.emit(submissionResult.persistedTask);
+    this.uiState.showSuccessToast(this.isOverlay);
     this.resetDirtyState();
   }
 
@@ -310,4 +357,5 @@ export class AddTask implements OnChanges, OnDestroy {
   confirmNavigationAway(): boolean | Promise<boolean> {
     return this.closeFlow.confirmNavigationAway();
   }
+  // #endregion
 }
