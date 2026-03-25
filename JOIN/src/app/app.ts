@@ -10,10 +10,21 @@ import { Cockpit } from './shared/components/cockpit/cockpit';
   styleUrl: './app.scss',
 })
 export class App {
+  private readonly appShellRoutes = ['/summary', '/add-task', '/board', '/contacts'];
+
   /**
    * Creates the root component with router access for layout route checks.
    *
    * @param router Angular router instance.
    */
   constructor(public router: Router) {}
+
+  /**
+   * Indicates whether the current route should be rendered inside the authenticated app shell.
+   *
+   * @returns `true` for protected app pages with cockpit and header.
+   */
+  get useAppShell(): boolean {
+    return this.appShellRoutes.some((route) => this.router.url.startsWith(route));
+  }
 }
