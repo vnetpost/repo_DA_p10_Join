@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { ControlContainer, FormsModule, NgForm } from '@angular/forms';
 import { ContactFormData } from '../../../../../../shared/interfaces/contact-form-data';
 
 @Component({
@@ -7,6 +7,7 @@ import { ContactFormData } from '../../../../../../shared/interfaces/contact-for
   imports: [FormsModule],
   templateUrl: './contact-dialog-form-fields.html',
   styleUrl: './contact-dialog-form-fields.scss',
+  viewProviders: [{ provide: ControlContainer, useExisting: NgForm }],
 })
 export class ContactDialogFormFields {
   @Input({ required: true }) contactData!: ContactFormData;

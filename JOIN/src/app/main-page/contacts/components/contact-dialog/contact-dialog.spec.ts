@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { ContactDialog } from './contact-dialog';
 
 describe('ContactDialog', () => {
@@ -19,5 +18,12 @@ describe('ContactDialog', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should keep the submit button disabled while the contact form is invalid', () => {
+    const submitButton: HTMLButtonElement = fixture.nativeElement.querySelector('button[type="submit"]');
+
+    expect(component.contactForm.invalid).toBeTrue();
+    expect(submitButton.disabled).toBeTrue();
   });
 });
