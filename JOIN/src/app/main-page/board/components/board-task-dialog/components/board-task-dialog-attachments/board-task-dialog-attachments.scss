@@ -13,10 +13,10 @@
     width: 100%;
     overflow-x: auto;
     overflow-y: hidden;
-    padding-bottom: 0.2rem;
-    scrollbar-gutter: stable;
+    padding-bottom: 0.1rem;
+    // scrollbar-gutter: stable;
     scrollbar-width: thin;
-    scrollbar-color: rgba(styles.$gray-dark, 0.35) transparent;
+    scrollbar-color: rgba(styles.$gray-dark, 0.1) transparent;
 
     &::-webkit-scrollbar {
       height: 0.35rem;
