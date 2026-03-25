@@ -7,7 +7,7 @@
   aria-roledescription="Draggable task"
   (click)="openTask.emit(task)"
 >
-  <header class="header">
+  <header class="header" cdkDragHandle>
     <p class="category" [ngClass]="task.category">
       {{ task.category === 'technical-task' ? 'Technical Task' : 'User Story' }}
     </p>
@@ -91,14 +91,21 @@
   </nav>
 
   <section class="topic">
-    <h4 class="title">{{ task.title }}</h4>
-    <p class="description">
+    <h4 class="title" cdkDragHandle>{{ task.title }}</h4>
+    <p
+      class="description"
+      (click)="stopCardInteraction($event)"
+      (pointerdown)="stopCardInteraction($event)"
+      (wheel)="stopCardInteraction($event)"
+      (touchstart)="stopCardInteraction($event)"
+      (touchmove)="stopCardInteraction($event)"
+    >
       {{ task.description }}
     </p>
   </section>
 
   @if(totalCount > 0){
-    <section class="subtasks" title="{{ doneCount }} of {{ totalCount }} subtasks completed">
+    <section class="subtasks" cdkDragHandle title="{{ doneCount }} of {{ totalCount }} subtasks completed">
       <progress id="subtasks-done" [value]="doneCount" [max]="totalCount" aria-valuetext="{{ doneCount }} of {{ totalCount }} subtasks completed"></progress>
       <label for="subtasks-done">
         {{ doneCount }}/{{ totalCount }} Subtasks
@@ -106,7 +113,7 @@
     </section>
   }
 
-  <footer class="assigned-info">
+  <footer class="assigned-info" cdkDragHandle>
     <ul class="assignees" aria-label="Assignees">
       @for (assignee of task.assignees.slice(0, 3); track $index) {
         <li

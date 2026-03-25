@@ -158,6 +158,13 @@ footer button {
 
 .description {
   margin-bottom: 4px;
+  max-height: 13rem;
+  overflow-y: auto;
+  padding-right: 0.25rem;
+  scrollbar-width: thin;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
 
   @include styles.up-xxl {
     margin-bottom: 0px;

@@ -8,11 +8,11 @@ import {
 } from '../../../../../shared/utilities/contact-presenter.utils';
 import { NgClass } from '@angular/common';
 import { TaskService } from '../../../../../shared/services/task.service';
-import { CdkDrag, DragDropModule } from '@angular/cdk/drag-drop';
+import { CdkDrag, CdkDragHandle, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-board-task-card',
-  imports: [NgClass, DragDropModule, CdkDrag],
+  imports: [NgClass, DragDropModule, CdkDrag, CdkDragHandle],
   templateUrl: './board-task-card.html',
   styleUrl: './board-task-card.scss',
 })
@@ -116,6 +116,16 @@ export class BoardTaskCard implements OnInit {
     this.task.order = 0;
     this.taskService.updateDocument(this.task, 'tasks');
     this.closeMenu(event);
+  }
+
+  /**
+   * Prevents card click and drag interactions from hijacking scrollable child content.
+   *
+   * @param event The child interaction event.
+   * @returns void
+   */
+  stopCardInteraction(event: Event): void {
+    event.stopPropagation();
   }
 
   /**
