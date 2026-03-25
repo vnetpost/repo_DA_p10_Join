@@ -21,11 +21,12 @@ export class ImageProcessingService {
   private readonly defaultMaxWidth = 800;
   private readonly defaultMaxHeight = 800;
   private readonly defaultQuality = 0.8;
+  private readonly pngColorLevels = 32;
 
   /**
    * Reads an image file as a processed data URL.
    *
-   * PNG files stay PNG. All other supported images are exported as JPEG.
+   * Supported JPEG and PNG uploads keep their original MIME type.
    *
    * @param file Selected browser file.
    * @param options Optional resize and quality settings.
@@ -35,10 +36,17 @@ export class ImageProcessingService {
     file: File,
     options: ImageProcessingOptions = {}
   ): Promise<string | null> {
+    const originalDataUrl = await this.readFileAsDataUrl(file);
+    if (!originalDataUrl) return null;
+
     const outputMimeType = this.resolveOutputMimeType(file.type);
     const compressedDataUrl = await this.compressImage(file, outputMimeType, options);
-    if (compressedDataUrl) return compressedDataUrl;
-    return this.readFileAsDataUrl(file);
+    if (outputMimeType !== 'image/png') {
+      return this.getSmallestDataUrl([compressedDataUrl, originalDataUrl]);
+    }
+
+    const optimizedPngDataUrl = await this.compressPngImage(originalDataUrl, options);
+    return this.getSmallestDataUrl([optimizedPngDataUrl, compressedDataUrl, originalDataUrl]);
   }
 
   /**
@@ -63,7 +71,9 @@ export class ImageProcessingService {
    * @returns Output MIME type.
    */
   resolveOutputMimeType(mimeType: string): string {
-    return mimeType === 'image/png' ? 'image/png' : 'image/jpeg';
+    if (mimeType === 'image/png') return 'image/png';
+    if (mimeType === 'image/jpeg') return 'image/jpeg';
+    return 'image/jpeg';
   }
 
   /**
@@ -84,6 +94,28 @@ export class ImageProcessingService {
       reader.onload = (event) => this.handleCompressionReaderLoad(event, outputMimeType, options, resolve);
       reader.onerror = () => resolve(null);
       reader.readAsDataURL(file);
+    });
+  }
+
+  /**
+   * Applies additional PNG optimization while preserving the PNG type.
+   *
+   * The optimization reduces the color precision before re-encoding the image,
+   * which gives the browser encoder a better chance to produce a smaller PNG.
+   *
+   * @param imageSource Data URL of the original PNG file.
+   * @param options Optional resize settings.
+   * @returns Optimized PNG data URL or `null`.
+   */
+  private compressPngImage(
+    imageSource: string,
+    options: ImageProcessingOptions
+  ): Promise<string | null> {
+    return new Promise((resolve) => {
+      const image = new Image();
+      image.onload = () => this.handlePngOptimizationLoad(image, options, resolve);
+      image.onerror = () => resolve(null);
+      image.src = imageSource;
     });
   }
 
@@ -161,6 +193,30 @@ export class ImageProcessingService {
   }
 
   /**
+   * Handles the loaded image step for PNG optimization.
+   *
+   * @param image Loaded image element.
+   * @param options Optional resize and quality settings.
+   * @param resolve Promise resolver for the optimized image.
+   * @returns void
+   */
+  private handlePngOptimizationLoad(
+    image: HTMLImageElement,
+    options: ImageProcessingOptions,
+    resolve: (value: string | null) => void
+  ): void {
+    const canvas = this.createCompressionCanvas(image, options);
+    const context = canvas.getContext('2d');
+    if (!context) return resolve(null);
+
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    this.quantizePngImageData(imageData.data);
+    context.putImageData(imageData, 0, 0);
+    resolve(canvas.toDataURL('image/png'));
+  }
+
+  /**
    * Creates the target canvas for one loaded image.
    *
    * @param image Loaded image element.
@@ -176,6 +232,36 @@ export class ImageProcessingService {
     canvas.width = dimensions.width;
     canvas.height = dimensions.height;
     return canvas;
+  }
+
+  /**
+   * Reduces PNG color precision to make the encoded image more compressible.
+   *
+   * Alpha values are kept untouched to avoid visible transparency artifacts.
+   *
+   * @param pixelData RGBA image data buffer.
+   * @returns void
+   */
+  private quantizePngImageData(pixelData: Uint8ClampedArray): void {
+    const maxChannelValue = 255;
+    const step = maxChannelValue / (this.pngColorLevels - 1);
+
+    for (let index = 0; index < pixelData.length; index += 4) {
+      pixelData[index] = this.quantizeChannel(pixelData[index], step);
+      pixelData[index + 1] = this.quantizeChannel(pixelData[index + 1], step);
+      pixelData[index + 2] = this.quantizeChannel(pixelData[index + 2], step);
+    }
+  }
+
+  /**
+   * Snaps one color channel value to the nearest reduced palette step.
+   *
+   * @param value Original channel value.
+   * @param step Distance between two palette values.
+   * @returns Quantized channel value.
+   */
+  private quantizeChannel(value: number, step: number): number {
+    return Math.round(value / step) * step;
   }
 
   /**
@@ -264,5 +350,20 @@ export class ImageProcessingService {
    */
   private resolveQuality(options: ImageProcessingOptions): number {
     return options.quality ?? this.defaultQuality;
+  }
+
+  /**
+   * Returns the smallest available data URL by raw string length.
+   *
+   * @param candidates Candidate data URLs, possibly containing `null`.
+   * @returns Shortest non-empty data URL or `null` when none are available.
+   */
+  private getSmallestDataUrl(candidates: Array<string | null>): string | null {
+    const availableDataUrls = candidates.filter((candidate): candidate is string => Boolean(candidate));
+    if (!availableDataUrls.length) return null;
+
+    return availableDataUrls.reduce((smallest, candidate) => {
+      return candidate.length < smallest.length ? candidate : smallest;
+    });
   }
 }

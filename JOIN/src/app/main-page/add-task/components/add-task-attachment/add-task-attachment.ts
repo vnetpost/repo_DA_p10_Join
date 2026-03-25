@@ -15,6 +15,7 @@ import { TaskAttachmentProcessingService } from '../../../../shared/services/tas
 import { TaskAttachmentViewerService } from '../../../../shared/services/task-attachment-viewer.service';
 import {
   MAX_TASK_ATTACHMENT_BYTES,
+  TASK_ATTACHMENT_ALLOWED_MIME_TYPES,
   TASK_ATTACHMENT_LIMIT_MESSAGE,
 } from '../../../../shared/utilities/task-attachment.constants';
 import {
@@ -55,7 +56,7 @@ export class AddTaskAttachment implements OnChanges, OnDestroy {
   @ViewChild('fileInput') private fileInput?: ElementRef<HTMLInputElement>;
   @ViewChild('viewerGallery') private viewerGallery?: ElementRef<HTMLElement>;
 
-  readonly allowedMimeTypes = ['image/jpeg', 'image/png'];
+  readonly allowedMimeTypes = TASK_ATTACHMENT_ALLOWED_MIME_TYPES;
   readonly maxTaskAttachmentBytes = MAX_TASK_ATTACHMENT_BYTES;
   readonly getAttachmentName = getTaskAttachmentFileName;
   readonly getExistingAttachmentPreview = getTaskAttachmentPreviewSrc;

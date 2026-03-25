@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import { TaskAttachment } from '../interfaces/task';
+import { TASK_ATTACHMENT_ALLOWED_MIME_TYPES } from '../utilities/task-attachment.constants';
 import { ImageProcessingService } from './image-processing.service';
 
 /**
@@ -10,6 +11,8 @@ import { ImageProcessingService } from './image-processing.service';
   providedIn: 'root',
 })
 export class TaskAttachmentProcessingService {
+  private readonly allowedMimeTypes = TASK_ATTACHMENT_ALLOWED_MIME_TYPES;
+
   /**
    * Creates the task-attachment processing service with the shared image pipeline.
    *
@@ -65,6 +68,7 @@ export class TaskAttachmentProcessingService {
    */
   private async createAttachmentFromFile(file: File): Promise<TaskAttachment | null> {
     try {
+      if (!this.isAllowedMimeType(file.type)) return null;
       const base64DataUrl = await this.readProcessedImage(file);
       if (!base64DataUrl) return null;
       return this.buildAttachmentPayload(file, base64DataUrl);
@@ -171,7 +175,7 @@ export class TaskAttachmentProcessingService {
   private buildAttachmentPayload(file: File, base64DataUrl: string): TaskAttachment {
     const fileType = this.resolveAttachmentMimeType(file, base64DataUrl);
     const base64 = this.extractBase64Value(base64DataUrl);
-    const fileName = this.buildFileNameForMimeType(file.name, fileType);
+    const fileName = file.name;
     return { fileName, fileType, base64Size: base64.length, base64, uploadedAt: Timestamp.now() };
   }
 
@@ -183,7 +187,8 @@ export class TaskAttachmentProcessingService {
    * @returns Persisted MIME type string.
    */
   private resolveAttachmentMimeType(file: File, base64DataUrl: string): string {
-    return this.extractMimeTypeFromDataUrl(base64DataUrl) || file.type || 'image/jpeg';
+    if (this.isAllowedMimeType(file.type)) return file.type;
+    return this.extractMimeTypeFromDataUrl(base64DataUrl) || 'image/jpeg';
   }
 
   /**
@@ -210,18 +215,12 @@ export class TaskAttachmentProcessingService {
   }
 
   /**
-   * Adapts filename extension to the resulting mime type.
+   * Checks whether the given MIME type is supported for task attachments.
    *
-   * @param fileName Original file name.
-   * @param mimeType Mime type of the converted file.
-   * @returns File name with matching extension.
+   * @param mimeType MIME type to validate.
+   * @returns `true` when the type is allowed.
    */
-  private buildFileNameForMimeType(fileName: string, mimeType: string): string {
-    const lastDotIndex = fileName.lastIndexOf('.');
-    const baseName = lastDotIndex === -1 ? fileName : fileName.slice(0, lastDotIndex);
-
-    if (mimeType === 'image/jpeg') return `${baseName}.jpg`;
-    if (mimeType === 'image/png') return `${baseName}.png`;
-    return fileName;
+  private isAllowedMimeType(mimeType: string): boolean {
+    return this.allowedMimeTypes.includes(mimeType as (typeof TASK_ATTACHMENT_ALLOWED_MIME_TYPES)[number]);
   }
 }
