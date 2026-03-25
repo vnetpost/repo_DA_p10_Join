@@ -3,17 +3,19 @@
     <app-cockpit />
     <app-header />
     <section class="content-area">
-      <router-outlet />
+      <div class="content-shell">
+        <router-outlet />
+      </div>
     </section>
-    <aside class="empty-content-column" aria-hidden="true"></aside>
     <aside class="empty-content-row" aria-hidden="true"></aside>
   </main>
 } @else {
   <main class="app-layout-login">
     <section class="content-area">
-      <router-outlet />
+      <div class="content-shell">
+        <router-outlet />
+      </div>
     </section>
-    <aside class="empty-content-column" aria-hidden="true"></aside>
     <aside class="empty-content-row" aria-hidden="true"></aside>
   </main>
 } 

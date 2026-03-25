@@ -9,7 +9,9 @@
   padding-bottom: 2.5rem;
 
   @include styles.up-xxl{
-    height: calc(100dvh - styles.$header-height);
+    min-height: calc(100dvh - styles.$header-height);
+    height: auto;
+    overflow: visible;
   }
 
   > .content-wrapper{

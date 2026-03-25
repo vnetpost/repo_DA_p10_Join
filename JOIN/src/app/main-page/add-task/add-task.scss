@@ -19,6 +19,12 @@
   overflow: hidden;
   overflow-y: auto;
   scrollbar-gutter: stable;
+
+  @include styles.up-xxl {
+    min-height: calc(100dvh - styles.$header-height);
+    height: auto;
+    overflow: visible;
+  }
 }
 
 .add-task--overlay {
