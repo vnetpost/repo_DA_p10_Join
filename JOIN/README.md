@@ -1,59 +1,253 @@
 # Join
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.3.14.
+Join is a standalone Angular application for task management with authentication, board workflows, contacts, summary dashboards, and image attachments for tasks.
 
-## Development server
+## Tech Stack
 
-To start a local development server, run:
+- Angular 20
+- Angular Router
+- Angular Forms
+- Angular Fire
+- Firebase Authentication
+- Firebase Firestore
+- SCSS
+- Viewer.js
+- Flatpickr
+
+## Local Development
+
+Start the local dev server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+Open:
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
+```text
+http://localhost:4200/
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## Build
 
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
+Create a production build:
 
 ```bash
 ng build
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+The build output is generated in:
 
-## Running unit tests
+```text
+dist/join/browser
+```
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## Tests
+
+Run unit tests:
 
 ```bash
 ng test
 ```
 
-## Running end-to-end tests
+## Routing Overview
 
-For end-to-end (e2e) testing, run:
+Main routes defined in `src/app/app.routes.ts`:
 
-```bash
-ng e2e
+- `/` -> Login / signup page
+- `/summary` -> Summary dashboard
+- `/add-task` -> Routed add-task page
+- `/board` -> Task board
+- `/contacts` -> Contacts feature
+- `/help` -> Help page
+- `/privacy` -> Privacy page
+- `/imprint` -> Imprint page
+
+## Architecture
+
+The app follows a feature-based structure.
+
+- `main-page/` contains the authenticated product areas and the auth landing page
+- larger features are split into:
+  - `components/`
+  - `services/`
+  - `state/`
+  - `utils/`
+- shared reusable logic lives in `shared/`
+
+## Component Tree
+
+```text
+src/app
+├── app
+│   └── App
+├── help-page
+│   └── HelpPage
+├── imprint
+│   └── Imprint
+├── privacy
+│   └── Privacy
+├── main-page
+│   ├── MainPage
+│   ├── components
+│   │   ├── LoginFormCard
+│   │   ├── SignupFormCard
+│   │   ├── MainPageBranding
+│   │   └── MainPageMobileGreeting
+│   ├── summary
+│   │   ├── Summary
+│   │   └── SummaryMetrics
+│   ├── add-task
+│   │   ├── AddTask
+│   │   └── components
+│   │       ├── AddTaskFormField
+│   │       ├── AddTaskPriority
+│   │       ├── AddTaskCategory
+│   │       ├── AddTaskAssignee
+│   │       ├── AddTaskSubtasks
+│   │       └── AddTaskAttachment
+│   ├── board
+│   │   ├── Board
+│   │   └── components
+│   │       ├── BoardTaskList
+│   │       │   └── BoardTaskCard
+│   │       └── BoardTaskDialog
+│   │           └── components
+│   │               ├── BoardTaskDialogAssignees
+│   │               ├── BoardTaskDialogAttachments
+│   │               └── BoardTaskDialogSubtasks
+│   └── contacts
+│       ├── Contacts
+│       └── components
+│           ├── ContactList
+│           │   └── ContactListItem
+│           ├── ContactDetail
+│           │   └── ContactDetailProfile
+│           └── ContactDialog
+│               └── components
+│                   ├── ContactDialogAvatar
+│                   └── ContactDialogFormFields
+└── shared
+    └── components
+        ├── Cockpit
+        └── Header
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+## Feature Structure
 
-## Additional Resources
+### Auth / Landing
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Path:
+
+```text
+src/app/main-page
+```
+
+Responsibilities:
+
+- login
+- signup
+- branding / greeting animations
+- auth submit handling
+
+### Add Task
+
+Path:
+
+```text
+src/app/main-page/add-task
+```
+
+Responsibilities:
+
+- create and edit tasks
+- validation
+- close confirmation for overlay and routed mode
+- attachment uploads with preview and limits
+
+Local structure:
+
+```text
+add-task/
+├── components/
+├── services/
+├── state/
+└── utils/
+```
+
+### Board
+
+Path:
+
+```text
+src/app/main-page/board
+```
+
+Responsibilities:
+
+- task board columns
+- drag and drop
+- task dialog
+- add-task overlay integration
+
+Local structure:
+
+```text
+board/
+├── components/
+│   ├── board-task-list/
+│   └── board-task-dialog/
+└── state/
+```
+
+### Contacts
+
+Path:
+
+```text
+src/app/main-page/contacts
+```
+
+Responsibilities:
+
+- contact list
+- contact details
+- contact dialog
+- mobile detail flow and delete confirmation
+
+Local structure:
+
+```text
+contacts/
+├── components/
+│   ├── contact-list/
+│   ├── contact-detail/
+│   └── contact-dialog/
+└── state/
+```
+
+## Shared Layer
+
+Path:
+
+```text
+src/app/shared
+```
+
+Contains:
+
+- reusable layout components
+- auth and Firestore services
+- attachment processing / viewer services
+- guards
+- interfaces
+- shared utilities
+- Flatpickr directive
+
+## Firebase Hosting
+
+The app includes Firebase Hosting SPA rewrites in:
+
+- `firebase.json`
+
+This is required so direct route calls like `/summary`, `/board`, or `/contacts` resolve to `index.html` instead of returning `404`.
