@@ -10,9 +10,6 @@ import {
 } from '@angular/core';
 import { Subtask } from '../../../../shared/interfaces/task';
 
-/**
- * Handles subtask creation, inline editing and removal for the task form.
- */
 @Component({
   selector: 'app-add-task-subtasks',
   imports: [],

@@ -1,8 +1,5 @@
 import { Component, Input } from '@angular/core';
 
-/**
- * Renders the animated landing-page branding and intro overlay.
- */
 @Component({
   selector: 'app-main-page-branding',
   imports: [],

@@ -2,9 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { FlatpickrDirective } from '../../../../shared/flatpickr.directive';
 
-/**
- * Reusable input/textarea field wrapper used in the add-task form.
- */
 @Component({
   selector: 'app-add-task-form-field',
   imports: [FormsModule, FlatpickrDirective],

@@ -8,9 +8,6 @@ export type ContactDialogAvatarChange = {
   previewSrc: string;
 };
 
-/**
- * Renders the contact avatar area and handles avatar image selection.
- */
 @Component({
   selector: 'app-contact-dialog-avatar',
   imports: [],

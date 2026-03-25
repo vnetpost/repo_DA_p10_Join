@@ -2,9 +2,6 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Contact } from '../../../../../shared/interfaces/contact';
 import { getContactAvatarSrc, getTwoInitials } from '../../../../../shared/utilities/utils';
 
-/**
- * Renders the contact avatar, name and desktop action buttons.
- */
 @Component({
   selector: 'app-contact-detail-profile',
   imports: [],

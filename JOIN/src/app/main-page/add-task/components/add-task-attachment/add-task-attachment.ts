@@ -36,9 +36,6 @@ import {
 import { AttachmentUploadViewer } from './services/attachment-upload-viewer';
 import { AttachmentUploadUsage } from './state/attachment-upload-usage';
 
-/**
- * Handles attachment selection, preview generation and removal inside the task form.
- */
 @Component({
   selector: 'app-add-task-attachment',
   imports: [],

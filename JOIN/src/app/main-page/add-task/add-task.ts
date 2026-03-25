@@ -39,9 +39,6 @@ import {
 } from './utils/add-task-form-values.utils';
 import { AddTaskCloseFlow } from './state/add-task-close-flow';
 
-/**
- * Manages task creation and editing, including form state, validation and persistence.
- */
 @Component({
   selector: 'app-add-task',
   imports: [
@@ -65,13 +62,9 @@ export class AddTask implements OnChanges, OnDestroy {
   // #endregion
 
   // #region Inputs & Outputs
-  /** Determines whether the form is rendered inside an overlay dialog. */
   @Input() isOverlay = false;
-  /** Existing task to edit. If `null`, the component creates a new task. */
   @Input() taskToEdit: Task | null = null;
-  /** Target status for newly created tasks. */
   @Input() initialStatus: Task['status'] = 'to-do';
-  /** Requests closing the overlay once submit feedback has finished. */
   @Output() closeDialogRequested = new EventEmitter<void>();
   @Output() dirtyChange = new EventEmitter<boolean>();
   @Output() taskSaved = new EventEmitter<Task>();

@@ -10,9 +10,6 @@ import {
 import type Viewer from 'viewerjs';
 import { TaskDialogAttachmentService } from '../../services/task-dialog-attachment.service';
 
-/**
- * Renders task attachments including preview, download and Viewer.js support.
- */
 @Component({
   selector: 'app-board-task-dialog-attachments',
   imports: [],

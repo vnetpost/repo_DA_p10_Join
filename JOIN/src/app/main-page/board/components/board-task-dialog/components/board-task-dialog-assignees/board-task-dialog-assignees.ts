@@ -7,9 +7,6 @@ import {
   getContactDisplayNameById,
 } from '../../../../../../shared/utilities/contact-presenter.utils';
 
-/**
- * Renders the assignee list inside the task dialog.
- */
 @Component({
   selector: 'app-board-task-dialog-assignees',
   imports: [],

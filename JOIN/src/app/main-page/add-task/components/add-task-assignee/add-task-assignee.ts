@@ -15,9 +15,6 @@ import {
   getContactDisplayInitials,
 } from '../../../../shared/utilities/contact-presenter.utils';
 
-/**
- * Searchable multi-select dropdown for choosing task assignees.
- */
 @Component({
   selector: 'app-add-task-assignee',
   imports: [],

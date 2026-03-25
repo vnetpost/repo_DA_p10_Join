@@ -1,9 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subtask } from '../../../../../../shared/interfaces/task';
 
-/**
- * Renders subtasks inside the task dialog.
- */
 @Component({
   selector: 'app-board-task-dialog-subtasks',
   imports: [],

@@ -9,9 +9,6 @@ type PriorityOption = {
   modifierClass: string;
 };
 
-/**
- * Segmented selector for choosing task priority.
- */
 @Component({
   selector: 'app-add-task-priority',
   imports: [],
