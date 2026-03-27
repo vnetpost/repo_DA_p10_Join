@@ -15,6 +15,7 @@ export class App {
     '/add-task',
     '/board',
     '/contacts',
+    '/help',
     '/privacy',
     '/imprint',
   ];
