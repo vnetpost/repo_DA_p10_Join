@@ -58,7 +58,7 @@ export class ContactDialogSubmitService {
    * @returns The normalized contact form data to emit.
    */
   private buildFormData(
-    dialogMode: ContactDialogMode,
+    _dialogMode: ContactDialogMode,
     contactData: ContactFormData,
     avatar: ContactAvatar | null,
   ): ContactFormData {
@@ -66,9 +66,9 @@ export class ContactDialogSubmitService {
       name: contactData.name,
       email: contactData.email,
       phone: contactData.phone,
+      avatar: avatar ?? null,
     };
 
-    if (dialogMode === 'edit') formData.avatar = avatar ?? null;
     return formData;
   }
 }
