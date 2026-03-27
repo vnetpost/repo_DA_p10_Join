@@ -35,4 +35,13 @@ export class App {
   get useAppShell(): boolean {
     return this.appShellRoutes.some((route) => this.router.url.startsWith(route));
   }
+
+  /**
+   * Indicates whether the current route should render the app shell with a white viewport background.
+   *
+   * @returns `true` for routed add-task pages.
+   */
+  get useWhiteViewportBackground(): boolean {
+    return this.router.url.startsWith('/add-task');
+  }
 }

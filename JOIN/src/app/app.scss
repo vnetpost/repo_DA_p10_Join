@@ -47,6 +47,15 @@
   }
 }
 
+.app-layout--white-viewport {
+  background-color: styles.$white;
+
+  .content-area,
+  .empty-content-row {
+    background-color: styles.$white;
+  }
+}
+
 .app-layout-login{
   background-color: #f6f7f8;
   width: 100%;
