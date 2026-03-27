@@ -2,7 +2,7 @@
 
 :host {
   grid-area: 2/1/3/2;
-  display: block;
+  @include styles.setFlex();
   width: 100%;
   padding-top: 1rem;
   z-index: 1;
