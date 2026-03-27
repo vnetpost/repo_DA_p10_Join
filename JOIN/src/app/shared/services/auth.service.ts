@@ -60,7 +60,8 @@ export class AuthService {
    * Registers a new user account.
    *
    * Creates the authentication user, updates the user profile,
-   * and creates a corresponding contact entry in the database.
+   * creates a corresponding contact entry in the database,
+   * and signs the user out afterwards.
    *
    * @param name The user's full name
    * @param email The user's email address
@@ -83,6 +84,8 @@ export class AuthService {
         userColor: setUserColor(),
         avatar: null,
       });
+
+      await signOut(this.firebaseAuth);
 
       return response;
     });
