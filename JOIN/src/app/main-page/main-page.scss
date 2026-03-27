@@ -1,23 +1,21 @@
 @use "../../styles/index.scss" as styles;
 
 .layout-wrapper{
-  @include styles.setFlex();
+  @include styles.setFlex($jc: flex-start, $ai: stretch);
   height: 100dvh;
 
   .layout{
     @include styles.setGrid($rows: auto 1fr auto auto, $columns: 1fr);
-    width: 93%;
+    width: min(100%, 1440px);
     height: 100%;
-    padding: 3rem 0 2rem;
+    padding: 3rem clamp(16px, 4vw, 48px) 2rem;
 
     @media(max-width: 400px){
-      padding: 2rem 0 1rem;
+      padding: 2rem 16px 1rem;
     }
   
     @include styles.up-xxl{
       @include styles.setGrid($rows: auto 1fr auto, $columns: auto 1fr);
-      width: 90%;
-      height: 100%;
       padding: 7rem 0 2rem;
     }
   }
