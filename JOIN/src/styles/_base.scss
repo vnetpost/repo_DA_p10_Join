@@ -17,7 +17,7 @@ a {
 
 html {
   @include styles.setFont($size: 10px);
-  scrollbar-gutter: stable;
+  // scrollbar-gutter: stable;
 
   > body {
     @include styles.setFont($size: 16px, $weight: 400);
