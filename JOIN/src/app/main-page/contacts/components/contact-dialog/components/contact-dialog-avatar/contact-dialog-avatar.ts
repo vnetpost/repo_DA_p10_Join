@@ -35,7 +35,7 @@ export class ContactDialogAvatar {
    */
   openAvatarPicker(event?: Event): void {
     event?.stopPropagation();
-    if (!this.canUploadAvatar || this.dialogMode !== 'edit') return;
+    if (!this.canUploadAvatar) return;
     this.avatarInput?.nativeElement.click();
   }
 

@@ -16,12 +16,12 @@ button {
   @include styles.up-xxl {
     padding: 14px;
 
-    &:hover {
+    &:not(:disabled):not(.button--disabled):hover {
       background-color: styles.$blue-sky;
       box-shadow: 0px 4px 4px 0px #00000040;
     }
 
-    &:active {
+    &:not(:disabled):not(.button--disabled):active {
       background-color: styles.$navy-dark;
       box-shadow: 0px 4px 4px 0px #00000040;
     }
@@ -36,13 +36,13 @@ button {
   @include styles.up-xxl {
     padding: 14px;
 
-    &:hover {
+    &:not(:disabled):not(.button--disabled):hover {
       color: styles.$blue-sky;
       border-color: styles.$blue-sky;
       box-shadow: 0px 4px 4px 0px #00000040;
     }
 
-    &:active {
+    &:not(:disabled):not(.button--disabled):active {
       color: styles.$gray-dark;
       border-color: styles.$gray-dark;
       box-shadow: 0px 4px 4px 0px #00000040;

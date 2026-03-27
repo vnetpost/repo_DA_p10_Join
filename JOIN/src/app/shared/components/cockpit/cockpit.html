@@ -75,15 +75,15 @@
           <ul>
             <li>
               <a routerLink="/" class="log-in-link">
-                <img src="assets/img/icons/cockpit/log-in.svg" alt="Log in icon" aria-hidden="true" />
-                <span>Log In</span>
+                <img src="assets/img/icons/cockpit/log-in.svg" alt="Sign in icon" aria-hidden="true" />
+                <span>Sign in</span>
               </a>
             </li>
           </ul>
         }
       </nav>
   
-      @if (isDesktop || !(user$ | async)) {
+      @if (isDesktop && (user$ | async)) {
         <nav class="legal-nav" aria-label="Legal navigation">
           <ul>
             <li>

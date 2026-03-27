@@ -113,6 +113,7 @@
         <button
           type="submit"
           class="button button--primary button--icon"
+          [class.button--disabled]="!isFormValid || isSubmitting"
           [class.add-task__submit-button--disabled]="!isFormValid || isSubmitting"
           [disabled]="isSubmitting"
           [attr.aria-disabled]="!isFormValid || isSubmitting ? 'true' : null"

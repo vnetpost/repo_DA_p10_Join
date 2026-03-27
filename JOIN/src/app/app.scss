@@ -27,7 +27,7 @@
     app-header {
       grid-area: 1/2/2/3;
     }
-    
+
     .content-area {
       grid-area: 2/2/3/3;
       min-height: 0;
@@ -44,6 +44,15 @@
     .empty-content-row{
       grid-area: 3/2/4/3;
     }
+  }
+}
+
+.app-layout--white-viewport {
+  background-color: styles.$white;
+
+  .content-area,
+  .empty-content-row {
+    background-color: styles.$white;
   }
 }
 
@@ -75,7 +84,7 @@
     .content-shell {
       width: min(100%, 1440px);
       min-height: 100%;
-      margin-inline: auto;
+      margin-right: auto;
     }
   
     .empty-content-row{

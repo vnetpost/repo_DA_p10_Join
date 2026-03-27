@@ -1,5 +1,5 @@
 @if (useAppShell){
-  <main class="app-layout">
+  <main class="app-layout" [class.app-layout--white-viewport]="useWhiteViewportBackground">
     <app-cockpit />
     <app-header />
     <section class="content-area">

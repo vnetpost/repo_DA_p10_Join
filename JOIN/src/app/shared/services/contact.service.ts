@@ -148,12 +148,10 @@ export class ContactService {
   /**
    * Determines whether avatar editing should be enabled.
    *
-   * @param contact The contact being edited.
    * @param isAuthenticated Indicates whether the current session is authenticated.
    * @returns `true` when avatar editing should be available.
    */
-  canEditAvatar(contact: Contact | null, isAuthenticated: boolean): boolean {
-    if (!contact) return false;
+  canEditAvatar(_contact: Contact | null, isAuthenticated: boolean): boolean {
     return isAuthenticated;
   }
 
