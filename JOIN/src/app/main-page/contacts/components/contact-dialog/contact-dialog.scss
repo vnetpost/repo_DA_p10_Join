@@ -22,7 +22,7 @@ dialog {
     @include styles.setGrid($rows: 32% 30px 1fr, $columns: 1fr);
     width: 85dvw;
     max-width: 350px;
-    height: 540px;
+    height: 470px;
     overflow-y: auto;
     scrollbar-gutter: stable;
     background-color: white;
