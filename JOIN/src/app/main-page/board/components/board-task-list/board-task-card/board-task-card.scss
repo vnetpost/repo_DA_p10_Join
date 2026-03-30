@@ -136,26 +136,13 @@ article{
 }
 
 .description{
-  display: block;
+  display: -webkit-box;
   height: 3.6rem;
   max-height: 3.6rem;
   min-height: 3.6rem;
-  overflow-y: auto;
-  padding-right: 0.25rem;
-  scrollbar-width: thin;
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-  cursor: auto;
-
-  &::-webkit-scrollbar {
-    width: 0.25rem;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: rgba(styles.$gray-light, 0.9);
-    border-radius: 999px;
-  }
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .subtasks{
