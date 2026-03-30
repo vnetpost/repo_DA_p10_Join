@@ -9,6 +9,7 @@ article{
   background-color: white;
   box-shadow: 0px 0px 2px 1px #00000014;
   word-break: break-word;
+  cursor: pointer;
 
   @include styles.up-xxl{
     min-width: 0;
@@ -23,6 +24,10 @@ article{
   @media(min-width: 1120px){
     padding: 16px 14px;
   }
+}
+
+article * {
+  cursor: inherit;
 }
 
 .header{

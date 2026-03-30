@@ -1,4 +1,4 @@
-import { Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
 import { Task } from '../../../../../shared/interfaces/task';
 import { ContactService } from '../../../../../shared/services/contact.service';
 import {
@@ -116,16 +116,6 @@ export class BoardTaskCard implements OnInit {
     this.task.order = 0;
     this.taskService.updateDocument(this.task, 'tasks');
     this.closeMenu(event);
-  }
-
-  /**
-   * Prevents card click and drag interactions from hijacking scrollable child content.
-   *
-   * @param event The child interaction event.
-   * @returns void
-   */
-  stopCardInteraction(event: Event): void {
-    event.stopPropagation();
   }
 
   /**
