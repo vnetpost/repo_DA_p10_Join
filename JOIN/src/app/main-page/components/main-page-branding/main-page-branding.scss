@@ -5,8 +5,8 @@
 }
 
 .logo {
-  --logo-final-left: clamp(16px, 4vw, 48px);
-  --logo-intro-left: min(50dvw, 720px);
+  --logo-final-left: calc((100dvw - min(100dvw, 1440px)) / 2 + clamp(16px, 4vw, 48px));
+  --logo-intro-left: 50dvw;
   --logo-final-top: 3rem;
   @include styles.setGrid();
   left: var(--logo-final-left);

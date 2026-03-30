@@ -224,8 +224,7 @@ export class MainPage implements OnInit, OnDestroy {
         this.isLoggingIn = false;
         this.handleLoginNavigation();
       },
-      error: (err) => {
-        console.error('Login failed', err);
+      error: () => {
         this.isLoggingIn = false;
         this.loginError = true;
       },
@@ -242,8 +241,8 @@ export class MainPage implements OnInit, OnDestroy {
       next: () => {
         this.handleLoginNavigation();
       },
-      error: (err) => {
-        console.error('Guest login failed', err);
+      error: () => {
+        this.loginError = true;
       },
     });
   }
@@ -282,8 +281,8 @@ export class MainPage implements OnInit, OnDestroy {
       next: () => {
         this.onSignUpSuccess();
       },
-      error: (err) => {
-        this.onSignUpError(err);
+      error: () => {
+        this.onSignUpError();
       },
     });
   }
@@ -327,14 +326,12 @@ export class MainPage implements OnInit, OnDestroy {
   /**
    * Handles a sign-up error.
    *
-   * Logs the error and updates the UI
-   * to reflect the failed sign-up attempt.
+   * Updates the UI to reflect
+   * the failed sign-up attempt.
    *
-   * @param err The error returned during sign-up
    * @returns void
    */
-  onSignUpError(err: unknown): void {
-    console.error('Sign up failed', err);
+  onSignUpError(): void {
     this.isSigningUp = false;
     this.signUpError = true;
   }

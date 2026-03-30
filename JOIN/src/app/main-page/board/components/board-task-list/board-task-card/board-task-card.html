@@ -92,14 +92,7 @@
 
   <section class="topic">
     <h4 class="title" cdkDragHandle>{{ task.title }}</h4>
-    <p
-      class="description"
-      (click)="stopCardInteraction($event)"
-      (pointerdown)="stopCardInteraction($event)"
-      (wheel)="stopCardInteraction($event)"
-      (touchstart)="stopCardInteraction($event)"
-      (touchmove)="stopCardInteraction($event)"
-    >
+    <p class="description" cdkDragHandle>
       {{ task.description }}
     </p>
   </section>
